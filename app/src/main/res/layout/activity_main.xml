@@ -18,7 +18,7 @@
         android:layout_height="50dp"
         android:background="@color/surface_secondary"
         android:baselineAligned="true"
-        android:elevation="12dp"
+        android:elevation="@dimen/_4"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
@@ -121,26 +121,45 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/CategoryListContainer"
-        android:layout_width="320dp"
-        android:layout_height="540dp"
-        android:background="@drawable/border_radius_16"
-        android:elevation="@dimen/_16"
-        android:orientation="horizontal"
-        android:padding="@dimen/_16"
-        android:visibility="gone"
-        android:weightSum="10"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4">
 
-        <ListView
-            android:id="@+id/CategoryList"
+    <LinearLayout
+        android:id="@+id/CategoryListMaskContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@color/shadowMask"
+        android:elevation="@dimen/_4"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/CategoryListContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="540dp"
+            android:background="@drawable/border_radius_top_16_tertiary"
+            android:elevation="@dimen/_16"
+            android:orientation="vertical"
+            android:weightSum="10"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingStart="@dimen/_32"
+                android:paddingTop="@dimen/_16"
+                android:text="@string/category_title"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/CategoryList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/_32"
+                android:paddingTop="@dimen/_16"
+                android:paddingRight="@dimen/_32" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

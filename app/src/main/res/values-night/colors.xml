@@ -19,4 +19,5 @@
     <color name="light">#333</color>
     <color name="dark">#ddd</color>
     <color name="danger">#9c284d</color>
+    <color name="shadowMask">#44000000</color>
 </resources>

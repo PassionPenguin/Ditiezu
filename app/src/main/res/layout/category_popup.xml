@@ -4,12 +4,12 @@
     android:layout_height="wrap_content"
     android:elevation="12dp"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="3dp">
 
     <ImageView
         android:id="@+id/iconIv"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:contentDescription="@string/category_title"
         android:src="@color/surface_secondary" />
 
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_margin="6dp"
         android:orientation="vertical">
 
         <TextView
@@ -25,11 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/descTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

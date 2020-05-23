@@ -7,7 +7,7 @@
         <item name="colorSecondary">@color/primary400</item>
         <item name="colorSecondaryVariant">@color/primary600</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/surface</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
         <item name="android:actionBarItemBackground" tools:targetApi="l">@color/black</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowFrame">@null</item>
@@ -26,10 +26,9 @@
     <style name="Theme.Ditiezu.BottomNavItemContent" parent="Theme.Ditiezu">
         <item name="android:clickable">false</item>
         <item name="android:focusable">false</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">10sp</item>
         <item name="android:background">@null</item>
     </style>

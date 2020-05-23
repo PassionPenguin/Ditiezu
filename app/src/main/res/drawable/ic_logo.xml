@@ -216,7 +216,7 @@
         android:fillColor="#9fa0a0"/>
     <path
         android:pathData="M71.13,98.59h1.3v1.3h-1.3z"
-        android:fillColor="#fff"/>
+        android:fillColor="@color/surface_tertiary"/>
     <path
         android:pathData="M72.42,98.59h1.3v1.3h-1.3z"
         android:fillColor="#231815"/>
