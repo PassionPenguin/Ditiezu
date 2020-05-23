@@ -52,4 +52,5 @@
     <string name="category_Hohhot">Hohhot</string>
     <string name="category_Oversea">Oversea</string>
     <string name="category_Comprehensive">Comprehensive</string>
+    <string name="loading_description" >Loading...</string>
 </resources>

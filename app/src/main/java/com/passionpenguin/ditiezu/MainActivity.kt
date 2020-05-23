@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         val categoryListContainer: LinearLayout = findViewById(R.id.CategoryListContainer)
         val categoryListMaskContainer: LinearLayout = findViewById(R.id.CategoryListMaskContainer)
         val categoryList: ListView = findViewById(R.id.CategoryList)
+        val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
         fun string(int: Int): String {
             return resources.getString(int)
         }
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                     R.color.primary700
                 )
             )
+            mask.visibility = View.GONE
         }
 
         fun categoryDialogController(state: Boolean) {
