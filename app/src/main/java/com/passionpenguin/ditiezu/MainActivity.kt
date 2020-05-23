@@ -32,175 +32,175 @@ class MainActivity : AppCompatActivity() {
             Model(
                 string(R.string.category_Beijing),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.beijing
             )
         )
         list.add(
             Model(
                 string(R.string.category_Tianjin),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.tianjin
             )
         )
         list.add(
             Model(
                 string(R.string.category_Shanghai),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.shanghai
             )
         )
         list.add(
             Model(
                 string(R.string.category_Guangzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.guangzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Changchun),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.changchun
             )
         )
         list.add(
             Model(
                 string(R.string.category_Dalian),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.dalian
             )
         )
         list.add(
             Model(
                 string(R.string.category_Wuhan),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.wuhan
             )
         )
         list.add(
             Model(
                 string(R.string.category_Chongqing),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.chongqing
             )
         )
         list.add(
             Model(
                 string(R.string.category_Shenzhen),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.shenzhen
             )
         )
         list.add(
             Model(
                 string(R.string.category_Nanjing),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.nanjing
             )
         )
         list.add(
             Model(
                 string(R.string.category_Chengdu),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.chengdu
             )
         )
         list.add(
             Model(
                 string(R.string.category_Shenyang),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.shenyang
             )
         )
         list.add(
             Model(
                 string(R.string.category_Foshan),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.foshan
             )
         )
         list.add(
             Model(
                 string(R.string.category_Xian),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.xian
             )
         )
         list.add(
             Model(
                 string(R.string.category_Suzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.suzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Kunming),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.kunming
             )
         )
         list.add(
             Model(
                 string(R.string.category_Hangzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.hangzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Harbin),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.harbin
             )
         )
         list.add(
             Model(
                 string(R.string.category_Zhengzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.zhengzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Changsha),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.changsha
             )
         )
         list.add(
             Model(
                 string(R.string.category_Ningbo),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.ningbo
             )
         )
         list.add(
             Model(
                 string(R.string.category_Wuxi),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.wuxi
             )
         )
         list.add(
             Model(
                 string(R.string.category_Qingdao),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.qingdao
             )
         )
         list.add(
             Model(
                 string(R.string.category_Nanchang),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.nanchang
             )
         )
         list.add(
             Model(
                 string(R.string.category_Fuzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.fuzhou
             )
         )
 
@@ -208,119 +208,105 @@ class MainActivity : AppCompatActivity() {
             Model(
                 string(R.string.category_Dongguan),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.dongguan
             )
         )
         list.add(
             Model(
                 string(R.string.category_Nanning),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.nanning
             )
         )
         list.add(
             Model(
                 string(R.string.category_Hefei),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.hefei
             )
         )
         list.add(
             Model(
                 string(R.string.category_Shijiazhuang),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.shijiazhuang
             )
         )
         list.add(
             Model(
                 string(R.string.category_Guiyang),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.guiyang
             )
         )
         list.add(
             Model(
                 string(R.string.category_Xiamen),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.xiamen
             )
         )
         list.add(
             Model(
                 string(R.string.category_Urumqi),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.urumqi
             )
         )
         list.add(
             Model(
                 string(R.string.category_Wenzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.wenzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Jinan),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.jinan
             )
         )
         list.add(
             Model(
                 string(R.string.category_Lanzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.lanzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Changzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.changzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Xuzhou),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.xuzhou
             )
         )
         list.add(
             Model(
                 string(R.string.category_Hongkong),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.hongkong
             )
         )
         list.add(
             Model(
                 string(R.string.category_Macau),
                 "",
-                R.mipmap.ic_launcher
+                R.drawable.macau
             )
         )
         list.add(
             Model(
                 string(R.string.category_Taiwan),
                 "",
-                R.mipmap.ic_launcher
-            )
-        )
-        list.add(
-            Model(
-                string(R.string.category_Oversea),
-                "",
-                R.mipmap.ic_launcher
-            )
-        )
-        list.add(
-            Model(
-                string(R.string.category_Comprehensive),
-                "",
-                R.mipmap.ic_launcher
+                R.drawable.taiwan
             )
         )
 

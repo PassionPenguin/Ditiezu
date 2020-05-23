@@ -49,6 +49,7 @@
     <string name="category_Hongkong">Hong Kong</string>
     <string name="category_Macau">Macau</string>
     <string name="category_Taiwan">Taiwan</string>
+    <string name="category_Hohhot">Hohhot</string>
     <string name="category_Oversea">Oversea</string>
     <string name="category_Comprehensive">Comprehensive</string>
 </resources>
