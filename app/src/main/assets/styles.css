@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+body {
+    --white: #fff;
+    --black: #000;
+    --grey: #888;
+    --dark: #333;
+    --light: #ddd;
+    --extLight: #efefef;
+    --surface: #fff;
+    --surfaceOnSecondary: #efefef;
+    --theme: #289c77;
+}
+
+body.darkmode {
+    --white: #000;
+    --black: #fff;
+    --dark: #ddd;
+    --light: #333;
+    --extLight: #010101;
+    --surface: #121212;
+    --surfaceOnSecondary: #1e1e1e;
+}
+
+body {
+    background: var(--surface);
+    color: var(--black);
+}
+
+a, a:link, a:visited, a:active {
+    color: var(--theme);
+    font-style: none;
+}
+
+.threadContainer {
+    padding: 12px;
+    border-radius: 6px;
+    background: var(--surfaceOnSecondary);
+    margin: 12px;
+}
+
+img.threadMeta_AuthorAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 12px;
+}
+
+.threadMeta_Container {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+p.threadMeta_AuthorName {
+    margin: 0;
+    font: 900 17px/1 "sans-serif-black", sans-serif;
+    color: var(--grey);
+}
+
+p.threadMeta_PostMeta {
+    margin: 3px 0 0 0;
+    font: 300 11px/1 sans-serif;
+    color: var(--grey);
+}
+
+.threadContent {
+    padding: 12px 0;
+}
+
+.threadContainer:not(:last-child) {
+    border-bottom: 1px solid var(--extLight);
+}

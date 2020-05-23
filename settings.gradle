@@ -1,2 +1,3 @@
+include ':jsoup-1.13.1'
 include ':app'
 rootProject.name = "Ditiezu"

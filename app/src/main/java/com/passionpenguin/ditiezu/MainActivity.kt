@@ -1,26 +1,29 @@
 package com.passionpenguin.ditiezu
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.postDelayed
+import org.jsoup.Jsoup
 
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val homeButton: LinearLayout = findViewById(R.id.HomeButton)
         val categoryButton: LinearLayout = findViewById(R.id.CategoryButton)
         val notificationButton: LinearLayout = findViewById(R.id.NotificationButton)
         val accountButton: LinearLayout = findViewById(R.id.AccountButton)
         val categoryListContainer: LinearLayout = findViewById(R.id.CategoryListContainer)
         val categoryListMaskContainer: LinearLayout = findViewById(R.id.CategoryListMaskContainer)
-        val categoryList: ListView = findViewById(R.id.CategoryList)
+        val categoryListView: ListView = findViewById(R.id.CategoryList)
+        val threadListView: ListView = findViewById(R.id.ThreadList)
         val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
         fun string(int: Int): String {
             return resources.getString(int)
@@ -75,180 +78,184 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val list = mutableListOf(
-            Model(
+        val categoryList = mutableListOf(
+            CategoryItem(
                 string(R.string.category_Beijing),
                 R.drawable.beijing
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Tianjin),
                 R.drawable.tianjin
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Shanghai),
                 R.drawable.shanghai
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Guangzhou),
                 R.drawable.guangzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Changchun),
                 R.drawable.changchun
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Dalian),
                 R.drawable.dalian
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Wuhan),
                 R.drawable.wuhan
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Chongqing),
                 R.drawable.chongqing
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Shenzhen),
                 R.drawable.shenzhen
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Nanjing),
                 R.drawable.nanjing
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Chengdu),
                 R.drawable.chengdu
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Shenyang),
                 R.drawable.shenyang
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Foshan),
                 R.drawable.foshan
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Xian),
                 R.drawable.xian
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Suzhou),
                 R.drawable.suzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Kunming),
                 R.drawable.kunming
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Hangzhou),
                 R.drawable.hangzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Harbin),
                 R.drawable.harbin
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Zhengzhou),
                 R.drawable.zhengzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Changsha),
                 R.drawable.changsha
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Ningbo),
                 R.drawable.ningbo
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Wuxi),
                 R.drawable.wuxi
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Qingdao),
                 R.drawable.qingdao
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Nanchang),
                 R.drawable.nanchang
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Fuzhou),
                 R.drawable.fuzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Dongguan),
                 R.drawable.dongguan
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Nanning),
                 R.drawable.nanning
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Hefei),
                 R.drawable.hefei
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Shijiazhuang),
                 R.drawable.shijiazhuang
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Guiyang),
                 R.drawable.guiyang
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Xiamen),
                 R.drawable.xiamen
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Urumqi),
                 R.drawable.urumqi
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Wenzhou),
                 R.drawable.wenzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Jinan),
                 R.drawable.jinan
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Lanzhou),
                 R.drawable.lanzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Changzhou),
                 R.drawable.changzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Xuzhou),
                 R.drawable.xuzhou
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Hongkong),
                 R.drawable.hongkong
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Macau),
                 R.drawable.macau
             ),
-            Model(
+            CategoryItem(
                 string(R.string.category_Taiwan),
                 R.drawable.taiwan
             )
         )
-
-        categoryList.adapter = CategoryAdapter(this, R.layout.category_popup, list)
-
-        categoryList.setOnItemClickListener { _, _, position, _ ->
+        categoryListView.adapter =
+            CategoryAdapter(
+                this,
+                R.layout.category_popup,
+                categoryList
+            )
+        categoryListView.setOnItemClickListener { _, _, position, _ ->
             categoryDialogController(true)
             Toast.makeText(this@MainActivity, position.toString(), Toast.LENGTH_LONG).show()
         }
-
         categoryListMaskContainer.setOnClickListener {
             categoryDialogController(true)
         }
-
+        findViewById<LinearLayout>(R.id.LoadingMaskContainer).setOnClickListener {
+            it.visibility = View.GONE
+        }
         homeButton.setOnClickListener {
             bottomButtonHighlight(
                 arrayOf(categoryButton, notificationButton, accountButton),
@@ -274,6 +281,63 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(homeButton, notificationButton, categoryButton),
                 accountButton
             )
+        }
+
+
+        fun processResult(result: String) {
+            val parser = Jsoup.parse(result)
+            runOnUiThread {
+                val threadListContent = mutableListOf<ThreadListItem>()
+                parser.select("ul.comiis_onemiddleulone li").forEach {
+                    val author = it.select("code").text()
+                    val category = it.select(".orgen").text()
+                    val title = it.select(".blackvs")
+                    threadListContent.add(
+                        ThreadListItem(
+                            title.text(), "$author · [$category]", title.attr("href")
+                                .substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
+                        )
+                    )
+                }
+                threadListView.adapter =
+                    ThreadListAdapter(
+                        this,
+                        R.layout.thread_list_item,
+                        threadListContent
+                    )
+
+                threadListView.setOnItemClickListener { _, _, position, _ ->
+                    Toast.makeText(this@MainActivity, position.toString(), Toast.LENGTH_LONG).show()
+                    Log.i("a", position.toString() + threadListContent[position].target)
+                    val i = Intent(this@MainActivity, ViewThread::class.java)
+                    i.putExtra(
+                        "tid",
+                        threadListContent[position].target
+                    )
+                    startActivity(i)
+                }
+            }
+        }
+
+        HttpExt().retrievePage("http://www.ditiezu.com/") {
+            val ctrlAnimation = TranslateAnimation(
+                TranslateAnimation.RELATIVE_TO_SELF, 0F,
+                TranslateAnimation.RELATIVE_TO_SELF, 0F,
+                TranslateAnimation.RELATIVE_TO_SELF, 0F,
+                TranslateAnimation.RELATIVE_TO_SELF, 1F
+            )
+            ctrlAnimation.duration = 400L
+            findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
+            findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(ctrlAnimation)
+            findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
+                findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
+            }
+
+            if (it == "Failed Retrieved") {
+                // Failed Retrieved
+                Log.i("HTTPEXT", "FAILED RETRIEVED")
+            }
+            processResult(it)
         }
     }
 }

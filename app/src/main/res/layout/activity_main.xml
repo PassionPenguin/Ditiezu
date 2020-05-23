@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Main" />
-
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -201,5 +195,19 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/ThreadList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
+        android:clickable="true"
+        android:divider="@null"
+        android:elevation="@dimen/_32"
+        android:focusable="true"
+        android:paddingTop="@dimen/_16"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

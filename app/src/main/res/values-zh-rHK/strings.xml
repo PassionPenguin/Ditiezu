@@ -37,4 +37,6 @@
     <string name="category_Oversea">海外地區</string>
     <string name="category_Comprehensive">綜合區</string>
     <string name="loading_description" >加載中...</string>
+    <string name="threadList_title">帖子標題</string>
+    <string name="title_reply">Reply</string>
 </resources>

@@ -52,5 +52,8 @@
     <string name="category_Hohhot">Hohhot</string>
     <string name="category_Oversea">Oversea</string>
     <string name="category_Comprehensive">Comprehensive</string>
-    <string name="loading_description" >Loading...</string>
+    <string name="loading_description">Loading...</string>
+    <string name="threadList_title">THREAD TITLE</string>
+    <string name="threadList_meta">THREAD META</string>
+    <string name="title_reply">Reply</string>
 </resources>
