@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Main" />
+
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/surface_secondary"
+        android:baselineAligned="true"
+        android:elevation="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <LinearLayout
+            android:id="@+id/HomeButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:orientation="vertical"
+            android:theme="@style/Theme.Ditiezu.BottomNavItem">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:contentDescription="@string/home_title"
+                android:src="@drawable/ic_baseline_home_24"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
+                android:tint="@color/primary700" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="@string/home_title"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/CategoryButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:orientation="vertical"
+            android:theme="@style/Theme.Ditiezu.BottomNavItem">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:contentDescription="@string/category_title"
+                android:src="@drawable/ic_baseline_category_24"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
+                android:tint="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="@string/category_title"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/NotificationButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:orientation="vertical"
+            android:theme="@style/Theme.Ditiezu.BottomNavItem">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:contentDescription="@string/notifications_title"
+                android:src="@drawable/ic_baseline_notifications_24"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
+                android:tint="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="@string/notifications_title"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/AccountButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple"
+            android:orientation="vertical"
+            android:theme="@style/Theme.Ditiezu.BottomNavItem">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:contentDescription="@string/settings_title"
+                android:src="@drawable/ic_baseline_settings_24"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
+                android:tint="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="@string/settings_title"
+                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/CategoryListContainer"
+        android:layout_width="320dp"
+        android:layout_height="540dp"
+        android:background="@drawable/border_radius_16"
+        android:elevation="@dimen/_16"
+        android:orientation="horizontal"
+        android:padding="@dimen/_16"
+        android:visibility="gone"
+        android:weightSum="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
+
+        <ListView
+            android:id="@+id/CategoryList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

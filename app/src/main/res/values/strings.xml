@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Ditiezu</string>
+    <string name="locale_default">English</string>
+    <string name="locale_chinese">Chinese</string>
+    <string name="locale_chinese_china">Chinese (China)</string>
+    <string name="locale_chinese_hongkong_sar">Chinese (Hong Kong SAR)</string>
+    <string name="category_title">Category</string>
+    <string name="home_title">Home</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="settings_title">Setting</string>
+</resources>
