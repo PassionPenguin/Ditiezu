@@ -146,6 +146,12 @@ class HttpExt {
         return result
     }
 
+    fun checkLogin(): Boolean {
+        return asyncRetrievePage("http://www.ditiezu.com/search.php?mod=forum&srchfrom=4000&searchsubmit=yes").indexOf(
+            "抱歉，您所在的用户组(地铁游客)无法进行此操作"
+        ) == -1
+    }
+
     fun openConn(url: String, then: (urlConn: InputStream?) -> Unit) {
         var urlconn: URLConnection
         val thread = Thread {

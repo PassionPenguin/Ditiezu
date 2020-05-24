@@ -136,3 +136,17 @@ span.page:hover, span.page:focus {
 span.page.mi {
     font-family: 'Material Icons', sans-serif !important;
 }
+
+dd {
+    margin: 0;
+}
+
+img[file] {
+    max-width: 100%;
+    display: block;
+}
+
+img[src^="imageAssets"] {
+    width: 50%;
+    margin: 0 auto;
+}

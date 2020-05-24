@@ -158,6 +158,7 @@ class Button {
         return this[this.length - 1];
     };
     HTMLCollection.prototype.forEach = NamedNodeMap.prototype.forEach = Array.prototype.forEach;
+    HTMLCollection.prototype.filter = NamedNodeMap.prototype.filter = Array.prototype.filter;
     NodeList.prototype.map = HTMLCollection.prototype.map = Array.prototype.map;
     NodeList.prototype.addClass = function (value) {
         for (let i = 0; i < this.length; i++) this[i].classList.add(value);

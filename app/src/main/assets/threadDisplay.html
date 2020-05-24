@@ -21,7 +21,8 @@
     };
     window.loadPage = (string = undefined) => {
         document.body.innerHTML = "";
-        let page = new DOMParser().parseFromString(string || android.getLoadedPage(), "text/html").children[0];
+        window.page = new DOMParser().parseFromString(string || android.getLoadedPage(), "text/html").children[0];
+        window.isLogIn = android.checkLogin();
         let container = document.body.appendNewChild({type: "div", attr: [["id", "content"]]});
         if (page.$("#pgt .pg>*").length !== 0) {
             window.curPage = Int([...page.$("#pgt .pg>*")].filter(i => i.tagName === "STRONG")[0].innerHTML);
@@ -45,9 +46,25 @@
             replyThreadContainer.appendNewChild({
                 type: "div",
                 attr: [["class", "threadContent"]],
-                innerHTML: reply.$(".t_fsz")[0].innerHTML
+                innerHTML: reply.$(".t_fsz")[0].innerHTML.replace("src=\"static/image/common/none.gif\"", "src='imageAssets\\imageHolder.svg'")
             });
         });
+
+        document.querySelectorAll("img[zoomfile]").forEach(e => {
+            let image = new Image();
+            image.src = e.attributes["file"].value;
+            image.onload = () => {
+                e.src = e.attributes["file"].value;
+            };
+            image.onerror = () => {
+                e.src = `imageAssets\\imageBrokenHolder.svg`;
+            };
+        });
+
+        document.querySelectorAll(".locked").forEach(e => {
+            if (e.innerText.indexOf("你需要登录") !== -1)
+                e.innerHTML = "尚未登录，请点击<a href='javascript:void(0)' onclick='android.toggleLogin()'>此处</a>登录。"
+        })
 
         try {
             let loadPostList = (page) => {

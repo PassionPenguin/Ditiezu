@@ -1,18 +1,20 @@
 package com.passionpenguin.ditiezu
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.*
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.google.android.material.snackbar.Snackbar
 import org.jsoup.Jsoup
+
 
 class ViewThread : AppCompatActivity() {
 
@@ -23,6 +25,7 @@ class ViewThread : AppCompatActivity() {
 
         val darkMode =
             this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK === Configuration.UI_MODE_NIGHT_YES
+        val webView: WebView = findViewById(R.id.viewThread)
 
         val extras = intent.extras
         var tid = 1
@@ -31,8 +34,19 @@ class ViewThread : AppCompatActivity() {
         } else finish()
 
         findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            webView.evaluateJavascript("android.checkLogin()") {
+                if (it == "false") Snackbar.make(view, "请登录后再进行操作", Snackbar.LENGTH_LONG)
+                    .setAction("登录") {
+                        startActivity(
+                            Intent(
+                                this@ViewThread,
+                                AccountActivity::class.java
+                            )
+                        )
+                    }.show()
+                else Snackbar.make(view, "尚在开发", Snackbar.LENGTH_LONG).show()
+            }
+
         }
 
         fun retrieveThreadContent(page: Int = 1) {
@@ -47,7 +61,6 @@ class ViewThread : AppCompatActivity() {
                         val parser = Jsoup.parse(result)
                         this@ViewThread.runOnUiThread {
                             title = parser.select("#thread_subject").text()
-                            val webView: WebView = findViewById(R.id.viewThread)
                             webView.settings.javaScriptEnabled = true
                             class WebViewInterface() {
                                 @JavascriptInterface
@@ -70,6 +83,21 @@ class ViewThread : AppCompatActivity() {
                                 @JavascriptInterface
                                 fun isDarkMode(): Boolean {
                                     return darkMode;
+                                }
+
+                                @JavascriptInterface
+                                fun toggleLogin() {
+                                    startActivity(
+                                        Intent(
+                                            this@ViewThread,
+                                            AccountActivity::class.java
+                                        )
+                                    )
+                                }
+
+                                @JavascriptInterface
+                                fun checkLogin(): Boolean {
+                                    return HttpExt().checkLogin()
                                 }
                             }
                             webView.addJavascriptInterface(WebViewInterface(), "android")
