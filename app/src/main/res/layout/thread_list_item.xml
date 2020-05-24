@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:background="@color/surface"
     android:clickable="false"
-    android:elevation="12dp"
     android:focusable="false"
     android:orientation="vertical">
 
@@ -12,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:background="@drawable/border_radius_8_no_padding"
+        android:background="@drawable/border_radius_4_no_padding"
         android:orientation="vertical">
 
         <LinearLayout

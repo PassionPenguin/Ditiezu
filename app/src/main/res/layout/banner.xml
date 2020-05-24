@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bannerImage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center|top"
+    android:contentDescription="@string/app_description"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="32dp">
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center|top"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_brand" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="@dimen/_16"
+        android:text="@string/app_description"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+</LinearLayout>

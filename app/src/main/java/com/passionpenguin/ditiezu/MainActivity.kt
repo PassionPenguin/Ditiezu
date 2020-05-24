@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
             return resources.getString(int)
         }
 
+        threadListView.addHeaderView(layoutInflater.inflate(R.layout.banner, threadListView))
+
         fun bottomButtonHighlight(clear: Array<LinearLayout>, add: LinearLayout) {
             clear.forEach {
                 (it.getChildAt(0) as ImageView).setColorFilter(
@@ -289,12 +291,16 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 val threadListContent = mutableListOf<ThreadListItem>()
                 parser.select("ul.comiis_onemiddleulone li").forEach {
-                    val author = it.select("code").text()
+                    val author = it.select("code a")
+                    val authorName = author.text()
                     val category = it.select(".orgen").text()
                     val title = it.select(".blackvs")
                     threadListContent.add(
                         ThreadListItem(
-                            title.text(), "$author · [$category]", title.attr("href")
+                            author.attr("href").substring(
+                                author.attr("href").indexOf("uid-") + 4,
+                                author.attr("href").indexOf(".html")
+                            ).toInt(), title.text(), "$authorName · [$category]", title.attr("href")
                                 .substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
                         )
                     )
@@ -307,14 +313,17 @@ class MainActivity : AppCompatActivity() {
                     )
 
                 threadListView.setOnItemClickListener { _, _, position, _ ->
-                    Toast.makeText(this@MainActivity, position.toString(), Toast.LENGTH_LONG).show()
-                    Log.i("a", position.toString() + threadListContent[position].target)
-                    val i = Intent(this@MainActivity, ViewThread::class.java)
-                    i.putExtra(
-                        "tid",
-                        threadListContent[position].target
-                    )
-                    startActivity(i)
+                    if (position == 0) {
+                        // Banner
+                    } else {
+                        val i = Intent(this@MainActivity, ViewThread::class.java)
+                        i.putExtra(
+                            "tid",
+                            threadListContent[position - 1].target
+                        )
+                        Log.i("", threadListContent[position - 1].target.toString())
+                        startActivity(i)
+                    }
                 }
             }
         }

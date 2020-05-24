@@ -18,7 +18,7 @@ class CategoryAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(resource, null)
+        val view: View = layoutInflater.inflate(resource, parent)
         val imageView: ImageView = view.findViewById(R.id.iconIv)
         val title: TextView = view.findViewById(R.id.titleTv)
         val category: CategoryItem = items[position]
@@ -28,7 +28,7 @@ class CategoryAdapter(
     }
 }
 
-class ThreadListItem(val title: String, val meta: String, val target: Int)
+class ThreadListItem(val authorId: Int, val title: String, val meta: String, val target: Int)
 
 class ThreadListAdapter(
     private var mCtx: Context,
@@ -38,7 +38,7 @@ class ThreadListAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(resource, null)
+        val view: View = layoutInflater.inflate(resource, parent)
         val title: TextView = view.findViewById(R.id.threadTitle)
         val meta: TextView = view.findViewById(R.id.threadMetaInfo)
         val category = items[position]

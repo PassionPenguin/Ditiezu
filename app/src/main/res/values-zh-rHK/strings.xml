@@ -39,4 +39,5 @@
     <string name="loading_description" >加載中...</string>
     <string name="threadList_title">帖子標題</string>
     <string name="title_reply">Reply</string>
+    <string name="app_description">上班，落班，地鐵帶你返工放工，地下鐵嘅故事就係依度發生</string>
 </resources>

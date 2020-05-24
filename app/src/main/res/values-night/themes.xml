@@ -3,9 +3,16 @@
     <style name="Theme.Ditiezu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
         <item name="android:actionBarItemBackground" tools:targetApi="l">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="Theme.Ditiezu.ActionBar" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="android:textSize">16sp</item>
+    <style name="Theme.Ditiezu.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/Theme.Ditiezu.ActionBarStyle</item>
+    </style>
+
+    <style name="Theme.Ditiezu.ActionBarStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">#000000</item>
     </style>
 </resources>
