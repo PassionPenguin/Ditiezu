@@ -10,7 +10,14 @@
         android:id="@+id/viewThreadContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:orientation="vertical">
+
+        <WebView
+            android:id="@+id/viewThread"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/LoadingMaskContainer"
@@ -58,9 +65,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/_32"
+        android:backgroundTint="@color/primary500"
         android:contentDescription="@string/title_reply"
+        android:src="@drawable/ic_baseline_reply_24"
+        android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_reply_24" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

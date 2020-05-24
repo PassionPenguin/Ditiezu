@@ -121,7 +121,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:background="@color/shadowMask"
-        android:elevation="@dimen/_8"
+        android:elevation="@dimen/_32"
         android:gravity="bottom"
         android:orientation="vertical"
         android:visibility="gone">
@@ -203,9 +203,8 @@
         android:layout_marginBottom="48dp"
         android:clickable="true"
         android:divider="@null"
-        android:elevation="@dimen/_32"
+        android:elevation="@dimen/_16"
         android:focusable="true"
-        android:paddingTop="@dimen/_16"
         app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintTop_toTopOf="parent" />
 

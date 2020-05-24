@@ -9,18 +9,28 @@
     <script src="main.js"></script>
 </head>
 <body>
-<div id='content'></div>
 </body>
 <script>
+    window.curPage = 0;
+    window.lastPage = 0;
     window.darkMode = (type) => {
         if (type)
             document.body.classList.add("darkmode");
         else
             document.body.classList.remove("darkmode");
     };
-    window.onload = () => {
-        let page = new DOMParser().parseFromString(android.getLoadedPage(), "text/html").children[0];
-        let container = $("#content")[0]
+    window.loadPage = (string = undefined) => {
+        document.body.innerHTML = "";
+        let page = new DOMParser().parseFromString(string || android.getLoadedPage(), "text/html").children[0];
+        let container = document.body.appendNewChild({type: "div", attr: [["id", "content"]]});
+        if (page.$("#pgt .pg>*").length !== 0) {
+            window.curPage = Int([...page.$("#pgt .pg>*")].filter(i => i.tagName === "STRONG")[0].innerHTML);
+            window.lastPage = [...page.$("#pgt .pg>*:not(.nxt)")].last().innerHTML;
+            window.lastPage = Int(lastPage.includes("...") ? lastPage.substr(4) : lastPage)
+        } else {
+            window.curPage = 1;
+            window.lastPage = 1
+        }
         page.$("[id^='pid']").forEach(reply => {
             let replyThreadContainer = container.appendNewChild({type: "div", attr: [["class", "threadContainer"]]});
             replyThreadContainer.appendNewChild({
@@ -38,7 +48,73 @@
                 innerHTML: reply.$(".t_fsz")[0].innerHTML
             });
         });
+
+        try {
+            let loadPostList = (page) => {
+                loadPage(android.loadPageWithPage(page));
+            };
+            let pgsBox = cE({type: "div", attr: [["id", "pg-pgs"]]});
+            if (curPage !== 1) {
+                let firstPage = cE({
+                    type: "span",
+                    innerText: "first_page",
+                    attr: [["class", "page mi"]]
+                });
+                firstPage.onclick = () => {
+                    loadPostList(1)
+                };
+                pgsBox.append(firstPage);
+                let prevPage = cE({
+                    type: "span",
+                    innerText: "chevron_left",
+                    attr: [["class", "page mi"]]
+                });
+                prevPage.onclick = () => {
+                    loadPostList(curPage - 1)
+                };
+                pgsBox.append(prevPage)
+            }
+            if (curPage - 1 >= 1) {
+                let page = cE({type: "span", innerText: (curPage - 1), attr: [["class", "page"]]});
+                page.onclick = () => {
+                    loadPostList(curPage - 1)
+                };
+                pgsBox.append(page)
+            }
+            pgsBox.append(cE({type: "span", innerText: curPage}));
+            if (curPage + 1 <= lastPage) {
+
+                let page = cE({type: "span", innerText: (curPage + 1), attr: [["class", "page"]]});
+                page.onclick = () => {
+                    loadPostList(curPage + 1)
+                };
+                pgsBox.append(page)
+            }
+            if (curPage !== lastPage) {
+                let nextPage = cE({
+                    type: "span",
+                    innerText: "chevron_right",
+                    attr: [["class", "page mi"]]
+                });
+                nextPage.onclick = () => {
+                    loadPostList(curPage + 1)
+                };
+                pgsBox.append(nextPage);
+                let lPCont = cE({type: "span", innerText: "last_page", attr: [["class", "page mi"]]});
+                lPCont.onclick = () => {
+                    loadPostList(lastPage)
+                };
+                pgsBox.append(lPCont)
+            }
+            document.body.append(pgsBox)
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    window.onload = () => {
+        loadPage();
         darkMode(android.isDarkMode());
+        android.displayWebView();
     };
 </script>
 </html>

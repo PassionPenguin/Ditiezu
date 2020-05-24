@@ -11,7 +11,7 @@ class TextField {
         value: null,
         color: "default"
     }) {
-        let i = createElement({type: (opt.size === "textarea" ? "textarea" : "input")});
+        let i = cE({type: (opt.size === "textarea" ? "textarea" : "input")});
         if (opt.prependicon)
             i.setAttribute("data-prependIcon", opt.prependicon);
         if (opt.appendicon)
@@ -28,7 +28,7 @@ class TextField {
             i.setAttribute("placeholder", opt.placeholder);
 
         i.classList.add("form-control");
-        let j = createElement({
+        let j = cE({
             type: "div",
             attr: [["class", "form-object" + opt.color]]
         });
@@ -50,7 +50,7 @@ class Button {
         color: "default",
         ripple: true
     }) {
-        let i = createElement({type: "button"});
+        let i = cE({type: "button"});
         if (opt.prependicon)
             i.innerHTML = `<span class='mi'>${opt.prependicon}</span>`
         i.innerHTML += opt.innerHTML;
@@ -71,8 +71,14 @@ class Button {
 }
 
 (() => {
+    window.Int = (val) => {
+        return parseInt(val);
+    };
+    window.Float = (val) => {
+        return parseFloat(val);
+    }
     window.copy = (value = "", opt = {}) => {
-        let input = document.createElement("input");
+        let input = document.cE("input");
         input.value = value;
         document.body.appendChild(input);
         input.select();
@@ -83,7 +89,7 @@ class Button {
     window.$ = (selector = "body", context = document) => {
         return context.querySelectorAll(selector);
     };
-    window.createElement = (data = {
+    window.cE = (data = {
         type: "div",
         ns: null,
         innerText: null,
@@ -141,7 +147,7 @@ class Button {
         attr: [],
         onclick: null
     }) {
-        let el = createElement(data);
+        let el = cE(data);
         this.appendChild(el);
         return el;
     };
@@ -205,7 +211,7 @@ class Button {
                                 pos = () => {
                                     return ripple.getBoundingClientRect();
                                 },
-                                rippler = document.createElement('span'),
+                                rippler = document.cE('span'),
                                 x = e.clientX - pos().left - (size / 2),
                                 y = e.clientY - pos().top - (size / 2),
                                 style = 'top:' + y + 'px; left:' + x + 'px; height: '
@@ -217,7 +223,7 @@ class Button {
                             }, 2000), {once: true});
                         }
                     if (detail[0].attributes["ripple"] !== "false") {
-                        rippleContainer = document.createElement('div');
+                        rippleContainer = document.cE('div');
                         rippleContainer.className = 'ripple--container';
                         ripple.addEventListener('mousedown', addRipple);
                         ripple.rippleContainer = rippleContainer;
@@ -226,7 +232,7 @@ class Button {
                 }
                 if (detail[1].indexOf("data-dismissible") !== -1 && detail[0].$(".close").length === 0) {
                     // Dismissible Generator
-                    let el = document.createElement("button");
+                    let el = document.cE("button");
                     el.classList.add("close");
                     el.innerText = "close";
                     el.on("click", () => {
@@ -269,7 +275,7 @@ class Button {
                         indicators.children[prevIndex].classList.remove("active");
                         indicators.children[curIndex].classList.add("active");
                     };
-                    let indicators = createElement({type: "div", attr: [["class", "carousel-indicators"]]});
+                    let indicators = cE({type: "div", attr: [["class", "carousel-indicators"]]});
                     for (let i = 0; i < imgs.length; i++)
                         indicators.appendNewChild({
                             type: "div", attr: [["class", "carousel-indicator"]], onclick: () => {
