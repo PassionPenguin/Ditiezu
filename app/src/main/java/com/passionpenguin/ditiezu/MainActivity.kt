@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             return resources.getString(int)
         }
 
-        threadListView.addHeaderView(layoutInflater.inflate(R.layout.banner, threadListView))
+        threadListView.addHeaderView(layoutInflater.inflate(R.layout.banner, null))
 
         fun bottomButtonHighlight(clear: Array<LinearLayout>, add: LinearLayout) {
             clear.forEach {
@@ -242,6 +242,51 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.taiwan
             )
         )
+        val categoryId = arrayOf(
+            7,
+            6,
+            8,
+            23,
+            40,
+            41,
+            39,
+            38,
+            24,
+            22,
+            53,
+            50,
+            56,
+            54,
+            51,
+            70,
+            52,
+            55,
+            64,
+            67,
+            65,
+            68,
+            66,
+            71,
+            72,
+            75,
+            73,
+            74,
+            140,
+            76,
+            77,
+            143,
+            142,
+            148,
+            78,
+            48,
+            144,
+            151,
+            28,
+            79,
+            36,
+            47,
+            37
+        )
         categoryListView.adapter =
             CategoryAdapter(
                 this,
@@ -249,6 +294,12 @@ class MainActivity : AppCompatActivity() {
                 categoryList
             )
         categoryListView.setOnItemClickListener { _, _, position, _ ->
+            val i = Intent(this@MainActivity, ForumDisplay::class.java)
+            i.putExtra(
+                "fid",
+                categoryId[position - 1]
+            )
+            startActivity(i)
             categoryDialogController(true)
             Toast.makeText(this@MainActivity, position.toString(), Toast.LENGTH_LONG).show()
         }
@@ -300,7 +351,11 @@ class MainActivity : AppCompatActivity() {
                             author.attr("href").substring(
                                 author.attr("href").indexOf("uid-") + 4,
                                 author.attr("href").indexOf(".html")
-                            ).toInt(), title.text(), "$authorName · [$category]", title.attr("href")
+                            ).toInt(),
+                            title.text(),
+                            authorName,
+                            "来自头条推荐 · $category",
+                            title.attr("href")
                                 .substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
                         )
                     )
@@ -321,7 +376,6 @@ class MainActivity : AppCompatActivity() {
                             "tid",
                             threadListContent[position - 1].target
                         )
-                        Log.i("", threadListContent[position - 1].target.toString())
                         startActivity(i)
                     }
                 }

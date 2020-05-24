@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Picasso
+
 
 class CategoryItem(val title: String, val photo: Int)
 
@@ -18,7 +20,7 @@ class CategoryAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(resource, parent)
+        val view: View = layoutInflater.inflate(resource, null)
         val imageView: ImageView = view.findViewById(R.id.iconIv)
         val title: TextView = view.findViewById(R.id.titleTv)
         val category: CategoryItem = items[position]
@@ -28,7 +30,13 @@ class CategoryAdapter(
     }
 }
 
-class ThreadListItem(val authorId: Int, val title: String, val meta: String, val target: Int)
+class ThreadListItem(
+    val authorId: Int,
+    val title: String,
+    val authorName: String,
+    val meta: String,
+    val target: Int
+)
 
 class ThreadListAdapter(
     private var mCtx: Context,
@@ -38,12 +46,21 @@ class ThreadListAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(resource, parent)
+        val view: View = layoutInflater.inflate(resource, null)
+        val avatar: ImageView = view.findViewById(R.id.avatar)
         val title: TextView = view.findViewById(R.id.threadTitle)
+        val authorName: TextView = view.findViewById(R.id.threadAuthorName)
         val meta: TextView = view.findViewById(R.id.threadMetaInfo)
-        val category = items[position]
-        title.text = category.title
-        meta.text = category.meta
+        val threadItem = items[position]
+        title.text = threadItem.title
+        authorName.text = threadItem.authorName
+        meta.text = threadItem.meta
+        Picasso.with(context)
+            .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${threadItem.authorId}")
+            .placeholder(R.mipmap.noavatar_middle_rounded)
+            .error(R.mipmap.noavatar_middle_rounded)
+            .transform(CircularCornersTransform())
+            .into(avatar);
         return view
     }
 }
