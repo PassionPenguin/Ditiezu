@@ -202,12 +202,12 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:id="@+id/userPoints"
                         android:text="@string/user_integral"
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:layout_marginTop="4dp"
                         android:textSize="10sp"
-                        android:id="@+id/userPoints"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:textAllCaps="true"
@@ -338,8 +338,9 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/user_id"
-                android:textStyle="bold"
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:gravity="start"
                 android:layout_marginBottom="8dp" />
 
             <TextView
@@ -348,8 +349,9 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder_number"
-                android:textStyle="bold"
-                android:textSize="14sp"
+                android:textColor="@color/grey"
+                android:gravity="end"
+                android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
         </LinearLayout>
 
@@ -365,8 +367,9 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/online_hour"
-                android:textStyle="bold"
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:gravity="start"
                 android:layout_marginBottom="8dp" />
 
             <TextView
@@ -375,176 +378,163 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder_number"
-                android:textStyle="bold"
-                android:textSize="14sp"
+                android:textColor="@color/grey"
+                android:gravity="end"
+                android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/points"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginBottom="16dp" />
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:baselineAligned="false">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                android:baselineAligned="false">
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/value_points"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="@string/placeholder_number"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
 
-                    <TextView
-                        android:id="@+id/value_points"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_number"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:id="@+id/title_points"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/points"
-                        android:textSize="12sp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/title_points"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="@string/points"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/value_prestige"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_number"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:gravity="center" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/title_prestige"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/prestige"
-                        android:textSize="12sp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/value_prestige"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="@string/placeholder_number"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
 
-                    <TextView
-                        android:id="@+id/value_money"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_number"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:id="@+id/title_money"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/money"
-                        android:textSize="12sp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/title_prestige"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="@string/prestige"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/value_m_score"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_number"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:gravity="center" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/title_m_score"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/m_score"
-                        android:textSize="12sp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/value_money"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="@string/placeholder_number"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
 
-                    <TextView
-                        android:id="@+id/value_popularity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/placeholder_number"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:gravity="center" />
+                <TextView
+                    android:id="@+id/title_money"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/money"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/title_popularity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/popularity"
-                        android:textSize="12sp"
-                        android:gravity="center" />
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/value_m_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/placeholder_number"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/title_m_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/m_score"
+                    android:textSize="12sp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/value_popularity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/placeholder_number"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/title_popularity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popularity"
+                    android:textSize="12sp"
+                    android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/LoadingMaskContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
         android:background="@color/shadowMask"
         android:elevation="@dimen/_8"
         android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/LoadingAnimation"
-            android:layout_width="180dp"
-            android:layout_height="150dp"
             android:background="@drawable/border_radius_16"
             android:elevation="@dimen/_32"
+            android:layout_height="150dp"
+            android:layout_width="180dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -552,18 +542,18 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ProgressBar
-                android:layout_width="180dp"
-                android:layout_height="96dp"
-                android:layout_gravity="center|top"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/primary500"
+                android:layout_gravity="center|top"
+                android:layout_height="96dp"
+                android:layout_width="180dp"
                 android:paddingTop="16dp" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
                 android:text="@string/loading_description"
                 android:textSize="16sp" />
         </LinearLayout>
