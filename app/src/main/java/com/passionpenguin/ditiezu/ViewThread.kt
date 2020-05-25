@@ -12,6 +12,7 @@ import android.webkit.WebViewClient
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.core.view.postDelayed
 import com.google.android.material.snackbar.Snackbar
 import org.jsoup.Jsoup
 
@@ -50,7 +51,6 @@ class ViewThread : AppCompatActivity() {
         }
 
         fun retrieveThreadContent(page: Int = 1) {
-
             fun loadPage(threadId: Int = tid, pageId: Int = page) {
                 HttpExt().retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
                     if (result == "Failed Retrieved") {
@@ -144,8 +144,15 @@ class ViewThread : AppCompatActivity() {
                                     return true
                                 }
                             })
-                            val loading: LinearLayout? = findViewById(R.id.LoadingAnimation)
-                            loading?.isGone = true
+                            findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility =
+                                View.VISIBLE
+                            findViewById<LinearLayout>(R.id.LoadingAnimation).startAnimation(
+                                Animation().fadeOutAnimation()
+                            )
+                            findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
+                                findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility =
+                                    View.GONE
+                            }
                         }
                     }
                     processResult(result)

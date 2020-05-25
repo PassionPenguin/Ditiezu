@@ -45,4 +45,15 @@
     <string name="prev_page">上頁</string>
     <string name="last_page">最後頁</string>
     <string name="first_page">第一頁</string>
+    <string name="avatar">頭像</string>
+    <string name="user_name">用戶名</string>
+    <string name="user_integral">用戶積分: 0</string>
+    <string name="level">等級</string>
+    <string name="replies">回覆</string>
+    <string name="threads">主題</string>
+    <string name="points">積分</string>
+    <string name="money">金錢</string>
+    <string name="popularity">人氣</string>
+    <string name="user_id">用戶唯一表示符</string>
+    <string name="online_hour">在線時長</string>
 </resources>

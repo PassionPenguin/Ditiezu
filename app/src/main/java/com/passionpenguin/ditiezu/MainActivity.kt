@@ -127,6 +127,8 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(homeButton, notificationButton, categoryButton),
                 accountButton
             )
+
+            startActivity(Intent(this@MainActivity, AccountActivity::class.java))
         }
 
 
@@ -176,15 +178,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         HttpExt().retrievePage("http://www.ditiezu.com/") {
-            val ctrlAnimation = TranslateAnimation(
-                TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                TranslateAnimation.RELATIVE_TO_SELF, 1F
-            )
-            ctrlAnimation.duration = 400L
             findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
-            findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(ctrlAnimation)
+            findViewById<LinearLayout>(R.id.LoadingAnimation).startAnimation(Animation().fadeOutAnimation())
             findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
                 findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
             }

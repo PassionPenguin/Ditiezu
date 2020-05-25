@@ -225,18 +225,9 @@ class ForumDisplay : AppCompatActivity() {
             }
 
             HttpExt().retrievePage("http://www.ditiezu.com/forum-$fid-$page.html") {
-                val ctrlAnimation = TranslateAnimation(
-                    TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                    TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                    TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                    TranslateAnimation.RELATIVE_TO_SELF, 1F
-                )
-                ctrlAnimation.duration = 400L
                 runOnUiThread {
                     findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
-                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(
-                        ctrlAnimation
-                    )
+                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(Animation().fadeOutAnimation())
                     findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
                         findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
                     }
@@ -292,6 +283,7 @@ class ForumDisplay : AppCompatActivity() {
                 arrayOf(homeButton, notificationButton, categoryButton),
                 accountButton
             )
+            startActivity(Intent(this@MainActivity, AccountActivity::class.java))
         }
 
         loadForumContent(1)

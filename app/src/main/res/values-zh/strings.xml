@@ -105,4 +105,18 @@
     <string name="prev_page">上页</string>
     <string name="next_page">下页</string>
     <string name="page_controller">页</string>
+    <string name="avatar">头像</string>
+    <string name="user_name">用户名</string>
+    <string name="user_integral">用户积分: 0</string>
+    <string name="friends">朋友</string>
+    <string name="threads">主题</string>
+    <string name="replies">回复</string>
+    <string name="level">等级</string>
+    <string name="points">积分</string>
+    <string name="popularity">人气</string>
+    <string name="m_score">M值</string>
+    <string name="money">金钱</string>
+    <string name="prestige">威望</string>
+    <string name="user_id">用户唯一标识符</string>
+    <string name="online_hour">在线时长</string>
 </resources>

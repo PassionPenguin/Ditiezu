@@ -106,4 +106,19 @@
     <string name="prev_page">Previous Page</string>
     <string name="next_page">Next Page</string>
     <string name="page_controller">Page Controller</string>
+    <string name="avatar">Avatar</string>
+    <string name="user_name">User Name</string>
+    <string name="user_integral">User Integration: 0</string>
+    <string name="level">Level</string>
+    <string name="friends">Friends</string>
+    <string name="replies">Replies</string>
+    <string name="threads">Threads</string>
+    <string name="placeholder_number" translatable="false">36</string>
+    <string name="points">Points</string>
+    <string name="prestige">Prestige</string>
+    <string name="money">Money</string>
+    <string name="m_score">M Score</string>
+    <string name="popularity">Popularity</string>
+    <string name="user_id">User Identifier</string>
+    <string name="online_hour">Online Hours</string>
 </resources>

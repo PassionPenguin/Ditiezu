@@ -12,7 +12,8 @@
         android:layout_height="50dp"
         android:background="@color/surface_secondary"
         android:baselineAligned="true"
-        android:elevation="@dimen/_4"
+        android:elevation="@dimen/_16"
+        android:translationZ="24dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
