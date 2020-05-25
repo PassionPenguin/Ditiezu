@@ -108,7 +108,7 @@
     <string name="page_controller">Page Controller</string>
     <string name="avatar">Avatar</string>
     <string name="user_name">User Name</string>
-    <string name="user_integral">User Integration: 0</string>
+    <string name="user_integral">"User Integration: "</string>
     <string name="level">Level</string>
     <string name="friends">Friends</string>
     <string name="replies">Replies</string>

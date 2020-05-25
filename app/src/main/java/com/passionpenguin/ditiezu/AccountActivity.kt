@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.TranslateAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.postDelayed
 import com.squareup.picasso.Picasso
 import org.jsoup.Jsoup
@@ -18,6 +20,117 @@ class AccountActivity : AppCompatActivity() {
 
         if (!HttpExt().checkLogin())
             startActivity(Intent(this@AccountActivity, LoginActivity::class.java))
+
+        val homeButton: LinearLayout = findViewById(R.id.HomeButton)
+        val categoryButton: LinearLayout = findViewById(R.id.CategoryButton)
+        val notificationButton: LinearLayout = findViewById(R.id.NotificationButton)
+        val accountButton: LinearLayout = findViewById(R.id.AccountButton)
+        val categoryListContainer: LinearLayout = findViewById(R.id.CategoryListContainer)
+        val categoryListMaskContainer: LinearLayout = findViewById(R.id.CategoryListMaskContainer)
+        val categoryListView: ListView = findViewById(R.id.CategoryList)
+        val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
+        val categoryContent = CategoryContent(applicationContext)
+        val categoryList = categoryContent.categoryList
+        val categoryId = categoryContent.categoryId
+
+        fun bottomButtonHighlight(clear: Array<LinearLayout>, add: LinearLayout) {
+            clear.forEach {
+                (it.getChildAt(0) as ImageView).setColorFilter(
+                    ContextCompat.getColor(applicationContext, R.color.black),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                (it.getChildAt(1) as TextView).setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.black
+                    )
+                )
+            }
+            (add.getChildAt(0) as ImageView).setColorFilter(
+                ContextCompat.getColor(applicationContext, R.color.primary700),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            (add.getChildAt(1) as TextView).setTextColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.primary700
+                )
+            )
+            mask.visibility = View.GONE
+        }
+
+        fun categoryDialogController(state: Boolean) {
+            val ctrlAnimation = if (state) TranslateAnimation(
+                TranslateAnimation.RELATIVE_TO_SELF, 0F, TranslateAnimation.RELATIVE_TO_SELF, 0F,
+                TranslateAnimation.RELATIVE_TO_SELF, 0F, TranslateAnimation.RELATIVE_TO_SELF, 1F
+            ) else TranslateAnimation(
+                TranslateAnimation.RELATIVE_TO_SELF, 0F, TranslateAnimation.RELATIVE_TO_SELF, 0F,
+                TranslateAnimation.RELATIVE_TO_SELF, 1F, TranslateAnimation.RELATIVE_TO_SELF, 0F
+            )
+            ctrlAnimation.duration = 400L //设置动画的过渡时间
+
+            categoryListMaskContainer.visibility = View.VISIBLE
+            categoryListContainer.startAnimation(ctrlAnimation)
+            if (state) {
+                categoryListMaskContainer.postDelayed(400) {
+                    categoryListMaskContainer.visibility = View.GONE
+                }
+                bottomButtonHighlight(
+                    arrayOf(categoryButton, notificationButton, accountButton),
+                    homeButton
+                )
+            }
+        }
+
+        categoryListView.adapter =
+            CategoryAdapter(
+                this,
+                R.layout.category_popup,
+                categoryList
+            )
+        categoryListView.setOnItemClickListener { _, _, position, _ ->
+            val i = Intent(this@AccountActivity, ForumDisplay::class.java)
+            i.putExtra(
+                "fid",
+                categoryId[position]
+            )
+            startActivity(i)
+            categoryDialogController(true)
+        }
+        categoryListMaskContainer.setOnClickListener {
+            categoryDialogController(true)
+        }
+        findViewById<LinearLayout>(R.id.LoadingMaskContainer).setOnClickListener {
+            it.visibility = View.GONE
+        }
+        homeButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(categoryButton, notificationButton, accountButton),
+                homeButton
+            )
+        }
+        categoryButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(homeButton, notificationButton, accountButton),
+                categoryButton
+            )
+
+            categoryDialogController(false)
+        }
+        notificationButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(homeButton, categoryButton, accountButton),
+                notificationButton
+            )
+        }
+        accountButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(homeButton, notificationButton, categoryButton),
+                accountButton
+            )
+
+            startActivity(Intent(this@AccountActivity, AccountActivity::class.java))
+        }
 
         HttpExt().retrievePage("http://www.ditiezu.com/home.php?mod=space") {
             runOnUiThread {
@@ -57,6 +170,8 @@ class AccountActivity : AppCompatActivity() {
                     parser.select(".pbm.mbm.bbda.cl:first-child ul > :nth-child(5) a")[2].text()
                         .substring(4)
                 findViewById<TextView>(R.id.userId).text = id
+                findViewById<TextView>(R.id.userPoints).text =
+                    resources.getString(R.string.user_integral) + parser.select("#psts li")[0].textNodes()[0].text()
                 findViewById<TextView>(R.id.onlineHour).text =
                     parser.select("#pbbs>:first-child").textNodes()[0].text()
                 findViewById<TextView>(R.id.value_points).text =
