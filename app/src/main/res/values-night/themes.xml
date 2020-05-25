@@ -7,11 +7,11 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="Theme.Ditiezu.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Ditiezu.ActionBar" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.Ditiezu.ActionBarStyle</item>
     </style>
 
-    <style name="Theme.Ditiezu.ActionBarStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Ditiezu.ActionBarStyle" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:textSize">18sp</item>
         <item name="android:background">#000000</item>
     </style>

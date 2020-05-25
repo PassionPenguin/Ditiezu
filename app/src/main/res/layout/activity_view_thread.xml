@@ -54,7 +54,6 @@
                 android:layout_height="match_parent"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
-                android:color="@color/dark"
                 android:text="@string/loading_description"
                 android:textSize="16sp" />
         </LinearLayout>
