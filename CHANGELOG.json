@@ -1,0 +1,17 @@
+{
+  "pref_name": "CHANGELOG",
+  "changelog_history": [
+    {
+      "versionCode": 1,
+      "versionName": "1",
+      "versionDate": "Mon Mar 16 2020 20:59:28 GMT+0800 (中国标准时间)",
+      "versionLog": "创建项目，支持登录、分板块查看帖子列表、看帖（图片可分享缩放旋转）、下载附件"
+    },
+    {
+      "versionCode": 2.1,
+      "versionName": "Watermelon Milkshake v2.1 Canary",
+      "versionDate": "Mon May 25 2020 21:17:04 GMT+0800 (中国标准时间)",
+      "versionLog": "创建项目，支持登录、分板块查看帖子列表、看帖（包括图片，不支持下载）"
+    }
+  ]
+}

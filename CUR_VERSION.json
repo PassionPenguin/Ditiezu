@@ -1,0 +1,6 @@
+{
+  "versionCode": 2.1,
+  "versionName": "Watermelon Milkshake v2.1 Canary",
+  "versionDate": "Mon May 25 2020 21:17:04 GMT+0800 (中国标准时间)",
+  "versionLog": "创建项目，支持登录、分板块查看帖子列表、看帖（包括图片，不支持下载）"
+}
