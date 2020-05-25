@@ -11,7 +11,6 @@ class CategoryContent(val context: Context) {
         } catch (e: Exception) {
             Log.i("", e.toString())
         }
-        Log.i(str, str)
         return str
     }
 
