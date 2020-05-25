@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 
 
-class CategoryItem(val title: String, val photo: Int)
+class CategoryItem(val title: String, val description: String, val icon: Int)
 
 class CategoryAdapter(
     private var mCtx: Context,
@@ -24,7 +24,7 @@ class CategoryAdapter(
         val imageView: ImageView = view.findViewById(R.id.iconIv)
         val title: TextView = view.findViewById(R.id.titleTv)
         val category: CategoryItem = items[position]
-        imageView.setImageDrawable(mCtx.resources.getDrawable(category.photo, null))
+        imageView.setImageDrawable(mCtx.resources.getDrawable(category.icon, null))
         title.text = category.title
         return view
     }

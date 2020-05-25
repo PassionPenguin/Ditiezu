@@ -18,7 +18,7 @@ class ForumDisplay : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val extras = intent.extras
-        var fid = 1
+        var fid = 23
         if (extras != null) {
             fid = extras.getInt("fid")
         } else finish()
@@ -32,11 +32,10 @@ class ForumDisplay : AppCompatActivity() {
         val categoryListView: ListView = findViewById(R.id.CategoryList)
         val threadListView: ListView = findViewById(R.id.ThreadList)
         val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
-        fun string(int: Int): String {
-            return resources.getString(int)
-        }
 
-        threadListView.addHeaderView(layoutInflater.inflate(R.layout.banner, null))
+        val categoryContent = CategoryContent(applicationContext)
+        val categoryList = categoryContent.categoryList
+        val categoryId = categoryContent.categoryId
 
         fun bottomButtonHighlight(clear: Array<LinearLayout>, add: LinearLayout) {
             clear.forEach {
@@ -87,217 +86,24 @@ class ForumDisplay : AppCompatActivity() {
             }
         }
 
-        val categoryList = mutableListOf(
-            CategoryItem(
-                string(R.string.category_Beijing),
-                R.drawable.beijing
-            ),
-            CategoryItem(
-                string(R.string.category_Tianjin),
-                R.drawable.tianjin
-            ),
-            CategoryItem(
-                string(R.string.category_Shanghai),
-                R.drawable.shanghai
-            ),
-            CategoryItem(
-                string(R.string.category_Guangzhou),
-                R.drawable.guangzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Changchun),
-                R.drawable.changchun
-            ),
-            CategoryItem(
-                string(R.string.category_Dalian),
-                R.drawable.dalian
-            ),
-            CategoryItem(
-                string(R.string.category_Wuhan),
-                R.drawable.wuhan
-            ),
-            CategoryItem(
-                string(R.string.category_Chongqing),
-                R.drawable.chongqing
-            ),
-            CategoryItem(
-                string(R.string.category_Shenzhen),
-                R.drawable.shenzhen
-            ),
-            CategoryItem(
-                string(R.string.category_Nanjing),
-                R.drawable.nanjing
-            ),
-            CategoryItem(
-                string(R.string.category_Chengdu),
-                R.drawable.chengdu
-            ),
-            CategoryItem(
-                string(R.string.category_Shenyang),
-                R.drawable.shenyang
-            ),
-            CategoryItem(
-                string(R.string.category_Foshan),
-                R.drawable.foshan
-            ),
-            CategoryItem(
-                string(R.string.category_Xian),
-                R.drawable.xian
-            ),
-            CategoryItem(
-                string(R.string.category_Suzhou),
-                R.drawable.suzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Kunming),
-                R.drawable.kunming
-            ),
-            CategoryItem(
-                string(R.string.category_Hangzhou),
-                R.drawable.hangzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Harbin),
-                R.drawable.harbin
-            ),
-            CategoryItem(
-                string(R.string.category_Zhengzhou),
-                R.drawable.zhengzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Changsha),
-                R.drawable.changsha
-            ),
-            CategoryItem(
-                string(R.string.category_Ningbo),
-                R.drawable.ningbo
-            ),
-            CategoryItem(
-                string(R.string.category_Wuxi),
-                R.drawable.wuxi
-            ),
-            CategoryItem(
-                string(R.string.category_Qingdao),
-                R.drawable.qingdao
-            ),
-            CategoryItem(
-                string(R.string.category_Nanchang),
-                R.drawable.nanchang
-            ),
-            CategoryItem(
-                string(R.string.category_Fuzhou),
-                R.drawable.fuzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Dongguan),
-                R.drawable.dongguan
-            ),
-            CategoryItem(
-                string(R.string.category_Nanning),
-                R.drawable.nanning
-            ),
-            CategoryItem(
-                string(R.string.category_Hefei),
-                R.drawable.hefei
-            ),
-            CategoryItem(
-                string(R.string.category_Shijiazhuang),
-                R.drawable.shijiazhuang
-            ),
-            CategoryItem(
-                string(R.string.category_Guiyang),
-                R.drawable.guiyang
-            ),
-            CategoryItem(
-                string(R.string.category_Xiamen),
-                R.drawable.xiamen
-            ),
-            CategoryItem(
-                string(R.string.category_Urumqi),
-                R.drawable.urumqi
-            ),
-            CategoryItem(
-                string(R.string.category_Wenzhou),
-                R.drawable.wenzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Jinan),
-                R.drawable.jinan
-            ),
-            CategoryItem(
-                string(R.string.category_Lanzhou),
-                R.drawable.lanzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Changzhou),
-                R.drawable.changzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Xuzhou),
-                R.drawable.xuzhou
-            ),
-            CategoryItem(
-                string(R.string.category_Hongkong),
-                R.drawable.hongkong
-            ),
-            CategoryItem(
-                string(R.string.category_Macau),
-                R.drawable.macau
-            ),
-            CategoryItem(
-                string(R.string.category_Taiwan),
-                R.drawable.taiwan
-            )
-        )
-        categoryListView.adapter =
-            CategoryAdapter(
-                this,
-                R.layout.category_popup,
-                categoryList
-            )
-        categoryListView.setOnItemClickListener { _, _, position, _ ->
-            categoryDialogController(true)
-            Toast.makeText(this@ForumDisplay, position.toString(), Toast.LENGTH_LONG).show()
-        }
-        categoryListMaskContainer.setOnClickListener {
-            categoryDialogController(true)
-        }
-        findViewById<LinearLayout>(R.id.LoadingMaskContainer).setOnClickListener {
-            it.visibility = View.GONE
-        }
-        homeButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(categoryButton, notificationButton, accountButton),
-                homeButton
-            )
-        }
-        categoryButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(homeButton, notificationButton, accountButton),
-                categoryButton
-            )
-
-            categoryDialogController(false)
-        }
-        notificationButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(homeButton, categoryButton, accountButton),
-                notificationButton
-            )
-        }
-        accountButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(homeButton, notificationButton, categoryButton),
-                accountButton
-            )
-        }
-
-
         fun loadForumContent(page: Int) {
-
             fun processResult(result: String) {
                 val parser = Jsoup.parse(result)
                 runOnUiThread {
+                    val bannerView = layoutInflater.inflate(R.layout.category_banner, null)
+                    bannerView.findViewById<ImageView>(R.id.CategoryIcon)
+                        .setImageDrawable(
+                            resources.getDrawable(
+                                categoryList[categoryId.indexOf(fid)].icon,
+                                null
+                            )
+                        )
+                    bannerView.findViewById<TextView>(R.id.CategoryTitle).text =
+                        categoryList[categoryId.indexOf(fid)].title
+                    threadListView.addHeaderView(bannerView)
+
+
+
                     val threadListContent = mutableListOf<ThreadListItem>()
                     parser.select("[id^='normalthread_']").forEach {
                         val type = if (it.select(".new em").text() !== "") {
@@ -355,12 +161,14 @@ class ForumDisplay : AppCompatActivity() {
                     TranslateAnimation.RELATIVE_TO_SELF, 1F
                 )
                 ctrlAnimation.duration = 400L
-                findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
-                findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(
-                    ctrlAnimation
-                )
-                findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
-                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
+                runOnUiThread {
+                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
+                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(
+                        ctrlAnimation
+                    )
+                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
+                        findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
+                    }
                 }
 
                 if (it == "Failed Retrieved") {
@@ -370,6 +178,51 @@ class ForumDisplay : AppCompatActivity() {
                 processResult(it)
             }
         }
+
+        categoryListView.adapter =
+            CategoryAdapter(
+                this,
+                R.layout.category_popup,
+                categoryList
+            )
+        categoryListView.setOnItemClickListener { _, _, position, _ ->
+            categoryDialogController(true)
+            fid = categoryId[position]
+            loadForumContent(1)
+        }
+        categoryListMaskContainer.setOnClickListener {
+            categoryDialogController(true)
+        }
+        findViewById<LinearLayout>(R.id.LoadingMaskContainer).setOnClickListener {
+            it.visibility = View.GONE
+        }
+        homeButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(categoryButton, notificationButton, accountButton),
+                homeButton
+            )
+        }
+        categoryButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(homeButton, notificationButton, accountButton),
+                categoryButton
+            )
+
+            categoryDialogController(false)
+        }
+        notificationButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(homeButton, categoryButton, accountButton),
+                notificationButton
+            )
+        }
+        accountButton.setOnClickListener {
+            bottomButtonHighlight(
+                arrayOf(homeButton, notificationButton, categoryButton),
+                accountButton
+            )
+        }
+
         loadForumContent(1)
     }
 }

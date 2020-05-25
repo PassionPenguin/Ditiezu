@@ -20,4 +20,5 @@
     <color name="dark">#333</color>
     <color name="danger">#9c284d</color>
     <color name="shadowMask">#44ffffff</color>
+    <color name="transparentWhiteBackground">#88ffffff</color>
 </resources>

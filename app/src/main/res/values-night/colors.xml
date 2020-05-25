@@ -20,4 +20,5 @@
     <color name="dark">#ddd</color>
     <color name="danger">#9c284d</color>
     <color name="shadowMask">#44000000</color>
+    <color name="transparentWhiteBackground">#dd000000</color>
 </resources>
