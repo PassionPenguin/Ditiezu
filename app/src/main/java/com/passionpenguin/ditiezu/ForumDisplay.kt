@@ -283,7 +283,7 @@ class ForumDisplay : AppCompatActivity() {
                 arrayOf(homeButton, notificationButton, categoryButton),
                 accountButton
             )
-            startActivity(Intent(this@MainActivity, AccountActivity::class.java))
+            startActivity(Intent(this@ForumDisplay, AccountActivity::class.java))
         }
 
         loadForumContent(1)
