@@ -47,7 +47,7 @@
     <string name="first_page">第一頁</string>
     <string name="avatar">頭像</string>
     <string name="user_name">用戶名</string>
-    <string name="user_integral">"用戶積分: "</string>
+    <string name="user_integral">用戶積分: %1$d</string>
     <string name="level">等級</string>
     <string name="replies">回覆</string>
     <string name="threads">主題</string>
@@ -56,4 +56,5 @@
     <string name="popularity">人氣</string>
     <string name="user_id">用戶唯一表示符</string>
     <string name="online_hour">在線時長</string>
+    <string name="online_hour_description">你在論壇總時長</string>
 </resources>

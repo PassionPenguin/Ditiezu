@@ -134,61 +134,61 @@ class MainActivity : AppCompatActivity() {
 
         fun processResult(result: String) {
             val parser = Jsoup.parse(result)
-            runOnUiThread {
-                val threadListContent = mutableListOf<ThreadListItem>()
-                parser.select("ul.comiis_onemiddleulone li").forEach {
-                    val author = it.select("code a")
-                    val authorName = author.text()
-                    val category = it.select(".orgen").text()
-                    val title = it.select(".blackvs")
-                    threadListContent.add(
-                        ThreadListItem(
-                            author.attr("href").substring(
-                                author.attr("href").indexOf("uid-") + 4,
-                                author.attr("href").indexOf(".html")
-                            ).toInt(),
-                            title.text(),
-                            authorName,
-                            "来自头条推荐 · $category",
-                            title.attr("href")
-                                .substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
-                        )
+            val threadListContent = mutableListOf<ThreadListItem>()
+            parser.select("ul.comiis_onemiddleulone li").forEach {
+                val author = it.select("code a")
+                val authorName = author.text()
+                val category = it.select(".orgen").text()
+                val title = it.select(".blackvs")
+                threadListContent.add(
+                    ThreadListItem(
+                        author.attr("href").substring(
+                            author.attr("href").indexOf("uid-") + 4,
+                            author.attr("href").indexOf(".html")
+                        ).toInt(),
+                        title.text(),
+                        authorName,
+                        "来自头条推荐 · $category",
+                        title.attr("href")
+                            .substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
                     )
-                }
-                threadListView.adapter =
-                    ThreadListAdapter(
-                        this,
-                        R.layout.thread_list_item,
-                        threadListContent
-                    )
+                )
+            }
+            threadListView.adapter =
+                ThreadListAdapter(
+                    this,
+                    R.layout.thread_list_item,
+                    threadListContent
+                )
 
-                threadListView.setOnItemClickListener { _, _, position, _ ->
-                    if (position == 0) {
-                        // Banner
-                    } else {
-                        val i = Intent(this@MainActivity, ViewThread::class.java)
-                        i.putExtra(
-                            "tid",
-                            threadListContent[position - 1].target
-                        )
-                        startActivity(i)
-                    }
+            threadListView.setOnItemClickListener { _, _, position, _ ->
+                if (position == 0) {
+                    // Banner
+                } else {
+                    val i = Intent(this@MainActivity, ViewThread::class.java)
+                    i.putExtra(
+                        "tid",
+                        threadListContent[position - 1].target
+                    )
+                    startActivity(i)
                 }
             }
         }
 
         HttpExt().retrievePage("http://www.ditiezu.com/") {
-            findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
-            findViewById<LinearLayout>(R.id.LoadingAnimation).startAnimation(Animation().fadeOutAnimation())
-            findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
-                findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
-            }
+            runOnUiThread {
+                findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
+                findViewById<LinearLayout>(R.id.LoadingAnimation).startAnimation(Animation().fadeOutAnimation())
+                findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
+                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
+                }
 
-            if (it == "Failed Retrieved") {
-                // Failed Retrieved
-                Log.i("HTTPEXT", "FAILED RETRIEVED")
+                if (it == "Failed Retrieved") {
+                    // Failed Retrieved
+                    Log.i("HTTPEXT", "FAILED RETRIEVED")
+                }
+                processResult(it)
             }
-            processResult(it)
         }
     }
 }

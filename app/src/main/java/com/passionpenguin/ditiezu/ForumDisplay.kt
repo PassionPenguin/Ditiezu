@@ -217,7 +217,6 @@ class ForumDisplay : AppCompatActivity() {
                                 "tid",
                                 threadListContent[position - 1].target
                             )
-                            Log.i("", threadListContent[position - 1].target.toString())
                             startActivity(i)
                         }
                     }

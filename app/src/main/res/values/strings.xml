@@ -108,7 +108,7 @@
     <string name="page_controller">Page Controller</string>
     <string name="avatar">Avatar</string>
     <string name="user_name">User Name</string>
-    <string name="user_integral">"User Integration: "</string>
+    <string name="user_integral">User Integration: %1$d</string>
     <string name="level">Level</string>
     <string name="friends">Friends</string>
     <string name="replies">Replies</string>
@@ -121,4 +121,5 @@
     <string name="popularity">Popularity</string>
     <string name="user_id">User Identifier</string>
     <string name="online_hour">Online Hours</string>
+    <string name="online_hour_description">The time you spent on the bbs</string>
 </resources>

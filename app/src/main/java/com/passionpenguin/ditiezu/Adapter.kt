@@ -40,13 +40,13 @@ class ThreadListItem(
 
 class ThreadListAdapter(
     private var mCtx: Context,
-    private var resource: Int,
+    resource: Int,
     private var items: List<ThreadListItem>
 ) : ArrayAdapter<ThreadListItem>(mCtx, resource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(resource, null)
+        val view: View = layoutInflater.inflate(R.layout.thread_list_item, null)
         val avatar: ImageView = view.findViewById(R.id.avatar)
         val title: TextView = view.findViewById(R.id.threadTitle)
         val authorName: TextView = view.findViewById(R.id.threadAuthorName)
@@ -61,6 +61,33 @@ class ThreadListAdapter(
             .error(R.mipmap.noavatar_middle_rounded)
             .transform(CircularCornersTransform())
             .into(avatar);
+        return view
+    }
+}
+
+class PrefListItem(
+    val name: String = "",
+    val description: String = "",
+    val value: String = "",
+    val toggle: Boolean = false,
+    val execFunc: () -> Unit
+)
+
+class PrefAdapter(
+    private var mCtx: Context,
+    resource: Int,
+    private var items: List<PrefListItem>
+) : ArrayAdapter<PrefListItem>(mCtx, resource, items) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
+        val view: View = layoutInflater.inflate(R.layout.pref_item, null)
+        val value = view.findViewById<TextView>(R.id.pref_item_value)
+        value.text = items[position].value
+        if (!items[position].toggle)
+            value.setCompoundDrawables(null, null, null, null)
+        view.findViewById<TextView>(R.id.pref_item_description).text = items[position].description
+        view.findViewById<TextView>(R.id.pref_item_name).text = items[position].name
         return view
     }
 }
