@@ -6,156 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/surface_secondary"
-        android:baselineAligned="true"
-        android:elevation="@dimen/_16"
-        android:translationZ="24dp"
-        android:orientation="horizontal"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        app:itemIconTint="@drawable/selected_color"
+        app:itemTextColor="@drawable/selected_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/menu" />
 
-        <LinearLayout
-            android:id="@+id/HomeButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/ripple"
-            android:orientation="vertical"
-            android:theme="@style/Theme.Ditiezu.BottomNavItem">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:contentDescription="@string/home_title"
-                android:src="@drawable/ic_baseline_home_24"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
-                android:tint="@color/primary700" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="@string/home_title"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/CategoryButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/ripple"
-            android:orientation="vertical"
-            android:theme="@style/Theme.Ditiezu.BottomNavItem">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:contentDescription="@string/category_title"
-                android:src="@drawable/ic_baseline_category_24"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
-                android:tint="@color/black" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="@string/category_title"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/NotificationButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/ripple"
-            android:orientation="vertical"
-            android:theme="@style/Theme.Ditiezu.BottomNavItem">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:contentDescription="@string/notifications_title"
-                android:src="@drawable/ic_baseline_notifications_24"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
-                android:tint="@color/black" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="@string/notifications_title"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/AccountButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/ripple"
-            android:orientation="vertical"
-            android:theme="@style/Theme.Ditiezu.BottomNavItem">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:contentDescription="@string/settings_title"
-                android:src="@drawable/ic_baseline_settings_24"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent"
-                android:tint="@color/black" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="@string/settings_title"
-                android:theme="@style/Theme.Ditiezu.BottomNavItemContent" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/CategoryListMaskContainer"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:background="@color/shadowMask"
-        android:elevation="@dimen/_32"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation" />
 
-        <LinearLayout
-            android:id="@+id/CategoryListContainer"
-            android:layout_width="match_parent"
-            android:layout_height="540dp"
-            android:background="@drawable/border_radius_top_16_tertiary"
-            android:elevation="@dimen/_16"
-            android:orientation="vertical"
-            android:weightSum="10"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:paddingStart="@dimen/_32"
-                android:paddingTop="@dimen/_16"
-                android:paddingEnd="@dimen/_32"
-                android:text="@string/category_title"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <ListView
-                android:id="@+id/CategoryList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/_32"
-                android:paddingTop="@dimen/_16"
-                android:paddingRight="@dimen/_32" />
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/LoadingMaskContainer"
@@ -196,17 +72,5 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/ThreadList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="48dp"
-        android:clickable="true"
-        android:divider="@null"
-        android:elevation="@dimen/_16"
-        android:focusable="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

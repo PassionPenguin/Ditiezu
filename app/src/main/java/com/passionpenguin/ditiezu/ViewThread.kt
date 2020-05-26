@@ -11,9 +11,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
 import androidx.core.view.postDelayed
 import com.google.android.material.snackbar.Snackbar
+import com.passionpenguin.ditiezu.helper.Animation
+import com.passionpenguin.ditiezu.helper.HttpExt
 import org.jsoup.Jsoup
 
 
@@ -52,7 +53,8 @@ class ViewThread : AppCompatActivity() {
 
         fun retrieveThreadContent(page: Int = 1) {
             fun loadPage(threadId: Int = tid, pageId: Int = page) {
-                HttpExt().retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
+                HttpExt()
+                    .retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
                     if (result == "Failed Retrieved") {
                         // Failed Retrieved
                         Log.i("HTTPEXT", "FAILED RETRIEVED")
@@ -65,7 +67,8 @@ class ViewThread : AppCompatActivity() {
                             class WebViewInterface() {
                                 @JavascriptInterface
                                 fun loadPageWithPage(page: Int): String {
-                                    return HttpExt().asyncRetrievePage("http://www.ditiezu.com/thread-$tid-$page-1.html")
+                                    return HttpExt()
+                                        .asyncRetrievePage("http://www.ditiezu.com/thread-$tid-$page-1.html")
                                 }
 
                                 @JavascriptInterface
@@ -97,7 +100,8 @@ class ViewThread : AppCompatActivity() {
 
                                 @JavascriptInterface
                                 fun checkLogin(): Boolean {
-                                    return HttpExt().checkLogin()
+                                    return HttpExt()
+                                        .checkLogin()
                                 }
                             }
                             webView.addJavascriptInterface(WebViewInterface(), "android")

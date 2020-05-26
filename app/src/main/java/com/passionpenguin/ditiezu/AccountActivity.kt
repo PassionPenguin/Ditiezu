@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.postDelayed
+import com.passionpenguin.ditiezu.helper.*
 import com.squareup.picasso.Picasso
 import org.jsoup.Jsoup
 
@@ -29,7 +30,8 @@ class AccountActivity : AppCompatActivity() {
         val categoryListMaskContainer: LinearLayout = findViewById(R.id.CategoryListMaskContainer)
         val categoryListView: ListView = findViewById(R.id.CategoryList)
         val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
-        val categoryContent = CategoryContent(applicationContext)
+        val categoryContent =
+            CategoryContent(applicationContext)
         val categoryList = categoryContent.categoryList
         val categoryId = categoryContent.categoryId
 
@@ -135,7 +137,8 @@ class AccountActivity : AppCompatActivity() {
         HttpExt().retrievePage("http://www.ditiezu.com/home.php?mod=space") {
             runOnUiThread {
                 findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
-                findViewById<LinearLayout>(R.id.LoadingAnimation).startAnimation(Animation().fadeOutAnimation())
+                findViewById<LinearLayout>(R.id.LoadingAnimation).startAnimation(
+                    Animation().fadeOutAnimation())
                 findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
                     findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
                 }
@@ -207,7 +210,11 @@ class AccountActivity : AppCompatActivity() {
                         false
                     ) {}
                 )
-                list.adapter = PrefAdapter(this, 0, prefItem)
+                list.adapter = PrefAdapter(
+                    this,
+                    0,
+                    prefItem
+                )
                 list.setOnItemClickListener { _, _, position, _ ->
                     prefItem[position].execFunc()
                 }

@@ -1,4 +1,4 @@
-package com.passionpenguin.ditiezu;
+package com.passionpenguin.ditiezu.helper;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,7 +12,7 @@ import android.graphics.RectF;
 
 import com.squareup.picasso.Transformation;
 
-public class CircularCornersTransform implements Transformation {
+public class RoundedCornersTransform implements Transformation {
     private static Bitmap createRoundedRectBitmap(Bitmap bitmap,
                                                   float topLeftCorner, float topRightCorner,
                                                   float bottomRightCorner, float bottomLeftCorner) {
@@ -54,7 +54,9 @@ public class CircularCornersTransform implements Transformation {
             source.recycle();
         }
 
-        Bitmap roundedBitmap = createRoundedRectBitmap(squaredBitmap, (float) size, (float) size, (float) size, (float) size);
+        float r = size / 4f;
+
+        Bitmap roundedBitmap = createRoundedRectBitmap(squaredBitmap, r, r, r, r);
 
         squaredBitmap.recycle();
 

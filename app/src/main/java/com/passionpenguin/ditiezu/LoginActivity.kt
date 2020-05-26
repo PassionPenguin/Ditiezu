@@ -7,6 +7,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import com.passionpenguin.ditiezu.helper.HttpExt
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {

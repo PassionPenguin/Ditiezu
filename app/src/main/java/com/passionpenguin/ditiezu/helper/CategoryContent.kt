@@ -1,7 +1,8 @@
-package com.passionpenguin.ditiezu
+package com.passionpenguin.ditiezu.helper
 
 import android.content.Context
 import android.util.Log
+import com.passionpenguin.ditiezu.R
 
 class CategoryContent(val context: Context) {
     private fun string(id: Int): String {
@@ -14,166 +15,206 @@ class CategoryContent(val context: Context) {
         return str
     }
 
-    val categoryList = mutableListOf(
+    val categoryList = listOf(
         CategoryItem(
             string(R.string.category_Beijing),
-            string(R.string.description_Beijing), R.drawable.beijing
+            string(R.string.description_Beijing),
+            R.drawable.beijing
         ),
         CategoryItem(
             string(R.string.category_Tianjin),
-            string(R.string.description_Tianjin), R.drawable.tianjin
+            string(R.string.description_Tianjin),
+            R.drawable.tianjin
         ),
         CategoryItem(
             string(R.string.category_Shanghai),
-            string(R.string.description_Shanghai), R.drawable.shanghai
+            string(R.string.description_Shanghai),
+            R.drawable.shanghai
         ),
         CategoryItem(
             string(R.string.category_Guangzhou),
-            string(R.string.description_Guangzhou), R.drawable.guangzhou
+            string(R.string.description_Guangzhou),
+            R.drawable.guangzhou
         ),
         CategoryItem(
             string(R.string.category_Changchun),
-            string(R.string.description_Changchun), R.drawable.changchun
+            string(R.string.description_Changchun),
+            R.drawable.changchun
         ),
         CategoryItem(
             string(R.string.category_Dalian),
-            string(R.string.description_Dalian), R.drawable.dalian
+            string(R.string.description_Dalian),
+            R.drawable.dalian
         ),
         CategoryItem(
             string(R.string.category_Wuhan),
-            string(R.string.description_Wuhan), R.drawable.wuhan
+            string(R.string.description_Wuhan),
+            R.drawable.wuhan
         ),
         CategoryItem(
             string(R.string.category_Chongqing),
-            string(R.string.description_Chongqing), R.drawable.chongqing
+            string(R.string.description_Chongqing),
+            R.drawable.chongqing
         ),
         CategoryItem(
             string(R.string.category_Shenzhen),
-            string(R.string.description_Shenzhen), R.drawable.shenzhen
+            string(R.string.description_Shenzhen),
+            R.drawable.shenzhen
         ),
         CategoryItem(
             string(R.string.category_Nanjing),
-            string(R.string.description_Nanjing), R.drawable.nanjing
+            string(R.string.description_Nanjing),
+            R.drawable.nanjing
         ),
         CategoryItem(
             string(R.string.category_Chengdu),
-            string(R.string.description_Chengdu), R.drawable.chengdu
+            string(R.string.description_Chengdu),
+            R.drawable.chengdu
         ),
         CategoryItem(
             string(R.string.category_Shenyang),
-            string(R.string.description_Shenyang), R.drawable.shenyang
+            string(R.string.description_Shenyang),
+            R.drawable.shenyang
         ),
         CategoryItem(
             string(R.string.category_Foshan),
-            string(R.string.description_Foshan), R.drawable.foshan
+            string(R.string.description_Foshan),
+            R.drawable.foshan
         ),
         CategoryItem(
             string(R.string.category_Xian),
-            string(R.string.description_Xian), R.drawable.xian
+            string(R.string.description_Xian),
+            R.drawable.xian
         ),
         CategoryItem(
             string(R.string.category_Suzhou),
-            string(R.string.description_Suzhou), R.drawable.suzhou
+            string(R.string.description_Suzhou),
+            R.drawable.suzhou
         ),
         CategoryItem(
             string(R.string.category_Kunming),
-            string(R.string.description_Kunming), R.drawable.kunming
+            string(R.string.description_Kunming),
+            R.drawable.kunming
         ),
         CategoryItem(
             string(R.string.category_Hangzhou),
-            string(R.string.description_Hangzhou), R.drawable.hangzhou
+            string(R.string.description_Hangzhou),
+            R.drawable.hangzhou
         ),
         CategoryItem(
             string(R.string.category_Harbin),
-            string(R.string.description_Harbin), R.drawable.harbin
+            string(R.string.description_Harbin),
+            R.drawable.harbin
         ),
         CategoryItem(
             string(R.string.category_Zhengzhou),
-            string(R.string.description_Zhengzhou), R.drawable.zhengzhou
+            string(R.string.description_Zhengzhou),
+            R.drawable.zhengzhou
         ),
         CategoryItem(
             string(R.string.category_Changsha),
-            string(R.string.description_Changsha), R.drawable.changsha
+            string(R.string.description_Changsha),
+            R.drawable.changsha
         ),
         CategoryItem(
             string(R.string.category_Ningbo),
-            string(R.string.description_Ningbo), R.drawable.ningbo
+            string(R.string.description_Ningbo),
+            R.drawable.ningbo
         ),
         CategoryItem(
             string(R.string.category_Wuxi),
-            string(R.string.description_Wuxi), R.drawable.wuxi
+            string(R.string.description_Wuxi),
+            R.drawable.wuxi
         ),
         CategoryItem(
             string(R.string.category_Qingdao),
-            string(R.string.description_Qingdao), R.drawable.qingdao
+            string(R.string.description_Qingdao),
+            R.drawable.qingdao
         ),
         CategoryItem(
             string(R.string.category_Nanchang),
-            string(R.string.description_Nanchang), R.drawable.nanchang
+            string(R.string.description_Nanchang),
+            R.drawable.nanchang
         ),
         CategoryItem(
             string(R.string.category_Fuzhou),
-            string(R.string.description_Fuzhou), R.drawable.fuzhou
+            string(R.string.description_Fuzhou),
+            R.drawable.fuzhou
         ),
         CategoryItem(
             string(R.string.category_Dongguan),
-            string(R.string.description_Dongguan), R.drawable.dongguan
+            string(R.string.description_Dongguan),
+            R.drawable.dongguan
         ),
         CategoryItem(
             string(R.string.category_Nanning),
-            string(R.string.description_Nanning), R.drawable.nanning
+            string(R.string.description_Nanning),
+            R.drawable.nanning
         ),
         CategoryItem(
             string(R.string.category_Hefei),
-            string(R.string.description_Hefei), R.drawable.hefei
+            string(R.string.description_Hefei),
+            R.drawable.hefei
         ),
         CategoryItem(
             string(R.string.category_Shijiazhuang),
-            string(R.string.description_Shijiazhuang), R.drawable.shijiazhuang
+            string(R.string.description_Shijiazhuang),
+            R.drawable.shijiazhuang
         ),
         CategoryItem(
             string(R.string.category_Guiyang),
-            string(R.string.description_Guiyang), R.drawable.guiyang
+            string(R.string.description_Guiyang),
+            R.drawable.guiyang
         ),
         CategoryItem(
             string(R.string.category_Xiamen),
-            string(R.string.description_Xiamen), R.drawable.xiamen
+            string(R.string.description_Xiamen),
+            R.drawable.xiamen
         ),
         CategoryItem(
             string(R.string.category_Urumqi),
-            string(R.string.description_Urumqi), R.drawable.urumqi
+            string(R.string.description_Urumqi),
+            R.drawable.urumqi
         ),
         CategoryItem(
             string(R.string.category_Wenzhou),
-            string(R.string.description_Wenzhou), R.drawable.wenzhou
+            string(R.string.description_Wenzhou),
+            R.drawable.wenzhou
         ),
         CategoryItem(
             string(R.string.category_Jinan),
-            string(R.string.description_Jinan), R.drawable.jinan
+            string(R.string.description_Jinan),
+            R.drawable.jinan
         ),
         CategoryItem(
             string(R.string.category_Lanzhou),
-            string(R.string.description_Lanzhou), R.drawable.lanzhou
+            string(R.string.description_Lanzhou),
+            R.drawable.lanzhou
         ),
         CategoryItem(
             string(R.string.category_Changzhou),
-            string(R.string.description_Changzhou), R.drawable.changzhou
+            string(R.string.description_Changzhou),
+            R.drawable.changzhou
         ),
         CategoryItem(
             string(R.string.category_Xuzhou),
-            string(R.string.description_Xuzhou), R.drawable.xuzhou
+            string(R.string.description_Xuzhou),
+            R.drawable.xuzhou
         ),
         CategoryItem(
             string(R.string.category_Hongkong),
-            string(R.string.description_Hongkong), R.drawable.hongkong
+            string(R.string.description_Hongkong),
+            R.drawable.hongkong
         ),
         CategoryItem(
             string(R.string.category_Macau),
-            string(R.string.description_Macau), R.drawable.macau
+            string(R.string.description_Macau),
+            R.drawable.macau
         ),
         CategoryItem(
             string(R.string.category_Taiwan),
-            string(R.string.description_Taiwan), R.drawable.taiwan
+            string(R.string.description_Taiwan),
+            R.drawable.taiwan
         )
     )
     val categoryId = arrayOf(

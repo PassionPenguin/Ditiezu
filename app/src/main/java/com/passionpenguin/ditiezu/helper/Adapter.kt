@@ -1,4 +1,4 @@
-package com.passionpenguin.ditiezu
+package com.passionpenguin.ditiezu.helper
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.passionpenguin.ditiezu.R
 import com.squareup.picasso.Picasso
 
 
@@ -60,7 +61,7 @@ class ThreadListAdapter(
             .placeholder(R.mipmap.noavatar_middle_rounded)
             .error(R.mipmap.noavatar_middle_rounded)
             .transform(CircularCornersTransform())
-            .into(avatar);
+            .into(avatar)
         return view
     }
 }

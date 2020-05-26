@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.Ditiezu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Ditiezu" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorAccent">@color/primary500</item>
         <item name="android:statusBarColor" tools:targetApi="l">#00000000</item>
         <item name="android:actionBarItemBackground" tools:targetApi="l">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="Theme.Ditiezu.ActionBar" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:actionBarStyle">@style/Theme.Ditiezu.ActionBarStyle</item>
     </style>
 

@@ -122,4 +122,6 @@
     <string name="user_id">User Identifier</string>
     <string name="online_hour">Online Hours</string>
     <string name="online_hour_description">The time you spent on the bbs</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

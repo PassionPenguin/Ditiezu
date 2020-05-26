@@ -1,4 +1,4 @@
-package com.passionpenguin.ditiezu
+package com.passionpenguin.ditiezu.helper
 
 import android.util.Log
 import android.webkit.CookieManager

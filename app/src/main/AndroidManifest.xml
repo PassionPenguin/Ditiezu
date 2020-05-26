@@ -16,12 +16,10 @@
         android:theme="@style/Theme.Ditiezu"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ForumDisplay"></activity>
+        <activity android:name=".ForumDisplay" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".AccountActivity" />
-        <activity
-            android:name=".ViewThread"
-            android:theme="@style/Theme.Ditiezu.ActionBar">
+        <activity android:name=".ViewThread">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.passionpenguin.ditiezu.MainActivity" />

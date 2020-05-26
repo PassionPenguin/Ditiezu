@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.postDelayed
+import com.passionpenguin.ditiezu.helper.*
 import org.jsoup.Jsoup
 
 
@@ -33,7 +34,8 @@ class ForumDisplay : AppCompatActivity() {
         val threadListView: ListView = findViewById(R.id.ThreadList)
         val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
 
-        val categoryContent = CategoryContent(applicationContext)
+        val categoryContent =
+            CategoryContent(applicationContext)
         val categoryList = categoryContent.categoryList
         val categoryId = categoryContent.categoryId
 
@@ -226,7 +228,8 @@ class ForumDisplay : AppCompatActivity() {
             HttpExt().retrievePage("http://www.ditiezu.com/forum-$fid-$page.html") {
                 runOnUiThread {
                     findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
-                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(Animation().fadeOutAnimation())
+                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(
+                        Animation().fadeOutAnimation())
                     findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
                         findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
                     }
