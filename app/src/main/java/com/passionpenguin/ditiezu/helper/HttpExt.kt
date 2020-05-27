@@ -154,7 +154,7 @@ class HttpExt {
 
     fun openConn(url: String, then: (urlConn: InputStream?) -> Unit) {
         var urlconn: URLConnection
-        val thread = Thread {
+        Thread {
             try {
                 urlconn = URL(url).openConnection()
                 then(urlconn.getInputStream())
