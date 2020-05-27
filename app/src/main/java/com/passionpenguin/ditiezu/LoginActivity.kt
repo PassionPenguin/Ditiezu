@@ -6,6 +6,7 @@ import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.passionpenguin.ditiezu.helper.HttpExt
 import java.util.*
@@ -14,6 +15,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        Toast.makeText(
+            applicationContext,
+            resources.getString(R.string.login_tips),
+            Toast.LENGTH_LONG
+        ).show()
 
         val webView: WebView = findViewById(R.id.LoginWebView)
         WebView.setWebContentsDebuggingEnabled(true)
@@ -38,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 if (HttpExt().checkLogin())
-                    startActivity(Intent(this@LoginActivity, AccountActivity::class.java))
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
             }
         }, 0, 5000)
     }

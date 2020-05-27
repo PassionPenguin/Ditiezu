@@ -24,69 +24,12 @@ class ForumDisplay : AppCompatActivity() {
             fid = extras.getInt("fid")
         } else finish()
 
-        val homeButton: LinearLayout = findViewById(R.id.HomeButton)
-        val categoryButton: LinearLayout = findViewById(R.id.CategoryButton)
-        val notificationButton: LinearLayout = findViewById(R.id.NotificationButton)
-        val accountButton: LinearLayout = findViewById(R.id.AccountButton)
-        val categoryListContainer: LinearLayout = findViewById(R.id.CategoryListContainer)
-        val categoryListMaskContainer: LinearLayout = findViewById(R.id.CategoryListMaskContainer)
-        val categoryListView: ListView = findViewById(R.id.CategoryList)
-        val threadListView: ListView = findViewById(R.id.ThreadList)
-        val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
-
         val categoryContent =
             CategoryContent(applicationContext)
         val categoryList = categoryContent.categoryList
         val categoryId = categoryContent.categoryId
 
-        fun bottomButtonHighlight(clear: Array<LinearLayout>, add: LinearLayout) {
-            clear.forEach {
-                (it.getChildAt(0) as ImageView).setColorFilter(
-                    ContextCompat.getColor(applicationContext, R.color.black),
-                    android.graphics.PorterDuff.Mode.SRC_IN
-                )
-                (it.getChildAt(1) as TextView).setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.black
-                    )
-                )
-            }
-            (add.getChildAt(0) as ImageView).setColorFilter(
-                ContextCompat.getColor(applicationContext, R.color.primary700),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            (add.getChildAt(1) as TextView).setTextColor(
-                ContextCompat.getColor(
-                    applicationContext,
-                    R.color.primary700
-                )
-            )
-            mask.visibility = View.GONE
-        }
-
-        fun categoryDialogController(state: Boolean) {
-            val ctrlAnimation = if (state) TranslateAnimation(
-                TranslateAnimation.RELATIVE_TO_SELF, 0F, TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                TranslateAnimation.RELATIVE_TO_SELF, 0F, TranslateAnimation.RELATIVE_TO_SELF, 1F
-            ) else TranslateAnimation(
-                TranslateAnimation.RELATIVE_TO_SELF, 0F, TranslateAnimation.RELATIVE_TO_SELF, 0F,
-                TranslateAnimation.RELATIVE_TO_SELF, 1F, TranslateAnimation.RELATIVE_TO_SELF, 0F
-            )
-            ctrlAnimation.duration = 400L //设置动画的过渡时间
-
-            categoryListMaskContainer.visibility = View.VISIBLE
-            categoryListContainer.startAnimation(ctrlAnimation)
-            if (state) {
-                categoryListMaskContainer.postDelayed(400) {
-                    categoryListMaskContainer.visibility = View.GONE
-                }
-                bottomButtonHighlight(
-                    arrayOf(categoryButton, notificationButton, accountButton),
-                    homeButton
-                )
-            }
-        }
+        val threadListView = findViewById<ListView>(R.id.ThreadList)
 
         fun loadForumContent(page: Int) {
             fun processResult(result: String) {
@@ -242,52 +185,6 @@ class ForumDisplay : AppCompatActivity() {
                 processResult(it)
             }
         }
-
-        categoryListView.adapter =
-            CategoryAdapter(
-                this,
-                R.layout.category_popup,
-                categoryList
-            )
-        categoryListView.setOnItemClickListener { _, _, position, _ ->
-            categoryDialogController(true)
-            fid = categoryId[position]
-            loadForumContent(1)
-        }
-        categoryListMaskContainer.setOnClickListener {
-            categoryDialogController(true)
-        }
-        findViewById<LinearLayout>(R.id.LoadingMaskContainer).setOnClickListener {
-            it.visibility = View.GONE
-        }
-        homeButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(categoryButton, notificationButton, accountButton),
-                homeButton
-            )
-        }
-        categoryButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(homeButton, notificationButton, accountButton),
-                categoryButton
-            )
-
-            categoryDialogController(false)
-        }
-        notificationButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(homeButton, categoryButton, accountButton),
-                notificationButton
-            )
-        }
-        accountButton.setOnClickListener {
-            bottomButtonHighlight(
-                arrayOf(homeButton, notificationButton, categoryButton),
-                accountButton
-            )
-            startActivity(Intent(this@ForumDisplay, AccountActivity::class.java))
-        }
-
         loadForumContent(1)
     }
 }

@@ -42,7 +42,7 @@ class ViewThread : AppCompatActivity() {
                         startActivity(
                             Intent(
                                 this@ViewThread,
-                                AccountActivity::class.java
+                                LoginActivity::class.java
                             )
                         )
                     }.show()
@@ -93,7 +93,7 @@ class ViewThread : AppCompatActivity() {
                                     startActivity(
                                         Intent(
                                             this@ViewThread,
-                                            AccountActivity::class.java
+                                            LoginActivity::class.java
                                         )
                                     )
                                 }

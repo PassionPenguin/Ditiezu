@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="48dp"
+        android:padding="@dimen/_16"
+        android:backgroundTint="@color/light"
+        android:orientation="vertical"
+        android:background="@drawable/border_radius_top_4">
+
+        <TextView
+            android:id="@+id/dialogName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginBottom="@dimen/_8"
+            android:layout_gravity="center"
+            android:textColor="@color/dark"
+            tools:text="Dialog Name" />
+
+        <TextView
+            android:id="@+id/dialogDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/grey"
+            android:layout_margin="@dimen/_8"
+            tools:text="Dialog Description" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="48dp"
+        android:paddingHorizontal="@dimen/_16"
+        android:orientation="horizontal"
+        android:background="@drawable/border_radius_bottom_4_no_padding"
+        android:backgroundTint="@color/light"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/CancelButton"
+            android:layout_width="0dp"
+            android:elevation="@dimen/_64"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/_4"
+            android:backgroundTint="@color/surface_tertiary"
+            android:textColor="@color/dark"
+            android:text="@string/cancel"
+            tools:text="Cancel" />
+
+        <Button
+            android:id="@+id/ConfirmButton"
+            android:layout_width="0dp"
+            android:elevation="@dimen/_64"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/_4"
+            android:backgroundTint="@color/surface_tertiary"
+            android:textColor="@color/primary500"
+            android:text="@string/confirm"
+            tools:text="Confirm" />
+    </LinearLayout>
+
+</LinearLayout>

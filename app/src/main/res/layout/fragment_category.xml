@@ -20,7 +20,7 @@
             android:id="@+id/CategoryListContainer"
             android:layout_width="match_parent"
             android:layout_height="540dp"
-            android:background="@drawable/border_radius_top_16_tertiary"
+            android:background="@drawable/border_radius_top_16"
             android:elevation="@dimen/_16"
             android:orientation="vertical"
             android:weightSum="10">

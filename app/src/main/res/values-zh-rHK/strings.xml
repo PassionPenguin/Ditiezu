@@ -56,5 +56,14 @@
     <string name="popularity">人氣</string>
     <string name="user_id">用戶唯一表示符</string>
     <string name="online_hour">在線時長</string>
-    <string name="online_hour_description">你在論壇總時長</string>
+    <string name="online_hour_description">您在論壇總時長</string>
+    <string name="login">登錄</string>
+    <string name="accept_terms">點擊按鈕時我同意用戶協議和隱私政策</string>
+    <string name="login_description">登錄以使用更多功能...</string>
+    <string name="login_tips">當頁面加載後，請按照常規方法登錄</string>
+    <string name="logout_warning">您確定要登出 %1$s嗎？</string>
+    <string name="logout_description">退出帳號</string>
+    <string name="confirm">確認</string>
+    <string name="cancel">取消</string>
+    <string name="failed">失敗</string>
 </resources>

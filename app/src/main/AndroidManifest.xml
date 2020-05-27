@@ -18,7 +18,6 @@
         tools:targetApi="m">
         <activity android:name=".ForumDisplay" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".AccountActivity" />
         <activity android:name=".ViewThread">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
