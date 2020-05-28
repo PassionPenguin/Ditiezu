@@ -43,8 +43,10 @@ class LoginActivity : AppCompatActivity() {
         webView.loadUrl("http://www.ditiezu.com/forum.php?mod=forum")
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                if (HttpExt().checkLogin())
+                if (HttpExt().checkLogin()) {
+                    cancel()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                }
             }
         }, 0, 5000)
     }

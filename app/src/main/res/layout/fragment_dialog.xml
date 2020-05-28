@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="48dp"
         android:padding="@dimen/_16"
-        android:backgroundTint="@color/light"
+        android:backgroundTint="@color/white"
+        android:elevation="@dimen/_64"
         android:orientation="vertical"
         android:background="@drawable/border_radius_top_4">
 
@@ -39,16 +40,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="48dp"
+        android:elevation="@dimen/_64"
         android:paddingHorizontal="@dimen/_16"
         android:orientation="horizontal"
         android:background="@drawable/border_radius_bottom_4_no_padding"
-        android:backgroundTint="@color/light"
+        android:backgroundTint="@color/white"
         android:weightSum="2">
 
         <Button
             android:id="@+id/CancelButton"
+            style="?attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:elevation="@dimen/_64"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="@dimen/_4"
@@ -59,8 +61,8 @@
 
         <Button
             android:id="@+id/ConfirmButton"
+            style="?attr/borderlessButtonStyle"
             android:layout_width="0dp"
-            android:elevation="@dimen/_64"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="@dimen/_4"

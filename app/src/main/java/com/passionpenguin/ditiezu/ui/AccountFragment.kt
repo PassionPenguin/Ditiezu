@@ -11,12 +11,16 @@ import com.passionpenguin.ditiezu.*
 import com.passionpenguin.ditiezu.helper.*
 import com.squareup.picasso.Picasso
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 
 class AccountFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+            View.VISIBLE
         if (HttpExt().checkLogin())
             HttpExt().retrievePage("http://www.ditiezu.com/home.php?mod=space") { it ->
                 if (it == "Failed Retrieved") {
@@ -40,23 +44,42 @@ class AccountFragment : Fragment() {
                         .into(activity?.findViewById<ImageView>(R.id.avatar))
                     activity?.findViewById<TextView>(R.id.value_level)?.text =
                         parser.select(".pbm span a")[0].text()
-                    activity?.findViewById<TextView>(R.id.value_friends)?.text =
-                        parser.select(".pbm.mbm.bbda.cl:first-child ul > :nth-child(5) a")[0].text()
-                            .trim()
-                            .substring(4)
-                    activity?.findViewById<TextView>(R.id.value_replies)?.text =
-                        parser.select(".pbm.mbm.bbda.cl:first-child ul > :nth-child(5) a")[1].text()
-                            .trim()
-                            .substring(4)
-                    activity?.findViewById<TextView>(R.id.value_threads)?.text =
-                        parser.select(".pbm.mbm.bbda.cl:first-child ul > :nth-child(5) a")[2].text()
-                            .trim()
-                            .substring(4)
+
+                    var metaList =
+                        parser.select(".pbm.mbm.bbda.cl:first-child ul > li:last-child")[0]
+                    parser.select(".pbm.mbm.bbda.cl:first-child ul > li").forEach {
+                        if (it.html().contains("统计信息"))
+                            metaList = it
+                    }
+
+                    try {
+                        activity?.findViewById<TextView>(R.id.value_friends)?.text =
+                            metaList.select("a")[0].text()
+                                .trim()
+                                .substring(4)
+                    } catch (e: Exception) {
+                        activity?.findViewById<TextView>(R.id.value_friends)?.text = "N/A"
+                    }
+                    try {
+                        activity?.findViewById<TextView>(R.id.value_replies)?.text =
+                            metaList.select("a")[1].text()
+                                .trim()
+                                .substring(4)
+                    } catch (e: Exception) {
+                        activity?.findViewById<TextView>(R.id.value_replies)?.text = "N/A"
+                    }
+                    try {
+                        activity?.findViewById<TextView>(R.id.value_threads)?.text =
+                            metaList.select("a")[2].text()
+                                .trim()
+                                .substring(4)
+                    } catch (e: Exception) {
+                        activity?.findViewById<TextView>(R.id.value_threads)?.text = "N/A"
+                    }
+
                     activity?.findViewById<TextView>(R.id.userIntegral)?.text =
-                        resources.getString(
-                            R.string.user_integral,
-                            parser.select("#psts li")[0].textNodes()[0].text().trim().toInt()
-                        )
+                        resources.getString(R.string.user_integral, parser.select("#psts li")[0].textNodes()[0].text().trim().toInt())
+
                     activity?.findViewById<TextView>(R.id.value_points)?.text =
                         parser.select("#psts li")[0].textNodes()[0].text().trim()
                     activity?.findViewById<TextView>(R.id.value_prestige)?.text =
@@ -105,20 +128,9 @@ class AccountFragment : Fragment() {
                                             parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
                                         )
                                     ) {
-                                        CookieManager.getInstance()
-                                            .removeAllCookies { cookieRemoved ->
-                                                Toast.makeText(
-                                                    context,
-                                                    resources.getString(
-                                                        if (cookieRemoved) {
-                                                            R.string.successful
-                                                        } else {
-                                                            R.string.failed
-                                                        }
-                                                    ),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
+                                        CookieManager.getInstance().removeAllCookies { _ ->
+                                            activity?.recreate()
+                                        }
                                     }
                                 }
                             }
@@ -142,8 +154,12 @@ class AccountFragment : Fragment() {
                 ?.setOnClickListener { _ ->
                     activity?.startActivity(Intent(context, LoginActivity::class.java))
                 }
+            activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                View.GONE
             return loginView
         }
+        activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+            View.GONE
         return inflater.inflate(R.layout.fragment_account, container, false)
     }
 }

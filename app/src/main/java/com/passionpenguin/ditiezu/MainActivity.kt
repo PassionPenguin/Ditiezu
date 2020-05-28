@@ -36,4 +36,9 @@ class MainActivity : AppCompatActivity() {
             it.visibility = View.GONE
         }
     }
+
+    override fun onRestart() {
+        super.onRestart()
+        findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
+    }
 }
