@@ -6,7 +6,9 @@
     android:clickable="false"
     android:focusable="false"
     android:orientation="vertical"
-    android:id="@+id/threadItem">
+    android:id="@+id/threadItem"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="SmallSp">
 
     <LinearLayout
         android:layout_width="match_parent"
