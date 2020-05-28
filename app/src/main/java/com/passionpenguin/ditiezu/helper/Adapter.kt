@@ -1,32 +1,43 @@
 package com.passionpenguin.ditiezu.helper
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toBitmap
 import com.passionpenguin.ditiezu.R
 import com.squareup.picasso.Picasso
 
 
-class CategoryItem(val title: String, val description: String, val icon: Int)
+class CategoryItem(val title: String, val description: String, val icon: Int, var meta: String)
 
 class CategoryAdapter(
     private var mCtx: Context,
-    private var resource: Int,
+    resource: Int,
     private var items: List<CategoryItem>
 ) : ArrayAdapter<CategoryItem>(mCtx, resource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(resource, null)
-        val imageView: ImageView = view.findViewById(R.id.iconIv)
-        val title: TextView = view.findViewById(R.id.titleTv)
-        val category: CategoryItem = items[position]
-        imageView.setImageDrawable(mCtx.resources.getDrawable(category.icon, null))
-        title.text = category.title
+        val view: View = layoutInflater.inflate(R.layout.item_category, null)
+        val icon: ImageView = view.findViewById(R.id.categoryIcon)
+        val title: TextView = view.findViewById(R.id.categoryName)
+        val meta: TextView = view.findViewById(R.id.categoryMeta)
+        val categoryItem = items[position]
+        title.text = categoryItem.title
+        meta.text = categoryItem.meta
+        icon.setImageBitmap(
+            CircularCornersTransform().transform(
+                mCtx.resources.getDrawable(
+                    categoryItem.icon,
+                    null
+                ).toBitmap()
+            )
+        )
         return view
     }
 }
@@ -47,7 +58,7 @@ class ThreadListAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.thread_list_item, null)
+        val view: View = layoutInflater.inflate(R.layout.item_thread_list_item, null)
         val avatar: ImageView = view.findViewById(R.id.avatar)
         val title: TextView = view.findViewById(R.id.threadTitle)
         val authorName: TextView = view.findViewById(R.id.threadAuthorName)
@@ -82,7 +93,7 @@ class PrefAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.pref_item, null)
+        val view: View = layoutInflater.inflate(R.layout.item_pref_item, null)
         val value = view.findViewById<TextView>(R.id.pref_item_value)
         value.text = items[position].value
         if (!items[position].toggle)

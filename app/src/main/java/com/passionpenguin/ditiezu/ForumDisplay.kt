@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.TranslateAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.postDelayed
 import com.passionpenguin.ditiezu.helper.*
 import org.jsoup.Jsoup
@@ -16,7 +14,7 @@ import org.jsoup.Jsoup
 class ForumDisplay : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_forum_display)
 
         val extras = intent.extras
         var fid = 23
@@ -37,7 +35,7 @@ class ForumDisplay : AppCompatActivity() {
                 runOnUiThread {
                     threadListView.removeHeaderView(threadListView.findViewById(R.id.categoryHeader))
                     threadListView.removeFooterView(threadListView.findViewById(R.id.paginationNavigation))
-                    val bannerView = layoutInflater.inflate(R.layout.category_info_header, null)
+                    val bannerView = layoutInflater.inflate(R.layout.item_category_info_header, null)
                     bannerView.findViewById<ImageView>(R.id.CategoryIcon)
                         .setImageDrawable(
                             resources.getDrawable(
@@ -47,10 +45,12 @@ class ForumDisplay : AppCompatActivity() {
                         )
                     bannerView.findViewById<TextView>(R.id.CategoryTitle).text =
                         categoryList[categoryId.indexOf(fid)].title
+                    bannerView.findViewById<TextView>(R.id.CategoryDescription).text =
+                        categoryList[categoryId.indexOf(fid)].description
                     threadListView.addHeaderView(bannerView)
 
                     val footerPagination =
-                        layoutInflater.inflate(R.layout.category_pagination_navigation, null)
+                        layoutInflater.inflate(R.layout.item_category_pagination_navigation, null)
                     val lastPage = parser.select(".last")[0].text().substring(4).toInt()
 
                     footerPagination.findViewById<TextView>(R.id.curPage).text = page.toString()
@@ -149,7 +149,7 @@ class ForumDisplay : AppCompatActivity() {
                     threadListView.adapter =
                         ThreadListAdapter(
                             this,
-                            R.layout.thread_list_item,
+                            R.layout.item_thread_list_item,
                             threadListContent
                         )
 
@@ -169,15 +169,6 @@ class ForumDisplay : AppCompatActivity() {
             }
 
             HttpExt().retrievePage("http://www.ditiezu.com/forum-$fid-$page.html") {
-                runOnUiThread {
-                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.VISIBLE
-                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).startAnimation(
-                        Animation().fadeOutAnimation())
-                    findViewById<LinearLayout>(R.id.LoadingMaskContainer).postDelayed(400) {
-                        findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
-                    }
-                }
-
                 if (it == "Failed Retrieved") {
                     // Failed Retrieved
                     Log.i("HTTPEXT", "FAILED RETRIEVED")

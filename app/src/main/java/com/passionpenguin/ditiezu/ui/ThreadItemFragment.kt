@@ -55,7 +55,7 @@ class ThreadItemFragment : Fragment() {
                         threadListContent
                     )
                 }
-            list?.addHeaderView(inflater.inflate(R.layout.fragment_home_header, container, false))
+            list?.addHeaderView(inflater.inflate(R.layout.item_home_header, container, false))
             activity?.findViewById<ListView>(R.id.threadItemList)
                 ?.setOnItemClickListener { _, _, position, _ ->
                     if (position != 0) {
@@ -64,7 +64,6 @@ class ThreadItemFragment : Fragment() {
                         context?.startActivity(i)
                     }
                 }
-
             activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
         }
 

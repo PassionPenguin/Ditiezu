@@ -17,5 +17,5 @@
         android:scrollbarAlwaysDrawVerticalTrack="false"
         android:scrollbarSize="1dp"
         tools:context=".ui.ThreadItemFragment"
-        tools:listitem="@layout/thread_list_item" />
+        tools:listitem="@layout/item_thread_list_item" />
 </FrameLayout>

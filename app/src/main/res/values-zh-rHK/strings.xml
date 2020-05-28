@@ -12,7 +12,6 @@
     <string name="category_Dalian">大連</string>
     <string name="category_Wuhan">武漢</string>
     <string name="category_Chongqing">重慶</string>
-    <string name="category_Nanjing">南寧</string>
     <string name="category_Shenyang">瀋陽</string>
     <string name="category_Foshan">佛山</string>
     <string name="category_Suzhou">蘇州</string>
@@ -36,7 +35,7 @@
     <string name="category_Taiwan">台灣省</string>
     <string name="category_Oversea">海外地區</string>
     <string name="category_Comprehensive">綜合區</string>
-    <string name="loading_description" >加載中...</string>
+    <string name="loading_description" >加載中…</string>
     <string name="threadList_title">帖子標題</string>
     <string name="title_reply">Reply</string>
     <string name="app_description">上班，落班，地鐵帶你返工放工，地下鐵嘅故事就係依度發生</string>
@@ -59,7 +58,7 @@
     <string name="online_hour_description">您在論壇總時長</string>
     <string name="login">登錄</string>
     <string name="accept_terms">點擊按鈕時我同意用戶協議和隱私政策</string>
-    <string name="login_description">登錄以使用更多功能...</string>
+    <string name="login_description">登錄以使用更多功能…</string>
     <string name="login_tips">當頁面加載後，請按照常規方法登錄</string>
     <string name="logout_warning">您確定要登出 %1$s嗎？</string>
     <string name="logout_description">退出帳號</string>

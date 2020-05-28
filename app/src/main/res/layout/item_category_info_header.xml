@@ -9,7 +9,9 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="136dp"
+        android:scaleType="centerCrop"
+        android:alpha="0.2"
         android:contentDescription="@null"
         android:src="@drawable/bg_category"
         android:layout_marginTop="-24dp"/>
@@ -18,8 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="32dp"
-        android:background="@color/transparentWhiteBackground">
+        android:paddingVertical="32dp">
 
         <ImageView
             android:id="@+id/CategoryIcon"
