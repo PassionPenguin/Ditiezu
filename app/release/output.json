@@ -10,8 +10,8 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 2,
-      "versionName": "Watermelon Milkshake v2.1 Canary",
+      "versionCode": 3,
+      "versionName": "Watermelon Milkshake v2.2 Canary",
       "outputFile": "app-release.apk"
     }
   ]

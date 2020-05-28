@@ -23,7 +23,6 @@ class ThreadItemFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-
         fun processResult(result: String) {
             val parser = Jsoup.parse(result)
             val threadListContent = mutableListOf<ThreadListItem>()
@@ -47,7 +46,8 @@ class ThreadItemFragment : Fragment() {
                 )
             }
 
-            activity?.findViewById<ListView>(R.id.threadItemList)?.adapter =
+            val list = activity?.findViewById<ListView>(R.id.threadItemList)
+            list?.adapter =
                 context?.let {
                     ThreadListAdapter(
                         it,
@@ -55,11 +55,14 @@ class ThreadItemFragment : Fragment() {
                         threadListContent
                     )
                 }
+            list?.addHeaderView(inflater.inflate(R.layout.fragment_home_header, container, false))
             activity?.findViewById<ListView>(R.id.threadItemList)
                 ?.setOnItemClickListener { _, _, position, _ ->
-                    val i = Intent(context, ViewThread::class.java)
-                    i.putExtra("tid", threadListContent[position].target)
-                    context?.startActivity(i)
+                    if (position != 0) {
+                        val i = Intent(context, ViewThread::class.java)
+                        i.putExtra("tid", threadListContent[position - 1].target)
+                        context?.startActivity(i)
+                    }
                 }
 
             activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
