@@ -4,9 +4,7 @@
     android:id="@+id/fragment_category"
     android:name="com.passionpenguin.ditiezu.CategoryFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/_16"
-    android:layout_marginRight="@dimen/_16">
+    android:layout_height="match_parent">
 
     <ListView
         android:id="@+id/categoryList"
@@ -14,8 +12,6 @@
         android:layout_height="match_parent"
         android:divider="@null"
         android:smoothScrollbar="true"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:scrollbarSize="1dp"
         tools:context=".ui.ThreadItemFragment"
         tools:listitem="@layout/item_category" />
 </FrameLayout>

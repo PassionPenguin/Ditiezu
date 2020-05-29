@@ -27,7 +27,7 @@ class ViewThread : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         val darkMode =
-            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK === Configuration.UI_MODE_NIGHT_YES
+            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         val webView: WebView = findViewById(R.id.viewThread)
 
         val extras = intent.extras
@@ -67,7 +67,7 @@ class ViewThread : AppCompatActivity() {
                             this@ViewThread.runOnUiThread {
                                 title = parser.select("#thread_subject").text()
                                 webView.settings.javaScriptEnabled = true
-                                class WebViewInterface() {
+                                class WebViewInterface {
                                     @JavascriptInterface
                                     fun loadPageWithPage(page: Int): String {
                                         return HttpExt()
@@ -109,7 +109,7 @@ class ViewThread : AppCompatActivity() {
                                 }
                                 webView.addJavascriptInterface(WebViewInterface(), "android")
                                 webView.loadUrl("file:///android_asset/threadDisplay.html")
-                                WebView.setWebContentsDebuggingEnabled(true);
+                                WebView.setWebContentsDebuggingEnabled(true)
                                 webView.webViewClient = (object : WebViewClient() {
                                     override fun shouldOverrideUrlLoading(
                                         view: WebView?,

@@ -110,7 +110,7 @@ p.threadMeta_PostMeta {
     display: inline-block;
     vertical-align: middle;
     text-align: center;
-    font: 900 14px/30px "sans-serif-bold", sans-serif;
+    font: 900 14px/36px "sans-serif-bold", sans-serif;
     border-radius: 4px;
     background: var(--surfaceOnSecondary);
     width: 30px;
