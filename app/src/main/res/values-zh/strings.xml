@@ -131,4 +131,6 @@
     <string name="confirm">确认</string>
     <string name="successful">成功</string>
     <string name="failed">失败</string>
+    <string name="read_notifications">已读</string>
+    <string name="unread_notifications">未读</string>
 </resources>

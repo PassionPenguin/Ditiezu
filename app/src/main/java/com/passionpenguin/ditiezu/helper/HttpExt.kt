@@ -165,4 +165,65 @@ class HttpExt {
             }
         }.start()
     }
+
+    fun retrieveRedirect(url: String): Array<String>? {
+        val c = URL(url).openConnection() as HttpURLConnection
+        c.instanceFollowRedirects = false
+        var result = arrayOf("-1", "1")
+        val t = Thread {
+            c.setRequestProperty(
+                "Cookie",
+                CookieManager.getInstance().getCookie(url)
+            )
+
+            c.requestMethod = "POST"
+            c.setRequestProperty(
+                "Referer",
+                "http://www.ditiezu.com"
+            )
+            c.setRequestProperty(
+                "Content-Type",
+                "application/x-www-form-urlencoded;"
+            )
+            c.setRequestProperty(
+                "Origin",
+                "http://www.ditiezu.com"
+            )
+            c.setRequestProperty(
+                "Host",
+                "www.ditiezu.com"
+            )
+            c.setRequestProperty(
+                "User-Agent",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+            )
+            c.setRequestProperty(
+                "DNT",
+                "1"
+            )
+            c.setRequestProperty(
+                "Proxy-Connection",
+                "keep-alive"
+            )
+            val it: String = c.getHeaderField("Location") ?: ""
+            Log.i(it, it)
+            it.let {
+                result =
+                    if (c.responseCode == HttpURLConnection.HTTP_MOVED_PERM || c.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+                        arrayOf(
+                            it.substring(
+                                it.indexOf("tid=") + 4,
+                                it.indexOf("&", it.indexOf("tid=") + 4)
+                            ),
+                            it.substring(
+                                it.indexOf("page=") + 5, it.indexOf("#", it.indexOf("page=") + 5)
+                            )
+                        )
+                    } else arrayOf("1", "1")
+            }
+        }
+        t.start()
+        t.join()
+        return result
+    }
 }

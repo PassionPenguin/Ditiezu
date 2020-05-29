@@ -103,3 +103,47 @@ class PrefAdapter(
         return view
     }
 }
+
+class NotificationItem(
+    val imageUrl: String,
+    val value: String,
+    val description: String? = null,
+    val time: String,
+    val tid: String? = "-1",
+    val page: String? = "1"
+)
+
+class NotificationsAdapter(
+    private var mCtx: Context,
+    resource: Int,
+    private var items: List<NotificationItem>
+) : ArrayAdapter<NotificationItem>(mCtx, resource, items) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
+        val view: View = layoutInflater.inflate(R.layout.item_notification, null)
+        val avatar: ImageView = view.findViewById(R.id.avatar)
+        val value: TextView = view.findViewById(R.id.notification_value)
+        val meta: TextView = view.findViewById(R.id.notification_meta)
+        val extraInfo: TextView = view.findViewById(R.id.extraInfo)
+        val notification = items[position]
+        value.text = notification.value
+        meta.text = notification.time
+        if (notification.description != null)
+            extraInfo.text = notification.description
+        else extraInfo.visibility = View.GONE
+        if (notification.imageUrl.isEmpty())
+            Picasso.with(context)
+                .load(R.mipmap.noavatar_middle_rounded)
+                .transform(CircularCornersTransform())
+                .into(avatar)
+        else
+            Picasso.with(context)
+                .load(notification.imageUrl)
+                .placeholder(R.mipmap.noavatar_middle_rounded)
+                .error(R.mipmap.noavatar_middle_rounded)
+                .transform(CircularCornersTransform())
+                .into(avatar)
+        return view
+    }
+}

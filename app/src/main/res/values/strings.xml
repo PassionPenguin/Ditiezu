@@ -133,4 +133,6 @@
     <string name="cancel">Cancel</string>
     <string name="successful">Successful!</string>
     <string name="failed">Failed!</string>
+    <string name="unread_notifications">Unread</string>
+    <string name="read_notifications">Read</string>
 </resources>

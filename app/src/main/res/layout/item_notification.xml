@@ -22,6 +22,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/ripple"
             android:orientation="vertical"
+            android:paddingBottom="12dp"
             android:paddingHorizontal="24dp">
 
             <LinearLayout
@@ -44,37 +45,37 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/threadAuthorName"
+                        android:id="@+id/notification_meta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/_4"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/threadList_meta"
-                        android:textColor="@color/dark"
-                        android:textSize="14sp" />
+                        android:textColor="@color/grey"
+                        android:textSize="10sp"
+                        tools:text="Notification Meta" />
 
                     <TextView
-                        android:id="@+id/threadMetaInfo"
+                        android:id="@+id/notification_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/threadList_meta"
-                        android:textColor="@color/grey"
-                        android:textSize="10sp" />
+                        android:layout_marginTop="@dimen/_4"
+                        android:fontFamily="sans-serif-medium"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="Notification Value" />
                 </LinearLayout>
             </LinearLayout>
 
             <TextView
-                android:id="@+id/threadTitle"
+                android:id="@+id/extraInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4"
                 android:fontFamily="sans-serif-black"
-                android:text="@string/threadList_title"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingBottom="12dp" />
+                android:textSize="13sp"
+                android:textStyle="italic"
+                android:drawableStart="@drawable/style_quote"
+                android:drawablePadding="@dimen/_8"
+                tools:text="？？" />
         </LinearLayout>
     </LinearLayout>
 

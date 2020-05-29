@@ -65,4 +65,6 @@
     <string name="confirm">確認</string>
     <string name="cancel">取消</string>
     <string name="failed">失敗</string>
+    <string name="read_notifications">已讀</string>
+    <string name="unread_notifications">未讀</string>
 </resources>
