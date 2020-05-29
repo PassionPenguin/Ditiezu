@@ -102,35 +102,29 @@ p.threadMeta_PostMeta {
 
 #pg-pgs {
     width: fit-content;
-    margin: 0 auto;
-    background: var(--white);
+    margin: 0 auto 20px auto;
     display: block;
 }
 
 #pg-pgs span {
-    padding: 3px;
     display: inline-block;
-    width: 24px;
-    height: 24px;
     vertical-align: middle;
     text-align: center;
-    font: 16px/24px Anodina, sans-serif;
-    margin: 6px;
-    border: 1px solid transparent;
+    font: 900 14px/30px "sans-serif-bold", sans-serif;
+    border-radius: 4px;
+    background: var(--surfaceOnSecondary);
+    width: 30px;
+    height: 30px;
+    margin: 3px;
 }
 
 span.page {
-    background: var(--bgwhite);
+    color: var(--dark);
     cursor: pointer;
 }
 
 #pg-pgs span:not(.page) {
-    font-weight: 900;
-}
-
-span.page:hover, span.page:focus {
-    background: var(--white);
-    border-color: var(--light) !important;
+    color: var(--theme);
 }
 
 span.page.mi {
@@ -149,4 +143,22 @@ img[file] {
 img[src^="imageAssets"] {
     width: 50%;
     margin: 0 auto;
+}
+
+blockquote {
+    margin-left: 0;
+    border-left: 5px solid var(--grey);
+    padding-left: 1em;
+    line-height: 1.2;
+}
+
+blockquote font {
+    margin-bottom: -6px;
+    display: block;
+}
+
+i.pstatus {
+    font-size: 10px;
+    margin-bottom: -24px;
+    display: block;
 }
