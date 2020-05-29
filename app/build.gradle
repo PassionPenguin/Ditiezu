@@ -12,8 +12,8 @@ android {
         applicationId "com.passionpenguin.ditiezu"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 3
-        versionName 'Watermelon Milkshake v2.2 Canary'
+        versionCode 4
+        versionName 'Watermelon Milkshake v3.1 Canary'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
