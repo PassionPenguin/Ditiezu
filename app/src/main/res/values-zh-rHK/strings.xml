@@ -71,4 +71,6 @@
     <string name="search_system">抱歉！系統設置了搜索回應限制</string>
     <string name="no_notification">冇佐…</string>
     <string name="new_version_detected">發現新版</string>
+    <string name="link">鏈接</string>
+    <string name="reload">重載</string>
 </resources>

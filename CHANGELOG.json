@@ -30,6 +30,12 @@
       "versionName": "Watermelon Milkshake v3.2 Canary",
       "versionDate": "Sat May 30 2020 17:30:29 GMT+0800 (中国标准时间)",
       "versionLog": "更新搜索页，修复错误"
+    },
+    {
+      "versionCode": 6,
+      "versionName": "Watermelon Milkshake v3.3 Canary",
+      "versionDate": "Sat May 30 2020 22:14:58 GMT+0800 (中国标准时间)",
+      "versionLog": "更新帖子页面的工具栏，修复错误"
     }
   ]
 }

@@ -141,4 +141,7 @@
     <string name="no_notification">No More...</string>
     <string name="version">Version</string>
     <string name="new_version_detected">New Version Detected</string>
+    <string name="share">Share</string>
+    <string name="link">Link</string>
+    <string name="reload">Reload</string>
 </resources>

@@ -139,4 +139,7 @@
     <string name="no_notification">没了…</string>
     <string name="version">版本</string>
     <string name="new_version_detected">发现新版</string>
+    <string name="reload">重载</string>
+    <string name="link">链接</string>
+    <string name="share">分享</string>
 </resources>

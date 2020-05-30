@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -45,9 +44,8 @@
         android:paddingBottom="@dimen/_16"
         android:paddingStart="@dimen/_8"
         android:paddingEnd="@dimen/_16"
-        android:gravity="end|center_horizontal"
-        android:layout_gravity="end|center_vertical"
         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
