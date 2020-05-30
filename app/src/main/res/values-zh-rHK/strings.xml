@@ -69,4 +69,5 @@
     <string name="unread_notifications">未讀</string>
     <string name="search_15s">抱歉！您只能在15秒內進行一次搜索</string>
     <string name="search_system">抱歉！系統設置了搜索回應限制</string>
+    <string name="no_notification">冇佐…</string>
 </resources>

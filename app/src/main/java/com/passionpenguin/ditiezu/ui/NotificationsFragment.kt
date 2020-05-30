@@ -6,10 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ListView
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.passionpenguin.ditiezu.LoginActivity
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.ViewThread
 import com.passionpenguin.ditiezu.helper.HttpExt
@@ -25,7 +28,33 @@ class NotificationsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_notifications, container, false)
 
         fun retriever(url: String) {
+            activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                View.VISIBLE
             HttpExt().retrievePage(url) { s ->
+                Log.i("", s.contains("暂时没有").toString())
+                if (s == "Failed Retrieved") {
+                    // Failed Retrieved
+                    Log.i("HTTPEXT", "FAILED RETRIEVED")
+                } else if (s.contains("用户登录"))
+                    Snackbar.make(
+                        view,
+                        resources.getString(R.string.login_description),
+                        Snackbar.LENGTH_LONG
+                    ).setAction("登录") {
+                        startActivity(
+                            Intent(
+                                context,
+                                LoginActivity::class.java
+                            )
+                        )
+                    }.show()
+                else if (s.contains("暂时没有新提醒"))
+                    Snackbar.make(
+                        view,
+                        resources.getString(R.string.no_notification),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+
                 val parser = Jsoup.parse(s)
                 val list = mutableListOf<NotificationItem>()
                 parser.select("[notice]").forEach {
@@ -87,6 +116,11 @@ class NotificationsFragment : Fragment() {
                         }
                     }
                 }
+
+                activity?.runOnUiThread {
+                    activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                        View.GONE
+                }
             }
         }
 
@@ -104,6 +138,8 @@ class NotificationsFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+
+        retriever("http://ditiezu.com/home.php?mod=space&do=notice")
         return view
     }
 }

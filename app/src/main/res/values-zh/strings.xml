@@ -136,4 +136,5 @@
     <string name="search_15s">抱歉！您只能在15秒内进行一次搜索</string>
     <string name="search_system">抱歉！系统设置了搜索回应限制</string>
     <string name="search">搜索！</string>
+    <string name="no_notification">没了…</string>
 </resources>

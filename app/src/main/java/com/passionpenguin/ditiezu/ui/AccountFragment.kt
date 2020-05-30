@@ -28,12 +28,19 @@ class AccountFragment : Fragment() {
                     Log.i("HTTPEXT", "FAILED RETRIEVED")
                 }
 
-                activity?.runOnUiThread {
-                    val parser = Jsoup.parse(it)
-                    val absUrl = parser.select("strong a").attr("href")
-                    Log.i("", absUrl)
-                    val id = absUrl.substring(33, absUrl.lastIndexOf(".html"))
+                val parser = Jsoup.parse(it)
+                val absUrl = parser.select("strong a").attr("href")
+                Log.i("", absUrl)
+                val id = absUrl.substring(33, absUrl.lastIndexOf(".html"))
 
+                var metaList =
+                    parser.select(".pbm.mbm.bbda.cl:first-child ul > li:last-child")[0]
+                parser.select(".pbm.mbm.bbda.cl:first-child ul > li").forEach {
+                    if (it.html().contains("统计信息"))
+                        metaList = it
+                }
+
+                activity?.runOnUiThread {
                     activity?.findViewById<TextView>(R.id.userName)?.text =
                         parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
                     Picasso.with(context)
@@ -44,13 +51,6 @@ class AccountFragment : Fragment() {
                         .into(activity?.findViewById<ImageView>(R.id.avatar))
                     activity?.findViewById<TextView>(R.id.value_level)?.text =
                         parser.select(".pbm span a")[0].text()
-
-                    var metaList =
-                        parser.select(".pbm.mbm.bbda.cl:first-child ul > li:last-child")[0]
-                    parser.select(".pbm.mbm.bbda.cl:first-child ul > li").forEach {
-                        if (it.html().contains("统计信息"))
-                            metaList = it
-                    }
 
                     try {
                         activity?.findViewById<TextView>(R.id.value_friends)?.text =

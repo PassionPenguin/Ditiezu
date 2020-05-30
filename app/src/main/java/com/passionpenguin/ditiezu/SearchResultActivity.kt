@@ -39,9 +39,10 @@ class SearchResultActivity : AppCompatActivity() {
         fun processResult(result: String) {
             val parser = Jsoup.parse(result)
             val threadListContent = mutableListOf<SearchListItem>()
-            parser.select(".pbw").forEach {
+            parser.select("#threadlist .pbw").forEach {
+                Log.i("", it.html())
                 val title = it.select("h3 a")
-                val author = it.select("span:nth-last-child(2) a")
+                val author = it.select("p")[2].select("span a")[0]
                 var targetTid = ""
                 with(title.attr("href")) {
                     try {
@@ -74,23 +75,25 @@ class SearchResultActivity : AppCompatActivity() {
                 )
             }
 
-            val list = findViewById<ListView>(R.id.threadItemList)
-            list?.adapter =
-                SearchListAdapter(
-                    applicationContext,
-                    0,
-                    threadListContent
-                )
+            runOnUiThread {
+                val list = findViewById<ListView>(R.id.threadItemList)
+                list?.adapter =
+                    SearchListAdapter(
+                        applicationContext,
+                        0,
+                        threadListContent
+                    )
 
-            findViewById<ListView>(R.id.threadItemList)
-                ?.setOnItemClickListener { _, _, position, _ ->
-                    if (position != 0) {
-                        val i = Intent(this@SearchResultActivity, ViewThread::class.java)
-                        i.putExtra("tid", threadListContent[position].target)
-                        startActivity(i)
+                findViewById<ListView>(R.id.threadItemList)
+                    ?.setOnItemClickListener { _, _, position, _ ->
+                        if (position != 0) {
+                            val intent = Intent(this@SearchResultActivity, ViewThread::class.java)
+                            intent.putExtra("tid", threadListContent[position].target)
+                            startActivity(intent)
+                        }
                     }
-                }
-            findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
+                findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
+            }
         }
 
         fun search() {
@@ -102,25 +105,36 @@ class SearchResultActivity : AppCompatActivity() {
                     "GBK"
                 ) + "&searchsubmit=yes"
             )
-            runOnUiThread {
-                if (s == "Failed Retrieved") {
-                    // Failed Retrieved
-                    Log.i("HTTPEXT", "FAILED RETRIEVED")
-                } else if (s.contains("只能进行一次搜索"))
-                    Snackbar.make(
-                        findViewById<ConstraintLayout>(R.id.SearchResultActivity),
-                        resources.getString(R.string.search_15s),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                else if (s.contains("站点设置每分钟系统最多"))
-                    Snackbar.make(
-                        findViewById<ConstraintLayout>(R.id.SearchResultActivity),
-                        resources.getString(R.string.search_system),
-                        Snackbar.LENGTH_LONG
-                    ).show()
+            if (s == "Failed Retrieved") {
+                // Failed Retrieved
+                Log.i("HTTPEXT", "FAILED RETRIEVED")
+            } else if (s.contains("用户登录"))
+                Snackbar.make(
+                    findViewById<ConstraintLayout>(R.id.SearchResultActivity),
+                    resources.getString(R.string.login_description),
+                    Snackbar.LENGTH_LONG
+                ).setAction("登录") {
+                    startActivity(
+                        Intent(
+                            this@SearchResultActivity,
+                            LoginActivity::class.java
+                        )
+                    )
+                }.show()
+            else if (s.contains("只能进行一次搜索"))
+                Snackbar.make(
+                    findViewById<ConstraintLayout>(R.id.SearchResultActivity),
+                    resources.getString(R.string.search_15s),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            else if (s.contains("站点设置每分钟系统最多"))
+                Snackbar.make(
+                    findViewById<ConstraintLayout>(R.id.SearchResultActivity),
+                    resources.getString(R.string.search_system),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            else
                 processResult(s)
-            }
-
         }
         search()
 
