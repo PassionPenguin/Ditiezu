@@ -2,7 +2,8 @@
 <html lang="zh-CN zh">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Thread Display</title>
     <link href="./styles.css" rel="stylesheet">
@@ -34,19 +35,24 @@
         }
         page.$("[id^='pid']").forEach(reply => {
             let replyThreadContainer = container.appendNewChild({type: "div", attr: [["class", "threadContainer"]]});
+            let avatarUrl = "";
+            if(reply.$(".avatar img")[0]===undefined) avatarUrl = "noavatar_middle.jpg";
+            else avatarUrl = reply.$(".avatar img")[0].src
             replyThreadContainer.appendNewChild({
                 type: "img",
-                attr: [["class", "threadMeta_AuthorAvatar"], ["src", reply.$(".avatar img")[0].src], ["onerror", "this.src='noavatar_middle.jpg';"]]
+                attr: [["class", "threadMeta_AuthorAvatar"], ["src", avatarUrl], ["onerror", "this.src='noavatar_middle.jpg';"]]
             });
             replyThreadContainer.appendNewChild({
                 type: "div",
                 attr: [["class", "threadMeta_Container"]],
                 innerHTML: `<p class="threadMeta_AuthorName">${reply.$('.pi .authi a')[0].innerText}</p><p class="threadMeta_PostMeta">${reply.$("p em")[0].innerText} · ${reply.$(".pi strong")[0].innerText} · ${reply.$('.pi [id^="authorposton"]')[0].innerText}</p>`
             });
+            let content = "";
+            if(reply.$(".t_fsz")[0]!==undefined)content=reply.$(".t_fsz")[0].innerHTML.replace("src=\"static/image/common/none.gif\"", "src='imageAssets\\imageHolder.svg'");
             replyThreadContainer.appendNewChild({
                 type: "div",
                 attr: [["class", "threadContent"]],
-                innerHTML: reply.$(".t_fsz")[0].innerHTML.replace("src=\"static/image/common/none.gif\"", "src='imageAssets\\imageHolder.svg'")
+                innerHTML: content
             });
         });
 
@@ -133,5 +139,6 @@
         darkMode(android.isDarkMode());
         android.displayWebView();
     };
+
 </script>
 </html>
