@@ -86,7 +86,7 @@ class SearchResultActivity : AppCompatActivity() {
                 ?.setOnItemClickListener { _, _, position, _ ->
                     if (position != 0) {
                         val i = Intent(this@SearchResultActivity, ViewThread::class.java)
-                        i.putExtra("tid", threadListContent[position - 1].target)
+                        i.putExtra("tid", threadListContent[position].target)
                         startActivity(i)
                     }
                 }
