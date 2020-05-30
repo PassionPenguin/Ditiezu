@@ -39,7 +39,7 @@ class ViewThread : AppCompatActivity() {
         } else finish()
 
         findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            if (HttpExt().checkLogin()) Snackbar.make(view, resources.getString(R.string.login_description), Snackbar.LENGTH_LONG)
+            if (!HttpExt().checkLogin()) Snackbar.make(view, resources.getString(R.string.login_description), Snackbar.LENGTH_LONG)
                 .setAction("登录") {
                     startActivity(
                         Intent(
