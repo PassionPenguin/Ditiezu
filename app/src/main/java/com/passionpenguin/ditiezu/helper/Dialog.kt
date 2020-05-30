@@ -6,7 +6,6 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import com.passionpenguin.ditiezu.R
 
-
 class Dialog {
     fun create(
         target: View,

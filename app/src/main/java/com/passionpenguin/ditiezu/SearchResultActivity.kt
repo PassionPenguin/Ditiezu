@@ -19,7 +19,6 @@ import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.SearchListAdapter
 import com.passionpenguin.ditiezu.helper.SearchListItem
 
-import kotlinx.android.synthetic.main.activity_search_result.*
 import org.jsoup.Jsoup
 import java.net.URLEncoder
 
@@ -96,7 +95,6 @@ class SearchResultActivity : AppCompatActivity() {
 
         fun search() {
             findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.VISIBLE
-            val keyword = URLEncoder.encode(kw, "utf-8")
             val s = HttpExt().asyncPostPage(
                 "http://ditiezu.com/search.php?mod=forum",
                 "formhash=$formhash&srchtxt=" + URLEncoder.encode(

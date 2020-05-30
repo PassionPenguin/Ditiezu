@@ -10,7 +10,6 @@ import androidx.core.view.postDelayed
 import com.passionpenguin.ditiezu.helper.*
 import org.jsoup.Jsoup
 
-
 class ForumDisplay : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
