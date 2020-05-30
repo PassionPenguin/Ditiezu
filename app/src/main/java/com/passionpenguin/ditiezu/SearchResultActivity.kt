@@ -40,7 +40,6 @@ class SearchResultActivity : AppCompatActivity() {
             val parser = Jsoup.parse(result)
             val threadListContent = mutableListOf<SearchListItem>()
             parser.select("#threadlist .pbw").forEach {
-                Log.i("", it.html())
                 val title = it.select("h3 a")
                 val author = it.select("p")[2].select("span a")[0]
                 var targetTid = ""
@@ -86,11 +85,9 @@ class SearchResultActivity : AppCompatActivity() {
 
                 findViewById<ListView>(R.id.threadItemList)
                     ?.setOnItemClickListener { _, _, position, _ ->
-                        if (position != 0) {
-                            val intent = Intent(this@SearchResultActivity, ViewThread::class.java)
-                            intent.putExtra("tid", threadListContent[position].target)
-                            startActivity(intent)
-                        }
+                        val intent = Intent(this@SearchResultActivity, ViewThread::class.java)
+                        intent.putExtra("tid", threadListContent[position].target)
+                        startActivity(intent)
                     }
                 findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
             }

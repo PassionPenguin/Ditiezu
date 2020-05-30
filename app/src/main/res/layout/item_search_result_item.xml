@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:paddingVertical="@dimen/_8"
             android:paddingHorizontal="@dimen/_16"
+            android:textColor="@color/dark"
             tools:text="2020/05/30 13:00" />
 
         <LinearLayout
@@ -43,6 +44,7 @@
                 android:fontFamily="sans-serif-black"
                 android:textSize="18sp"
                 android:paddingTop="12dp"
+                android:textColor="@color/black"
                 tools:text="Thread Title" />
 
             <TextView
@@ -51,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4"
                 android:textSize="13sp"
+                android:textColor="@color/dark"
                 tools:text="Thread Content" />
 
             <LinearLayout

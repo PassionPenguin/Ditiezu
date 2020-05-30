@@ -31,7 +31,6 @@ class NotificationsFragment : Fragment() {
             activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
                 View.VISIBLE
             HttpExt().retrievePage(url) { s ->
-                Log.i("", s.contains("暂时没有").toString())
                 if (s == "Failed Retrieved") {
                     // Failed Retrieved
                     Log.i("HTTPEXT", "FAILED RETRIEVED")
@@ -67,12 +66,10 @@ class NotificationsFragment : Fragment() {
                         var page = "1"
                         var tid: String
                         with(it.select(".ntc_body a:last-child")) {
-                            Log.i("", this.attr("href"))
                             if (this.isEmpty())
                                 tid = "-1"
                             else if (this.attr("href").contains("findpost")) {
                                 val result = HttpExt().retrieveRedirect(this.attr("href"))
-                                Log.i("", result.toString())
                                 tid = result?.get(0) ?: "1"
                                 page = result?.get(1) ?: "1"
                             } else if (this.attr("href").contains("thread-")) {
@@ -108,7 +105,6 @@ class NotificationsFragment : Fragment() {
                     listView?.adapter = context?.let { ctx -> NotificationsAdapter(ctx, 0, list) }
                     listView?.setOnItemClickListener { _, _, position, _ ->
                         if (list[position].tid != "-1") {
-                            Log.i("", list[position].tid + " " + list[position].page)
                             val i = Intent(context, ViewThread::class.java)
                             i.putExtra("tid", list[position].tid?.toInt())
                             i.putExtra("page", list[position].page?.toInt())
