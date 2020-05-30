@@ -135,4 +135,7 @@
     <string name="failed">Failed!</string>
     <string name="unread_notifications">Unread</string>
     <string name="read_notifications">Read</string>
+    <string name="search_15s">Sorry.. You can only search once in 15s</string>
+    <string name="search_system">Sorry! System has a restriction of responding times</string>
+    <string name="search">Search!</string>
 </resources>

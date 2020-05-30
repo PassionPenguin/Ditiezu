@@ -77,6 +77,41 @@ class ThreadListAdapter(
     }
 }
 
+class SearchListItem(
+    val authorId: Int,
+    val title: String,
+    val content: String,
+    val authorName: String,
+    val time: String,
+    val meta: String,
+    val target: Int
+)
+
+class SearchListAdapter(
+    private var mCtx: Context,
+    resource: Int,
+    private var items: List<SearchListItem>
+) : ArrayAdapter<SearchListItem>(mCtx, resource, items) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
+        val view: View = layoutInflater.inflate(R.layout.item_search_result_item, null)
+        val searchItem = items[position]
+        view.findViewById<TextView>(R.id.threadTitle).text = searchItem.title
+        view.findViewById<TextView>(R.id.threadContent).text = searchItem.content
+        view.findViewById<TextView>(R.id.threadPostTime).text = searchItem.time
+        view.findViewById<TextView>(R.id.threadMetaInfo).text = searchItem.meta
+        view.findViewById<TextView>(R.id.threadAuthorName).text = searchItem.authorName
+        Picasso.with(context)
+            .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${searchItem.authorId}")
+            .placeholder(R.mipmap.noavatar_middle_rounded)
+            .error(R.mipmap.noavatar_middle_rounded)
+            .transform(CircularCornersTransform())
+            .into(view.findViewById<ImageView>(R.id.avatar))
+        return view
+    }
+}
+
 class PrefListItem(
     val name: String = "",
     val description: String = "",

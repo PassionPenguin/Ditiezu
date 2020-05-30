@@ -133,4 +133,7 @@
     <string name="failed">失败</string>
     <string name="read_notifications">已读</string>
     <string name="unread_notifications">未读</string>
+    <string name="search_15s">抱歉！您只能在15秒内进行一次搜索</string>
+    <string name="search_system">抱歉！系统设置了搜索回应限制</string>
+    <string name="search">搜索！</string>
 </resources>

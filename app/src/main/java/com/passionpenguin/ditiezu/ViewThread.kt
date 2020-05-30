@@ -39,19 +39,16 @@ class ViewThread : AppCompatActivity() {
         } else finish()
 
         findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            webView.evaluateJavascript("android.checkLogin()") {
-                if (it == "false") Snackbar.make(view, "请登录后再进行操作", Snackbar.LENGTH_LONG)
-                    .setAction("登录") {
-                        startActivity(
-                            Intent(
-                                this@ViewThread,
-                                LoginActivity::class.java
-                            )
+            if (HttpExt().checkLogin()) Snackbar.make(view, "请登录后再进行操作", Snackbar.LENGTH_LONG)
+                .setAction("登录") {
+                    startActivity(
+                        Intent(
+                            this@ViewThread,
+                            LoginActivity::class.java
                         )
-                    }.show()
-                else Snackbar.make(view, "尚在开发", Snackbar.LENGTH_LONG).show()
-            }
-
+                    )
+                }.show()
+            else Snackbar.make(view, "尚在开发", Snackbar.LENGTH_LONG).show()
         }
 
         fun retrieveThreadContent() {

@@ -16,6 +16,8 @@
         android:theme="@style/Theme.Ditiezu"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity
+            android:name=".SearchResultActivity" />
         <activity android:name=".ForumDisplay" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ViewThread">
