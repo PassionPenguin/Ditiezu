@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -24,13 +23,11 @@ import kotlinx.android.synthetic.main.activity_view_thread.*
 import org.jsoup.Jsoup
 import kotlin.properties.Delegates
 
-
 class ViewThread : AppCompatActivity() {
-
-    lateinit var webView: WebView
-    var darkMode by Delegates.notNull<Boolean>()
-    var tid by Delegates.notNull<Int>()
-    var page by Delegates.notNull<Int>()
+    private var darkMode by Delegates.notNull<Boolean>()
+    private var tid by Delegates.notNull<Int>()
+    private var page by Delegates.notNull<Int>()
+    private var loginState by Delegates.notNull<Boolean>()
 
     private fun retrieveThreadContent() {
         fun loadPage(threadId: Int = this.tid, pageId: Int = this.page) {
@@ -43,7 +40,7 @@ class ViewThread : AppCompatActivity() {
                     val parser = Jsoup.parse(result)
                     this@ViewThread.runOnUiThread {
                         title = parser.select("#thread_subject").text()
-                        webView.settings.javaScriptEnabled = true
+                        viewThread.settings.javaScriptEnabled = true
                         class WebViewInterface {
                             @JavascriptInterface
                             fun loadPageWithPage(page: Int): String {
@@ -54,7 +51,7 @@ class ViewThread : AppCompatActivity() {
                             @JavascriptInterface
                             fun displayWebView() {
                                 runOnUiThread {
-                                    webView.visibility = View.VISIBLE
+                                    viewThread.visibility = View.VISIBLE
                                 }
                             }
 
@@ -84,10 +81,10 @@ class ViewThread : AppCompatActivity() {
                                     .checkLogin()
                             }
                         }
-                        webView.addJavascriptInterface(WebViewInterface(), "android")
-                        webView.loadUrl("file:///android_asset/threadDisplay.html")
+                        viewThread.addJavascriptInterface(WebViewInterface(), "android")
+                        viewThread.loadUrl("file:///android_asset/threadDisplay.html")
                         WebView.setWebContentsDebuggingEnabled(true)
-                        webView.webViewClient = (object : WebViewClient() {
+                        viewThread.webViewClient = (object : WebViewClient() {
                             override fun shouldOverrideUrlLoading(
                                 view: WebView?,
                                 request: WebResourceRequest?
@@ -172,10 +169,30 @@ class ViewThread : AppCompatActivity() {
                     "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&page=$page"
                 )
                 clipboard.setPrimaryClip(clip)
+                Snackbar.make(
+                    viewThread,
+                    resources.getString(R.string.copied),
+                    Snackbar.LENGTH_SHORT
+                ).show()
                 true
             }
             R.id.reload -> {
                 retrieveThreadContent()
+                true
+            }
+            R.id.reply -> {
+                if (loginState) {/* TODO: Updated Post Thread */
+                } else {
+                    Snackbar.make(
+                        viewThread,
+                        resources.getString(R.string.login_description),
+                        Snackbar.LENGTH_LONG
+                    ).setAction(resources.getString(R.string.login)) {
+                        startActivity(
+                            Intent(this@ViewThread, LoginActivity::class.java)
+                        )
+                    }.show()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -189,7 +206,6 @@ class ViewThread : AppCompatActivity() {
 
         this.darkMode =
             this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        this.webView = viewThread
 
         val extras = intent.extras
         if (extras != null) {
@@ -197,25 +213,8 @@ class ViewThread : AppCompatActivity() {
             this.page = extras.getInt("page", 1)
         } else finish()
 
-        val loginState = HttpExt().checkLogin()
+        loginState = HttpExt().checkLogin()
 
-        fab.setOnClickListener { view ->
-            if (!loginState)
-                Snackbar.make(
-                    view,
-                    resources.getString(R.string.login_description),
-                    Snackbar.LENGTH_LONG
-                ).setAction("登录") {
-                    startActivity(
-                        Intent(
-                            this@ViewThread,
-                            LoginActivity::class.java
-                        )
-                    )
-                }.show()
-            else Snackbar.make(view, "尚在开发", Snackbar.LENGTH_LONG).show()
-        }
-        fab.drawable.mutate().setTint(Color.WHITE)
         BackButton.setOnClickListener {
             onBackPressed()
         }

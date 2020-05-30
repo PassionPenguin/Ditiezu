@@ -55,7 +55,7 @@
     <string name="loading_description">加载中…</string>
     <string name="threadList_meta">帖子信息</string>
     <string name="threadList_title">帖子标题</string>
-    <string name="title_reply">Reply</string>
+    <string name="title_reply">回复</string>
     <string name="app_description">上班、落班，地铁带你返工放工，地下铁嘅故事就系依度发生</string>
     <string name='description_Beijing'>地下通衢肇始燕，铁流暗涌古城垣。北畅南达东西贯，京都旧貌换新颜。</string>
     <string name='description_Tianjin'>跨越海河津门，连接新区古镇，通达京都江淮，品味公交百年，感受城轨脉动。</string>
@@ -120,7 +120,7 @@
     <string name="user_id">用户唯一标识符</string>
     <string name="online_hour">在线时长</string>
     <string name="online_hour_description">您在论坛总时长</string>
-    <string name="login">登录</string>
+    <string name="login">回复</string>
     <string name="login_description">登录以使用更多功能…</string>
     <string name="accept_terms">点击按钮时我同意用户协议与隐私政策</string>
     <string name="login_tips">当页面加载后，请按照常规方法登录</string>
@@ -142,4 +142,5 @@
     <string name="reload">重载</string>
     <string name="link">链接</string>
     <string name="share">分享</string>
+    <string name="copied">已复制链接！</string>
 </resources>

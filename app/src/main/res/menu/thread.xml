@@ -22,6 +22,11 @@
                 android:icon="@drawable/ic_baseline_reload_24"
                 android:title="@string/reload"
                 app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/reply"
+                android:icon="@drawable/ic_baseline_reply_24"
+                android:title="@string/title_reply"
+                app:showAsAction="ifRoom" />
         </menu>
     </item>
 </menu>

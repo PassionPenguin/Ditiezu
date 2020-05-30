@@ -37,7 +37,7 @@
     <string name="category_Comprehensive">綜合區</string>
     <string name="loading_description" >加載中…</string>
     <string name="threadList_title">帖子標題</string>
-    <string name="title_reply">Reply</string>
+    <string name="title_reply">回覆</string>
     <string name="app_description">上班，落班，地鐵帶你返工放工，地下鐵嘅故事就係依度發生</string>
     <string name="page_controller">頁</string>
     <string name="next_page">下頁</string>
@@ -56,7 +56,7 @@
     <string name="user_id">用戶唯一表示符</string>
     <string name="online_hour">在線時長</string>
     <string name="online_hour_description">您在論壇總時長</string>
-    <string name="login">登錄</string>
+    <string name="login">回覆</string>
     <string name="accept_terms">點擊按鈕時我同意用戶協議和隱私政策</string>
     <string name="login_description">登錄以使用更多功能…</string>
     <string name="login_tips">當頁面加載後，請按照常規方法登錄</string>
@@ -73,4 +73,5 @@
     <string name="new_version_detected">發現新版</string>
     <string name="link">鏈接</string>
     <string name="reload">重載</string>
+    <string name="copied">已複製鏈接！</string>
 </resources>
