@@ -2,6 +2,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -13,7 +14,7 @@
         android:paddingBottom="@dimen/_16"
         android:paddingStart="@dimen/_16"
         android:paddingEnd="@dimen/_8"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintRight_toLeftOf="@id/pref_item_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,14 +23,18 @@
             android:id="@+id/pref_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_gravity="start"
+            tools:text="PREF NAME" />
 
         <TextView
             android:id="@+id/pref_item_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_gravity="start" />
+            android:layout_gravity="start"
+            tools:text="PREF DESCRIPTION" />
     </LinearLayout>
 
     <TextView
@@ -40,7 +45,7 @@
         android:paddingBottom="@dimen/_16"
         android:paddingStart="@dimen/_8"
         android:paddingEnd="@dimen/_16"
-        android:gravity="end"
+        android:gravity="end|center_horizontal"
         android:layout_gravity="end|center_vertical"
         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
         app:layout_constraintRight_toRightOf="parent"

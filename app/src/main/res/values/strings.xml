@@ -139,4 +139,6 @@
     <string name="search_system">Sorry! System has a restriction of responding times</string>
     <string name="search">Search!</string>
     <string name="no_notification">No More...</string>
+    <string name="version">Version</string>
+    <string name="new_version_detected">New Version Detected</string>
 </resources>

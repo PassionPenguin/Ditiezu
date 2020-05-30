@@ -325,7 +325,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16"
             android:background="@drawable/border_radius_8"
-            android:divider="@null" />
+            android:divider="@null"
+            tools:listitem="@layout/item_pref_item"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -79,7 +79,7 @@ class HttpExt {
 
     }
 
-    fun asyncRetrievePage(url: String): String {
+    fun asyncRetrievePage(url: String, charsetName: String = "GBK"): String {
         val urlConnection = URL(url).openConnection() as HttpURLConnection
         val cookieManager = CookieManager.getInstance()
         var cookie = cookieManager.getCookie(url)
@@ -127,7 +127,7 @@ class HttpExt {
 
             try {
                 val inputStream: InputStream = urlConnection.inputStream
-                val reader = InputStreamReader(inputStream, "GBK")
+                val reader = InputStreamReader(inputStream, charsetName)
                 var str = reader.readText()
                 var res = ""
                 while (str != "") {

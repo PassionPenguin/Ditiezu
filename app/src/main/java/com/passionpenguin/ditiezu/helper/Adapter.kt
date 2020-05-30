@@ -132,7 +132,11 @@ class PrefAdapter(
         value.text = items[position].value
         if (!items[position].toggle)
             value.setCompoundDrawables(null, null, null, null)
-        view.findViewById<TextView>(R.id.pref_item_description).text = items[position].description
+        if (items[position].description !== "")
+            with(view.findViewById<TextView>(R.id.pref_item_description)) {
+                this.text = items[position].description
+                this.visibility = View.VISIBLE
+            }
         view.findViewById<TextView>(R.id.pref_item_name).text = items[position].name
         return view
     }

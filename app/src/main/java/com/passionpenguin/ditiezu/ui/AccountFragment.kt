@@ -11,8 +11,6 @@ import com.passionpenguin.ditiezu.*
 import com.passionpenguin.ditiezu.helper.*
 import com.squareup.picasso.Picasso
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
 
 class AccountFragment : Fragment() {
     override fun onCreateView(
@@ -78,7 +76,10 @@ class AccountFragment : Fragment() {
                     }
 
                     activity?.findViewById<TextView>(R.id.userIntegral)?.text =
-                        resources.getString(R.string.user_integral, parser.select("#psts li")[0].textNodes()[0].text().trim().toInt())
+                        resources.getString(
+                            R.string.user_integral,
+                            parser.select("#psts li")[0].textNodes()[0].text().trim().toInt()
+                        )
 
                     activity?.findViewById<TextView>(R.id.value_points)?.text =
                         parser.select("#psts li")[0].textNodes()[0].text().trim()
@@ -136,6 +137,12 @@ class AccountFragment : Fragment() {
                             }
                         }
                     )
+                    prefItem.add(
+                        PrefListItem(
+                            resources.getString(R.string.version),
+                            BuildConfig.VERSION_NAME,
+                            BuildConfig.VERSION_CODE.toString()
+                        ) {})
                     list?.adapter = context?.let { ct ->
                         PrefAdapter(
                             ct,
@@ -146,6 +153,14 @@ class AccountFragment : Fragment() {
                     list?.setOnItemClickListener { _, _, position, _ ->
                         prefItem[position].execFunc()
                     }
+
+                    val app_pref = mutableListOf<PrefListItem>()
+                    app_pref.add(
+                        PrefListItem(
+                            resources.getString(R.string.version),
+                            BuildConfig.VERSION_NAME,
+                            BuildConfig.VERSION_CODE.toString()
+                        ) {})
                 }
             }
         else {

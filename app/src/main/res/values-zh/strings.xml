@@ -137,4 +137,6 @@
     <string name="search_system">抱歉！系统设置了搜索回应限制</string>
     <string name="search">搜索！</string>
     <string name="no_notification">没了…</string>
+    <string name="version">版本</string>
+    <string name="new_version_detected">发现新版</string>
 </resources>
