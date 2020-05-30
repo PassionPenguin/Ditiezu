@@ -181,7 +181,7 @@ class ViewThread : AppCompatActivity() {
                 true
             }
             R.id.reply -> {
-                if (loginState) {/* TODO: Updated Post Thread */
+                if (loginState) {/* TODO: Updated Post Thread Activity */
                 } else {
                     Snackbar.make(
                         viewThread,
