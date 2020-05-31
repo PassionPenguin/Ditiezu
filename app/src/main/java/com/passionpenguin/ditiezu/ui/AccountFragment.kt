@@ -97,29 +97,29 @@ class AccountFragment : Fragment() {
                     HttpExt().asyncRetrieveNonForumPage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/CUR_VERSION.json")
                 if (value != "Failed Retrieved") {
                     val latestVersion = JsonParser().parse(value).obj
-//                    if (latestVersion.get("versionCode").asInt > BuildConfig.VERSION_CODE)
-                    appPref.add(
-                        PrefListItem(
-                            resources.getString(R.string.new_version_detected),
-                            latestVersion.get("versionLog").asString,
-                            latestVersion.get("versionCode").asString,
-                            true
-                        ) {
-                            context?.let { ctx ->
-                                Dialog().create(
-                                    fragment_account,
-                                    ctx,
-                                    resources.getString(R.string.confirmUpdating),
-                                    resources.getString(R.string.confirmUpdating_description)
-                                ) {
-                                    HttpExt().downloadUtils(
-                                        context,
-                                        "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
-                                        "dtz_${latestVersion.get("versionCode").asString}.apk"
-                                    )
+                    if (latestVersion.get("versionCode").asInt > BuildConfig.VERSION_CODE)
+                        appPref.add(
+                            PrefListItem(
+                                resources.getString(R.string.new_version_detected),
+                                latestVersion.get("versionLog").asString,
+                                latestVersion.get("versionCode").asString,
+                                true
+                            ) {
+                                context?.let { ctx ->
+                                    Dialog().create(
+                                        fragment_account,
+                                        ctx,
+                                        resources.getString(R.string.confirmUpdating),
+                                        resources.getString(R.string.confirmUpdating_description)
+                                    ) {
+                                        HttpExt().downloadUtils(
+                                            context,
+                                            "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                                            "dtz_${latestVersion.get("versionCode").asString}.apk"
+                                        )
+                                    }
                                 }
-                            }
-                        })
+                            })
                 }
 
                 activity?.runOnUiThread {
