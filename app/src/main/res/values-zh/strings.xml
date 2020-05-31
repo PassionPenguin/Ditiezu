@@ -144,5 +144,4 @@
     <string name="share">分享</string>
     <string name="copied">已复制链接！</string>
     <string name="confirmUpdating">确认更新</string>
-    <string name="confirmUpdating_description">当您确认后，我们将下载然后第一时间提醒您安装</string>
 </resources>
