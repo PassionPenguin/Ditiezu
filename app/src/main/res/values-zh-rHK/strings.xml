@@ -74,4 +74,6 @@
     <string name="link">鏈接</string>
     <string name="reload">重載</string>
     <string name="copied">已複製鏈接！</string>
+    <string name="confirmUpdating">確認更新</string>
+    <string name="confirmUpdating_description">當您確認後，我們將下載然後第一時間提醒您安裝</string>
 </resources>

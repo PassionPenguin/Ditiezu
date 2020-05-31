@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.*
 import android.webkit.CookieManager
 import android.widget.*
+import com.github.salomonbrys.kotson.obj
+import com.google.gson.JsonParser
 import com.passionpenguin.ditiezu.*
 import com.passionpenguin.ditiezu.helper.*
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_account.*
 import org.jsoup.Jsoup
 
 class AccountFragment : Fragment() {
@@ -37,130 +40,151 @@ class AccountFragment : Fragment() {
                     if (it.html().contains("统计信息"))
                         metaList = it
                 }
+                val prefItem = mutableListOf<PrefListItem>()
+                prefItem.add(
+                    PrefListItem(
+                        resources.getString(R.string.user_id),
+                        "",
+                        id,
+                        false
+                    ) {}
+                )
+                prefItem.add(
+                    PrefListItem(
+                        resources.getString(R.string.online_hour),
+                        resources.getString(R.string.online_hour_description),
+                        parser.select("#pbbs>:first-child").textNodes()[0].text(),
+                        false
+                    ) {}
+                )
+                prefItem.add(
+                    PrefListItem(
+                        resources.getString(R.string.logout),
+                        resources.getString(
+                            R.string.logout_description
+                        ), "",
+                        true
+                    ) {
+                        view?.let { v ->
+                            context?.let { ctx ->
+                                Dialog().create(
+                                    v,
+                                    ctx,
+                                    resources.getString(R.string.logout),
+                                    resources.getString(
+                                        R.string.logout_warning,
+                                        parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
+                                    )
+                                ) {
+                                    CookieManager.getInstance().removeAllCookies { _ ->
+                                        activity?.recreate()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                )
+
+                val appPref = mutableListOf<PrefListItem>()
+                appPref.add(
+                    PrefListItem(
+                        resources.getString(R.string.version),
+                        BuildConfig.VERSION_NAME,
+                        ""
+                    ) {})
+
+                val value =
+                    HttpExt().asyncRetrieveNonForumPage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/CUR_VERSION.json")
+                if (value != "Failed Retrieved") {
+                    val latestVersion = JsonParser().parse(value).obj
+//                    if (latestVersion.get("versionCode").asInt > BuildConfig.VERSION_CODE)
+                    appPref.add(
+                        PrefListItem(
+                            resources.getString(R.string.new_version_detected),
+                            latestVersion.get("versionLog").asString,
+                            latestVersion.get("versionCode").asString,
+                            true
+                        ) {
+                            context?.let { ctx ->
+                                Dialog().create(
+                                    fragment_account,
+                                    ctx,
+                                    resources.getString(R.string.confirmUpdating),
+                                    resources.getString(R.string.confirmUpdating_description)
+                                ) {
+                                    HttpExt().downloadUtils(
+                                        context,
+                                        "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                                        "dtz_${latestVersion.get("versionCode").asString}.apk"
+                                    )
+                                }
+                            }
+                        })
+                }
 
                 activity?.runOnUiThread {
-                    activity?.findViewById<TextView>(R.id.userName)?.text =
-                        parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
+                    userName.text = parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
                     Picasso.with(context)
                         .load(parser.select(".avt img").attr("src"))
                         .placeholder(R.mipmap.noavatar_middle_rounded)
                         .error(R.mipmap.noavatar_middle_rounded)
                         .transform(CircularCornersTransform())
-                        .into(activity?.findViewById<ImageView>(R.id.avatar))
-                    activity?.findViewById<TextView>(R.id.value_level)?.text =
-                        parser.select(".pbm span a")[0].text()
+                        .into(avatar)
+                    value_level.text = parser.select(".pbm span a")[0].text()
 
                     try {
-                        activity?.findViewById<TextView>(R.id.value_friends)?.text =
-                            metaList.select("a")[0].text()
-                                .trim()
-                                .substring(4)
+                        value_friends.text = metaList.select("a")[0].text().trim().substring(4)
                     } catch (e: Exception) {
-                        activity?.findViewById<TextView>(R.id.value_friends)?.text = "N/A"
+                        value_friends.text = "N/A"
                     }
                     try {
-                        activity?.findViewById<TextView>(R.id.value_replies)?.text =
-                            metaList.select("a")[1].text()
-                                .trim()
-                                .substring(4)
+                        value_replies.text = metaList.select("a")[1].text().trim().substring(4)
                     } catch (e: Exception) {
-                        activity?.findViewById<TextView>(R.id.value_replies)?.text = "N/A"
+                        value_replies.text = "N/A"
                     }
                     try {
-                        activity?.findViewById<TextView>(R.id.value_threads)?.text =
-                            metaList.select("a")[2].text()
-                                .trim()
-                                .substring(4)
+                        value_threads.text = metaList.select("a")[2].text().trim().substring(4)
                     } catch (e: Exception) {
-                        activity?.findViewById<TextView>(R.id.value_threads)?.text = "N/A"
+                        value_threads.text = "N/A"
                     }
 
-                    activity?.findViewById<TextView>(R.id.userIntegral)?.text =
-                        resources.getString(
-                            R.string.user_integral,
-                            parser.select("#psts li")[0].textNodes()[0].text().trim().toInt()
-                        )
+                    userIntegral.text = resources.getString(
+                        R.string.user_integral,
+                        parser.select("#psts li")[0].textNodes()[0].text().trim().toInt()
+                    )
 
-                    activity?.findViewById<TextView>(R.id.value_points)?.text =
+                    value_points.text =
                         parser.select("#psts li")[0].textNodes()[0].text().trim()
-                    activity?.findViewById<TextView>(R.id.value_prestige)?.text =
+                    value_prestige.text =
                         parser.select("#psts li")[1].textNodes()[0].text().trim()
-                    activity?.findViewById<TextView>(R.id.value_money)?.text =
+                    value_money.text =
                         parser.select("#psts li")[2].textNodes()[0].text().trim()
-                    activity?.findViewById<TextView>(R.id.value_m_score)?.text =
+                    value_m_score.text =
                         parser.select("#psts li")[3].textNodes()[0].text().trim()
-                    activity?.findViewById<TextView>(R.id.value_popularity)?.text =
+                    value_popularity.text =
                         parser.select("#psts li")[4].textNodes()[0].text().trim()
 
-                    val list = activity?.findViewById<ListView>(R.id.personal_pref_list)
-                    val prefItem = mutableListOf<PrefListItem>()
-                    prefItem.add(
-                        PrefListItem(
-                            resources.getString(R.string.user_id),
-                            "",
-                            id,
-                            false
-                        ) {}
-                    )
-                    prefItem.add(
-                        PrefListItem(
-                            resources.getString(R.string.online_hour),
-                            resources.getString(R.string.online_hour_description),
-                            parser.select("#pbbs>:first-child").textNodes()[0].text(),
-                            false
-                        ) {}
-                    )
-                    prefItem.add(
-                        PrefListItem(
-                            resources.getString(R.string.logout),
-                            resources.getString(
-                                R.string.logout_description
-                            ), "",
-                            true
-                        ) {
-                            view?.let { v ->
-                                context?.let { ctx ->
-                                    Dialog().create(
-                                        v,
-                                        ctx,
-                                        resources.getString(R.string.logout),
-                                        resources.getString(
-                                            R.string.logout_warning,
-                                            parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
-                                        )
-                                    ) {
-                                        CookieManager.getInstance().removeAllCookies { _ ->
-                                            activity?.recreate()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    )
-                    prefItem.add(
-                        PrefListItem(
-                            resources.getString(R.string.version),
-                            BuildConfig.VERSION_NAME,
-                            BuildConfig.VERSION_CODE.toString()
-                        ) {})
-                    list?.adapter = context?.let { ct ->
+                    personal_pref_list.adapter = context?.let { ct ->
                         PrefAdapter(
                             ct,
                             0,
                             prefItem
                         )
                     }
-                    list?.setOnItemClickListener { _, _, position, _ ->
+                    personal_pref_list.setOnItemClickListener { _, _, position, _ ->
                         prefItem[position].execFunc()
                     }
 
-                    val app_pref = mutableListOf<PrefListItem>()
-                    app_pref.add(
-                        PrefListItem(
-                            resources.getString(R.string.version),
-                            BuildConfig.VERSION_NAME,
-                            BuildConfig.VERSION_CODE.toString()
-                        ) {})
+                    application_pref_list.adapter = context?.let { ct ->
+                        PrefAdapter(
+                            ct,
+                            0,
+                            appPref
+                        )
+                    }
+                    application_pref_list.setOnItemClickListener { _, _, position, _ ->
+                        appPref[position].execFunc()
+                    }
                 }
             }
         else {

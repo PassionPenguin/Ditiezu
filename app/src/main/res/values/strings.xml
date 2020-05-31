@@ -145,4 +145,6 @@
     <string name="link">Link</string>
     <string name="reload">Reload</string>
     <string name="copied">Copied!</string>
+    <string name="confirmUpdating">Confirm Updating</string>
+    <string name="confirmUpdating_description">Once you confirm, we will start downloading and will ask you to install at once.</string>
 </resources>

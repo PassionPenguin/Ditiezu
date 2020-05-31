@@ -10,12 +10,12 @@ android {
 
     defaultConfig {
         applicationId "com.passionpenguin.ditiezu"
-        minSdkVersion 23
         targetSdkVersion 29
         versionCode 6
         versionName 'Watermelon Milkshake v3.3 Canary'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        minSdkVersion 23
     }
 
     buildTypes {
@@ -52,4 +52,5 @@ dependencies {
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
 }
