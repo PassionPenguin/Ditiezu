@@ -1,6 +1,6 @@
 {
-  "versionCode": 6,
-  "versionName": "Watermelon Milkshake v3.3 Canary",
-  "versionDate": "Sat May 30 2020 22:14:58 GMT+0800 (中国标准时间)",
-  "versionLog": "更新帖子页面的工具栏，修复错误"
+  "versionCode": 7,
+  "versionName": "Watermelon Milkshake v3.4 Canary",
+  "versionDate": "Sun May 31 2020 13:00:34 GMT+0800 (中国标准时间)",
+  "versionLog": "适配Android 7-无法安装"
 }
