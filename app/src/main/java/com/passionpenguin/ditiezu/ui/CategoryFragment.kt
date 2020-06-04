@@ -29,6 +29,25 @@ class CategoryFragment : Fragment() {
 
         activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
             View.VISIBLE
+
+        categoryListView?.adapter =
+            context?.let { ctx ->
+                categoryList?.let {
+                    CategoryAdapter(
+                        ctx,
+                        0,
+                        categoryList
+                    )
+                }
+            }
+        categoryListView?.setOnItemClickListener { _, _, position, _ ->
+            val i = Intent(context, ForumDisplay::class.java)
+            i.putExtra(
+                "fid",
+                categoryId?.get(position)
+            )
+            startActivity(i)
+        }
         HttpExt().retrievePage("http://www.ditiezu.com/") {
             if (it == "Failed Retrieved") {
                 // Failed Retrieved
@@ -45,14 +64,6 @@ class CategoryFragment : Fragment() {
                                 )
                             }
                         }
-                    categoryListView?.setOnItemClickListener { _, _, position, _ ->
-                        val i = Intent(context, ForumDisplay::class.java)
-                        i.putExtra(
-                            "fid",
-                            categoryId?.get(position)
-                        )
-                        startActivity(i)
-                    }
                 }
             } else {
                 val parser = Jsoup.parse(it)

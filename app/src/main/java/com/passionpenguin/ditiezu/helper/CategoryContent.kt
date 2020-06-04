@@ -233,15 +233,15 @@ class CategoryContent(val context: Context) {
             ""
         ),
         CategoryItem(
-            string(R.string.category_Hohhot),
-            string(R.string.description_Hohhot),
-            R.drawable.hohhot,
-            ""
-        ),
-        CategoryItem(
             string(R.string.category_Xuzhou),
             string(R.string.description_Xuzhou),
             R.drawable.xuzhou,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Hohhot),
+            string(R.string.description_Hohhot),
+            R.drawable.hohhot,
             ""
         ),
         CategoryItem(
