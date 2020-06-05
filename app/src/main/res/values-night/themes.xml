@@ -10,7 +10,9 @@
         <item name="colorSecondaryVariant">@color/primary600</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.Ditiezu.TabLayout" parent="Theme.Ditiezu">

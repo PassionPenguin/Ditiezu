@@ -120,7 +120,7 @@
     <string name="user_id">用户唯一标识符</string>
     <string name="online_hour">在线时长</string>
     <string name="online_hour_description">您在论坛总时长</string>
-    <string name="login">回复</string>
+    <string name="login">登录</string>
     <string name="login_description">登录以使用更多功能…</string>
     <string name="accept_terms">点击按钮时我同意用户协议与隐私政策</string>
     <string name="login_tips">当页面加载后，请按照常规方法登录</string>
@@ -144,4 +144,7 @@
     <string name="share">分享</string>
     <string name="copied">已复制链接！</string>
     <string name="confirmUpdating">确认更新</string>
+    <string name="confirmUpdating_description">当您确认后，我们将下载然后第一时间提醒您安装</string>
+    <string name="views">查看</string>
+    <string name="all">全部</string>
 </resources>

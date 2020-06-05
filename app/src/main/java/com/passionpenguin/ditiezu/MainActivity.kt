@@ -12,7 +12,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_action_bar.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,17 +21,17 @@ class MainActivity : AppCompatActivity() {
         actionBar?.hide()
         setContentView(R.layout.activity_main)
 
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        val navView = nav_view
 
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
 
-        val mask: LinearLayout = findViewById(R.id.LoadingMaskContainer)
+        val mask = LoadingMaskContainer
         mask.setOnClickListener {
             it.visibility = View.GONE
         }
 
-        val input = findViewById<EditText>(R.id.app_search_input)
+        val input = app_search_input
 
         input.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
@@ -66,6 +67,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
+        LoadingMaskContainer.visibility = View.GONE
     }
 }

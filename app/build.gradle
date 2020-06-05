@@ -11,8 +11,8 @@ android {
     defaultConfig {
         applicationId "com.passionpenguin.ditiezu"
         targetSdkVersion 29
-        versionCode 9
-        versionName 'Watermelon Milkshake v3.6 Canary'
+        versionCode 11
+        versionName 'Watermelon Milkshake v4 Canary'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         minSdkVersion 23

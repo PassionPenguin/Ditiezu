@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchResultActivity"
-    android:id="@+id/SearchResultActivity">
+    android:id="@+id/SearchResultActivity"
+    android:layout_marginTop="24dp">
 
     <include
         android:id="@+id/actoin_bar_layout"

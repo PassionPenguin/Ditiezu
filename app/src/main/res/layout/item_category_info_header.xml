@@ -1,47 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/categoryHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center|top"
     android:contentDescription="@string/app_description"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="SmallSp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="136dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:scaleType="centerCrop"
-        android:alpha="0.2"
+        android:scaleX="1.8"
+        android:scaleY="1.8"
+        android:alpha="0.6"
         android:contentDescription="@null"
-        android:src="@drawable/bg_category"
-        android:layout_marginTop="-24dp"/>
+        android:src="@drawable/splash"
+        android:layout_marginTop="-24dp" />
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="32dp">
-
-        <ImageView
-            android:id="@+id/CategoryIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center|top"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/guangzhou" />
+        android:layout_marginTop="@dimen/_128"
+        android:layout_marginHorizontal="@dimen/_16">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/CategoryTitle"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
-                android:text="@string/category_title"
-                android:textSize="18sp" />
+                android:padding="@dimen/_8"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/CategoryIcon"
+                    android:background="@drawable/border_radius_8"
+                    android:backgroundTint="@color/white"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_gravity="center|top"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/guangzhou" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="@dimen/_16"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/CategoryTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-black"
+                        android:textSize="20sp"
+                        android:textColor="@color/dark"
+                        tools:text="NAME" />
+
+                    <TextView
+                        android:id="@+id/CategoryMeta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="false"
+                        android:textSize="10sp"
+                        android:textColor="@color/grey"
+                        tools:text="META" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/CategoryDescription"
@@ -49,8 +81,12 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:scrollHorizontally="false"
-                android:text="@string/app_description"
-                android:textSize="12sp" />
+                android:textSize="14sp"
+                android:textColor="@color/dark"
+                android:paddingTop="@dimen/_8"
+                android:paddingBottom="@dimen/_16"
+                android:layout_marginHorizontal="@dimen/_16"
+                tools:text="DESCRIPTION" />
         </LinearLayout>
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

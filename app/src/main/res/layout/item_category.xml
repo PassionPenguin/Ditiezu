@@ -33,14 +33,15 @@
                 android:id="@+id/categoryName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-black"
                 tools:text="@string/category_Guangzhou" />
 
             <TextView
                 android:id="@+id/categoryMeta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 tools:text="主题: 99999, 帖数: 9999999" />
         </LinearLayout>
     </LinearLayout>

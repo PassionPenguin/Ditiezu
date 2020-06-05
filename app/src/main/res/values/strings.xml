@@ -147,4 +147,6 @@
     <string name="copied">Copied!</string>
     <string name="confirmUpdating">Confirm Updating</string>
     <string name="confirmUpdating_description">Once you confirm, we will start downloading and will ask you to install at once.</string>
+    <string name="views">Views</string>
+    <string name="all">All</string>
 </resources>

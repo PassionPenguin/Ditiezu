@@ -16,9 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ditiezu"
         android:usesCleartextTraffic="true"
+        android:fitsSystemWindows="true"
         tools:targetApi="m">
-        <activity
-            android:name=".SearchResultActivity" />
+        <activity android:name=".SearchResultActivity" />
         <activity android:name=".ForumDisplay" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ViewThread">
@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.passionpenguin.ditiezu.fileprovider"

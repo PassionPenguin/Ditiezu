@@ -76,7 +76,7 @@ class ThreadListAdapter(
     }
 }
 
-class SearchListItem(
+class ThreadItem(
     val authorId: Int,
     val title: String,
     val content: String,
@@ -86,11 +86,11 @@ class SearchListItem(
     val target: Int
 )
 
-class SearchListAdapter(
+class ThreadItemListAdapter(
     private var mCtx: Context,
     resource: Int,
-    private var items: List<SearchListItem>
-) : ArrayAdapter<SearchListItem>(mCtx, resource, items) {
+    private var items: List<ThreadItem>
+) : ArrayAdapter<ThreadItem>(mCtx, resource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)

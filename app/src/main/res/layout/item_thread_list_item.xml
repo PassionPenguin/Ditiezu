@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_4"
                 android:paddingTop="12dp">
 
                 <ImageView
@@ -48,7 +49,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/_4"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/threadList_meta"
                         android:textColor="@color/dark"

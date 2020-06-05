@@ -4,16 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ForumDisplay">
+    tools:context=".ForumDisplay"
+    android:layout_marginTop="24dp">
+
+    <include
+        android:id="@+id/action_bar_layout"
+        layout="@layout/fragment_action_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/ThreadList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:clickable="true"
         android:divider="@null"
         android:elevation="@dimen/_16"
         android:focusable="true"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/action_bar_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

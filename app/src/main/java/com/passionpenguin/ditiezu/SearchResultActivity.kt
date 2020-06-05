@@ -16,8 +16,8 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.passionpenguin.ditiezu.helper.HttpExt
-import com.passionpenguin.ditiezu.helper.SearchListAdapter
-import com.passionpenguin.ditiezu.helper.SearchListItem
+import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
+import com.passionpenguin.ditiezu.helper.ThreadItem
 
 import org.jsoup.Jsoup
 import java.net.URLEncoder
@@ -38,7 +38,7 @@ class SearchResultActivity : AppCompatActivity() {
 
         fun processResult(result: String) {
             val parser = Jsoup.parse(result)
-            val threadListContent = mutableListOf<SearchListItem>()
+            val threadListContent = mutableListOf<ThreadItem>()
             parser.select("#threadlist .pbw").forEach {
                 val title = it.select("h3 a")
                 val author = it.select("p")[2].select("span a")[0]
@@ -58,7 +58,7 @@ class SearchResultActivity : AppCompatActivity() {
                     }
                 }
                 threadListContent.add(
-                    SearchListItem(
+                    ThreadItem(
                         author.attr("href").substring(
                             author.attr("href").indexOf("uid-") + 4,
                             author.attr("href").indexOf(".html")
@@ -77,7 +77,7 @@ class SearchResultActivity : AppCompatActivity() {
             runOnUiThread {
                 val list = findViewById<ListView>(R.id.threadItemList)
                 list?.adapter =
-                    SearchListAdapter(
+                    ThreadItemListAdapter(
                         applicationContext,
                         0,
                         threadListContent
