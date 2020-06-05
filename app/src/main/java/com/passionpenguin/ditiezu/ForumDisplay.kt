@@ -11,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.activity_forum_display.*
 import kotlinx.android.synthetic.main.fragment_action_bar.*
@@ -39,8 +40,69 @@ class ForumDisplay : AppCompatActivity() {
                 val parser = Jsoup.parse(result)
                 runOnUiThread {
                     threadListView.removeHeaderView(threadListView.findViewById(R.id.categoryHeader))
-                    threadListView.removeHeaderView(threadListView.findViewById(R.id.typeNavigationWrap))
                     threadListView.removeFooterView(threadListView.findViewById(R.id.paginationNavigation))
+
+                    if (threadListView.findViewById<HorizontalScrollView>(R.id.typeNavigationWrap) === null) {
+                        val list = layoutInflater.inflate(R.layout.fragment_types_list, null)
+                        val t = TextView(applicationContext)
+                        t.text = resources.getString(R.string.all)
+                        t.setOnClickListener { _ ->
+                            loadForumContent(1)
+                        }
+                        t.setPadding(
+                            resources.getDimension(R.dimen._8).toInt(),
+                            resources.getDimension(R.dimen._16).toInt(),
+                            resources.getDimension(R.dimen._8).toInt(),
+                            resources.getDimension(R.dimen._16).toInt()
+                        )
+                        t.background = resources.getDrawable(R.drawable.border_bottom, null)
+                        list.findViewById<LinearLayout>(R.id.typesNavigation).addView(t)
+                        parser.select("#thread_types li:not(.fold):not(#ttp_all)").forEach {
+                            with(it.select("a").attr("href")) {
+                                val text = TextView(applicationContext)
+                                text.text = it.select("a").text()
+                                text.setOnClickListener { _ ->
+                                    if (!it.className().contains("xw1"))
+                                        loadForumContent(
+                                            1, "?" + this.substring(this.indexOf("filter="))
+                                        )
+                                }
+                                text.setPadding(
+                                    resources.getDimension(R.dimen._8).toInt(),
+                                    resources.getDimension(R.dimen._16).toInt(),
+                                    resources.getDimension(R.dimen._8).toInt(),
+                                    resources.getDimension(R.dimen._16).toInt()
+                                )
+                                try {
+                                    if (it.className().contains("xw1"))
+                                        text.background =
+                                            resources.getDrawable(R.drawable.border_bottom, null)
+                                } catch (exception: Exception) {
+                                    Log.e("", this + exception.toString())
+                                }
+                                list.findViewById<LinearLayout>(R.id.typesNavigation).addView(text)
+                            }
+                        }
+                        threadListView.addHeaderView(list)
+                    } else {
+                        threadListView.findViewById<LinearLayout>(R.id.typesNavigation).children.toList()
+                            .forEach {
+                                it.background = null
+                            }
+                        if (!ext.contains("typeid"))
+                            threadListView.findViewById<LinearLayout>(R.id.typesNavigation).children.toList()[0].background =
+                                resources.getDrawable(R.drawable.border_bottom, null)
+                        else {
+                            var i = -1
+                            parser.select("#thread_types li:not(.fold)")
+                                .forEachIndexed { index, e ->
+                                    if (e.className().contains("xw1")) i = index
+                                }
+                            if (i == -1) i = 0
+                            threadListView.findViewById<LinearLayout>(R.id.typesNavigation).children.toList()[i].background =
+                                resources.getDrawable(R.drawable.border_bottom, null)
+                        }
+                    }
 
                     val bannerView =
                         layoutInflater.inflate(R.layout.item_category_info_header, null)
@@ -58,52 +120,6 @@ class ForumDisplay : AppCompatActivity() {
                     bannerView.findViewById<TextView>(R.id.CategoryDescription).text =
                         categoryList[categoryId.indexOf(fid)].description
                     threadListView.addHeaderView(bannerView)
-
-                    val list = layoutInflater.inflate(R.layout.fragment_types_list, null)
-                    val t = TextView(applicationContext)
-                    t.text = resources.getString(R.string.all)
-                    t.setOnClickListener { _ ->
-                        loadForumContent(1)
-                    }
-                    t.setPadding(
-                        resources.getDimension(R.dimen._8).toInt(),
-                        resources.getDimension(R.dimen._16).toInt(),
-                        resources.getDimension(R.dimen._8).toInt(),
-                        resources.getDimension(R.dimen._16).toInt()
-                    )
-                    if (!ext.contains("typeid"))
-                        t.background = resources.getDrawable(R.drawable.border_bottom, null)
-
-                    list.findViewById<LinearLayout>(R.id.typesNavigation).addView(t)
-                    parser.select("#thread_types li:not(.fold):not(#ttp_all)").forEach {
-                        with(it.select("a").attr("href")) {
-                            val text = TextView(applicationContext)
-                            text.text = it.select("a").text()
-                            text.setOnClickListener { _ ->
-                                if (!it.className().contains("xw1"))
-                                    loadForumContent(
-                                        1, "?" + this.substring(this.indexOf("filter="))
-                                    )
-                            }
-                            text.setPadding(
-                                resources.getDimension(R.dimen._8).toInt(),
-                                resources.getDimension(R.dimen._16).toInt(),
-                                resources.getDimension(R.dimen._8).toInt(),
-                                resources.getDimension(R.dimen._16).toInt()
-                            )
-                            try {
-                                if (it.className().contains("xw1")
-                                    || ext == this.substring(this.indexOf("filter="))
-                                )
-                                    text.background =
-                                        resources.getDrawable(R.drawable.border_bottom, null)
-                            } catch (exception: Exception) {
-                                Log.e("", this + exception.toString())
-                            }
-                            list.findViewById<LinearLayout>(R.id.typesNavigation).addView(text)
-                        }
-                    }
-                    threadListView.addHeaderView(list)
 
                     val footerPagination =
                         layoutInflater.inflate(R.layout.item_category_pagination_navigation, null)
@@ -216,13 +232,11 @@ class ForumDisplay : AppCompatActivity() {
                             )
 
                         threadListView.setOnItemClickListener { _, _, position, _ ->
-                            if (position == 0) {
-                                // Banner
-                            } else {
+                            if (position != 0 || position != 1) {
                                 val i = Intent(this@ForumDisplay, ViewThread::class.java)
                                 i.putExtra(
                                     "tid",
-                                    threadListContent[position - 1].target
+                                    threadListContent[position - 2].target
                                 )
                                 startActivity(i)
                             }
