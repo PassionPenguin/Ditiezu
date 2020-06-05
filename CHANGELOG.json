@@ -48,6 +48,12 @@
       "versionName": "Watermelon Milkshake v3.5 Canary",
       "versionDate": "Sun May 31 2020 13:58:51 GMT+0800 (中国标准时间)",
       "versionLog": "支持应用内更新数据"
+    },
+    {
+      "versionCode": 11,
+      "versionName": "Watermelon Milkshake v4 Canary",
+      "versionDate": "Fri Jun 05 2020 23:20:37 GMT+0800 (中国标准时间)",
+      "versionLog": "支持选择标签"
     }
   ]
 }
