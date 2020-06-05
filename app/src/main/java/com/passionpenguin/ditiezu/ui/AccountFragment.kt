@@ -174,7 +174,6 @@ class AccountFragment : Fragment() {
                     personal_pref_list.setOnItemClickListener { _, _, position, _ ->
                         prefItem[position].execFunc()
                     }
-
                     application_pref_list.adapter = context?.let { ct ->
                         PrefAdapter(
                             ct,

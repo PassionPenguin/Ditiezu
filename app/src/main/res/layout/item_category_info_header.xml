@@ -39,7 +39,7 @@
                 <ImageView
                     android:id="@+id/CategoryIcon"
                     android:background="@drawable/border_radius_8"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/surface"
                     android:layout_width="54dp"
                     android:layout_height="54dp"
                     android:layout_gravity="center|top"

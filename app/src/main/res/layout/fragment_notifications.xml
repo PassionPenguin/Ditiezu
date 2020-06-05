@@ -8,6 +8,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         style="@style/Theme.Ditiezu.TabLayout"
+        android:background="@color/surface"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />

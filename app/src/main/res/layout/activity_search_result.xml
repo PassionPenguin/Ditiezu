@@ -63,6 +63,6 @@
         android:divider="@null"
         android:smoothScrollbar="true"
         tools:context=".ui.ThreadItemFragment"
-        tools:listitem="@layout/item_search_result_item" />
+        tools:listitem="@layout/item_thread_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

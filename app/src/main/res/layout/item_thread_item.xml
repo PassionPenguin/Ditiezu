@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/_16"
         android:background="@drawable/border_radius_4_no_padding"
+        android:backgroundTint="@color/surface"
         android:elevation="@dimen/_8"
         android:orientation="vertical">
 
@@ -31,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/ripple"
-            android:backgroundTint="@color/surface"
+            android:backgroundTint="@color/surface_secondary"
             android:orientation="vertical"
             android:paddingBottom="@dimen/_16"
             android:paddingHorizontal="@dimen/_16">

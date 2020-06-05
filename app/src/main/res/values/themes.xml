@@ -17,7 +17,7 @@
     </style>
 
     <style name="Theme.Ditiezu.TabLayout" parent="Theme.Ditiezu">
-        <item name="tabBackground">@color/white</item>
+        <item name="tabBackground">@android:color/transparent</item>
         <item name="tabIndicatorColor">@color/primary500</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>

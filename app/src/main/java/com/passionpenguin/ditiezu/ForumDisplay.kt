@@ -46,6 +46,7 @@ class ForumDisplay : AppCompatActivity() {
                         val list = layoutInflater.inflate(R.layout.fragment_types_list, null)
                         val t = TextView(applicationContext)
                         t.text = resources.getString(R.string.all)
+                        t.setTextColor(resources.getColor(R.color.black, null))
                         t.setOnClickListener { _ ->
                             loadForumContent(1)
                         }
@@ -61,6 +62,7 @@ class ForumDisplay : AppCompatActivity() {
                             with(it.select("a").attr("href")) {
                                 val text = TextView(applicationContext)
                                 text.text = it.select("a").text()
+                                text.setTextColor(resources.getColor(R.color.black, null))
                                 text.setOnClickListener { _ ->
                                     if (!it.className().contains("xw1"))
                                         loadForumContent(
@@ -197,8 +199,8 @@ class ForumDisplay : AppCompatActivity() {
                         val author = it.select(".by cite a")[0]
                         val authorName = author.text()
                         val time = it.select(".by:not(.kmhf) em span").text()
-                        val views = it.select(".num a").text()
-                        val replies = it.select(".num em").text()
+                        val views = it.select(".num em").text()
+                        val replies = it.select(".num a").text()
                         val lastTime = it.select(".by.kmhf em span").attr("title")
                         val title = it.select(".xst")
                         var targetId: Int

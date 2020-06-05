@@ -51,7 +51,7 @@ class NotificationsFragment : Fragment() {
                     Snackbar.make(
                         view,
                         resources.getString(R.string.no_notification),
-                        Snackbar.LENGTH_LONG
+                        Snackbar.LENGTH_SHORT
                     ).show()
 
                 val parser = Jsoup.parse(s)

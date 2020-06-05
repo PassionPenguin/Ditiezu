@@ -94,7 +94,7 @@ class ThreadItemListAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_search_result_item, null)
+        val view: View = layoutInflater.inflate(R.layout.item_thread_item, null)
         val searchItem = items[position]
         view.findViewById<TextView>(R.id.threadTitle).text = searchItem.title
         view.findViewById<TextView>(R.id.threadContent).text = searchItem.content

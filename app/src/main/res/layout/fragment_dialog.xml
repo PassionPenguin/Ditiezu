@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="@dimen/_4"
-            android:backgroundTint="@color/surface_tertiary"
+            android:backgroundTint="@color/surface"
             android:textColor="@color/dark"
             android:text="@string/cancel"
             tools:text="Cancel" />
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="@dimen/_4"
-            android:backgroundTint="@color/surface_tertiary"
+            android:backgroundTint="@color/surface"
             android:textColor="@color/primary500"
             android:text="@string/confirm"
             tools:text="Confirm" />
