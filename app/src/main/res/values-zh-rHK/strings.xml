@@ -69,11 +69,22 @@
     <string name="unread_notifications">未讀</string>
     <string name="search_15s">抱歉！您只能在15秒內進行一次搜索</string>
     <string name="search_system">抱歉！系統設置了搜索回應限制</string>
-    <string name="no_notification">冇佐…</string>
+    <string name="no_notification">冇更新提醒…</string>
     <string name="new_version_detected">發現新版</string>
     <string name="link">鏈接</string>
     <string name="reload">重載</string>
     <string name="copied">已複製鏈接！</string>
     <string name="confirmUpdating">確認更新</string>
     <string name="confirmUpdating_description">當您確認後，我們將下載然後第一時間提醒您安裝</string>
+    <string name="category_Collection">軌道收藏</string>
+    <string name="category_City">都市風情</string>
+    <string name="category_Estate">地鐵房產</string>
+    <string name="category_Food">地鐵美食</string>
+    <string name="category_Market">交易市場</string>
+    <string name="category_Game">軌交遊戲</string>
+    <string name="category_Conversation">站前廣場</string>
+    <string name="category_Railway">城際鐵路</string>
+    <string name="category_Knowledge">軌道知識</string>
+    <string name="category_Suggestion">意見反饋</string>
+    <string name="category_Announcement">站務公告</string>
 </resources>

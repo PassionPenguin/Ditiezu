@@ -68,9 +68,10 @@ class CategoryFragment : Fragment() {
             } else {
                 val parser = Jsoup.parse(it)
                 try {
-                    parser.select("#category_2 td dd:nth-child(2)")
+                    parser.select("#category_2 td dd:nth-child(2), .fl_i")
                         .forEachIndexed { index, child ->
-                            categoryList?.get(index)?.meta = child.text()
+                            categoryList?.get(index)?.meta =
+                                "主题: " + child.text().replace("主题: ", "").replace(" / ", ", 帖数: ")
                         }
                 } catch (e: Exception) {
                     Log.i("", e.toString())

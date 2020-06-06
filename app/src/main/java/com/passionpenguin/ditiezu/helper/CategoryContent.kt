@@ -273,6 +273,72 @@ class CategoryContent(val context: Context) {
             string(R.string.description_Comprehensive),
             R.drawable.comprehensive,
             ""
+        ),
+        CategoryItem(
+            string(R.string.category_Collection),
+            string(R.string.description_Collection),
+            R.drawable.stamp,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_City),
+            string(R.string.description_City),
+            R.drawable.park,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Estate),
+            string(R.string.description_Estate),
+            R.drawable.building,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Food),
+            string(R.string.description_Food),
+            R.drawable.food,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Market),
+            string(R.string.description_Market),
+            R.drawable.market,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Game),
+            string(R.string.description_Game),
+            R.drawable.game,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Conversation),
+            string(R.string.description_Conversation),
+            R.drawable.message,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Railway),
+            string(R.string.description_Railway),
+            R.drawable.high_speed_railway,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Knowledge),
+            string(R.string.description_Knowledge),
+            R.drawable.book,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Suggestion),
+            string(R.string.description_Suggestion),
+            R.drawable.feedback,
+            ""
+        ),
+        CategoryItem(
+            string(R.string.category_Announcement),
+            string(R.string.description_Announcement),
+            R.drawable.announcement,
+            ""
         )
     )
     val categoryId = arrayOf(
@@ -318,6 +384,15 @@ class CategoryContent(val context: Context) {
         79,
         36,
         47,
-        37
+        37,
+        33,
+        15,
+        60,
+        145,
+        21,
+        46,
+        43,
+        18,
+        17
     )
 }
