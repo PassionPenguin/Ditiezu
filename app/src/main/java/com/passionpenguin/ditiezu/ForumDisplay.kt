@@ -234,7 +234,7 @@ class ForumDisplay : AppCompatActivity() {
                             )
 
                         threadListView.setOnItemClickListener { _, _, position, _ ->
-                            if (position != 0 || position != 1) {
+                            if (position - 2 >= 0) {
                                 val i = Intent(this@ForumDisplay, ViewThread::class.java)
                                 i.putExtra(
                                     "tid",

@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_action_bar.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +25,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
 
-        val mask = LoadingMaskContainer
-        mask.setOnClickListener {
-            it.visibility = View.GONE
-        }
-
-        val input = app_search_input
+        val input = findViewById<EditText>(R.id.app_search_input)
 
         input.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
@@ -63,10 +57,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(event)
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        LoadingMaskContainer.visibility = View.GONE
     }
 }

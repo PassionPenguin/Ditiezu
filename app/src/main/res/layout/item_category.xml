@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_32"
+        android:layout_marginVertical="@dimen/_8"
         android:orientation="horizontal">
 
         <ImageView
@@ -33,7 +34,7 @@
                 android:id="@+id/categoryName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:fontFamily="sans-serif-black"
                 tools:text="@string/category_Guangzhou" />
 
