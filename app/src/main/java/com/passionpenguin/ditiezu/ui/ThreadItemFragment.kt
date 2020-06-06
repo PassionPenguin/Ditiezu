@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.passionpenguin.ditiezu.*
 import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.fragment_item_list.*
 import org.jsoup.Jsoup
+import kotlin.properties.Delegates
 
 class ThreadItemFragment : Fragment() {
 
@@ -19,6 +21,7 @@ class ThreadItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        activity?.findViewById<LinearLayout>(R.id.tips)?.removeAllViews()
         return inflater.inflate(R.layout.fragment_item_list, container, false)
     }
 
@@ -67,18 +70,34 @@ class ThreadItemFragment : Fragment() {
                     context?.startActivity(i)
                 }
             }
-            activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
         }
 
         activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.VISIBLE
         HttpExt().retrievePage("http://www.ditiezu.com/") {
             activity?.runOnUiThread {
-                if (it == "Failed Retrieved") {
-                    // Failed Retrieved
-                    Log.i("HTTPEXT", "FAILED RETRIEVED")
+                val v = when (it) {
+                    "Failed Retrieved" -> {
+                        val v = LayoutInflater.from(context).inflate(
+                            R.layout.tip_access_denied,
+                            activity?.findViewById<LinearLayout>(R.id.tips),
+                            false
+                        )
+                        v.findViewById<TextView>(R.id.text).text =
+                            resources.getString(R.string.failed_retrieved)
+                        v
+                    }
+                    else -> {
+                        processResult(it)
+                        null
+                    }
                 }
-                processResult(it)
+                if (v != null)
+                    activity?.findViewById<LinearLayout>(R.id.tips)?.addView(v)
+                activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                    View.GONE
             }
         }
+        activity?.findViewById<TextView>(R.id.title)?.text =
+            resources.getString(R.string.home_title)
     }
 }

@@ -135,9 +135,9 @@
     <string name="failed">Failed!</string>
     <string name="unread_notifications">Unread</string>
     <string name="read_notifications">Read</string>
-    <string name="search_15s">Sorry.. You can only search once in 15s</string>
-    <string name="search_system">Sorry! System has a restriction of responding times</string>
-    <string name="search">Search!</string>
+    <string name="search_15s">Sorry.. You can only search once in specific time.</string>
+    <string name="search_system_restriction">Sorry! System has a restriction of responding times</string>
+    <string name="search">Search</string>
     <string name="no_notification">No More Notifications…</string>
     <string name="version">Version</string>
     <string name="new_version_detected" translatable="false">New Version Detected</string>
@@ -171,4 +171,6 @@
     <string name="description_Knowledge" translatable="false">地铁和轨道交通相关技术、知识发表讨论区。</string>
     <string name="description_Suggestion" translatable="false">意见建议、反馈中心</string>
     <string name="description_Announcement" translatable="false">站务公告中心</string>
+    <string name="failed_retrieved">Failed Retrieved Content</string>
+    <string name="keyword_not_match">Your search - %s - did not match any documents.</string>
 </resources>

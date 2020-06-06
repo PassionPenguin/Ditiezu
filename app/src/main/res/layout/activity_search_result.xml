@@ -2,14 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/SearchResultActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchResultActivity"
-    android:id="@+id/SearchResultActivity"
-    android:layout_marginTop="24dp">
+    android:layout_marginTop="24dp"
+    tools:context=".SearchResultActivity">
 
     <include
-        android:id="@+id/actoin_bar_layout"
+        android:id="@+id/action_bar_layout"
         layout="@layout/fragment_action_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -58,11 +58,23 @@
         android:id="@+id/threadItemList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/actoin_bar_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:divider="@null"
         android:smoothScrollbar="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/action_bar_layout"
         tools:context=".ui.ThreadItemFragment"
         tools:listitem="@layout/item_thread_item" />
+
+    <LinearLayout
+        android:id="@+id/tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar_layout"
+        app:layout_constraintVertical_bias="0.33" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

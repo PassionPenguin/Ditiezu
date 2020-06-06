@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="240dp"
         android:layout_margin="8dp"
         android:layout_marginBottom="@dimen/_32"
         app:layout_constraintTop_toTopOf="parent">
@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/backgroundImage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="240dp"
             android:src="@drawable/background"
             android:scaleType="centerCrop"
             android:alpha="0.5"

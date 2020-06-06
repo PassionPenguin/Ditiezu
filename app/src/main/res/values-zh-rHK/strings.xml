@@ -67,8 +67,8 @@
     <string name="failed">失敗</string>
     <string name="read_notifications">已讀</string>
     <string name="unread_notifications">未讀</string>
-    <string name="search_15s">抱歉！您只能在15秒內進行一次搜索</string>
-    <string name="search_system">抱歉！系統設置了搜索回應限制</string>
+    <string name="search_15s">抱歉！您只能在限定時間內內進行一次搜索</string>
+    <string name="search_system_restriction">抱歉！系統設置了搜索回應限制</string>
     <string name="no_notification">冇更新提醒…</string>
     <string name="new_version_detected">發現新版</string>
     <string name="link">鏈接</string>
@@ -87,4 +87,6 @@
     <string name="category_Knowledge">軌道知識</string>
     <string name="category_Suggestion">意見反饋</string>
     <string name="category_Announcement">站務公告</string>
+    <string name="failed_retrieved">爬取數據失敗</string>
+    <string name="keyword_not_match">你的搜索內容 - %s - 並沒有匹配任何搜索結果</string>
 </resources>

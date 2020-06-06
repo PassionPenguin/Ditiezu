@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.*
 import com.passionpenguin.ditiezu.ForumDisplay
 import com.passionpenguin.ditiezu.R
-import com.passionpenguin.ditiezu.helper.*
+import com.passionpenguin.ditiezu.helper.CategoryAdapter
+import com.passionpenguin.ditiezu.helper.CategoryContent
+import com.passionpenguin.ditiezu.helper.HttpExt
 import org.jsoup.Jsoup
 
 class CategoryFragment : Fragment() {
@@ -19,9 +21,14 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_category, container, false)
+        activity?.findViewById<LinearLayout>(R.id.tips)?.removeAllViews()
+        return inflater.inflate(R.layout.fragment_category, container, false)
+    }
 
-        val categoryListView: ListView? = view?.findViewById(R.id.categoryList)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val categoryListView: ListView? = view.findViewById(R.id.categoryList)
         val categoryContent =
             context?.let { CategoryContent(it) }
         val categoryList = categoryContent?.categoryList
@@ -49,52 +56,55 @@ class CategoryFragment : Fragment() {
             startActivity(i)
         }
         HttpExt().retrievePage("http://www.ditiezu.com/") {
-            if (it == "Failed Retrieved") {
-                // Failed Retrieved
-                Log.i("HTTPEXT", "FAILED RETRIEVED")
+            when (it) {
+                "Failed Retrieved" -> {
+                    Log.i("HTTPEXT", "FAILED RETRIEVED")
 
-                activity?.runOnUiThread {
-                    categoryListView?.adapter =
-                        context?.let { ctx ->
-                            categoryList?.let {
-                                CategoryAdapter(
-                                    ctx,
-                                    0,
-                                    categoryList
-                                )
+                    activity?.runOnUiThread {
+                        categoryListView?.adapter =
+                            context?.let { ctx ->
+                                categoryList?.let {
+                                    CategoryAdapter(
+                                        ctx,
+                                        0,
+                                        categoryList
+                                    )
+                                }
                             }
-                        }
+                    }
                 }
-            } else {
-                val parser = Jsoup.parse(it)
-                try {
-                    parser.select("#category_2 td dd:nth-child(2), .fl_i")
-                        .forEachIndexed { index, child ->
-                            categoryList?.get(index)?.meta =
-                                "主题: " + child.text().replace("主题: ", "").replace(" / ", ", 帖数: ")
-                        }
-                } catch (e: Exception) {
-                    Log.i("", e.toString())
-                }
+                else -> {
+                    val parser = Jsoup.parse(it)
+                    try {
+                        parser.select("#category_2 td dd:nth-child(2), .fl_i")
+                            .forEachIndexed { index, child ->
+                                categoryList?.get(index)?.meta =
+                                    "主题: " + child.text().replace("主题: ", "")
+                                        .replace(" / ", ", 帖数: ")
+                            }
+                    } catch (e: Exception) {
+                        Log.i("", e.toString())
+                    }
 
-                activity?.runOnUiThread {
-                    categoryListView?.adapter =
-                        context?.let { ctx ->
-                            categoryList?.let {
-                                CategoryAdapter(
-                                    ctx,
-                                    0,
-                                    categoryList
-                                )
+                    activity?.runOnUiThread {
+                        categoryListView?.adapter =
+                            context?.let { ctx ->
+                                categoryList?.let {
+                                    CategoryAdapter(
+                                        ctx,
+                                        0,
+                                        categoryList
+                                    )
+                                }
                             }
+                        categoryListView?.setOnItemClickListener { _, _, position, _ ->
+                            val i = Intent(context, ForumDisplay::class.java)
+                            i.putExtra(
+                                "fid",
+                                categoryId?.get(position)
+                            )
+                            startActivity(i)
                         }
-                    categoryListView?.setOnItemClickListener { _, _, position, _ ->
-                        val i = Intent(context, ForumDisplay::class.java)
-                        i.putExtra(
-                            "fid",
-                            categoryId?.get(position)
-                        )
-                        startActivity(i)
                     }
                 }
             }
@@ -104,6 +114,7 @@ class CategoryFragment : Fragment() {
             }
         }
 
-        return view
+        activity?.findViewById<TextView>(R.id.title)?.text =
+            resources.getString(R.string.category_title)
     }
 }

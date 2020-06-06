@@ -32,6 +32,8 @@ class ForumDisplay : AppCompatActivity() {
             CategoryContent(applicationContext)
         val categoryList = categoryContent.categoryList
         val categoryId = categoryContent.categoryId
+        if (categoryId.indexOf(fid) == -1) return
+        findViewById<TextView>(R.id.title).text = categoryList[categoryId.indexOf(fid)].title
 
         val threadListView = ThreadList
 

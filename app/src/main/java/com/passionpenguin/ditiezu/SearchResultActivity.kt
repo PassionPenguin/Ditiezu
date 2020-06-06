@@ -6,15 +6,15 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ListView
-import com.google.android.material.snackbar.Snackbar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
 import com.passionpenguin.ditiezu.helper.ThreadItem
@@ -27,6 +27,7 @@ class SearchResultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_result)
+        findViewById<TextView>(R.id.title).text = resources.getString(R.string.search)
 
         val i = intent.extras
         if (i?.getString("kw", null) == null) finish()
@@ -89,7 +90,6 @@ class SearchResultActivity : AppCompatActivity() {
                         intent.putExtra("tid", threadListContent[position].target)
                         startActivity(intent)
                     }
-                findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
             }
         }
 
@@ -102,36 +102,63 @@ class SearchResultActivity : AppCompatActivity() {
                     "GBK"
                 ) + "&searchsubmit=yes"
             )
-            if (s == "Failed Retrieved") {
-                // Failed Retrieved
-                Log.i("HTTPEXT", "FAILED RETRIEVED")
-            } else if (s.contains("用户登录"))
-                Snackbar.make(
-                    findViewById<ConstraintLayout>(R.id.SearchResultActivity),
-                    resources.getString(R.string.login_description),
-                    Snackbar.LENGTH_LONG
-                ).setAction("登录") {
-                    startActivity(
-                        Intent(
-                            this@SearchResultActivity,
-                            LoginActivity::class.java
-                        )
+            findViewById<LinearLayout>(R.id.tips).removeAllViews()
+            val v = when {
+                s == "Failed Retrieved" -> {
+                    val v = LayoutInflater.from(applicationContext).inflate(
+                        R.layout.tip_access_denied,
+                        findViewById<LinearLayout>(R.id.tips),
+                        false
                     )
-                }.show()
-            else if (s.contains("只能进行一次搜索"))
-                Snackbar.make(
-                    findViewById<ConstraintLayout>(R.id.SearchResultActivity),
-                    resources.getString(R.string.search_15s),
-                    Snackbar.LENGTH_LONG
-                ).show()
-            else if (s.contains("站点设置每分钟系统最多"))
-                Snackbar.make(
-                    findViewById<ConstraintLayout>(R.id.SearchResultActivity),
-                    resources.getString(R.string.search_system),
-                    Snackbar.LENGTH_LONG
-                ).show()
-            else
-                processResult(s)
+                    v.findViewById<TextView>(R.id.text).text =
+                        resources.getString(R.string.failed_retrieved)
+                    v
+                }
+                s.contains("用户登录") -> {
+                    LayoutInflater.from(applicationContext).inflate(
+                        R.layout.tip_login_required,
+                        findViewById<LinearLayout>(R.id.tips),
+                        false
+                    )
+                }
+                s.contains("只能进行一次搜索") -> {
+                    val v = LayoutInflater.from(applicationContext).inflate(
+                        R.layout.tip_access_denied,
+                        findViewById<LinearLayout>(R.id.tips),
+                        false
+                    )
+                    v.findViewById<TextView>(R.id.text).text =
+                        resources.getString(R.string.search_15s)
+                    v
+                }
+                s.contains("站点设置每分钟系统最多") -> {
+                    val v = LayoutInflater.from(applicationContext).inflate(
+                        R.layout.tip_access_denied,
+                        findViewById<LinearLayout>(R.id.tips),
+                        false
+                    )
+                    v.findViewById<TextView>(R.id.text).text =
+                        resources.getString(R.string.search_system_restriction)
+                    v
+                }
+                s.contains("没有找到匹配结果") -> {
+                    val v = LayoutInflater.from(applicationContext).inflate(
+                        R.layout.tip_not_applicable,
+                        findViewById<LinearLayout>(R.id.tips),
+                        false
+                    )
+                    v.findViewById<TextView>(R.id.text).text =
+                        resources.getString(R.string.keyword_not_match, kw)
+                    v
+                }
+                else -> {
+                    processResult(s)
+                    null
+                }
+            }
+            if (v != null)
+                findViewById<LinearLayout>(R.id.tips)?.addView(v)
+            findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
         }
         search()
 
