@@ -135,22 +135,22 @@ class AccountFragment : Fragment() {
                                         resources.getString(R.string.new_version_detected),
                                         latestVersion.get("versionLog").asString,
                                         latestVersion.get("versionCode").asString,
-                                        false // true
+                                        true
                                     ) {
-//                                context?.let { ctx ->
-//                                    Dialog().create(
-//                                        fragment_account,
-//                                        ctx,
-//                                        resources.getString(R.string.confirmUpdating),
-//                                        resources.getString(R.string.confirmUpdating_description)
-//                                    ) {
-//                                        HttpExt().downloadUtils(
-//                                            context,
-//                                            "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
-//                                            "dtz_${latestVersion.get("versionCode").asString}.apk"
-//                                        )
-//                                    }
-//                                }
+                                        context?.let { ctx ->
+                                            Dialog().create(
+                                                fragment_account,
+                                                ctx,
+                                                resources.getString(R.string.confirmUpdating),
+                                                resources.getString(R.string.confirmUpdating_description)
+                                            ) {
+                                                HttpExt().downloadUtils(
+                                                    context,
+                                                    "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                                                    "dtz_${latestVersion.get("versionCode").asString}.apk"
+                                                )
+                                            }
+                                        }
                                     })
                         }
 
