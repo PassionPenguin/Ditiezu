@@ -30,7 +30,10 @@ class ReplyActivity : AppCompatActivity() {
         val pid = e?.get("pid")
         when (type) {
             "reply" -> if (tid == null) onBackPressed()
-            "edit" -> if (pid == null || tid == null) onBackPressed()
+            "edit" -> {
+                if (pid == null || tid == null) onBackPressed()
+                EditTextInput.setText(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid"))
+            }
         }
 
         val formhash =
