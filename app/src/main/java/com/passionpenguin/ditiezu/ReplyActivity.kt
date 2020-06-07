@@ -208,18 +208,18 @@ class ReplyActivity : AppCompatActivity() {
             replaceWith: String? = null
         ) {
             with(EditTextInput) {
-                val s = this.selectionStart
-                val e = this.selectionEnd
+                val start = this.selectionStart
+                val end = this.selectionEnd
                 val t =
-                    this.text.substring(0, s) + contentBefore + (replaceWith ?: this.text.substring(
-                        s,
-                        e
-                    )) + contentAfter + this.text.substring(
-                        e,
-                        this.length()
+                    this.text.substring(0, start) + contentBefore + (replaceWith
+                        ?: this.text.substring(
+                            start,
+                            end
+                        )) + contentAfter + this.text.substring(
+                        end, this.length()
                     )
                 this.setText(t)
-                this.setSelection(s + contentBefore.length, e + contentAfter.length - 1)
+                this.setSelection(start + contentBefore.length, end + contentAfter.length - 1)
             }
         }
 
