@@ -11,13 +11,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
 import com.passionpenguin.ditiezu.helper.ThreadItem
+import kotlinx.android.synthetic.main.activity_search_result.*
 
 import org.jsoup.Jsoup
 import java.net.URLEncoder
@@ -94,7 +94,7 @@ class SearchResultActivity : AppCompatActivity() {
         }
 
         fun search() {
-            findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.VISIBLE
+            LoadingMaskContainer.visibility = View.VISIBLE
             val s = HttpExt().asyncPostPage(
                 "http://ditiezu.com/search.php?mod=forum",
                 "formhash=$formhash&srchtxt=" + URLEncoder.encode(
@@ -102,12 +102,12 @@ class SearchResultActivity : AppCompatActivity() {
                     "GBK"
                 ) + "&searchsubmit=yes"
             )
-            findViewById<LinearLayout>(R.id.tips).removeAllViews()
+            tips.removeAllViews()
             val v = when {
                 s == "Failed Retrieved" -> {
                     val v = LayoutInflater.from(applicationContext).inflate(
                         R.layout.tip_access_denied,
-                        findViewById<LinearLayout>(R.id.tips),
+                        tips,
                         false
                     )
                     v.findViewById<TextView>(R.id.text).text =
@@ -117,14 +117,14 @@ class SearchResultActivity : AppCompatActivity() {
                 s.contains("用户登录") -> {
                     LayoutInflater.from(applicationContext).inflate(
                         R.layout.tip_login_required,
-                        findViewById<LinearLayout>(R.id.tips),
+                        tips,
                         false
                     )
                 }
                 s.contains("只能进行一次搜索") -> {
                     val v = LayoutInflater.from(applicationContext).inflate(
                         R.layout.tip_access_denied,
-                        findViewById<LinearLayout>(R.id.tips),
+                        tips,
                         false
                     )
                     v.findViewById<TextView>(R.id.text).text =
@@ -134,7 +134,7 @@ class SearchResultActivity : AppCompatActivity() {
                 s.contains("站点设置每分钟系统最多") -> {
                     val v = LayoutInflater.from(applicationContext).inflate(
                         R.layout.tip_access_denied,
-                        findViewById<LinearLayout>(R.id.tips),
+                        tips,
                         false
                     )
                     v.findViewById<TextView>(R.id.text).text =
@@ -144,7 +144,7 @@ class SearchResultActivity : AppCompatActivity() {
                 s.contains("没有找到匹配结果") -> {
                     val v = LayoutInflater.from(applicationContext).inflate(
                         R.layout.tip_not_applicable,
-                        findViewById<LinearLayout>(R.id.tips),
+                        tips,
                         false
                     )
                     v.findViewById<TextView>(R.id.text).text =
@@ -157,8 +157,8 @@ class SearchResultActivity : AppCompatActivity() {
                 }
             }
             if (v != null)
-                findViewById<LinearLayout>(R.id.tips)?.addView(v)
-            findViewById<LinearLayout>(R.id.LoadingMaskContainer).visibility = View.GONE
+                tips?.addView(v)
+            LoadingMaskContainer.visibility = View.GONE
         }
         search()
 

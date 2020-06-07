@@ -10,14 +10,15 @@
 
     <application
         android:allowBackup="false"
+        android:fitsSystemWindows="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ditiezu"
         android:usesCleartextTraffic="true"
-        android:fitsSystemWindows="true"
         tools:targetApi="m">
+        <activity android:name=".ReplyActivity" />
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".ForumDisplay" />
         <activity android:name=".LoginActivity" />

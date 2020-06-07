@@ -173,4 +173,13 @@
     <string name="description_Announcement" translatable="false">站务公告中心</string>
     <string name="failed_retrieved">Failed Retrieved Content</string>
     <string name="keyword_not_match">Your search - %s - did not match any documents.</string>
+    <string name="_1x" translatable="false">1x</string>
+    <string name="_2x" translatable="false">2x</string>
+    <string name="_3x" translatable="false">3x</string>
+    <string name="_4x" translatable="false">4x</string>
+    <string name="_5x" translatable="false">5x</string>
+    <string name="_6x" translatable="false">6x</string>
+    <string name="_7x" translatable="false">7x</string>
+    <string name="tip_input_content">What about the weather…</string>
+    <string name="edit">Edit</string>
 </resources>

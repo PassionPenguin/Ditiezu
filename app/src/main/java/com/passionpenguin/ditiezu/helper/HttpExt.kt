@@ -201,8 +201,9 @@ class HttpExt {
         return result
     }
 
-    fun asyncPostPage(url: String, params: String): String {
+    fun asyncPostPage(url: String, params: String, followRedirected: Boolean = true): String {
         val urlConnection = URL(url).openConnection() as HttpURLConnection
+        urlConnection.instanceFollowRedirects = followRedirected
         val cookieManager = CookieManager.getInstance()
         var cookie = cookieManager.getCookie(url)
 
@@ -268,7 +269,11 @@ class HttpExt {
         };
         thread.start()
         thread.join()
-        return result
+        return when (urlConnection.responseCode) {
+            in 300..399 -> "succeed, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
+            in 400..599 -> "error, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
+            else -> result
+        }
     }
 
     fun checkLogin(): Boolean {
@@ -437,7 +442,11 @@ class HttpExt {
             val file = File(pathstr)
             //参数1 上下文, 参数2 Provider主机地址 和配置文件中保持一致   参数3  共享的文件
             val apkUri =
-                FileProvider.getUriForFile(mContext!!, "com.passionpenguin.ditiezu.fileprovider", file)
+                FileProvider.getUriForFile(
+                    mContext!!,
+                    "com.passionpenguin.ditiezu.fileprovider",
+                    file
+                )
             //添加这一句表示对目标应用临时授权该Uri所代表的文件
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             intent.setDataAndType(apkUri, "application/vnd.android.package-archive")

@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="108dp"
     android:elevation="@dimen/_64"
     android:orientation="vertical">
+
+    <RadioButton
+        android:id="@+id/actionBar_leftButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:button="@null"
+        android:layout_margin="@dimen/_16"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioButton
+        android:id="@+id/actionBar_rightButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:button="@null"
+        android:layout_margin="@dimen/_16"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title"
@@ -16,6 +37,8 @@
         android:textColor="@color/black"
         android:paddingVertical="@dimen/_8"
         android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="HOME" />
 
     <EditText
@@ -31,6 +54,7 @@
         android:inputType="text"
         android:hint="@string/search"
         android:textSize="12sp"
-        android:layout_marginBottom="@dimen/_16" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

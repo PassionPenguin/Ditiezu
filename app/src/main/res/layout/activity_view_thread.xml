@@ -5,8 +5,8 @@
     android:id="@+id/view_thread"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewThread"
-    android:layout_marginTop="24dp">
+    android:layout_marginTop="@dimen/_32"
+    tools:context=".ViewThread">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/action_bar_in_thread"

@@ -5,8 +5,8 @@
     android:id="@+id/MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:layout_marginTop="24dp">
+    android:layout_marginTop="@dimen/_32"
+    tools:context=".MainActivity">
 
     <include
         android:id="@+id/action_bar_layout"

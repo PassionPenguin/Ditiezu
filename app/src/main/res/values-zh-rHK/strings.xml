@@ -89,4 +89,6 @@
     <string name="category_Announcement">站務公告</string>
     <string name="failed_retrieved">爬取數據失敗</string>
     <string name="keyword_not_match">你的搜索內容 - %s - 並沒有匹配任何搜索結果</string>
+    <string name="tip_input_content">寫點啥…</string>
+    <string name="edit">編輯</string>
 </resources>

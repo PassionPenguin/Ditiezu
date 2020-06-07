@@ -1,5 +1,6 @@
 package com.passionpenguin.ditiezu
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -181,7 +182,10 @@ class ViewThread : AppCompatActivity() {
                 true
             }
             R.id.reply -> {
-                if (loginState) {/* TODO: Updated Post Thread Activity */
+                if (loginState) {
+                    val i = Intent(this@ViewThread, ReplyActivity::class.java)
+                    i.putExtra("tid", tid)
+                    startActivity(i)
                 } else {
                     Snackbar.make(
                         viewThread,
