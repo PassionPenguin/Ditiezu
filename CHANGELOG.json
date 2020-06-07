@@ -102,6 +102,12 @@
       "versionName": "Watermelon Milkshake v5.2",
       "versionDate": "Sun Jun 07 2020 20:44:05 GMT+0800 (中国标准时间)",
       "versionLog": "更好支持跳转链接显示内容"
+    },
+    {
+      "versionCode": 20,
+      "versionName": "Watermelon Milkshake v5.3",
+      "versionDate": "Sun Jun 07 2020 21:02:45 GMT+0800 (中国标准时间)",
+      "versionLog": "查看帖子页支持翻页，修复错误"
     }
   ]
 }
