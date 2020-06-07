@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -109,10 +110,80 @@ class ViewThread : AppCompatActivity() {
                         )
                     )
                 }
+                val footerPagination =
+                    layoutInflater.inflate(R.layout.item_category_pagination_navigation, null)
+                val lastPage =
+                    if (!parser.select(".last").isEmpty())
+                        parser.select(".last")[0].text().substring(4).toInt()
+                    else parser.select("#pgt .pg a:not(.nxt)").last().text().toInt()
+
+                footerPagination.findViewById<TextView>(R.id.curPage).text = page.toString()
+
+                val firstPageView = footerPagination.findViewById<ImageButton>(R.id.firstPage)
+                if (page == 1) firstPageView.visibility = View.GONE
+                else firstPageView.setOnClickListener {
+                    this.page = 1
+                    loadPage(tid, page)
+                }
+
+                val lastPageView = footerPagination.findViewById<ImageButton>(R.id.lastPage)
+                if (page > lastPage) lastPageView.visibility = View.GONE
+                else lastPageView.setOnClickListener {
+                    this.page = lastPage
+                    loadPage(tid, page)
+                }
+
+                val prevPage = footerPagination.findViewById<ImageButton>(R.id.prevPage)
+                val prevPage1 = footerPagination.findViewById<TextView>(R.id.prevPage1)
+                if (page - 1 < 1) {
+                    prevPage.visibility = View.GONE
+                    prevPage1.visibility = View.GONE
+                } else {
+                    prevPage.setOnClickListener {
+                        loadPage(tid, --page)
+                    }
+                    prevPage1.setOnClickListener {
+                        loadPage(tid, --page)
+                    }
+                    prevPage1.text = (page - 1).toString()
+                }
+
+                val prevPage2 = footerPagination.findViewById<TextView>(R.id.prevPage2)
+                if (page - 2 < 1) prevPage2.visibility = View.GONE
+                else prevPage2.setOnClickListener {
+                    this.page = page - 2
+                    loadPage(tid, page)
+                }
+                prevPage2.text = (page - 2).toString()
+
+                val nextPage = footerPagination.findViewById<ImageButton>(R.id.nextPage)
+                val nextPage1 = footerPagination.findViewById<TextView>(R.id.nextPage1)
+                if (page + 1 > lastPage) {
+                    nextPage.visibility = View.GONE
+                    nextPage1.visibility = View.GONE
+                } else {
+                    nextPage.setOnClickListener {
+                        loadPage(tid, ++page)
+                    }
+                    nextPage1.setOnClickListener {
+                        loadPage(tid, ++page)
+                    }
+                    nextPage1.text = (page + 1).toString()
+                }
+
+                val nextPage2 = footerPagination.findViewById<TextView>(R.id.nextPage2)
+                if (page + 2 > lastPage) nextPage2.visibility = View.GONE
+                else nextPage2.setOnClickListener {
+                    this.page = page + 2
+                    loadPage(tid, page)
+                }
+                nextPage2.text = (page + 2).toString()
                 this@ViewThread.runOnUiThread {
                     title = parser.select("#thread_subject").text()
                     threadTitle.text = parser.select("#thread_subject").text()
+                    viewThread.removeFooterView(viewThread.findViewById(R.id.paginationNavigation))
                     viewThread.adapter = ReplyItemAdapter(applicationContext, 0, list)
+                    viewThread.addFooterView(footerPagination)
                     LoadingMaskContainer.visibility = View.GONE
                 }
             }
