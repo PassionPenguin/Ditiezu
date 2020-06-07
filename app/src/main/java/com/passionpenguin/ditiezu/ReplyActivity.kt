@@ -80,7 +80,7 @@ class ReplyActivity : AppCompatActivity() {
                     inputMethodManager.hideSoftInputFromWindow(
                         view.windowToken,
                         InputMethodManager.HIDE_NOT_ALWAYS
-                    );
+                    )
                 }
                 tips.removeAllViews()
                 val tipView = when {
