@@ -38,7 +38,7 @@
     <string name="loading_description" >加載中…</string>
     <string name="threadList_title">帖子標題</string>
     <string name="title_reply">回覆</string>
-    <string name="app_description">上班，落班，地鐵帶你返工放工，地下鐵嘅故事就係依度發生</string>
+    <string name="app_description">地下鐵嘅故事</string>
     <string name="page_controller">頁</string>
     <string name="next_page">下頁</string>
     <string name="prev_page">上頁</string>
@@ -92,4 +92,5 @@
     <string name="tip_input_content">寫點啥…</string>
     <string name="edit">編輯</string>
     <string name="subject">Subject</string>
+    <string name="selectType">選擇類別</string>
 </resources>

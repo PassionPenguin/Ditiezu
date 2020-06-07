@@ -16,12 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ditiezu"
-        android:usesCleartextTraffic="true"
-        tools:targetApi="m">
-        <activity
-            android:name=".DisplayForum"
-            android:label="@string/title_activity_display_forum"
-            android:theme="@style/Theme.Ditiezu.AppBarOverlay"></activity>
+        android:usesCleartextTraffic="true">
         <activity android:name=".PostActivity" />
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".ForumDisplay" />

@@ -56,7 +56,7 @@
     <string name="threadList_meta">帖子信息</string>
     <string name="threadList_title">帖子标题</string>
     <string name="title_reply">回复</string>
-    <string name="app_description">上班、落班，地铁带你返工放工，地下铁嘅故事就系依度发生</string>
+    <string name="app_description">地下铁的故事</string>
     <string name="first_page">第一页</string>
     <string name="last_page">最后页</string>
     <string name="prev_page">上页</string>
@@ -120,4 +120,5 @@
     <string name="tip_input_content">写点啥…</string>
     <string name="edit">编辑</string>
     <string name="subject">Subject</string>
+    <string name="selectType">选择类别</string>
 </resources>

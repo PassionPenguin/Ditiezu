@@ -10,9 +10,9 @@ android {
 
     defaultConfig {
         applicationId "com.passionpenguin.ditiezu"
-        targetSdkVersion 29
-        versionCode 20
-        versionName 'Watermelon Milkshake v5.3'
+        targetSdkVersion 30
+        versionCode 21
+        versionName 'Watermelon Milkshake v6.0'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         minSdkVersion 23
@@ -20,7 +20,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

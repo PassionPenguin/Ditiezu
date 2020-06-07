@@ -12,7 +12,7 @@
     <string name="threadList_title">THREAD TITLE</string>
     <string name="threadList_meta">THREAD META</string>
     <string name="title_reply">Reply</string>
-    <string name="app_description">The story of the underground took place here</string>
+    <string name="app_description">The Underground</string>
 
     <string name="category_Beijing">Beijing</string>
     <string name="category_Tianjin">Tianjin</string>
@@ -140,7 +140,7 @@
     <string name="search">Search</string>
     <string name="no_notification">No More Notifications…</string>
     <string name="version">Version</string>
-    <string name="new_version_detected" translatable="false">New Version Detected</string>
+    <string name="new_version_detected">New Version Detected</string>
     <string name="share">Share</string>
     <string name="link">Link</string>
     <string name="reload">Reload</string>
@@ -184,13 +184,4 @@
     <string name="edit">Edit</string>
     <string name="subject">Subject</string>
     <string name="selectType">Select Type</string>
-    <string name="title_activity_display_forum">DisplayForum</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
