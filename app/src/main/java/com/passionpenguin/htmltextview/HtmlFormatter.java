@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.passionpenguin.ditiezu.HtmlTextView;
+package com.passionpenguin.htmltextview;
 
 import android.text.Html;
 import android.text.Html.ImageGetter;

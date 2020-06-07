@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.passionpenguin.ditiezu.HtmlTextView;
+package com.passionpenguin.htmltextview;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -78,8 +78,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
         UrlDrawable urlDrawable = new UrlDrawable();
 
         // get the actual source
-        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this, container,
-                matchParentWidth, compressImage, qualityImage);
+        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this, container, !source.contains("static/image/smiley"), compressImage, qualityImage);
 
         asyncTask.execute(source);
 
@@ -251,4 +250,4 @@ public class HtmlHttpImageGetter implements ImageGetter {
             }
         }
     }
-}
+} 

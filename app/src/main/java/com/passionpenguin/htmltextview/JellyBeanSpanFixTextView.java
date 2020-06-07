@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.passionpenguin.ditiezu.HtmlTextView;
+package com.passionpenguin.htmltextview;
 
 import java.util.ArrayList;
 import java.util.List;

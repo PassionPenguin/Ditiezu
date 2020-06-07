@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-package com.passionpenguin.ditiezu.HtmlTextView;
+package com.passionpenguin.htmltextview;
 
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
@@ -36,8 +35,6 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.passionpenguin.ditiezu.PaddingBackgroundColorSpan;
-
 import org.xml.sax.Attributes;
 
 import java.util.Stack;
@@ -52,7 +49,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
     public static final String LIST_ITEM = "HTML_TEXTVIEW_ESCAPED_LI_TAG";
     public static final String A_ITEM = "HTML_TEXTVIEW_ESCAPED_A_TAG";
     public static final String PLACEHOLDER_ITEM = "HTML_TEXTVIEW_ESCAPED_PLACEHOLDER";
-    public static final String QUOTE_ITEM = "HTML_TEXTVIEW_ESCAPED_QUOTE";
 
     public HtmlTagHandler() {
     }
@@ -79,8 +75,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
         html = html.replace("</li>", "</" + LIST_ITEM + ">");
         html = html.replace("<a", "<" + A_ITEM);
         html = html.replace("</a>", "</" + A_ITEM + ">");
-        html = html.replace("<quote", "<" + QUOTE_ITEM + ">");
-        html = html.replace("</quote", "</" + QUOTE_ITEM + ">");
 
         return html;
     }
@@ -160,9 +154,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
     private static class Td {
     }
 
-    private static class Quote {
-    }
-
     @Override
     public boolean handleTag(boolean opening, String tag, Editable output, Attributes attributes) {
         if (opening) {
@@ -214,8 +205,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 start(output, new Th());
             } else if (tag.equalsIgnoreCase("td")) {
                 start(output, new Td());
-            } else if (tag.equalsIgnoreCase("quote")) {
-                start(output, new Quote());
             } else {
                 return false;
             }
@@ -320,8 +309,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 end(output, Th.class, false);
             } else if (tag.equalsIgnoreCase("td")) {
                 end(output, Td.class, false);
-            } else if (tag.equalsIgnoreCase("quote")) {
-                end(output, Quote.class, false, new PaddingBackgroundColorSpan(Color.GRAY, 24));
             } else {
                 return false;
             }

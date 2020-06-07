@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.passionpenguin.ditiezu.HtmlTextView;
+package com.passionpenguin.htmltextview;
 
 import android.content.Context;
 import android.text.Html;
@@ -55,14 +55,14 @@ public class HtmlTextView extends JellyBeanSpanFixTextView {
     }
 
     /**
-     * @see HtmlTextView#setHtml(int)
+     * @see com.passionpenguin.htmltextview.HtmlTextView#setHtml(int)
      */
     public void setHtml(@RawRes int resId) {
         setHtml(resId, null);
     }
 
     /**
-     * @see HtmlTextView#setHtml(String)
+     * @see com.passionpenguin.htmltextview.HtmlTextView#setHtml(String)
      */
     public void setHtml(@NonNull String html) {
         setHtml(html, null);

@@ -1,6 +1,5 @@
 package com.passionpenguin.ditiezu
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -8,22 +7,19 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.webkit.JavascriptInterface
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.postDelayed
 import com.google.android.material.snackbar.Snackbar
-import com.passionpenguin.ditiezu.helper.Animation
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ReplyItem
 import com.passionpenguin.ditiezu.helper.ReplyItemAdapter
 import kotlinx.android.synthetic.main.activity_view_thread.*
 import org.jsoup.Jsoup
+import java.util.*
 import kotlin.properties.Delegates
 
 class ViewThread : AppCompatActivity() {
@@ -31,74 +27,94 @@ class ViewThread : AppCompatActivity() {
     private var tid by Delegates.notNull<Int>()
     private var page by Delegates.notNull<Int>()
     private var loginState by Delegates.notNull<Boolean>()
+    private var t: Long = 0
 
     private fun retrieveThreadContent() {
+        t = Calendar.getInstance().time.time
         runOnUiThread {
             LoadingMaskContainer.visibility = View.VISIBLE
         }
         fun loadPage(threadId: Int = this.tid, pageId: Int = this.page) {
             HttpExt().retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
-                if (result == "Failed Retrieved") {
-                    // Failed Retrieved
-                    Log.i("HTTPEXT", "FAILED RETRIEVED")
-                }
-                fun processResult(result: String) {
-                    val parser = Jsoup.parse(result)
-                    val list = mutableListOf<ReplyItem>()
-                    parser.select("table[id^='pid']").forEach {
-                        it.select(".tip,a").forEach { tipEl ->
-                            if (tipEl.tagName() != "a" || tipEl.attr("href").contains("redirect"))
-                                tipEl.remove()
-                        }
-                        it.select("[id^='postmessage_'] a").forEach { tipEl ->
-                            tipEl.text("查看链接")
-                            tipEl.attr("style", "color: #289c77")
-                        }
-                        it.select("img[id^='aimg_']").forEach { img ->
-                            img.attr("src", img.attr("file"))
-                        }
-                        it.select("img[smilieid]").forEach { img ->
-                            img.attr("src", "http://www.ditiezu.com/" + img.attr("src"))
-                        }
-                        it.select("font[size]").forEach { size ->
-                            when (size.attr("size").toInt()) {
-                                1 -> size.html("<small><small>" + size.html() + "</small></small>")
-                                2 -> size.html("<small>" + size.html() + "</small>")
-                                4 -> size.html("<big>" + size.html() + "</big>")
-                                5 -> size.html("<big><big>" + size.html() + "</big></big>")
-                                6 -> size.html("<big><big><big>" + size.html() + "</big></big></big>")
-                                7 -> size.html("<big><big><big><big>" + size.html() + "</big></big></big></big>")
-                            }
-                        }
-                        it.select("blockquote").forEach { blockQuote ->
-                            blockQuote.tagName("font")
-                            blockQuote.attr("color", "#88888822")
-                            blockQuote.attr("face", "monospaced")
-                        }
-                        list.add(
-                            ReplyItem(
-                                with(it.select(".avatar a").attr("href")) {
-                                    this.substring(this.indexOf("uid-") + 4, this.indexOf(".html"))
-                                        .toInt()
-                                },
-                                it.select("[id^='postmessage_']").html(),
-                                it.select(".authi .xw1").text(),
-                                it.select("[id^='authorposton']").text(),
-                                it.select(".fastre").isEmpty(),
-                                it.select(".editp").isEmpty(),
-                                it.attr("id").substring(3).toInt(),
-                                tid
-                            )
-                        )
+                val parser = Jsoup.parse(result)
+                runOnUiThread {
+                    if (result == "Failed Retrieved") {
+                        tips.removeAllViews()
+                        val v = LayoutInflater.from(applicationContext)
+                            .inflate(R.layout.tip_access_denied, tips, false)
+                        v.findViewById<TextView>(R.id.text).text =
+                            resources.getString(R.string.failed_retrieved)
+                        tips.addView(v)
+                        LoadingMaskContainer.visibility = View.GONE
                     }
-                    this@ViewThread.runOnUiThread {
-                        title = parser.select("#thread_subject").text()
-                        threadTitle.text = parser.select("#thread_subject").text()
-                        viewThread.adapter = ReplyItemAdapter(applicationContext, 0, list)
+                    if (parser.select("#messagetext").isNotEmpty()) {
+                        tips.removeAllViews()
+                        val v = LayoutInflater.from(applicationContext)
+                            .inflate(R.layout.tip_access_denied, tips, false)
+                        v.findViewById<TextView>(R.id.text).text =
+                            parser.select("#messagetext").text()
+                        Log.i("", parser.select("#messagetext").text())
+                        tips.addView(v)
                         LoadingMaskContainer.visibility = View.GONE
                     }
                 }
-                processResult(result)
+                val list = mutableListOf<ReplyItem>()
+                parser.select("table[id^='pid']").forEach {
+                    it.select(".tip,a").forEach { tipEl ->
+                        if (tipEl.tagName() != "a" || tipEl.attr("href").contains("redirect"))
+                            tipEl.remove()
+                    }
+                    it.select("[id^='postmessage_'] a").forEach { tipEl ->
+                        tipEl.text("查看链接")
+                        tipEl.attr("style", "color: #289c77")
+                    }
+                    it.select("img[id^='aimg_']").forEach { img ->
+                        img.attr("src", img.attr("file"))
+                    }
+                    it.select("img[smilieid]").forEach { img ->
+                        img.attr("src", "http://www.ditiezu.com/" + img.attr("src"))
+                    }
+                    it.select("font[size]").forEach { size ->
+                        when (size.attr("size").toInt()) {
+                            1 -> size.html("<small><small>" + size.html() + "</small></small>")
+                            2 -> size.html("<small>" + size.html() + "</small>")
+                            4 -> size.html("<big>" + size.html() + "</big>")
+                            5 -> size.html("<big><big>" + size.html() + "</big></big>")
+                            6 -> size.html("<big><big><big>" + size.html() + "</big></big></big>")
+                            7 -> size.html("<big><big><big><big>" + size.html() + "</big></big></big></big>")
+                        }
+                    }
+                    it.select("blockquote").forEach { blockQuote ->
+                        blockQuote.tagName("font")
+                        blockQuote.attr("color", "#88888822")
+                        blockQuote.attr("face", "monospaced")
+                    }
+                    list.add(
+                        ReplyItem(
+                            with(it.select(".avatar a").attr("href")) {
+                                if (this.indexOf("uid-") + 4 <= 0 || this.indexOf(".html") <= 0)
+                                    0
+                                else this.substring(
+                                    this.indexOf("uid-") + 4,
+                                    this.indexOf(".html")
+                                ).toInt()
+                            },
+                            it.select("[id^='postmessage_']").html(),
+                            it.select(".authi .xw1").text(),
+                            it.select("[id^='authorposton']").text(),
+                            it.select(".fastre").isEmpty(),
+                            it.select(".editp").isEmpty(),
+                            it.attr("id").substring(3).toInt(),
+                            tid
+                        )
+                    )
+                }
+                this@ViewThread.runOnUiThread {
+                    title = parser.select("#thread_subject").text()
+                    threadTitle.text = parser.select("#thread_subject").text()
+                    viewThread.adapter = ReplyItemAdapter(applicationContext, 0, list)
+                    LoadingMaskContainer.visibility = View.GONE
+                }
             }
         }
         loadPage(tid, page)

@@ -11,13 +11,11 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
-import com.passionpenguin.ditiezu.HtmlTextView.HtmlHttpImageGetter
-import com.passionpenguin.ditiezu.HtmlTextView.HtmlTextView
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.ReplyActivity
-import com.passionpenguin.ditiezu.ViewThread
+import com.passionpenguin.htmltextview.HtmlHttpImageGetter
+import com.passionpenguin.htmltextview.HtmlTextView
 import com.squareup.picasso.Picasso
-import java.net.URL
 
 
 class CategoryItem(val title: String, val description: String, val icon: Int, var meta: String)
@@ -220,45 +218,6 @@ class ReplyItemAdapter(
                 replyItem.content,
                 HtmlHttpImageGetter(this)
             )
-            this.setOnClickATagListener { _, href ->
-                val url = URL(href)
-                if (url.host.contains("ditiezu.com") && (href?.contains("?mod=viewthread")!! || href.contains(
-                        "thread-"
-                    ))
-                ) {
-                    val i = Intent(mCtx, ViewThread::class.java)
-                    i.putExtra(
-                        "tid", when {
-                            href.contains("mod=viewthread") -> href.substring(
-                                href.indexOf("tid=") + 4,
-                                href.indexOf("&", href.indexOf("tid=") + 4)
-                            )
-                            href.contains("thread-") -> href.substring(
-                                href.indexOf("thread-") + 7,
-                                href.indexOf("-", href.indexOf("thread-") + 7)
-                            )
-                            else -> null
-                        }
-                    )
-                    if (href.contains("page=") && href.contains("mod=viewthread"))
-                        i.putExtra(
-                            "page",
-                            href.substring(
-                                href.indexOf("page=") + 4,
-                                href.indexOf("&", href.indexOf("page=") + 4)
-                            )
-                        )
-                    else i.putExtra(
-                        "page",
-                        href.substring(
-                            href.indexOf("-", href.indexOf("thread-") + 7),
-                            href.indexOf("-", href.indexOf("-", href.indexOf("thread-") + 7))
-                        )
-                    )
-                    i.flags = FLAG_ACTIVITY_NEW_TASK
-                    mCtx.startActivity(i)
-                }
-            }
         }
         view.findViewById<TextView>(R.id.threadMetaInfo).text = replyItem.time
         view.findViewById<TextView>(R.id.threadAuthorName).text = replyItem.authorName

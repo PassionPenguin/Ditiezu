@@ -1,4 +1,4 @@
-package com.passionpenguin.ditiezu.HtmlTextView;
+package com.passionpenguin.htmltextview;
 
 import android.view.View;
 

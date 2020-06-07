@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.passionpenguin.ditiezu.HtmlTextView;
+package com.passionpenguin.htmltextview;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

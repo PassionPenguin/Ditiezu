@@ -46,7 +46,7 @@
                 android:textSize="15sp"
                 tools:text="Author Name" />
 
-            <com.passionpenguin.ditiezu.HtmlTextView.HtmlTextView
+            <com.passionpenguin.htmltextview.HtmlTextView
                 android:id="@+id/threadContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
