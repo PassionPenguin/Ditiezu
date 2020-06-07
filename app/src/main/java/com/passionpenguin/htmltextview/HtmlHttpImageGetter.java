@@ -38,47 +38,19 @@ import java.net.URI;
 import java.net.URL;
 
 public class HtmlHttpImageGetter implements ImageGetter {
-    private TextView container;
+    private final TextView container;
     private URI baseUri;
-    private boolean matchParentWidth;
-
-    private boolean compressImage = false;
-    private int qualityImage = 50;
 
     public HtmlHttpImageGetter(TextView textView) {
         this.container = textView;
-        this.matchParentWidth = false;
-    }
-
-    public HtmlHttpImageGetter(TextView textView, String baseUrl) {
-        this.container = textView;
-        if (baseUrl != null) {
-            this.baseUri = URI.create(baseUrl);
-        }
-    }
-
-    public HtmlHttpImageGetter(TextView textView, String baseUrl, boolean matchParentWidth) {
-        this.container = textView;
-        this.matchParentWidth = matchParentWidth;
-        if (baseUrl != null) {
-            this.baseUri = URI.create(baseUrl);
-        }
-    }
-
-    public void enableCompressImage(boolean enable) {
-        enableCompressImage(enable, 50);
-    }
-
-    public void enableCompressImage(boolean enable, int quality) {
-        compressImage = enable;
-        qualityImage = quality;
     }
 
     public Drawable getDrawable(String source) {
         UrlDrawable urlDrawable = new UrlDrawable();
 
         // get the actual source
-        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this, container, !source.contains("static/image/smiley"), compressImage, qualityImage);
+        int qualityImage = 50;
+        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this, container, !source.contains("static/image/smiley"), false, qualityImage);
 
         asyncTask.execute(source);
 
@@ -99,11 +71,11 @@ public class HtmlHttpImageGetter implements ImageGetter {
         private final WeakReference<View> containerReference;
         private final WeakReference<Resources> resources;
         private String source;
-        private boolean matchParentWidth;
+        private final boolean matchParentWidth;
         private float scale;
 
-        private boolean compressImage = false;
-        private int qualityImage = 50;
+        private final boolean compressImage;
+        private final int qualityImage;
 
         public ImageGetterAsyncTask(UrlDrawable d, HtmlHttpImageGetter imageGetter, View container,
                                     boolean matchParentWidth, boolean compressImage, int qualityImage) {
@@ -183,6 +155,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 original.compress(Bitmap.CompressFormat.JPEG, qualityImage, out);
                 original.recycle();
+                assert is != null;
                 is.close();
 
                 Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
@@ -239,7 +212,7 @@ public class HtmlHttpImageGetter implements ImageGetter {
     }
 
     @SuppressWarnings("deprecation")
-    public class UrlDrawable extends BitmapDrawable {
+    public static class UrlDrawable extends BitmapDrawable {
         protected Drawable drawable;
 
         @Override
@@ -250,4 +223,4 @@ public class HtmlHttpImageGetter implements ImageGetter {
             }
         }
     }
-} 
+}

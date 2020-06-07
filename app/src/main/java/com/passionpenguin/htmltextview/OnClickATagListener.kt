@@ -1,13 +1,10 @@
-package com.passionpenguin.htmltextview;
+package com.passionpenguin.htmltextview
 
-import android.view.View;
-
-import androidx.annotation.Nullable;
+import android.view.View
 
 /**
  * This listener can define what happens when the a tag is clicked
  */
-public interface OnClickATagListener {
-    void onClick(View widget, @Nullable String href);
-
+interface OnClickATagListener {
+    fun onClick(widget: View?, href: String?)
 }

@@ -14,75 +14,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.passionpenguin.htmltextview
 
-package com.passionpenguin.htmltextview;
-
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.os.Parcel;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import android.text.Layout;
-import android.text.Spanned;
-import android.text.style.BulletSpan;
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.os.Parcel
+import android.text.Layout
+import android.text.Spanned
+import android.text.style.BulletSpan
 
 /**
  * Class to use Numbered Lists in TextViews.
- * The span works the same as {@link android.text.style.BulletSpan} and all lines of the entry have
+ * The span works the same as [android.text.style.BulletSpan] and all lines of the entry have
  * the same leading margin.
  */
-public class NumberSpan extends BulletSpan {
-    private final int mNumberGapWidth;
-    private final String mNumber;
+class NumberSpan(gapWidth: Int, number: Int) : BulletSpan() {
+    private val mNumberGapWidth: Int = gapWidth
+    private val mNumber: String?
 
-    public static final int STANDARD_GAP_WIDTH = 10;
-
-    public NumberSpan(int gapWidth, int number) {
-        super();
-        mNumberGapWidth = gapWidth;
-        mNumber = Integer.toString(number).concat(".");
+    init {
+        mNumber = "$number."
     }
 
-    public NumberSpan(int number) {
-        this(STANDARD_GAP_WIDTH, number);
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        super.writeToParcel(dest, flags)
+        dest.writeInt(mNumberGapWidth)
+        dest.writeString(mNumber)
     }
 
-    public NumberSpan(Parcel src) {
-        super(src);
-        mNumberGapWidth = src.readInt();
-        mNumber = src.readString();
+    override fun getLeadingMargin(first: Boolean): Int {
+        return 2 * STANDARD_GAP_WIDTH + mNumberGapWidth
     }
 
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(mNumberGapWidth);
-        dest.writeString(mNumber);
-    }
-
-    public int getLeadingMargin(boolean first) {
-        return 2 * STANDARD_GAP_WIDTH + mNumberGapWidth;
-    }
-
-    @Override
-    public void drawLeadingMargin(@NonNull Canvas c, @NonNull Paint p, int x, int dir,
-                                  int top, int baseline, int bottom, @NonNull CharSequence text,
-                                  int start, int end, boolean first, @Nullable Layout l) {
-        if (((Spanned) text).getSpanStart(this) == start) {
-            Paint.Style style = p.getStyle();
-
-            p.setStyle(Paint.Style.FILL);
-
-            if (c.isHardwareAccelerated()) {
-                c.save();
-                c.drawText(mNumber, x + dir, baseline, p);
-                c.restore();
+    override fun drawLeadingMargin(
+        c: Canvas, p: Paint, x: Int, dir: Int,
+        top: Int, baseline: Int, bottom: Int, text: CharSequence,
+        start: Int, end: Int, first: Boolean, l: Layout?
+    ) {
+        if ((text as Spanned).getSpanStart(this) == start) {
+            val style = p.style
+            p.style = Paint.Style.FILL
+            if (c.isHardwareAccelerated) {
+                c.save()
+                c.drawText(mNumber!!, x + dir.toFloat(), baseline.toFloat(), p)
+                c.restore()
             } else {
-                c.drawText(mNumber, x + dir, (top + bottom) / 2.0f, p);
+                c.drawText(mNumber!!, x + dir.toFloat(), (top + bottom) / 2.0f, p)
             }
-
-            p.setStyle(style);
+            p.style = style
         }
+    }
+
+    companion object {
+        const val STANDARD_GAP_WIDTH = 10
     }
 }

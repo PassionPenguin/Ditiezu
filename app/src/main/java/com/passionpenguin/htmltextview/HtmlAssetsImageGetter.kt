@@ -13,51 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.passionpenguin.htmltextview
 
-package com.passionpenguin.htmltextview;
-
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.text.Html;
-import android.util.Log;
-import android.widget.TextView;
-
-import java.io.IOException;
-import java.io.InputStream;
+import android.content.Context
+import android.graphics.drawable.Drawable
+import android.text.Html.ImageGetter
+import android.util.Log
+import android.widget.TextView
+import com.passionpenguin.htmltextview.HtmlTextView
+import java.io.IOException
 
 /**
  * Assets Image Getter
- * <p>
+ *
+ *
  * Load image from assets folder
  *
- * @author <a href="mailto:daniel@passos.me">Daniel Passos</a>
+ * @author [Daniel Passos](mailto:daniel@passos.me)
  */
-public class HtmlAssetsImageGetter implements Html.ImageGetter {
+class HtmlAssetsImageGetter : ImageGetter {
+    private val context: Context
 
-    private final Context context;
-
-    public HtmlAssetsImageGetter(Context context) {
-        this.context = context;
+    constructor(context: Context) {
+        this.context = context
     }
 
-    public HtmlAssetsImageGetter(TextView textView) {
-        this.context = textView.getContext();
+    constructor(textView: TextView) {
+        context = textView.context
     }
 
-    @Override
-    public Drawable getDrawable(String source) {
-
-        try {
-            InputStream inputStream = context.getAssets().open(source);
-            Drawable d = Drawable.createFromStream(inputStream, null);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        } catch (IOException e) {
+    override fun getDrawable(source: String): Drawable? {
+        return try {
+            val inputStream = context.assets.open(source)
+            val d =
+                Drawable.createFromStream(inputStream, null)
+            d.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)
+            d
+        } catch (e: IOException) {
             // prevent a crash if the resource still can't be found
-            Log.e(HtmlTextView.TAG, "source could not be found: " + source);
-            return null;
+            Log.e(HtmlTextView.TAG, "source could not be found: $source")
+            null
         }
-
     }
-
 }

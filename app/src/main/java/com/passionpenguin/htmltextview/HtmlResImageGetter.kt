@@ -14,41 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.passionpenguin.htmltextview
 
-package com.passionpenguin.htmltextview;
-
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.text.Html;
-import android.util.Log;
-import androidx.annotation.NonNull;
+import android.content.Context
+import android.graphics.drawable.Drawable
+import android.text.Html.ImageGetter
+import android.util.Log
+import com.passionpenguin.htmltextview.HtmlTextView
 
 /**
  * Copied from http://stackoverflow.com/a/22298833
  */
-public class HtmlResImageGetter implements Html.ImageGetter {
-    private Context context;
-
-    public HtmlResImageGetter(@NonNull Context context) {
-        this.context = context;
-    }
-
-    public Drawable getDrawable(String source) {
-        int id = context.getResources().getIdentifier(source, "drawable", context.getPackageName());
-
+class HtmlResImageGetter(private val context: Context) : ImageGetter {
+    override fun getDrawable(source: String): Drawable? {
+        var id =
+            context.resources.getIdentifier(source, "drawable", context.packageName)
         if (id == 0) {
             // the drawable resource wasn't found in our package, maybe it is a stock android drawable?
-            id = context.getResources().getIdentifier(source, "drawable", "android");
+            id = context.resources.getIdentifier(source, "drawable", "android")
         }
-
-        if (id == 0) {
+        return if (id == 0) {
             // prevent a crash if the resource still can't be found
-            Log.e(HtmlTextView.TAG, "source could not be found: " + source);
-            return null;
+            Log.e(HtmlTextView.TAG, "source could not be found: $source")
+            null
         } else {
-            Drawable d = context.getResources().getDrawable(id);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
+            val d = context.resources.getDrawable(id)
+            d.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)
+            d
         }
     }
 

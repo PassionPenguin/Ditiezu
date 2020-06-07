@@ -11,81 +11,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.passionpenguin.htmltextview
 
-package com.passionpenguin.htmltextview;
+import android.text.Html.ImageGetter
 
-import android.text.Html.ImageGetter;
-import androidx.annotation.Nullable;
+class HtmlFormatterBuilder {
+    var html: String? = null
+        private set
+    var imageGetter: ImageGetter? = null
+        private set
+    var clickableTableSpan: ClickableTableSpan? = null
+        private set
+    var drawTableLinkSpan: DrawTableLinkSpan? = null
+        private set
+    var onClickATagListener: OnClickATagListener? = null
+    var indent = 24.0f
+        private set
+    var isRemoveTrailingWhiteSpace = true
+        private set
 
-public class HtmlFormatterBuilder {
-
-    private String html;
-    private ImageGetter imageGetter;
-    private ClickableTableSpan clickableTableSpan;
-    private DrawTableLinkSpan drawTableLinkSpan;
-    private OnClickATagListener onClickATagListener;
-    private float indent = 24.0f;
-    private boolean removeTrailingWhiteSpace = true;
-
-    public String getHtml() {
-        return html;
+    fun setHtml(html: String?): HtmlFormatterBuilder {
+        this.html = html
+        return this
     }
 
-    public ImageGetter getImageGetter() {
-        return imageGetter;
+    fun setImageGetter(imageGetter: ImageGetter?): HtmlFormatterBuilder {
+        this.imageGetter = imageGetter
+        return this
     }
 
-    public ClickableTableSpan getClickableTableSpan() {
-        return clickableTableSpan;
+    fun setClickableTableSpan(clickableTableSpan: ClickableTableSpan?): HtmlFormatterBuilder {
+        this.clickableTableSpan = clickableTableSpan
+        return this
     }
 
-    public DrawTableLinkSpan getDrawTableLinkSpan() {
-        return drawTableLinkSpan;
+    fun setDrawTableLinkSpan(drawTableLinkSpan: DrawTableLinkSpan?): HtmlFormatterBuilder {
+        this.drawTableLinkSpan = drawTableLinkSpan
+        return this
     }
 
-    public OnClickATagListener getOnClickATagListener() {
-        return onClickATagListener;
+    fun setIndent(indent: Float): HtmlFormatterBuilder {
+        this.indent = indent
+        return this
     }
 
-    public float getIndent() {
-        return indent;
-    }
-
-    public boolean isRemoveTrailingWhiteSpace() {
-        return removeTrailingWhiteSpace;
-    }
-
-    public HtmlFormatterBuilder setHtml(@Nullable final String html) {
-        this.html = html;
-        return this;
-    }
-
-    public HtmlFormatterBuilder setImageGetter(@Nullable final ImageGetter imageGetter) {
-        this.imageGetter = imageGetter;
-        return this;
-    }
-
-    public HtmlFormatterBuilder setClickableTableSpan(@Nullable final ClickableTableSpan clickableTableSpan) {
-        this.clickableTableSpan = clickableTableSpan;
-        return this;
-    }
-
-    public HtmlFormatterBuilder setDrawTableLinkSpan(@Nullable final DrawTableLinkSpan drawTableLinkSpan) {
-        this.drawTableLinkSpan = drawTableLinkSpan;
-        return this;
-    }
-
-    public void setOnClickATagListener(OnClickATagListener onClickATagListener) {
-        this.onClickATagListener = onClickATagListener;
-    }
-
-    public HtmlFormatterBuilder setIndent(final float indent) {
-        this.indent = indent;
-        return this;
-    }
-
-    public HtmlFormatterBuilder setRemoveTrailingWhiteSpace(final boolean removeTrailingWhiteSpace) {
-        this.removeTrailingWhiteSpace = removeTrailingWhiteSpace;
-        return this;
+    fun setRemoveTrailingWhiteSpace(removeTrailingWhiteSpace: Boolean): HtmlFormatterBuilder {
+        isRemoveTrailingWhiteSpace = removeTrailingWhiteSpace
+        return this
     }
 }

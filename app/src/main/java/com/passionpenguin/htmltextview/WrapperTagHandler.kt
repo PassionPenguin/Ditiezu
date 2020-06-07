@@ -1,11 +1,13 @@
-package com.passionpenguin.htmltextview;
+package com.passionpenguin.htmltextview
 
-import android.text.Editable;
+import android.text.Editable
+import org.xml.sax.Attributes
 
-import androidx.annotation.Nullable;
-
-import org.xml.sax.Attributes;
-
-public interface WrapperTagHandler {
-    boolean handleTag(boolean opening, String tag, Editable output, @Nullable Attributes attributes);
+interface WrapperTagHandler {
+    fun handleTag(
+        opening: Boolean,
+        tag: String?,
+        output: Editable?,
+        attributes: Attributes?
+    ): Boolean
 }

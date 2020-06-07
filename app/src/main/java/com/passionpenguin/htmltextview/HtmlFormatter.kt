@@ -11,42 +11,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.passionpenguin.htmltextview
 
-package com.passionpenguin.htmltextview;
+import android.text.Html
+import android.text.Html.ImageGetter
+import android.text.Spanned
 
-import android.text.Html;
-import android.text.Html.ImageGetter;
-import android.text.Spanned;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-public class HtmlFormatter {
-
-    private HtmlFormatter() {
+object HtmlFormatter {
+    fun formatHtml(builder: HtmlFormatterBuilder): Spanned? {
+        return formatHtml(
+            builder.html,
+            builder.imageGetter,
+            builder.clickableTableSpan,
+            builder.drawTableLinkSpan,
+            builder.onClickATagListener,
+            builder.indent,
+            builder.isRemoveTrailingWhiteSpace
+        )
     }
 
-    public static Spanned formatHtml(@NonNull HtmlFormatterBuilder builder) {
-        return formatHtml(builder.getHtml(), builder.getImageGetter(), builder.getClickableTableSpan(), builder.getDrawTableLinkSpan(), builder.getOnClickATagListener(), builder.getIndent(), builder.isRemoveTrailingWhiteSpace());
-    }
-
-    public static Spanned formatHtml(@Nullable String html, ImageGetter imageGetter, ClickableTableSpan clickableTableSpan, DrawTableLinkSpan drawTableLinkSpan, OnClickATagListener onClickATagListener, float indent, boolean removeTrailingWhiteSpace) {
-        final HtmlTagHandler htmlTagHandler = new HtmlTagHandler();
-        htmlTagHandler.setClickableTableSpan(clickableTableSpan);
-        htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan);
-        htmlTagHandler.setOnClickATagListener(onClickATagListener);
-        htmlTagHandler.setListIndentPx(indent);
-
-        html = htmlTagHandler.overrideTags(html);
-
-        Spanned formattedHtml;
-        if (removeTrailingWhiteSpace) {
-            formattedHtml = removeHtmlBottomPadding(Html.fromHtml(html, imageGetter, new WrapperContentHandler(htmlTagHandler)));
+    @JvmStatic
+    fun formatHtml(
+        html: String?,
+        imageGetter: ImageGetter?,
+        clickableTableSpan: ClickableTableSpan?,
+        drawTableLinkSpan: DrawTableLinkSpan?,
+        onClickATagListener: OnClickATagListener?,
+        indent: Float,
+        removeTrailingWhiteSpace: Boolean
+    ): Spanned? {
+        val htmlTagHandler = HtmlTagHandler()
+        htmlTagHandler.setClickableTableSpan(clickableTableSpan)
+        htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan)
+        htmlTagHandler.setOnClickATagListener(onClickATagListener)
+        htmlTagHandler.setListIndentPx(indent)
+        val h = htmlTagHandler.overrideTags(html)
+        val formattedHtml: Spanned?
+        formattedHtml = if (removeTrailingWhiteSpace) {
+            removeHtmlBottomPadding(
+                Html.fromHtml(
+                    h,
+                    imageGetter,
+                    WrapperContentHandler(htmlTagHandler)
+                )
+            )
         } else {
-            formattedHtml = Html.fromHtml(html, imageGetter, new WrapperContentHandler(htmlTagHandler));
+            Html.fromHtml(h, imageGetter, WrapperContentHandler(htmlTagHandler))
         }
-
-        return formattedHtml;
+        return formattedHtml
     }
 
     /**
@@ -54,15 +66,11 @@ public class HtmlFormatter {
      * This methods removes this space again.
      * See https://github.com/SufficientlySecure/html-textview/issues/19
      */
-    @Nullable
-    private static Spanned removeHtmlBottomPadding(@Nullable Spanned text) {
-        if (text == null) {
-            return null;
+    private fun removeHtmlBottomPadding(text: Spanned?): Spanned? {
+        var t = text ?: return null
+        while (t.isNotEmpty() && t[t.length - 1] == '\n') {
+            t = t.subSequence(0, t.length - 1) as Spanned
         }
-
-        while (text.length() > 0 && text.charAt(text.length() - 1) == '\n') {
-            text = (Spanned) text.subSequence(0, text.length() - 1);
-        }
-        return text;
+        return t
     }
 }

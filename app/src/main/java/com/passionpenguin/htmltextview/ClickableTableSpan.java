@@ -33,8 +33,4 @@ public abstract class ClickableTableSpan extends ClickableSpan {
     public void setTableHtml(String tableHtml) {
         this.tableHtml = tableHtml;
     }
-
-    public String getTableHtml() {
-        return tableHtml;
-    }
 }

@@ -19,6 +19,7 @@
 
 package com.passionpenguin.htmltextview;
 
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
@@ -29,12 +30,14 @@ import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
-import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.passionpenguin.ditiezu.htmlTextView.CustomURLSpan;
+
+import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
 
 import java.util.Stack;
@@ -49,6 +52,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
     public static final String LIST_ITEM = "HTML_TEXTVIEW_ESCAPED_LI_TAG";
     public static final String A_ITEM = "HTML_TEXTVIEW_ESCAPED_A_TAG";
     public static final String PLACEHOLDER_ITEM = "HTML_TEXTVIEW_ESCAPED_PLACEHOLDER";
+    public static final String QUOTE_ITEM = "HTML_TEXTVIEW_ESCAPED_QUOTE";
 
     public HtmlTagHandler() {
     }
@@ -75,6 +79,8 @@ public class HtmlTagHandler implements WrapperTagHandler {
         html = html.replace("</li>", "</" + LIST_ITEM + ">");
         html = html.replace("<a", "<" + A_ITEM);
         html = html.replace("</a>", "</" + A_ITEM + ">");
+        html = html.replace("<quote", "<" + QUOTE_ITEM + ">");
+        html = html.replace("</quote", "</" + QUOTE_ITEM + ">");
 
         return html;
     }
@@ -89,9 +95,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
      * we can continue with correct index of outer list
      */
     Stack<Integer> olNextIndex = new Stack<>();
-    /**
-     * List indentation in pixels. Nested lists use multiple of this.
-     */
     /**
      * Running HTML table string based off of the root table tag. Root table tag being the tag which
      * isn't embedded within any other table tag. Example:
@@ -126,7 +129,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
     }
 
     private static class A {
-        private String href;
+        private final String href;
 
         private A(String href) {
             this.href = href;
@@ -152,6 +155,9 @@ public class HtmlTagHandler implements WrapperTagHandler {
     }
 
     private static class Td {
+    }
+
+    private static class Quote {
     }
 
     @Override
@@ -205,6 +211,8 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 start(output, new Th());
             } else if (tag.equalsIgnoreCase("td")) {
                 start(output, new Td());
+            } else if (tag.equalsIgnoreCase("quote")) {
+                start(output, new Quote());
             } else {
                 return false;
             }
@@ -265,9 +273,9 @@ public class HtmlTagHandler implements WrapperTagHandler {
             } else if (tag.equalsIgnoreCase(A_ITEM)) {
                 final Object a = getLast(output, A.class);
                 final String href = a instanceof A ? ((A) a).href : null;
-                end(output, A.class, false, new URLSpan(href) {
+                end(output, A.class, false, new CustomURLSpan(href) {
                     @Override
-                    public void onClick(View widget) {
+                    public void onClick(@NotNull View widget) {
                         if (onClickATagListener != null) {
                             onClickATagListener.onClick(widget, getURL());
                         } else {
@@ -309,6 +317,8 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 end(output, Th.class, false);
             } else if (tag.equalsIgnoreCase("td")) {
                 end(output, Td.class, false);
+            } else if (tag.equalsIgnoreCase("quote")) {
+                end(output, Quote.class, false, new PaddingBackgroundColorSpan(Color.GRAY, 24));
             } else {
                 return false;
             }
