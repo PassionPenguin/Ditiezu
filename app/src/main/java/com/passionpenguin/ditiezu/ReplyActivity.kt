@@ -2,13 +2,13 @@ package com.passionpenguin.ditiezu
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.tintDrawable
@@ -24,15 +24,26 @@ class ReplyActivity : AppCompatActivity() {
 
         val e = intent.extras
         val tid = e?.get("tid")
-        val reppid = e?.get("reppid")
         if (tid == null) onBackPressed()
         val type = e?.get("type") ?: "reply"
         val pid = e?.get("pid")
+        val html = Jsoup.parse(
+            when (type) {
+                "edit" -> HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid")
+                else -> HttpExt().asyncRetrievePage(
+                    "http://www.ditiezu.com/forum.php?mod=post&action=reply&tid=$tid&pid=$pid" + if (pid == null) {
+                        ""
+                    } else {
+                        "&repquote=$pid"
+                    }
+                )
+            }
+        )
         when (type) {
             "reply" -> if (tid == null) onBackPressed()
             "edit" -> {
                 if (pid == null || tid == null) onBackPressed()
-                EditTextInput.setText(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid"))
+                EditTextInput.setText(html.select("textarea").text())
             }
         }
 
@@ -64,8 +75,23 @@ class ReplyActivity : AppCompatActivity() {
                             "&pid=$pid&tid=$tid"
                         } // Edit
                         else -> {
-                            if (reppid != null) {
-                                "&reppid=$reppid&reppost=$reppid"
+                            if (pid != null) {
+                                val noticeAuthor: String =
+                                    html.select("[name=\"noticeauthor\"]").attr("value")
+                                val noticeAuthorStr: String =
+                                    html.select("[name=\"noticetrimstr\"]").attr("value")
+                                val noticeAuthorMsg: String =
+                                    html.select("[name=\"noticeauthormsg\"]").attr("value")
+                                val reppid: String = html.select("[name=\"reppid\"]").attr("value")
+                                val reppost: String =
+                                    html.select("[name=\"reppost\"]").attr("value")
+                                "&reppid=$reppid&reppost=$reppost&noticeauthor=$noticeAuthor&noticetrimstr=" + URLEncoder.encode(
+                                    noticeAuthorStr,
+                                    "GBK"
+                                ) + "&noticeauthormsg=" + URLEncoder.encode(
+                                    "$noticeAuthorMsg\nWith App.",
+                                    "GBK"
+                                )
                             } else {
                                 ""
                             }
@@ -256,5 +282,14 @@ class ReplyActivity : AppCompatActivity() {
         numberedList.setOnClickListener {
             insert("[list=1]\n[*]", "\n[/list]")
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val i = Intent(applicationContext, ViewThread::class.java)
+        i.putExtra("reload", true)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(i)
+        finish()
     }
 }
