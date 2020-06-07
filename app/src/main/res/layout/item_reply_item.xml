@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/threadItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/surface"
+    android:clickable="false"
+    android:focusable="false"
+    android:orientation="vertical"
+    tools:ignore="SmallSp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16"
+        android:layout_marginVertical="@dimen/_8"
+        android:background="@drawable/border_radius_4_no_padding"
+        android:backgroundTint="@color/surface"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:src="@mipmap/noavatar_middle_rounded"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="@dimen/_8"
+            android:contentDescription="@null" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_no_radius"
+            android:backgroundTint="@color/surface"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_16"
+            android:paddingVertical="@dimen/_8">
+
+            <TextView
+                android:id="@+id/threadAuthorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:textColor="@color/primary500"
+                android:textSize="15sp"
+                tools:text="Author Name" />
+
+            <com.passionpenguin.ditiezu.HtmlTextView.HtmlTextView
+                android:id="@+id/threadContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8"
+                android:textSize="16sp"
+                android:textColor="@color/dark"
+                tools:text="Thread Content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/threadMetaInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:textSize="10sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    tools:text="Thread Meta" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true">
+
+                    <CheckBox
+                        android:id="@+id/edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
+                        android:layout_gravity="center|end"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp"
+                        android:button="@drawable/ic_baseline_edit_24"
+                        android:buttonTint="@color/grey"
+                        android:paddingHorizontal="@dimen/_8"
+                        android:visibility="gone"
+                        android:text="@string/edit" />
+
+                    <CheckBox
+                        android:id="@+id/reply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
+                        android:layout_gravity="center|end"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp"
+                        android:button="@drawable/ic_baseline_reply_24"
+                        android:buttonTint="@color/grey"
+                        android:paddingHorizontal="@dimen/_8"
+                        android:visibility="gone"
+                        android:text="@string/title_reply" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

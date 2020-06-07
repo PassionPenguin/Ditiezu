@@ -1,15 +1,23 @@
 package com.passionpenguin.ditiezu.helper
 
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
+import com.passionpenguin.ditiezu.HtmlTextView.HtmlHttpImageGetter
+import com.passionpenguin.ditiezu.HtmlTextView.HtmlTextView
 import com.passionpenguin.ditiezu.R
+import com.passionpenguin.ditiezu.ReplyActivity
+import com.passionpenguin.ditiezu.ViewThread
 import com.squareup.picasso.Picasso
+import java.net.URL
 
 
 class CategoryItem(val title: String, val description: String, val icon: Int, var meta: String)
@@ -182,6 +190,110 @@ class NotificationsAdapter(
                 .error(R.mipmap.noavatar_middle_rounded)
                 .transform(CircularCornersTransform())
                 .into(avatar)
+        return view
+    }
+}
+
+class ReplyItem(
+    val authorId: Int,
+    val content: String,
+    val authorName: String,
+    val time: String,
+    val editable: Boolean = false,
+    val replyable: Boolean = false,
+    val pid: Int,
+    val tid: Int
+)
+
+class ReplyItemAdapter(
+    private var mCtx: Context,
+    resource: Int,
+    private var items: List<ReplyItem>
+) : ArrayAdapter<ReplyItem>(mCtx, resource, items) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
+        val view: View = layoutInflater.inflate(R.layout.item_reply_item, null)
+        val replyItem = items[position]
+        with(view.findViewById<HtmlTextView>(R.id.threadContent)) {
+            this.setHtml(
+                replyItem.content,
+                HtmlHttpImageGetter(this)
+            )
+            this.setOnClickATagListener { _, href ->
+                val url = URL(href)
+                if (url.host.contains("ditiezu.com") && (href?.contains("?mod=viewthread")!! || href.contains(
+                        "thread-"
+                    ))
+                ) {
+                    val i = Intent(mCtx, ViewThread::class.java)
+                    i.putExtra(
+                        "tid", when {
+                            href.contains("mod=viewthread") -> href.substring(
+                                href.indexOf("tid=") + 4,
+                                href.indexOf("&", href.indexOf("tid=") + 4)
+                            )
+                            href.contains("thread-") -> href.substring(
+                                href.indexOf("thread-") + 7,
+                                href.indexOf("-", href.indexOf("thread-") + 7)
+                            )
+                            else -> null
+                        }
+                    )
+                    if (href.contains("page=") && href.contains("mod=viewthread"))
+                        i.putExtra(
+                            "page",
+                            href.substring(
+                                href.indexOf("page=") + 4,
+                                href.indexOf("&", href.indexOf("page=") + 4)
+                            )
+                        )
+                    else i.putExtra(
+                        "page",
+                        href.substring(
+                            href.indexOf("-", href.indexOf("thread-") + 7),
+                            href.indexOf("-", href.indexOf("-", href.indexOf("thread-") + 7))
+                        )
+                    )
+                    i.flags = FLAG_ACTIVITY_NEW_TASK
+                    mCtx.startActivity(i)
+                }
+            }
+        }
+        view.findViewById<TextView>(R.id.threadMetaInfo).text = replyItem.time
+        view.findViewById<TextView>(R.id.threadAuthorName).text = replyItem.authorName
+
+        if (replyItem.editable)
+            with(view.findViewById<CheckBox>(R.id.edit)) {
+                this.visibility = View.VISIBLE
+                this.setOnClickListener {
+                    val i = Intent(mCtx, ReplyActivity::class.java)
+                    i.putExtra("type", "edit")
+                    i.putExtra("pid", replyItem.pid)
+                    i.putExtra("tid", replyItem.tid)
+                    i.flags = FLAG_ACTIVITY_NEW_TASK
+                    mCtx.startActivity(i)
+                }
+            }
+        if (replyItem.replyable)
+            with(view.findViewById<CheckBox>(R.id.reply)) {
+                this.visibility = View.VISIBLE
+                this.setOnClickListener {
+                    val i = Intent(mCtx, ReplyActivity::class.java)
+                    i.putExtra("type", "reply")
+                    i.putExtra("pid", replyItem.pid)
+                    i.putExtra("tid", replyItem.tid)
+                    i.flags = FLAG_ACTIVITY_NEW_TASK
+                    mCtx.startActivity(i)
+                }
+            }
+
+        Picasso.with(context)
+            .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${replyItem.authorId}")
+            .placeholder(R.mipmap.noavatar_middle_rounded)
+            .error(R.mipmap.noavatar_middle_rounded)
+            .transform(CircularCornersTransform())
+            .into(view.findViewById<ImageView>(R.id.avatar))
         return view
     }
 }

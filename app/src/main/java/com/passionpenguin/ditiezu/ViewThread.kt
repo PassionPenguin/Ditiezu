@@ -20,6 +20,8 @@ import androidx.core.view.postDelayed
 import com.google.android.material.snackbar.Snackbar
 import com.passionpenguin.ditiezu.helper.Animation
 import com.passionpenguin.ditiezu.helper.HttpExt
+import com.passionpenguin.ditiezu.helper.ReplyItem
+import com.passionpenguin.ditiezu.helper.ReplyItemAdapter
 import kotlinx.android.synthetic.main.activity_view_thread.*
 import org.jsoup.Jsoup
 import kotlin.properties.Delegates
@@ -31,6 +33,9 @@ class ViewThread : AppCompatActivity() {
     private var loginState by Delegates.notNull<Boolean>()
 
     private fun retrieveThreadContent() {
+        runOnUiThread {
+            LoadingMaskContainer.visibility = View.VISIBLE
+        }
         fun loadPage(threadId: Int = this.tid, pageId: Int = this.page) {
             HttpExt().retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
                 if (result == "Failed Retrieved") {
@@ -39,101 +44,58 @@ class ViewThread : AppCompatActivity() {
                 }
                 fun processResult(result: String) {
                     val parser = Jsoup.parse(result)
+                    val list = mutableListOf<ReplyItem>()
+                    parser.select("table[id^='pid']").forEach {
+                        it.select(".tip,a").forEach { tipEl ->
+                            if (tipEl.tagName() != "a" || tipEl.attr("href").contains("redirect"))
+                                tipEl.remove()
+                        }
+                        it.select("[id^='postmessage_'] a").forEach { tipEl ->
+                            tipEl.text("查看链接")
+                            tipEl.attr("style", "color: #289c77")
+                        }
+                        it.select("img[id^='aimg_']").forEach { img ->
+                            img.attr("src", img.attr("file"))
+                        }
+                        it.select("img[smilieid]").forEach { img ->
+                            img.attr("src", "http://www.ditiezu.com/" + img.attr("src"))
+                        }
+                        it.select("font[size]").forEach { size ->
+                            when (size.attr("size").toInt()) {
+                                1 -> size.html("<small><small>" + size.html() + "</small></small>")
+                                2 -> size.html("<small>" + size.html() + "</small>")
+                                4 -> size.html("<big>" + size.html() + "</big>")
+                                5 -> size.html("<big><big>" + size.html() + "</big></big>")
+                                6 -> size.html("<big><big><big>" + size.html() + "</big></big></big>")
+                                7 -> size.html("<big><big><big><big>" + size.html() + "</big></big></big></big>")
+                            }
+                        }
+                        it.select("blockquote").forEach { blockQuote ->
+                            blockQuote.tagName("font")
+                            blockQuote.attr("color", "#88888822")
+                            blockQuote.attr("face", "monospaced")
+                        }
+                        list.add(
+                            ReplyItem(
+                                with(it.select(".avatar a").attr("href")) {
+                                    this.substring(this.indexOf("uid-") + 4, this.indexOf(".html"))
+                                        .toInt()
+                                },
+                                it.select("[id^='postmessage_']").html(),
+                                it.select(".authi .xw1").text(),
+                                it.select("[id^='authorposton']").text(),
+                                it.select(".fastre").isEmpty(),
+                                it.select(".editp").isEmpty(),
+                                it.attr("id").substring(3).toInt(),
+                                tid
+                            )
+                        )
+                    }
                     this@ViewThread.runOnUiThread {
                         title = parser.select("#thread_subject").text()
-                        viewThread.settings.javaScriptEnabled = true
-                        class WebViewInterface {
-                            @JavascriptInterface
-                            fun loadPageWithPage(page: Int): String {
-                                return HttpExt()
-                                    .asyncRetrievePage("http://www.ditiezu.com/thread-$tid-$page-1.html")
-                            }
-
-                            @JavascriptInterface
-                            fun displayWebView() {
-                                runOnUiThread {
-                                    viewThread.visibility = View.VISIBLE
-                                }
-                            }
-
-                            @JavascriptInterface
-                            fun getLoadedPage(): String {
-                                return result;
-                            }
-
-                            @JavascriptInterface
-                            fun isDarkMode(): Boolean {
-                                return darkMode;
-                            }
-
-                            @JavascriptInterface
-                            fun toggleLogin() {
-                                startActivity(
-                                    Intent(
-                                        this@ViewThread,
-                                        LoginActivity::class.java
-                                    )
-                                )
-                            }
-
-                            @JavascriptInterface
-                            fun checkLogin(): Boolean {
-                                return HttpExt()
-                                    .checkLogin()
-                            }
-                        }
-                        viewThread.addJavascriptInterface(WebViewInterface(), "android")
-                        viewThread.loadUrl("file:///android_asset/threadDisplay.html")
-                        WebView.setWebContentsDebuggingEnabled(true)
-                        viewThread.webViewClient = (object : WebViewClient() {
-                            override fun shouldOverrideUrlLoading(
-                                view: WebView?,
-                                request: WebResourceRequest?
-                            ): Boolean {
-                                val url = request?.url.toString()
-                                if (url.indexOf("ditiezu.com/") != -1) {
-                                    if (url.indexOf("mod=viewthread") != -1 || url.indexOf("thread-") != -1) {
-                                        // ViewThread
-                                        loadPage(
-                                            if (url.indexOf("viewthread") == -1) {
-                                                url.substring(
-                                                    url.indexOf("thread-") + 7,
-                                                    url.indexOf("-1-1")
-                                                ).toInt()
-                                            } else {
-                                                url.substring(
-                                                    url.indexOf("tid=") + 4,
-                                                    url.indexOf("&", url.indexOf("tid="))
-                                                ).toInt()
-                                            }, if (url.indexOf("viewthread") == -1) {
-                                                url.substring(
-                                                    url.indexOf("-") + 1,
-                                                    url.indexOf("-1")
-                                                ).toInt()
-                                            } else {
-                                                url.substring(
-                                                    url.indexOf("page=") + 5,
-                                                    url.indexOf("&", url.indexOf("page="))
-                                                ).toInt()
-                                            }
-                                        )
-                                    }
-                                }
-                                view?.evaluateJavascript(
-                                    "window.open('$url')",
-                                    null
-                                )
-                                return true
-                            }
-                        })
-                        LoadingMaskContainer.visibility = View.VISIBLE
-                        LoadingAnimation.startAnimation(
-                            Animation().fadeOutAnimation()
-                        )
-                        LoadingMaskContainer.postDelayed(400) {
-                            LoadingMaskContainer.visibility = View.GONE
-                        }
                         threadTitle.text = parser.select("#thread_subject").text()
+                        viewThread.adapter = ReplyItemAdapter(applicationContext, 0, list)
+                        LoadingMaskContainer.visibility = View.GONE
                     }
                 }
                 processResult(result)
@@ -213,8 +175,8 @@ class ViewThread : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
-            this.tid = extras.getInt("tid", 1)
-            this.page = extras.getInt("page", 1)
+            this.tid = (extras.get("tid") ?: 1) as Int
+            this.page = (extras.get("page") ?: 1) as Int
         } else finish()
 
         loginState = HttpExt().checkLogin()
@@ -223,5 +185,11 @@ class ViewThread : AppCompatActivity() {
             onBackPressed()
         }
         retrieveThreadContent()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (intent.extras?.get("reload") == true)
+            retrieveThreadContent()
     }
 }
