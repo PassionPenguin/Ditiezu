@@ -141,7 +141,7 @@ class ForumDisplay : AppCompatActivity() {
                     }
 
                     val lastPageView = footerPagination.findViewById<ImageButton>(R.id.lastPage)
-                    if (page == 1) lastPageView.visibility = View.GONE
+                    if (page > lastPage) lastPageView.visibility = View.GONE
                     else lastPageView.setOnClickListener {
                         loadForumContent(lastPage)
                     }

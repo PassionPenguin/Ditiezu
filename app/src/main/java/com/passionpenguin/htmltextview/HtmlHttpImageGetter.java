@@ -46,6 +46,8 @@ public class HtmlHttpImageGetter implements ImageGetter {
     }
 
     public Drawable getDrawable(String source) {
+        if (source == null)
+            return new UrlDrawable();
         UrlDrawable urlDrawable = new UrlDrawable();
 
         // get the actual source
