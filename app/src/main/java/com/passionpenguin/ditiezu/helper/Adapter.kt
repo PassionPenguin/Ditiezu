@@ -12,7 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
 import com.passionpenguin.ditiezu.R
-import com.passionpenguin.ditiezu.ReplyActivity
+import com.passionpenguin.ditiezu.PostActivity
 import com.passionpenguin.htmltextview.HtmlHttpImageGetter
 import com.passionpenguin.htmltextview.HtmlTextView
 import com.squareup.picasso.Picasso
@@ -226,7 +226,7 @@ class ReplyItemAdapter(
             with(view.findViewById<CheckBox>(R.id.edit)) {
                 this.visibility = View.VISIBLE
                 this.setOnClickListener {
-                    val i = Intent(mCtx, ReplyActivity::class.java)
+                    val i = Intent(mCtx, PostActivity::class.java)
                     i.putExtra("type", "edit")
                     i.putExtra("pid", replyItem.pid)
                     i.putExtra("tid", replyItem.tid)
@@ -238,7 +238,7 @@ class ReplyItemAdapter(
             with(view.findViewById<CheckBox>(R.id.reply)) {
                 this.visibility = View.VISIBLE
                 this.setOnClickListener {
-                    val i = Intent(mCtx, ReplyActivity::class.java)
+                    val i = Intent(mCtx, PostActivity::class.java)
                     i.putExtra("type", "reply")
                     i.putExtra("pid", replyItem.pid)
                     i.putExtra("tid", replyItem.tid)

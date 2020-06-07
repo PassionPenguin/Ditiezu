@@ -4,41 +4,62 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
+import android.util.Log
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.view.children
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.tintDrawable
-import kotlinx.android.synthetic.main.activity_reply.*
+import kotlinx.android.synthetic.main.activity_post.*
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import java.net.URLEncoder
 
-class ReplyActivity : AppCompatActivity() {
+class PostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reply)
+        setContentView(R.layout.activity_post)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val e = intent.extras
         val tid = e?.get("tid")
         val reppid = e?.get("reppid")
-        if (tid == null) onBackPressed()
         val type = e?.get("type") ?: "reply"
         val pid = e?.get("pid")
+        val fid = e?.get("fid")
+        lateinit var originParser: Document
+        val typeNameList: ArrayList<String> = arrayListOf()
+        val typeValueList: ArrayList<String> = arrayListOf()
         when (type) {
             "reply" -> if (tid == null) onBackPressed()
             "edit" -> {
                 if (pid == null || tid == null) onBackPressed()
                 EditTextInput.setText(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid"))
             }
+            "newthread" -> {
+                if (fid == null) onBackPressed()
+                NewThreadComponent.visibility = View.VISIBLE
+                originParser =
+                    Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=newthread&fid=$fid"))
+                originParser.select("#typeid option").forEach {
+                    typeNameList.add(it.text())
+                    typeValueList.add(it.attr("value"))
+                }
+                val adapter = ArrayAdapter(
+                    applicationContext,
+                    R.layout.textview_dropdown,
+                    typeNameList
+                )
+                adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+                typeSelector.adapter = adapter
+            }
         }
 
         val formhash =
-            Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/search.php?mod=forum"))
-                .select("[name=\"formhash\"]").attr("value")
+            if (type == "newthread") originParser.select("[name='formhash']").attr("value") else
+                Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/search.php?mod=forum"))
+                    .select("[name=\"formhash\"]").attr("value")
 
         findViewById<EditText>(R.id.app_search_input).visibility = View.GONE
         findViewById<TextView>(R.id.title).text = resources.getString(R.string.edit)
@@ -54,6 +75,7 @@ class ReplyActivity : AppCompatActivity() {
                 val str = HttpExt().asyncPostPage(
                     when (type) {
                         "edit" -> "http://www.ditiezu.com/forum.php?mod=post&action=edit&extra=&editsubmit=yes&inajax=1"
+                        "newthread" -> "http://www.ditiezu.com/forum.php?mod=post&action=newthread&fid=$fid&extra=&topicsubmit=yes&inajax=1"
                         else -> "http://www.ditiezu.com/forum.php?mod=post&action=reply&tid=$tid&replysubmit=yes&inajax=1"
                     },
                     "message=" + URLEncoder.encode(
@@ -63,6 +85,9 @@ class ReplyActivity : AppCompatActivity() {
                         "edit" -> {
                             "&pid=$pid&tid=$tid"
                         } // Edit
+                        "newthread" -> {
+                            "&typeid=" + typeValueList[typeSelector.selectedItemPosition] + "&subject=" + subject.text.toString()
+                        } // New Thread
                         else -> {
                             if (reppid != null) {
                                 "&reppid=$reppid&reppost=$reppid"

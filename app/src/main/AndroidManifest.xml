@@ -18,7 +18,11 @@
         android:theme="@style/Theme.Ditiezu"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ReplyActivity" />
+        <activity
+            android:name=".DisplayForum"
+            android:label="@string/title_activity_display_forum"
+            android:theme="@style/Theme.Ditiezu.AppBarOverlay"></activity>
+        <activity android:name=".PostActivity" />
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".ForumDisplay" />
         <activity android:name=".LoginActivity" />

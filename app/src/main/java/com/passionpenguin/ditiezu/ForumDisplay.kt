@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.activity_forum_display.*
-import kotlinx.android.synthetic.main.fragment_action_bar.*
 import org.jsoup.Jsoup
 
 class ForumDisplay : AppCompatActivity() {
@@ -27,6 +26,13 @@ class ForumDisplay : AppCompatActivity() {
         if (extras != null) {
             fid = extras.getInt("fid")
         } else finish()
+
+        fab.setOnClickListener {
+            val i = Intent(this@ForumDisplay, PostActivity::class.java)
+            i.putExtra("type", "newthread")
+            i.putExtra("fid", fid)
+            startActivity(i)
+        }
 
         val categoryContent =
             CategoryContent(applicationContext)
@@ -258,7 +264,7 @@ class ForumDisplay : AppCompatActivity() {
         }
         loadForumContent(1)
 
-        val input = app_search_input
+        val input = findViewById<EditText>(R.id.app_search_input)
 
         input.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {

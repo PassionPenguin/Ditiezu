@@ -119,4 +119,5 @@
     <string name="keyword_not_match">您的搜索内容 - %s - 并没有匹配任何搜索结果</string>
     <string name="tip_input_content">写点啥…</string>
     <string name="edit">编辑</string>
+    <string name="subject">Subject</string>
 </resources>

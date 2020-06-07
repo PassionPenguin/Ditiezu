@@ -182,4 +182,15 @@
     <string name="_7x" translatable="false">7x</string>
     <string name="tip_input_content">What about the weather…</string>
     <string name="edit">Edit</string>
+    <string name="subject">Subject</string>
+    <string name="selectType">Select Type</string>
+    <string name="title_activity_display_forum">DisplayForum</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

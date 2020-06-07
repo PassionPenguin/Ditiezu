@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/_32"
-    tools:context=".ReplyActivity">
+    tools:context=".PostActivity">
 
     <include
         android:id="@+id/action_bar_layout"
@@ -14,6 +14,33 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/NewThreadComponent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar_layout">
+
+        <Spinner
+            android:id="@+id/typeSelector"
+            android:layout_width="@dimen/_128"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <EditText
+            android:id="@+id/subject"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="@null"
+            android:inputType="text"
+            android:background="@null"
+            android:hint="@string/subject"
+            android:textSize="14sp"
+            android:paddingHorizontal="@dimen/_16" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/EditTextInput"
@@ -27,7 +54,7 @@
         android:padding="@dimen/_16"
         android:background="@null"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintTop_toBottomOf="@+id/action_bar_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/NewThreadComponent" />
 
 
     <HorizontalScrollView

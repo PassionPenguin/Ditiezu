@@ -91,4 +91,5 @@
     <string name="keyword_not_match">你的搜索內容 - %s - 並沒有匹配任何搜索結果</string>
     <string name="tip_input_content">寫點啥…</string>
     <string name="edit">編輯</string>
+    <string name="subject">Subject</string>
 </resources>

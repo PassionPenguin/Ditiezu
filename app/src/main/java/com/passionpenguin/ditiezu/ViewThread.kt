@@ -115,7 +115,8 @@ class ViewThread : AppCompatActivity() {
                 val lastPage =
                     if (!parser.select(".last").isEmpty())
                         parser.select(".last")[0].text().substring(4).toInt()
-                    else parser.select("#pgt .pg a:not(.nxt)").last().text().toInt()
+                    else if (!parser.select("#pgt .pg a:not(.nxt)").isEmpty()) parser.select("#pgt .pg a:not(.nxt)")
+                        .last().text().toInt() else 1
 
                 footerPagination.findViewById<TextView>(R.id.curPage).text = page.toString()
 
@@ -127,7 +128,7 @@ class ViewThread : AppCompatActivity() {
                 }
 
                 val lastPageView = footerPagination.findViewById<ImageButton>(R.id.lastPage)
-                if (page > lastPage) lastPageView.visibility = View.GONE
+                if (page >= lastPage) lastPageView.visibility = View.GONE
                 else lastPageView.setOnClickListener {
                     this.page = lastPage
                     loadPage(tid, page)
@@ -232,7 +233,7 @@ class ViewThread : AppCompatActivity() {
             }
             R.id.reply -> {
                 if (loginState) {
-                    val i = Intent(this@ViewThread, ReplyActivity::class.java)
+                    val i = Intent(this@ViewThread, PostActivity::class.java)
                     i.putExtra("tid", tid)
                     startActivity(i)
                 } else {

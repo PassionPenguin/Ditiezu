@@ -7,6 +7,17 @@
     android:layout_marginTop="@dimen/_32"
     tools:context=".ForumDisplay">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/ThreadList"
+        app:layout_constraintEnd_toEndOf="@+id/ThreadList"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
+
     <include
         android:id="@+id/action_bar_layout"
         layout="@layout/fragment_action_bar"
@@ -19,9 +30,9 @@
         android:layout_height="0dp"
         android:clickable="true"
         android:divider="@null"
-        android:elevation="@dimen/_16"
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/action_bar_layout" />
+        app:layout_constraintTop_toBottomOf="@id/action_bar_layout"
+        tools:listitem="@layout/item_thread_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
