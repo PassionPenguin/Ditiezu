@@ -108,7 +108,7 @@ class AccountFragment : Fragment() {
                                                 parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
                                             )
                                         ) {
-                                            CookieManager.getInstance().removeAllCookies { _ ->
+                                            CookieManager.getInstance().removeAllCookies {
                                                 activity?.recreate()
                                             }
                                         }

@@ -2,7 +2,6 @@ package com.passionpenguin.ditiezu.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import com.passionpenguin.ditiezu.*
 import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.fragment_item_list.*
 import org.jsoup.Jsoup
-import kotlin.properties.Delegates
 
 class ThreadItemFragment : Fragment() {
 
@@ -62,7 +60,7 @@ class ThreadItemFragment : Fragment() {
                         threadListContent
                     )
                 }
-            list?.addHeaderView(layoutInflater.inflate(R.layout.item_home_header, null, false))
+            list?.addHeaderView(layoutInflater.inflate(R.layout.item_home_header, list, false))
             list?.setOnItemClickListener { _, _, position, _ ->
                 if (position != 0) {
                     val i = Intent(context, ViewThread::class.java)

@@ -10,16 +10,13 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import com.passionpenguin.ditiezu.LoginActivity
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.ViewThread
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.NotificationItem
 import com.passionpenguin.ditiezu.helper.NotificationsAdapter
 import org.jsoup.Jsoup
-import kotlin.properties.Delegates
 
 class NotificationsFragment : Fragment() {
     override fun onCreateView(
@@ -36,10 +33,11 @@ class NotificationsFragment : Fragment() {
         fun retriever(url: String) {
             activity?.runOnUiThread {
                 activity?.findViewById<LinearLayout>(R.id.tips)?.removeAllViews()
+                activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                    View.VISIBLE
             }
-            activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
-                View.VISIBLE
             HttpExt().retrievePage(url) { s ->
+                val parser = Jsoup.parse(s)
                 val v = when {
                     s == "Failed Retrieved" -> {
                         val v = LayoutInflater.from(context).inflate(
@@ -58,7 +56,7 @@ class NotificationsFragment : Fragment() {
                             false
                         )
                     }
-                    s.contains("暂时没有新提醒") -> {
+                    parser.select(".emp").text().contains("暂时没有新提醒") -> {
                         val v = LayoutInflater.from(context).inflate(
                             R.layout.tip_not_applicable,
                             activity?.findViewById<LinearLayout>(R.id.tips),
@@ -69,7 +67,6 @@ class NotificationsFragment : Fragment() {
                         v
                     }
                     else -> {
-                        val parser = Jsoup.parse(s)
                         val list = mutableListOf<NotificationItem>()
                         parser.select("[notice]").forEach {
                             try {
@@ -81,24 +78,26 @@ class NotificationsFragment : Fragment() {
                                 var page = "1"
                                 var tid: String
                                 with(it.select(".ntc_body a:last-child")) {
-                                    if (this.isEmpty())
-                                        tid = "-1"
-                                    else if (this.attr("href").contains("findpost")) {
-                                        val result = HttpExt().retrieveRedirect(this.attr("href"))
-                                        tid = result?.get(0) ?: "1"
-                                        page = result?.get(1) ?: "1"
-                                    } else if (this.attr("href").contains("thread-")) {
-                                        tid = this.attr("href").substring(
-                                            this.attr("href").indexOf("thread-") + 7,
-                                            this.attr("href")
-                                                .indexOf(
-                                                    "-",
-                                                    this.attr("href").indexOf("thread-") + 7
-                                                )
-                                        )
-                                        page = "1"
-                                    } else {
-                                        tid = "-1"
+                                    when {
+                                        this.isEmpty() -> tid = "-1"
+                                        this.attr("href").contains("findpost") -> {
+                                            val result =
+                                                HttpExt().retrieveRedirect(this.attr("href"))
+                                            tid = result?.get(0) ?: "1"
+                                            page = result?.get(1) ?: "1"
+                                        }
+                                        this.attr("href").contains("thread-") -> {
+                                            tid = this.attr("href").substring(
+                                                this.attr("href").indexOf("thread-") + 7,
+                                                this.attr("href")
+                                                    .indexOf(
+                                                        "-",
+                                                        this.attr("href").indexOf("thread-") + 7
+                                                    )
+                                            )
+                                            page = "1"
+                                        }
+                                        else -> tid = "-1"
                                     }
                                 }
 

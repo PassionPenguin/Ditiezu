@@ -111,7 +111,7 @@ class ViewThread : AppCompatActivity() {
                     )
                 }
                 val footerPagination =
-                    layoutInflater.inflate(R.layout.item_category_pagination_navigation, null)
+                    layoutInflater.inflate(R.layout.item_category_pagination_navigation, viewThread, false)
                 val lastPage =
                     if (!parser.select(".last").isEmpty())
                         parser.select(".last")[0].text().substring(4).toInt()
@@ -208,7 +208,7 @@ class ViewThread : AppCompatActivity() {
                 shareIntent.putExtra(
                     Intent.EXTRA_TEXT,
                     "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&page=$page"
-                );
+                )
                 startActivity(Intent.createChooser(shareIntent, "Choose an app"))
                 true
             }

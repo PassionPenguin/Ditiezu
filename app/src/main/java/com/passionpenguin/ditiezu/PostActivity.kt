@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -211,7 +210,7 @@ class PostActivity : AppCompatActivity() {
             el.children.forEachIndexed { index, it ->
                 val btn = it as RadioButton
                 setCompoundButtonColor(btn, true)
-                btn.setOnClickListener { _ ->
+                btn.setOnClickListener {
                     (el.children).forEach { e ->
                         setCompoundButtonColor(e as RadioButton, true)
                     }

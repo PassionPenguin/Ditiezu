@@ -51,11 +51,15 @@ class ForumDisplay : AppCompatActivity() {
                     threadListView.removeFooterView(threadListView.findViewById(R.id.paginationNavigation))
 
                     if (threadListView.findViewById<HorizontalScrollView>(R.id.typeNavigationWrap) === null) {
-                        val list = layoutInflater.inflate(R.layout.fragment_types_list, null)
+                        val list = layoutInflater.inflate(
+                            R.layout.fragment_types_list,
+                            threadListView,
+                            false
+                        )
                         val t = TextView(applicationContext)
                         t.text = resources.getString(R.string.all)
                         t.setTextColor(resources.getColor(R.color.black, null))
-                        t.setOnClickListener { _ ->
+                        t.setOnClickListener {
                             loadForumContent(1)
                         }
                         t.setPadding(
@@ -115,7 +119,7 @@ class ForumDisplay : AppCompatActivity() {
                     }
 
                     val bannerView =
-                        layoutInflater.inflate(R.layout.item_category_info_header, null)
+                        layoutInflater.inflate(R.layout.item_category_info_header, threadListView, false)
                     bannerView.findViewById<ImageView>(R.id.CategoryIcon)
                         .setImageDrawable(
                             resources.getDrawable(
@@ -132,7 +136,7 @@ class ForumDisplay : AppCompatActivity() {
                     threadListView.addHeaderView(bannerView)
 
                     val footerPagination =
-                        layoutInflater.inflate(R.layout.item_category_pagination_navigation, null)
+                        layoutInflater.inflate(R.layout.item_category_pagination_navigation, threadListView, false)
                     val lastPage =
                         if (!parser.select(".last").isEmpty())
                             parser.select(".last")[0].text().substring(4).toInt()
