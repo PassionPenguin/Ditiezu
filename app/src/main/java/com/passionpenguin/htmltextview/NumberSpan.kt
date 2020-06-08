@@ -2,6 +2,10 @@
  * Copyright (C) 2017 Dominik Mosberger <https://github.com/mosberger>
  * Copyright (C) 2013 Leszek Mzyk <https://github.com/imbryk>
  *
+ * Converted from Java to Kotlin
+ * Fixed some mistakes.
+ * Copyright (C) 2020 @PassionPenguin
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at

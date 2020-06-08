@@ -4,6 +4,9 @@
  * Copyright (C) 2013 Mohammed Lakkadshaw
  * Copyright (C) 2007 The Android Open Source Project
  *
+ * Fixed some mistakes.
+ * Copyright (C) 2020 @PassionPenguin
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -34,8 +37,6 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-
-import com.passionpenguin.ditiezu.htmlTextView.CustomURLSpan;
 
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
