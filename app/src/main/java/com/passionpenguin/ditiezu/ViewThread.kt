@@ -103,19 +103,25 @@ class ViewThread : AppCompatActivity() {
                             it.select("[id^='postmessage_']").html(),
                             it.select(".authi .xw1").text(),
                             it.select("[id^='authorposton']").text(),
-                            it.select(".fastre").isEmpty(),
-                            it.select(".editp").isEmpty(),
+                            it.select(".fastre").isEmpty() && loginState,
+                            it.select(".editp").isEmpty() && loginState,
                             it.attr("id").substring(3).toInt(),
                             tid
                         )
                     )
                 }
                 val footerPagination =
-                    layoutInflater.inflate(R.layout.item_category_pagination_navigation, viewThread, false)
+                    layoutInflater.inflate(
+                        R.layout.item_category_pagination_navigation,
+                        viewThread,
+                        false
+                    )
                 val lastPage =
                     if (!parser.select(".last").isEmpty())
                         parser.select(".last")[0].text().substring(4).toInt()
-                    else if (!parser.select("#pgt .pg a:not(.nxt)").isEmpty()) parser.select("#pgt .pg a:not(.nxt)")
+                    else if (!parser.select("#pgt .pg a:not(.nxt)")
+                            .isEmpty()
+                    ) parser.select("#pgt .pg a:not(.nxt)")
                         .last().text().toInt() else 1
 
                 footerPagination.findViewById<TextView>(R.id.curPage).text = page.toString()
