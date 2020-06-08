@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="108dp"
+    android:layout_height="wrap_content"
     android:elevation="@dimen/_64"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_8">
 
     <RadioButton
         android:id="@+id/actionBar_leftButton"
@@ -30,12 +31,11 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:paddingVertical="@dimen/_8"
+        android:layout_marginTop="@dimen/_8"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,6 +46,7 @@
         android:drawableStart="@drawable/ic_baseline_search_24"
         android:drawablePadding="@dimen/_8"
         android:paddingHorizontal="@dimen/_16"
+        android:layout_marginTop="@dimen/_8"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginHorizontal="@dimen/_16"

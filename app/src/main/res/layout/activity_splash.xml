@@ -15,7 +15,7 @@
         android:scaleX="1.2"
         android:scaleY="1.2"
         android:contentDescription="@null"
-        android:src="@drawable/splash"
+        android:src="@drawable/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
