@@ -132,6 +132,12 @@
       "versionName": "Watermelon Milkshake v6.3",
       "versionDate": "Tue Jun 09 2020 20:12:56 GMT+0800 (中国标准时间)",
       "versionLog": "修复错误"
+    },
+    {
+      "versionCode": 25,
+      "versionName": "Watermelon Milkshake v6.4",
+      "versionDate": "Tue Jun 09 2020 21:59:17 GMT+0800 (中国标准时间)",
+      "versionLog": "修复错误 - 支持图像"
     }
   ]
 }
