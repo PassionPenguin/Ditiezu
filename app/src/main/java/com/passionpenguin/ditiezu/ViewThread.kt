@@ -69,11 +69,15 @@ class ViewThread : AppCompatActivity() {
                         tipEl.text("查看链接")
                         tipEl.attr("style", "color: #289c77")
                     }
-                    it.select("img:not([file]):not([src])").forEach { img ->
-                        img.remove()
-                    }
-                    it.select("img[file]").forEach { img ->
-                        img.attr("src", img.attr("file"))
+                    it.select("[id^='postmessage_'] img:not([file]):not([src]):not([id^='aimg_'])")
+                        .forEach { img ->
+                            img.remove()
+                        }
+                    it.select("[id^='postmessage_'] img").forEach { img ->
+                        img.attr(
+                            "src",
+                            img.attr("file")
+                        )
                     }
                     it.select("img[smilieid]").forEach { img ->
                         img.attr("src", "http://www.ditiezu.com/" + img.attr("src"))

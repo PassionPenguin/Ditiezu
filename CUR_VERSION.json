@@ -1,6 +1,6 @@
 {
-  "versionCode": 23,
-  "versionName": "Watermelon Milkshake v6.2",
-  "versionDate": "Mon Jun 08 2020 22:28:34 GMT+0800 (中国标准时间)",
-  "versionLog": "将部分库迁移至Kotlin架构"
+  "versionCode": 24,
+  "versionName": "Watermelon Milkshake v6.3",
+  "versionDate": "Tue Jun 09 2020 20:12:56 GMT+0800 (中国标准时间)",
+  "versionLog": "修复错误"
 }
