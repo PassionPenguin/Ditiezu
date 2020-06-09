@@ -28,11 +28,11 @@ import android.view.View
 import com.passionpenguin.ditiezu.ViewThread
 
 open class CustomURLSpan(
-    var uRL: String?
+    var URL: String?
 ) : ClickableSpan(), ParcelableSpan {
 
     override fun onClick(widget: View) {
-        val uri = Uri.parse(uRL)
+        val uri = Uri.parse(URL)
         val context = widget.context
         val href = uri.toString()
 

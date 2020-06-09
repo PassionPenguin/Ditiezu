@@ -3,6 +3,8 @@ package com.passionpenguin.ditiezu.helper
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.text.method.LinkMovementMethod
+import android.text.method.MovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +30,7 @@ class CategoryAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_category, null)
+        val view: View = layoutInflater.inflate(R.layout.item_category, parent, false)
         val icon: ImageView = view.findViewById(R.id.categoryIcon)
         val title: TextView = view.findViewById(R.id.categoryName)
         val meta: TextView = view.findViewById(R.id.categoryMeta)
@@ -63,7 +65,7 @@ class ThreadListAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_thread_list_item, null)
+        val view: View = layoutInflater.inflate(R.layout.item_thread_list_item, parent, false)
         val avatar: ImageView = view.findViewById(R.id.avatar)
         val title: TextView = view.findViewById(R.id.threadTitle)
         val authorName: TextView = view.findViewById(R.id.threadAuthorName)
@@ -100,7 +102,7 @@ class ThreadItemListAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_thread_item, null)
+        val view: View = layoutInflater.inflate(R.layout.item_thread_item, parent, false)
         val searchItem = items[position]
         view.findViewById<TextView>(R.id.threadTitle).text = searchItem.title
         view.findViewById<TextView>(R.id.threadContent).text = searchItem.content
@@ -133,7 +135,7 @@ class PrefAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_pref_item, null)
+        val view: View = layoutInflater.inflate(R.layout.item_pref_item, parent, false)
         val value = view.findViewById<TextView>(R.id.pref_item_value)
         value.text = items[position].value
         if (!items[position].toggle)
@@ -165,7 +167,7 @@ class NotificationsAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_notification, null)
+        val view: View = layoutInflater.inflate(R.layout.item_notification, parent, false)
         val avatar: ImageView = view.findViewById(R.id.avatar)
         val value: TextView = view.findViewById(R.id.notification_value)
         val meta: TextView = view.findViewById(R.id.notification_meta)
@@ -211,13 +213,14 @@ class ReplyItemAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_reply_item, null)
+        val view: View = layoutInflater.inflate(R.layout.item_reply_item, parent, false)
         val replyItem = items[position]
         with(view.findViewById<HtmlTextView>(R.id.threadContent)) {
             this.setHtml(
                 replyItem.content,
                 HtmlHttpImageGetter(this)
             )
+            this.movementMethod = LinkMovementMethod.getInstance()
         }
         view.findViewById<TextView>(R.id.threadMetaInfo).text = replyItem.time
         view.findViewById<TextView>(R.id.threadAuthorName).text = replyItem.authorName

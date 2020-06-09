@@ -86,6 +86,7 @@ class HtmlTextView : JellyBeanSpanFixTextView {
      */
     fun setHtml(html: String, imageGetter: ImageGetter?) {
         text = formatHtml(
+            context,
             html,
             imageGetter,
             clickableTableSpan,

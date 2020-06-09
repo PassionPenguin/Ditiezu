@@ -17,6 +17,7 @@
  */
 package com.passionpenguin.htmltextview
 
+import android.content.Context
 import android.text.Html
 import android.text.Html.ImageGetter
 import android.text.Spanned
@@ -24,6 +25,7 @@ import android.text.Spanned
 object HtmlFormatter {
     fun formatHtml(builder: HtmlFormatterBuilder): Spanned? {
         return formatHtml(
+            builder.context,
             builder.html,
             builder.imageGetter,
             builder.clickableTableSpan,
@@ -36,6 +38,7 @@ object HtmlFormatter {
 
     @JvmStatic
     fun formatHtml(
+        context: Context?,
         html: String?,
         imageGetter: ImageGetter?,
         clickableTableSpan: ClickableTableSpan?,
@@ -44,7 +47,7 @@ object HtmlFormatter {
         indent: Float,
         removeTrailingWhiteSpace: Boolean
     ): Spanned? {
-        val htmlTagHandler = HtmlTagHandler()
+        val htmlTagHandler = HtmlTagHandler(context)
         htmlTagHandler.setClickableTableSpan(clickableTableSpan)
         htmlTagHandler.setDrawTableLinkSpan(drawTableLinkSpan)
         htmlTagHandler.setOnClickATagListener(onClickATagListener)

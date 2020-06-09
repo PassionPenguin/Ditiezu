@@ -32,6 +32,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.passionpenguin.ditiezu.BuildConfig
+import com.passionpenguin.ditiezu.R
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -45,13 +46,15 @@ class HtmlHttpImageGetter(private val container: TextView) : ImageGetter {
     override fun getDrawable(source: String): Drawable {
         val urlDrawable = UrlDrawable()
 
+        Log.i("", source)
+
         // get the actual source
-        val qualityImage = 50
+        val qualityImage = 100
         val asyncTask = ImageGetterAsyncTask(
             urlDrawable,
             this,
             container,
-            !source.contains("static/image/smiley"),
+            !(source.contains("://www.ditiezu.com") && source.contains("static/image/smiley")),
             false,
             qualityImage
         )

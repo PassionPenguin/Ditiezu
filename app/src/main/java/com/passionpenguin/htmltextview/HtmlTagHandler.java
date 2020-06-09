@@ -22,6 +22,7 @@
 
 package com.passionpenguin.htmltextview;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.Html;
@@ -30,6 +31,7 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
+import android.text.style.ImageSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
@@ -41,6 +43,7 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
 
+import java.util.Locale;
 import java.util.Stack;
 
 /**
@@ -54,8 +57,10 @@ public class HtmlTagHandler implements WrapperTagHandler {
     public static final String A_ITEM = "HTML_TEXTVIEW_ESCAPED_A_TAG";
     public static final String PLACEHOLDER_ITEM = "HTML_TEXTVIEW_ESCAPED_PLACEHOLDER";
     public static final String QUOTE_ITEM = "HTML_TEXTVIEW_ESCAPED_QUOTE";
+    private final Context mContext;
 
-    public HtmlTagHandler() {
+    public HtmlTagHandler(Context mCtx) {
+        mContext = mCtx;
     }
 
     /**
@@ -163,6 +168,16 @@ public class HtmlTagHandler implements WrapperTagHandler {
 
     @Override
     public boolean handleTag(boolean opening, String tag, Editable output, Attributes attributes) {
+
+        if (tag.toLowerCase(Locale.getDefault()).equals("img") && output.length() > 0) {
+            // 获取长度
+            int len = output.length();
+            // 获取图片地址
+            String src = attributes != null ? attributes.getValue("src") : null;
+            // 使图片可点击并监听点击事件
+            if (src != null)
+                output.setSpan(new CustomIMGSpan(mContext, src), len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         if (opening) {
             // opening tag
             if (HtmlTextView.DEBUG) {

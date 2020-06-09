@@ -69,7 +69,10 @@ class ViewThread : AppCompatActivity() {
                         tipEl.text("查看链接")
                         tipEl.attr("style", "color: #289c77")
                     }
-                    it.select("img[id^='aimg_']").forEach { img ->
+                    it.select("img:not([file]):not([src])").forEach { img ->
+                        img.remove()
+                    }
+                    it.select("img[file]").forEach { img ->
                         img.attr("src", img.attr("file"))
                     }
                     it.select("img[smilieid]").forEach { img ->

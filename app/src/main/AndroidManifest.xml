@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ditiezu"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ZoomImage"></activity>
         <activity android:name=".PostActivity" />
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".ForumDisplay" />

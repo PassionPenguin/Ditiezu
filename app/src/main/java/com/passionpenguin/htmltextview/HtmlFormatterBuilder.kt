@@ -17,9 +17,12 @@
  */
 package com.passionpenguin.htmltextview
 
+import android.content.Context
 import android.text.Html.ImageGetter
 
 class HtmlFormatterBuilder {
+    var context: Context? = null
+        private set
     var html: String? = null
         private set
     var imageGetter: ImageGetter? = null
