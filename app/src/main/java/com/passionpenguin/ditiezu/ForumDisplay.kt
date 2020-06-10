@@ -12,7 +12,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
-import com.passionpenguin.ditiezu.helper.*
+import com.passionpenguin.ditiezu.helper.CategoryContent
+import com.passionpenguin.ditiezu.helper.HttpExt
+import com.passionpenguin.ditiezu.helper.ThreadItem
+import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
 import kotlinx.android.synthetic.main.activity_forum_display.*
 import org.jsoup.Jsoup
 
@@ -119,7 +122,11 @@ class ForumDisplay : AppCompatActivity() {
                     }
 
                     val bannerView =
-                        layoutInflater.inflate(R.layout.item_category_info_header, threadListView, false)
+                        layoutInflater.inflate(
+                            R.layout.item_category_info_header,
+                            threadListView,
+                            false
+                        )
                     bannerView.findViewById<ImageView>(R.id.CategoryIcon)
                         .setImageDrawable(
                             resources.getDrawable(
@@ -136,11 +143,17 @@ class ForumDisplay : AppCompatActivity() {
                     threadListView.addHeaderView(bannerView)
 
                     val footerPagination =
-                        layoutInflater.inflate(R.layout.item_category_pagination_navigation, threadListView, false)
+                        layoutInflater.inflate(
+                            R.layout.item_category_pagination_navigation,
+                            threadListView,
+                            false
+                        )
                     val lastPage =
                         if (!parser.select(".last").isEmpty())
                             parser.select(".last")[0].text().substring(4).toInt()
-                        else parser.select("#pgt .pg a:not(.nxt)").last().text().toInt()
+                        else if (parser.select("#pgt .pg a:not(.nxt)")
+                                .last() != null
+                        ) parser.select("#pgt .pg a:not(.nxt)").last().text().toInt() else 1
 
                     footerPagination.findViewById<TextView>(R.id.curPage).text = page.toString()
 

@@ -8,10 +8,14 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.github.salomonbrys.kotson.obj
+import com.google.gson.JsonParser
+import com.passionpenguin.ditiezu.helper.Dialog
+import com.passionpenguin.ditiezu.helper.HttpExt
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +44,28 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
+
+        val value =
+            HttpExt().asyncRetrieveNonForumPage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/CUR_VERSION.json")
+        if (value != "Failed Retrieved") {
+            val latestVersion = JsonParser().parse(value).obj
+            if (latestVersion.get("versionCode").asInt > BuildConfig.VERSION_CODE)
+                MainActivity.post {
+                    Dialog().create(
+                        this,
+                        MainActivity,
+                        applicationContext,
+                        resources.getString(R.string.new_version_detected),
+                        latestVersion.get("versionLog").asString
+                    ) {
+                        HttpExt().downloadUtils(
+                            applicationContext,
+                            "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                            "dtz_${latestVersion.get("versionCode").asString}.apk"
+                        )
+                    }
+                }
+        }
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
