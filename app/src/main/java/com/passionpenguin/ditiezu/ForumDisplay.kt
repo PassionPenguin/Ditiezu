@@ -151,9 +151,10 @@ class ForumDisplay : AppCompatActivity() {
                     val lastPage =
                         if (!parser.select(".last").isEmpty())
                             parser.select(".last")[0].text().substring(4).toInt()
-                        else if (parser.select("#pgt .pg a:not(.nxt)")
-                                .last() != null
-                        ) parser.select("#pgt .pg a:not(.nxt)").last().text().toInt() else 1
+                        else if (!parser.select("#pgt .pg a:not(.nxt)")
+                                .isEmpty()
+                        ) parser.select("#pgt .pg a:not(.nxt)")
+                            .last().text().toInt() else 1
 
                     footerPagination.findViewById<TextView>(R.id.curPage).text = page.toString()
 
@@ -164,7 +165,7 @@ class ForumDisplay : AppCompatActivity() {
                     }
 
                     val lastPageView = footerPagination.findViewById<ImageButton>(R.id.lastPage)
-                    if (page > lastPage) lastPageView.visibility = View.GONE
+                    if (page >= lastPage) lastPageView.visibility = View.GONE
                     else lastPageView.setOnClickListener {
                         loadForumContent(lastPage)
                     }
