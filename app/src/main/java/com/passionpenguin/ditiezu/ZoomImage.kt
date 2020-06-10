@@ -12,17 +12,17 @@ import com.squareup.picasso.Picasso
 import kotlin.math.sqrt
 
 class ZoomImage : AppCompatActivity(), View.OnTouchListener {
-    private val TAG = "Touch"
+    private val tag = "Touch"
 
     // These matrices will be used to scale points of the image
     private var matrix: Matrix = Matrix()
     private var savedMatrix: Matrix = Matrix()
 
     // The 3 states (events) which the user is trying to perform
-    private val NONE = 0
-    private val DRAG = 1
-    private val ZOOM = 2
-    private var mode = NONE
+    private val none = 0
+    private val drag = 1
+    private val zoom = 2
+    private var mode = none
 
     // these PointF objects are used to record the point(s) the user is touching
     var start = PointF()
@@ -35,14 +35,19 @@ class ZoomImage : AppCompatActivity(), View.OnTouchListener {
         setContentView(R.layout.activity_zoom_image)
         val e = intent.extras
         val path = e?.getString("filePath", "-1") as String
-        if (path == "-1") onBackPressed()
+        if (path == "-1" || path.isEmpty()) onBackPressed()
 
         val view: ImageView = findViewById<View>(R.id.imageView) as ImageView
-        Picasso.with(applicationContext).load(path).into(view)
+        try {
+            Picasso.with(applicationContext).load(path).into(view)
+        } catch (ignored: Exception) {
+            onBackPressed()
+        }
         view.setOnTouchListener(this)
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
+        v.performClick()
         val view: ImageView = v as ImageView
         view.scaleType = ImageView.ScaleType.MATRIX
         val scale: Float
@@ -51,34 +56,34 @@ class ZoomImage : AppCompatActivity(), View.OnTouchListener {
             MotionEvent.ACTION_DOWN -> {
                 savedMatrix.set(matrix)
                 start[event.x] = event.y
-                Log.d(TAG, "mode=DRAG") // write to LogCat
-                mode = DRAG
+                Log.d(tag, "mode=DRAG") // write to LogCat
+                mode = drag
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                mode = NONE
-                Log.d(TAG, "mode=NONE")
+                mode = none
+                Log.d(tag, "mode=NONE")
             }
             MotionEvent.ACTION_POINTER_DOWN -> {
                 oldDist = spacing(event)
-                Log.d(TAG, "oldDist=$oldDist")
+                Log.d(tag, "oldDist=$oldDist")
                 if (oldDist > 5f) {
                     savedMatrix.set(matrix)
                     midPoint(mid, event)
-                    mode = ZOOM
-                    Log.d(TAG, "mode=ZOOM")
+                    mode = zoom
+                    Log.d(tag, "mode=ZOOM")
                 }
             }
-            MotionEvent.ACTION_MOVE -> if (mode == DRAG) {
+            MotionEvent.ACTION_MOVE -> if (mode == drag) {
                 matrix.set(savedMatrix)
                 matrix.postTranslate(
                     event.x - start.x,
                     event.y - start.y
                 ) // create the transformation in the matrix  of points
-            } else if (mode == ZOOM) {
+            } else if (mode == zoom) {
                 // pinch zooming
                 val newDist = spacing(event)
                 Log.i("", (newDist / oldDist).toString())
-                Log.d(TAG, "newDist=$newDist")
+                Log.d(tag, "newDist=$newDist")
                 if (newDist > 5f) {
                     matrix.set(savedMatrix)
                     scale = newDist / oldDist // setting the scaling of the

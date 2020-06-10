@@ -3,13 +3,17 @@ package com.passionpenguin.ditiezu.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.CookieManager
-import android.widget.*
-import com.github.salomonbrys.kotson.obj
-import com.google.gson.JsonParser
-import com.passionpenguin.ditiezu.*
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import com.passionpenguin.ditiezu.AboutDitiezu
+import com.passionpenguin.ditiezu.LoginActivity
+import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.helper.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_account.*
@@ -111,7 +115,7 @@ class AccountFragment : Fragment() {
                                                 )
                                             ) {
                                                 CookieManager.getInstance().removeAllCookies {
-                                                    activity?.recreate()
+                                                    activity.recreate()
                                                 }
                                             }
                                         }
@@ -119,46 +123,6 @@ class AccountFragment : Fragment() {
                                 }
                             }
                         )
-
-                        val appPref = mutableListOf<PrefListItem>()
-                        appPref.add(
-                            PrefListItem(
-                                resources.getString(R.string.version),
-                                BuildConfig.VERSION_NAME,
-                                ""
-                            ) {})
-
-                        val value =
-                            HttpExt().asyncRetrieveNonForumPage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/CUR_VERSION.json")
-                        if (value != "Failed Retrieved") {
-                            val latestVersion = JsonParser().parse(value).obj
-                            if (latestVersion.get("versionCode").asInt > BuildConfig.VERSION_CODE)
-                                appPref.add(
-                                    PrefListItem(
-                                        resources.getString(R.string.new_version_detected),
-                                        latestVersion.get("versionLog").asString,
-                                        latestVersion.get("versionCode").asString,
-                                        true
-                                    ) {
-                                        context?.let { ctx ->
-                                            activity?.let { activity ->
-                                                Dialog().create(
-                                                    activity,
-                                                    fragment_account,
-                                                    ctx,
-                                                    resources.getString(R.string.confirmUpdating),
-                                                    resources.getString(R.string.confirmUpdating_description)
-                                                ) {
-                                                    HttpExt().downloadUtils(
-                                                        context,
-                                                        "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
-                                                        "dtz_${latestVersion.get("versionCode").asString}.apk"
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    })
-                        }
 
                         activity?.runOnUiThread {
                             userName.text =
@@ -219,18 +183,22 @@ class AccountFragment : Fragment() {
                                     )
                                 })
                             }
-                            appPref.forEach { item ->
-                                application_pref_list.addView(context?.let { ctx ->
-                                    prefView(
-                                        ctx,
-                                        item.name,
-                                        item.description,
-                                        item.value,
-                                        item.toggle,
-                                        item.execFunc
+                            application_pref_list.addView(context?.let { ctx ->
+                                prefView(
+                                    ctx,
+                                    resources.getString(R.string.about),
+                                    "",
+                                    "",
+                                    true
+                                ) {
+                                    activity?.startActivity(
+                                        Intent(
+                                            context,
+                                            AboutDitiezu::class.java
+                                        )
                                     )
-                                })
-                            }
+                                }
+                            })
                         }
                         null
                     }

@@ -31,7 +31,6 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
-import android.text.style.ImageSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
@@ -428,16 +427,14 @@ public class HtmlTagHandler implements WrapperTagHandler {
      */
     private static Object getLast(Editable text, Class kind) {
         Object[] objs = text.getSpans(0, text.length(), kind);
-        if (objs.length == 0) {
-            return null;
-        } else {
+        if (objs.length != 0) {
             for (int i = objs.length; i > 0; i--) {
                 if (text.getSpanFlags(objs[i - 1]) == Spannable.SPAN_MARK_MARK) {
                     return objs[i - 1];
                 }
             }
-            return null;
         }
+        return null;
     }
 
     // Util method for setting pixels.

@@ -74,14 +74,17 @@ class ViewThread : AppCompatActivity() {
                         el.attr("src", el.select("[id^='a_img']").attr("file"))
                     }
                     it.select("img").forEach { img ->
-                        if (img.attr("src") !== null && img.attr("src").contains("static/image"))
+                        if (img.attr("src").contains("none.gif"))
                             img.attr(
                                 "src",
                                 img.attr("file")
                             )
                     }
                     it.select("img[smilieid]").forEach { img ->
-                        img.attr("src", "http://www.ditiezu.com/" + img.attr("src"))
+                        val src = img.attr("src")
+                        Log.i("", src)
+                        img.attr("src", "http://www.ditiezu.com/$src")
+                        Log.i("", img.attr("src"))
                     }
                     it.select("font[size]").forEach { size ->
                         when (size.attr("size").toInt()) {

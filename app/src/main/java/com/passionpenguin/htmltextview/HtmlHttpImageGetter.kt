@@ -54,7 +54,6 @@ class HtmlHttpImageGetter(textView: TextView) : ImageGetter {
             urlDrawable,
             this,
             container,
-            !source.contains("static/image/smiley"),
             compressImage,
             qualityImage
         )
@@ -73,11 +72,15 @@ class HtmlHttpImageGetter(textView: TextView) : ImageGetter {
      * we won't leak the UrlDrawable or the HtmlRemoteImageGetter.
      */
     private class ImageGetterAsyncTask(
-        d: UrlDrawable, imageGetter: HtmlHttpImageGetter, container: View,
-        private val matchParentWidth: Boolean, compressImage: Boolean, qualityImage: Int
+        d: UrlDrawable,
+        imageGetter: HtmlHttpImageGetter,
+        container: View,
+        compressImage: Boolean,
+        qualityImage: Int
     ) : AsyncTask<String?, Void?, Drawable?>() {
         private val drawableReference: WeakReference<UrlDrawable> = WeakReference(d)
-        private val imageGetterReference: WeakReference<HtmlHttpImageGetter> = WeakReference(imageGetter)
+        private val imageGetterReference: WeakReference<HtmlHttpImageGetter> =
+            WeakReference(imageGetter)
         private val containerReference: WeakReference<View> = WeakReference(container)
         private val resources: WeakReference<Resources?> = WeakReference(container.resources)
         private var source: String? = null
@@ -179,17 +182,22 @@ class HtmlHttpImageGetter(textView: TextView) : ImageGetter {
             val container = containerReference.get() ?: return 1f
             val maxWidth = container.width.toFloat()
             val originalDrawableWidth = bitmap.width.toFloat()
-            return maxWidth / originalDrawableWidth
+            if (source?.contains("static/image")!!) {
+                Log.i("", originalDrawableWidth.toString())
+                return 2f
+            }
+            return if (maxWidth < originalDrawableWidth) maxWidth / originalDrawableWidth else 1f
         }
 
         private fun getScale(drawable: Drawable): Float {
-            val container = containerReference.get()
-            if (!matchParentWidth || container == null) {
-                return 1f
-            }
+            val container = containerReference.get() ?: /*!matchParentWidth || */return 1f
             val maxWidth = container.width.toFloat()
             val originalDrawableWidth = drawable.intrinsicWidth.toFloat()
-            return maxWidth / originalDrawableWidth
+            if (source?.contains("static/image")!!) {
+                Log.i("", originalDrawableWidth.toString())
+                return 2f
+            }
+            return if (maxWidth < originalDrawableWidth) maxWidth / originalDrawableWidth else 1f
         }
 
         @Throws(IOException::class)

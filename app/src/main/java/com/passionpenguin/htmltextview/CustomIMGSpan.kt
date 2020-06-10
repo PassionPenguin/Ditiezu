@@ -27,9 +27,11 @@ class CustomIMGSpan(
     private val url: String?
 ) : ClickableSpan() {
     override fun onClick(widget: View) {
-        val intent = Intent(context, ZoomImage::class.java)
-        intent.putExtra("filePath", url)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context!!.startActivity(intent)
+        if (!url?.contains("static/image/smiley")!!) {
+            val intent = Intent(context, ZoomImage::class.java)
+            intent.putExtra("filePath", url)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context!!.startActivity(intent)
+        }
     }
 }
