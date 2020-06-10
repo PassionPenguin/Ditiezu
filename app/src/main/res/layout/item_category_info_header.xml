@@ -57,7 +57,7 @@
                         android:id="@+id/CategoryTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="sans-serif-medium"
                         android:textSize="20sp"
                         android:textColor="@color/dark"
                         tools:text="NAME" />
