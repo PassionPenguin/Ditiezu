@@ -127,27 +127,30 @@ class PrefListItem(
     val execFunc: () -> Unit
 )
 
-class PrefAdapter(
-    private var mCtx: Context,
-    resource: Int,
-    private var items: List<PrefListItem>
-) : ArrayAdapter<PrefListItem>(mCtx, resource, items) {
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_pref_item, parent, false)
-        val value = view.findViewById<TextView>(R.id.pref_item_value)
-        value.text = items[position].value
-        if (!items[position].toggle)
-            value.setCompoundDrawables(null, null, null, null)
-        if (items[position].description !== "")
-            with(view.findViewById<TextView>(R.id.pref_item_description)) {
-                this.text = items[position].description
-                this.visibility = View.VISIBLE
-            }
-        view.findViewById<TextView>(R.id.pref_item_name).text = items[position].name
-        return view
+fun prefView(
+    mCtx: Context,
+    name: String = "",
+    description: String = "",
+    value: String = "",
+    toggle: Boolean = false,
+    execFunc: () -> Unit
+): View {
+    val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
+    val view: View = layoutInflater.inflate(R.layout.item_pref_item, null)
+    val v = view.findViewById<TextView>(R.id.pref_item_value)
+    v.text = value
+    if (!toggle)
+        v.setCompoundDrawables(null, null, null, null)
+    if (description !== "")
+        with(view.findViewById<TextView>(R.id.pref_item_description)) {
+            this.text = description
+            this.visibility = View.VISIBLE
+        }
+    view.findViewById<TextView>(R.id.pref_item_name).text = name
+    view.setOnClickListener {
+        execFunc()
     }
+    return view
 }
 
 class NotificationItem(

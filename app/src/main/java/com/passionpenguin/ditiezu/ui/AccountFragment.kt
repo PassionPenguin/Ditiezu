@@ -99,17 +99,20 @@ class AccountFragment : Fragment() {
                             ) {
                                 view.let { v ->
                                     context?.let { ctx ->
-                                        Dialog().create(
-                                            v,
-                                            ctx,
-                                            resources.getString(R.string.logout),
-                                            resources.getString(
-                                                R.string.logout_warning,
-                                                parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
-                                            )
-                                        ) {
-                                            CookieManager.getInstance().removeAllCookies {
-                                                activity?.recreate()
+                                        activity?.let { activity ->
+                                            Dialog().create(
+                                                activity,
+                                                v,
+                                                ctx,
+                                                resources.getString(R.string.logout),
+                                                resources.getString(
+                                                    R.string.logout_warning,
+                                                    parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
+                                                )
+                                            ) {
+                                                CookieManager.getInstance().removeAllCookies {
+                                                    activity?.recreate()
+                                                }
                                             }
                                         }
                                     }
@@ -138,17 +141,20 @@ class AccountFragment : Fragment() {
                                         true
                                     ) {
                                         context?.let { ctx ->
-                                            Dialog().create(
-                                                fragment_account,
-                                                ctx,
-                                                resources.getString(R.string.confirmUpdating),
-                                                resources.getString(R.string.confirmUpdating_description)
-                                            ) {
-                                                HttpExt().downloadUtils(
-                                                    context,
-                                                    "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
-                                                    "dtz_${latestVersion.get("versionCode").asString}.apk"
-                                                )
+                                            activity?.let { activity ->
+                                                Dialog().create(
+                                                    activity,
+                                                    fragment_account,
+                                                    ctx,
+                                                    resources.getString(R.string.confirmUpdating),
+                                                    resources.getString(R.string.confirmUpdating_description)
+                                                ) {
+                                                    HttpExt().downloadUtils(
+                                                        context,
+                                                        "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                                                        "dtz_${latestVersion.get("versionCode").asString}.apk"
+                                                    )
+                                                }
                                             }
                                         }
                                     })
@@ -201,25 +207,29 @@ class AccountFragment : Fragment() {
                             value_popularity.text =
                                 parser.select("#psts li")[4].textNodes()[0].text().trim()
 
-                            personal_pref_list.adapter = context?.let { ct ->
-                                PrefAdapter(
-                                    ct,
-                                    0,
-                                    prefItem
-                                )
+                            prefItem.forEach { item ->
+                                personal_pref_list.addView(context?.let { ctx ->
+                                    prefView(
+                                        ctx,
+                                        item.name,
+                                        item.description,
+                                        item.value,
+                                        item.toggle,
+                                        item.execFunc
+                                    )
+                                })
                             }
-                            personal_pref_list.setOnItemClickListener { _, _, position, _ ->
-                                prefItem[position].execFunc()
-                            }
-                            application_pref_list.adapter = context?.let { ct ->
-                                PrefAdapter(
-                                    ct,
-                                    0,
-                                    appPref
-                                )
-                            }
-                            application_pref_list.setOnItemClickListener { _, _, position, _ ->
-                                appPref[position].execFunc()
+                            appPref.forEach { item ->
+                                application_pref_list.addView(context?.let { ctx ->
+                                    prefView(
+                                        ctx,
+                                        item.name,
+                                        item.description,
+                                        item.value,
+                                        item.toggle,
+                                        item.execFunc
+                                    )
+                                })
                             }
                         }
                         null

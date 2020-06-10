@@ -323,23 +323,21 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <ListView
+            <LinearLayout
                 android:id="@+id/personal_pref_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16"
-                android:background="@drawable/border_radius_8"
-                android:divider="@null"
-                tools:listitem="@layout/item_pref_item" />
+                android:background="@drawable/border_radius_4_no_padding"
+                android:orientation="vertical" />
 
-            <ListView
+            <LinearLayout
                 android:id="@+id/application_pref_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16"
-                android:background="@drawable/border_radius_8"
-                android:divider="@null"
-                tools:listitem="@layout/item_pref_item" />
+                android:background="@drawable/border_radius_4_no_padding"
+                android:orientation="vertical" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

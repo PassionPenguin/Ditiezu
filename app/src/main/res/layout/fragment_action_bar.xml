@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:elevation="@dimen/_64"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/_8">
+    android:paddingBottom="@dimen/_8"
+    android:paddingTop="@dimen/_32">
 
     <RadioButton
         android:id="@+id/actionBar_leftButton"
