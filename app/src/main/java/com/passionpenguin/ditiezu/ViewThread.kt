@@ -61,23 +61,24 @@ class ViewThread : AppCompatActivity() {
                 }
                 val list = mutableListOf<ReplyItem>()
                 parser.select("table[id^='pid']").forEach {
-                    it.select(".tip,a").forEach { tipEl ->
+                    it.select(".tip, a").forEach { tipEl ->
                         if (tipEl.tagName() != "a" || tipEl.attr("href").contains("redirect"))
                             tipEl.remove()
                     }
-                    it.select("[id^='postmessage_'] a").forEach { tipEl ->
+                    it.select(".pcb a").forEach { tipEl ->
                         tipEl.text("查看链接")
                         tipEl.attr("style", "color: #289c77")
                     }
-                    it.select("[id^='postmessage_'] img:not([file]):not([src]):not([id^='aimg_'])")
-                        .forEach { img ->
-                            img.remove()
-                        }
-                    it.select("[id^='postmessage_'] img").forEach { img ->
-                        img.attr(
-                            "src",
-                            img.attr("file")
-                        )
+                    it.select("ignore_js_op").forEach { el ->
+                        el.tagName("img")
+                        el.attr("src", el.select("[id^='a_img']").attr("file"))
+                    }
+                    it.select("img").forEach { img ->
+                        if (img.attr("src") !== null && img.attr("src").contains("static/image"))
+                            img.attr(
+                                "src",
+                                img.attr("file")
+                            )
                     }
                     it.select("img[smilieid]").forEach { img ->
                         img.attr("src", "http://www.ditiezu.com/" + img.attr("src"))
@@ -107,7 +108,7 @@ class ViewThread : AppCompatActivity() {
                                     this.indexOf(".html")
                                 ).toInt()
                             },
-                            it.select("[id^='postmessage_']").html(),
+                            it.select("[id^='postmessage_']").html() + it.select(".pattl").html(),
                             it.select(".authi .xw1").text(),
                             it.select("[id^='authorposton']").text(),
                             it.select(".fastre").isEmpty() && loginState,
