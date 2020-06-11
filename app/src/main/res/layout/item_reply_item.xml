@@ -80,6 +80,21 @@
                     android:layout_alignParentBottom="true">
 
                     <CheckBox
+                        android:id="@+id/rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
+                        android:layout_gravity="center|end"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp"
+                        android:button="@drawable/ic_baseline_thumb_up_24"
+                        android:buttonTint="@color/grey"
+                        android:paddingHorizontal="@dimen/_8"
+                        android:visibility="gone"
+                        android:text="@string/rate" />
+
+                    <CheckBox
                         android:id="@+id/edit"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"

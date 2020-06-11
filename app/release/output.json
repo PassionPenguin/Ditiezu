@@ -10,7 +10,7 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 26,
+      "versionCode": 28,
       "versionName": "Watermelon Milkshake v6.5",
       "outputFile": "app-release.apk"
     }

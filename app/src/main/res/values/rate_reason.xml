@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rate_reason">
+        <item>地铁族有你更精彩：）</item>
+        <item>--------</item>
+        <item>感谢分享</item>
+        <item>精品文章</item>
+        <item>助人为乐</item>
+        <item>原创内容</item>
+        <item>精彩转帖</item>
+        <item>我很赞同</item>
+        <item>--------</item>
+        <item>错版发帖</item>
+        <item>不符合本版规则</item>
+        <item>禁止广告</item>
+        <item>重复发帖</item>
+        <item>请不要纯表情</item>
+        <item>请不要灌水</item>
+        <item>请文明用语</item>
+        <item>请勿地域攻击</item>
+        <item>请勿人身攻击</item>
+        <item>--------</item>
+        <item>网警不让发：（</item>
+    </string-array>
+
+    <string-array name="popularity_score">
+        <item>+1</item>
+        <item>-1</item>
+    </string-array>
+</resources>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/rate"
+        android:textColor="@color/dark"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/select_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:background="@drawable/dialog_content_background"
+        android:layout_marginVertical="@dimen/_16"
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_8"
+            android:text="@string/popularity"
+            android:layout_gravity="center_vertical" />
+
+        <Spinner
+            android:id="@+id/score"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_8"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_8"
+            android:text="@string/popularity_range"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/rest"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_8"
+            android:text="@string/rest_score"
+            android:textSize="12sp"
+            android:textColor="@color/primary500"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/reasonList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/_4"
+        app:layout_constraintTop_toBottomOf="@id/select_item" />
+
+    <EditText
+        android:id="@+id/reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/_8"
+        android:inputType="textShortMessage"
+        android:autofillHints="@null"
+        android:hint="@string/app_description"
+        android:textSize="14sp"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@id/reasonList" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

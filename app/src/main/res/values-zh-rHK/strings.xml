@@ -94,4 +94,10 @@
     <string name="subject">Subject</string>
     <string name="selectType">選擇類別</string>
     <string name="about">關於</string>
+    <string name="rest_score">剩餘: %d</string>
+    <string name="popularity_range">區間: -1~+1</string>
+    <string name="rate">評分</string>
+    <string name="rate_title">評分回覆</string>
+    <string name="require_reason">原因是必須要填寫的</string>
+    <string name="rate_description">確認後您將對該帖子評分</string>
 </resources>

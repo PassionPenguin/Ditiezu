@@ -122,4 +122,10 @@
     <string name="subject">Subject</string>
     <string name="selectType">选择类别</string>
     <string name="about">关于</string>
+    <string name="rate">评分</string>
+    <string name="popularity_range">区间: -1~+1</string>
+    <string name="rest_score">剩余: %d</string>
+    <string name="rate_title">评分回复</string>
+    <string name="rate_description">确认后您将对该帖子评分</string>
+    <string name="require_reason">原因是必须填写的</string>
 </resources>

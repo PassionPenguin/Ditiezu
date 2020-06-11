@@ -124,6 +124,12 @@ class PostActivity : AppCompatActivity() {
                     )
                 }
                 tips.removeAllViews()
+                val response = str.substring(
+                    str.indexOf("_rate('") + 33,
+                    str.indexOf(
+                        "'", str.indexOf("_rate('") + 34
+                    )
+                )
                 val tipView = when {
                     str == "Failed Retrieved" -> {
                         val v = LayoutInflater.from(applicationContext).inflate(
@@ -138,10 +144,7 @@ class PostActivity : AppCompatActivity() {
                     str.contains("succeed") -> {
                         val v = LayoutInflater.from(applicationContext)
                             .inflate(R.layout.tip_succeed, tips, false)
-                        v.findViewById<TextView>(R.id.text).text = str.substring(
-                            str.indexOf(", '") + 3,
-                            str.indexOf("'", str.indexOf(", '") + 3)
-                        )
+                        v.findViewById<TextView>(R.id.text).text = response
                         postDelayed({
                             super.onBackPressed()
                             val intent = Intent()
@@ -155,19 +158,11 @@ class PostActivity : AppCompatActivity() {
                         val v =
                             LayoutInflater.from(applicationContext)
                                 .inflate(R.layout.tip_not_applicable, tips, false)
-                        v.findViewById<TextView>(R.id.text).text = str.substring(
-                            str.indexOf(", '") + 3,
-                            str.indexOf("'", str.indexOf(", '") + 3)
-                        )
+                        v.findViewById<TextView>(R.id.text).text = response
                         v
                     }
                     else -> {
-                        val v =
-                            LayoutInflater.from(applicationContext)
-                                .inflate(R.layout.tip_not_applicable, tips, false)
-                        v.findViewById<TextView>(R.id.text).text =
-                            resources.getString(R.string.title_reply)
-                        v
+                        null
                     }
                 }
                 if (tipView != null) {

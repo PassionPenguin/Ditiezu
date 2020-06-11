@@ -12,35 +12,67 @@
         android:layout_height="match_parent"
         android:background="#bb888888"
         android:orientation="horizontal"
-        android:elevation="@dimen/_32" />
+        android:elevation="@dimen/_16" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="@dimen/_32">
+        android:elevation="@dimen/_32"
+        android:background="@drawable/border_radius_top_4"
+        android:backgroundTint="@color/white"
+        android:paddingBottom="@dimen/_32"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_64"
-            android:layout_marginTop="@dimen/_128"
             android:padding="@dimen/_16"
-            android:backgroundTint="@color/white"
             android:orientation="vertical"
-            android:background="@drawable/border_radius_top_4">
+            android:elevation="@dimen/_64">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_32"
+                    android:layout_height="@dimen/_32"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/appName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_32"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/_8"
+                    android:textColor="@color/black"
+                    android:text="@string/app_name"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginEnd="@dimen/_8"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:id="@+id/dialog_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_32"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/_8"
+                    android:textColor="@color/grey"
+                    android:gravity="center_vertical"
+                    tools:text="Dialog Name" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/dialogName"
+                android:id="@+id/dialog_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:layout_marginBottom="@dimen/_8"
-                android:layout_gravity="center"
+                android:layout_margin="@dimen/_8"
                 android:textColor="@color/dark"
+                android:gravity="center_vertical"
                 tools:text="Dialog Name" />
 
             <TextView
@@ -51,27 +83,30 @@
                 android:textColor="@color/grey"
                 android:layout_margin="@dimen/_8"
                 tools:text="Dialog Description" />
-
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_16"
+            android:layout_marginHorizontal="@dimen/_4"
+            android:orientation="vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_64"
-            android:layout_marginBottom="@dimen/_128"
             android:paddingHorizontal="@dimen/_16"
             android:orientation="horizontal"
-            android:background="@drawable/border_radius_bottom_4_no_padding"
-            android:backgroundTint="@color/white"
-            android:weightSum="2">
+            android:gravity="center">
 
             <Button
                 android:id="@+id/CancelButton"
                 style="?attr/borderlessButtonStyle"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/_4"
+                android:paddingHorizontal="@dimen/_32"
                 android:backgroundTint="@color/surface"
                 android:textColor="@color/dark"
                 android:text="@string/cancel"
@@ -80,12 +115,12 @@
             <Button
                 android:id="@+id/ConfirmButton"
                 style="?attr/borderlessButtonStyle"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/_4"
-                android:backgroundTint="@color/surface"
-                android:textColor="@color/primary500"
+                android:paddingHorizontal="@dimen/_32"
+                android:backgroundTint="@color/primary500"
+                android:textColor="@color/white"
                 android:text="@string/confirm"
                 tools:text="Confirm" />
         </LinearLayout>

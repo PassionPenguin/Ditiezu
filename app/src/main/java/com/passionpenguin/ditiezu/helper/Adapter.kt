@@ -1,5 +1,6 @@
 package com.passionpenguin.ditiezu.helper
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -7,16 +8,16 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.core.graphics.drawable.toBitmap
 import com.passionpenguin.ditiezu.PostActivity
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.htmltextview.HtmlHttpImageGetter
 import com.passionpenguin.htmltextview.HtmlTextView
 import com.squareup.picasso.Picasso
+import org.jsoup.Jsoup
+import java.net.URLEncoder
 
 
 class CategoryItem(val title: String, val description: String, val icon: Int, var meta: String)
@@ -203,6 +204,7 @@ class ReplyItem(
     val time: String,
     val editable: Boolean = false,
     val replyable: Boolean = false,
+    val rateable: Boolean = false,
     val pid: Int,
     val tid: Int
 )
@@ -210,7 +212,10 @@ class ReplyItem(
 class ReplyItemAdapter(
     private var mCtx: Context,
     resource: Int,
-    private var items: List<ReplyItem>
+    private var items: List<ReplyItem>,
+    private val activity: Activity,
+    private val tipLayout: LinearLayout,
+    private val formhash: String
 ) : ArrayAdapter<ReplyItem>(mCtx, resource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -251,6 +256,196 @@ class ReplyItemAdapter(
                     i.putExtra("reppost", replyItem.pid)
                     i.flags = FLAG_ACTIVITY_NEW_TASK
                     mCtx.startActivity(i)
+                }
+            }
+        if (replyItem.rateable)
+            with(view.findViewById<CheckBox>(R.id.rate)) {
+                this.visibility = View.VISIBLE
+                this.setOnClickListener {
+                    var s =
+                        HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=misc&action=rate&tid=${replyItem.tid}&pid=${replyItem.pid}&infloat=yes&handlekey=rate&t=&inajax=1&ajaxtarget=fwin_content_rate")
+                    when (s) {
+                        "Failed Retrieved" -> {
+                            val v = LayoutInflater.from(mCtx).inflate(
+                                R.layout.tip_access_denied,
+                                tipLayout,
+                                false
+                            )
+                            v.findViewById<TextView>(R.id.text).text =
+                                resources.getString(R.string.failed_retrieved)
+                            tipLayout.removeAllViews()
+                            tipLayout.addView(v)
+                            tipLayout.postDelayed(
+                                { tipLayout.removeView(v) },
+                                2000
+                            )
+                        }
+                        else -> {
+                            s = s.substring(53, s.length - 10)
+                            val p = Jsoup.parse(s)
+                            when {
+                                p.select(".alert_error").isNotEmpty() -> {
+                                    val v = LayoutInflater.from(mCtx).inflate(
+                                        R.layout.tip_not_applicable,
+                                        tipLayout,
+                                        false
+                                    )
+                                    v.findViewById<TextView>(R.id.text).text =
+                                        p.select(".alert_error").text()
+                                    tipLayout.removeAllViews()
+                                    tipLayout.addView(v)
+                                    tipLayout.postDelayed({
+                                        tipLayout.removeView(
+                                            v
+                                        )
+                                    }, 2000)
+                                }
+                                else -> {
+                                    Dialog().create(
+                                        activity,
+                                        activity.findViewById(R.id.view_thread),
+                                        resources.getString(R.string.rate),
+                                        resources.getString(R.string.rate_title),
+                                        resources.getString(R.string.rate_description),
+                                        { v, w ->
+                                            if (v.findViewById<TextView>(R.id.reason).text == "") {
+                                                val err = LayoutInflater.from(mCtx).inflate(
+                                                    R.layout.tip_not_applicable,
+                                                    tipLayout,
+                                                    false
+                                                )
+                                                v.findViewById<TextView>(R.id.text).text =
+                                                    resources.getString(R.string.require_reason)
+                                                tipLayout.removeAllViews()
+                                                tipLayout.addView(err)
+                                                tipLayout.postDelayed({
+                                                    tipLayout.removeView(
+                                                        v
+                                                    )
+                                                }, 1000)
+                                            } else {
+                                                val str = HttpExt().asyncPostPage(
+                                                    "http://www.ditiezu.com/forum.php?mod=misc&action=rate&ratesubmit=yes&infloat=yes&inajax=1",
+                                                    "formhash=$formhash&tid=${replyItem.tid}&pid=${replyItem.pid}&handlekey=rate&reason=${URLEncoder.encode(
+                                                        v.findViewById<EditText>(R.id.reason).text.toString(),
+                                                        "GBK"
+                                                    )}&score4=${v.findViewById<Spinner>(R.id.score).selectedItem}"
+                                                )
+
+                                                tipLayout.removeAllViews()
+                                                val response = str.substring(
+                                                    str.indexOf("_rate('") + 33,
+                                                    str.indexOf(
+                                                        "'", str.indexOf("_rate('") + 34
+                                                    )
+                                                )
+                                                val tipView = when {
+                                                    str == "Failed Retrieved" -> {
+                                                        val lv = LayoutInflater.from(mCtx).inflate(
+                                                            R.layout.tip_access_denied,
+                                                            tipLayout,
+                                                            false
+                                                        )
+                                                        lv.findViewById<TextView>(R.id.text).text =
+                                                            resources.getString(R.string.failed_retrieved)
+                                                        lv
+                                                    }
+                                                    str.contains("succeed") -> {
+                                                        val lv = LayoutInflater.from(mCtx)
+                                                            .inflate(
+                                                                R.layout.tip_succeed,
+                                                                tipLayout,
+                                                                false
+                                                            )
+                                                        lv.findViewById<TextView>(R.id.text).text =
+                                                            response
+                                                        postDelayed({ w.dismiss() }, 1000)
+                                                        lv
+                                                    }
+                                                    str.contains("error") -> {
+                                                        val lv =
+                                                            LayoutInflater.from(mCtx)
+                                                                .inflate(
+                                                                    R.layout.tip_not_applicable,
+                                                                    tipLayout,
+                                                                    false
+                                                                )
+                                                        lv.findViewById<TextView>(R.id.text).text =
+                                                            response
+                                                        lv
+                                                    }
+                                                    else -> {
+                                                        null
+                                                    }
+                                                }
+                                                if (tipView != null) {
+                                                    tipLayout.addView(tipView)
+                                                    postDelayed({
+                                                        tipLayout.removeAllViews()
+                                                    }, 1000)
+                                                }
+                                            }
+                                        }) { v, w ->
+                                        v.addView(
+                                            LayoutInflater.from(mCtx)
+                                                .inflate(R.layout.fragment_rate, v, false)
+                                        )
+                                        with(v.findViewById<Spinner>(R.id.reasonList)) {
+                                            createFromResource(
+                                                activity,
+                                                R.array.rate_reason,
+                                                android.R.layout.simple_spinner_dropdown_item
+                                            ).also { adapter ->
+                                                // Specify the layout to use when the list of choices appears
+                                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                                // Apply the adapter to the spinner
+                                                this.adapter = adapter
+                                            }
+                                            this.onItemSelectedListener =
+                                                object : OnItemSelectedListener {
+                                                    override fun onItemSelected(
+                                                        parent: AdapterView<*>?,
+                                                        view: View,
+                                                        position: Int,
+                                                        id: Long
+                                                    ) {
+                                                        v.findViewById<EditText>(R.id.reason)
+                                                            .setText(resources.getStringArray(R.array.rate_reason)[position])
+                                                    }
+
+                                                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                                                }
+                                        }
+                                        createFromResource(
+                                            activity,
+                                            R.array.popularity_score,
+                                            android.R.layout.simple_spinner_dropdown_item
+                                        ).also { adapter ->
+                                            // Specify the layout to use when the list of choices appears
+                                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                            // Apply the adapter to the spinner
+                                            v.findViewById<Spinner>(R.id.score).adapter = adapter
+                                        }
+                                        with(p.select("td:last-child")[0].text().toInt()) {
+                                            val restScore = v.findViewById<TextView>(R.id.rest)
+                                            restScore.text =
+                                                resources.getString(
+                                                    R.string.rest_score, this
+                                                )
+                                            if (this < 3)
+                                                restScore.setTextColor(
+                                                    resources.getColor(
+                                                        R.color.danger,
+                                                        null
+                                                    )
+                                                )
+                                        }
+                                        w.update()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

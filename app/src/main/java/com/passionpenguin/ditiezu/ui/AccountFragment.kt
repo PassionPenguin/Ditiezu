@@ -99,24 +99,21 @@ class AccountFragment : Fragment() {
                                 ), "",
                                 true
                             ) {
-                                view.let { v ->
-                                    context?.let { ctx ->
-                                        activity?.let { activity ->
-                                            Dialog().create(
-                                                activity,
-                                                v,
-                                                ctx,
-                                                resources.getString(R.string.logout),
-                                                resources.getString(
-                                                    R.string.logout_warning,
-                                                    parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
-                                                )
-                                            ) {
-                                                CookieManager.getInstance().removeAllCookies {
-                                                    activity.recreate()
-                                                }
-                                            }
+                                activity?.let { activity ->
+                                    Dialog().create(
+                                        activity,
+                                        activity.findViewById(R.id.MainActivity),
+                                        resources.getString(R.string.confirm),
+                                        resources.getString(R.string.logout),
+                                        resources.getString(
+                                            R.string.logout_warning,
+                                            parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
+                                        )
+                                    ) { _, w ->
+                                        CookieManager.getInstance().removeAllCookies {
+                                            activity.recreate()
                                         }
+                                        w.dismiss()
                                     }
                                 }
                             }

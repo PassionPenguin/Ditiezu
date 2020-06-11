@@ -113,8 +113,10 @@ class ViewThread : AppCompatActivity() {
                             it.select("[id^='postmessage_']").html() + it.select(".pattl").html(),
                             it.select(".authi .xw1").text(),
                             it.select("[id^='authorposton']").text(),
-                            it.select(".fastre").isEmpty() && loginState,
-                            it.select(".editp").isEmpty() && loginState,
+                            it.select(".fastre").isNotEmpty() && loginState,
+                            it.select(".editp").isNotEmpty() && loginState,
+                            it.select("[onclick^=\"showWindow('rate'\"]")
+                                .isNotEmpty() && loginState,
                             it.attr("id").substring(3).toInt(),
                             tid
                         )
@@ -199,7 +201,14 @@ class ViewThread : AppCompatActivity() {
                     title = parser.select("#thread_subject").text()
                     threadTitle.text = parser.select("#thread_subject").text()
                     viewThread.removeFooterView(viewThread.findViewById(R.id.paginationNavigation))
-                    viewThread.adapter = ReplyItemAdapter(applicationContext, 0, list)
+                    viewThread.adapter = ReplyItemAdapter(
+                        applicationContext,
+                        0,
+                        list,
+                        this@ViewThread,
+                        tips,
+                        parser.select("[name=\"formhash\"]").attr("value")
+                    )
                     viewThread.addFooterView(footerPagination)
                     LoadingMaskContainer.visibility = View.GONE
                 }
