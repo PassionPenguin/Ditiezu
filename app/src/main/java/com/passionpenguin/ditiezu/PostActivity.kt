@@ -3,13 +3,13 @@ package com.passionpenguin.ditiezu
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.tintDrawable
 import kotlinx.android.synthetic.main.activity_post.*
@@ -130,21 +130,26 @@ class PostActivity : AppCompatActivity() {
                         "'", str.indexOf("_rate('") + 34
                     )
                 )
-                val tipView = when {
+                when {
                     str == "Failed Retrieved" -> {
-                        val v = LayoutInflater.from(applicationContext).inflate(
-                            R.layout.tip_access_denied,
-                            tips,
-                            false
+                        Dialog().tip(
+                            resources.getString(R.string.failed_retrieved),
+                            R.drawable.ic_baseline_close_24,
+                            R.color.danger,
+                            this@PostActivity,
+                            PostActivity,
+                            Dialog.TIME_SHORT
                         )
-                        v.findViewById<TextView>(R.id.text).text =
-                            resources.getString(R.string.failed_retrieved)
-                        v
                     }
                     str.contains("succeed") -> {
-                        val v = LayoutInflater.from(applicationContext)
-                            .inflate(R.layout.tip_succeed, tips, false)
-                        v.findViewById<TextView>(R.id.text).text = response
+                        Dialog().tip(
+                            response,
+                            R.drawable.ic_baseline_close_24,
+                            R.color.danger,
+                            this@PostActivity,
+                            PostActivity,
+                            Dialog.TIME_SHORT
+                        )
                         postDelayed({
                             super.onBackPressed()
                             val intent = Intent()
@@ -152,24 +157,18 @@ class PostActivity : AppCompatActivity() {
                             setResult(Activity.RESULT_OK, intent)
                             finish()
                         }, 1500)
-                        v
                     }
                     str.contains("error") -> {
-                        val v =
-                            LayoutInflater.from(applicationContext)
-                                .inflate(R.layout.tip_not_applicable, tips, false)
-                        v.findViewById<TextView>(R.id.text).text = response
-                        v
+                        Dialog().tip(
+                            response,
+                            R.drawable.ic_baseline_close_24,
+                            R.color.danger,
+                            this@PostActivity,
+                            PostActivity,
+                            Dialog.TIME_SHORT
+                        )
+
                     }
-                    else -> {
-                        null
-                    }
-                }
-                if (tipView != null) {
-                    tips?.addView(tipView)
-                    postDelayed({
-                        tips?.removeAllViews()
-                    }, 1500)
                 }
             }
         }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -12,10 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
-import com.passionpenguin.ditiezu.helper.CategoryContent
-import com.passionpenguin.ditiezu.helper.HttpExt
-import com.passionpenguin.ditiezu.helper.ThreadItem
-import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
+import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.activity_forum_display.*
 import org.jsoup.Jsoup
 
@@ -272,10 +268,15 @@ class ForumDisplay : AppCompatActivity() {
                 }
             }
             HttpExt().retrievePage("http://www.ditiezu.com/forum-$fid-$page.html$ext") {
-                if (it == "Failed Retrieved") {
-                    // Failed Retrieved
-                    Log.i("HTTPEXT", "FAILED RETRIEVED")
-                }
+                if (it == "Failed Retrieved")
+                    Dialog().tip(
+                        resources.getString(R.string.failed_retrieved),
+                        R.drawable.ic_baseline_close_24,
+                        R.color.danger,
+                        this@ForumDisplay,
+                        ForumDisplay,
+                        Dialog.TIME_SHORT
+                    )
                 processResult(it)
             }
         }

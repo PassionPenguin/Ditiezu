@@ -214,7 +214,6 @@ class ReplyItemAdapter(
     resource: Int,
     private var items: List<ReplyItem>,
     private val activity: Activity,
-    private val tipLayout: LinearLayout,
     private val formhash: String
 ) : ArrayAdapter<ReplyItem>(mCtx, resource, items) {
 
@@ -262,22 +261,18 @@ class ReplyItemAdapter(
             with(view.findViewById<CheckBox>(R.id.rate)) {
                 this.visibility = View.VISIBLE
                 this.setOnClickListener {
+                    val viewThread = activity.findViewById<ViewGroup>(R.id.viewThread)
                     var s =
                         HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=misc&action=rate&tid=${replyItem.tid}&pid=${replyItem.pid}&infloat=yes&handlekey=rate&t=&inajax=1&ajaxtarget=fwin_content_rate")
                     when (s) {
                         "Failed Retrieved" -> {
-                            val v = LayoutInflater.from(mCtx).inflate(
-                                R.layout.tip_access_denied,
-                                tipLayout,
-                                false
-                            )
-                            v.findViewById<TextView>(R.id.text).text =
-                                resources.getString(R.string.failed_retrieved)
-                            tipLayout.removeAllViews()
-                            tipLayout.addView(v)
-                            tipLayout.postDelayed(
-                                { tipLayout.removeView(v) },
-                                2000
+                            Dialog().tip(
+                                resources.getString(R.string.failed_retrieved),
+                                R.drawable.ic_baseline_close_24,
+                                R.color.danger,
+                                activity,
+                                viewThread,
+                                Dialog.TIME_SHORT
                             )
                         }
                         else -> {
@@ -285,44 +280,32 @@ class ReplyItemAdapter(
                             val p = Jsoup.parse(s)
                             when {
                                 p.select(".alert_error").isNotEmpty() -> {
-                                    val v = LayoutInflater.from(mCtx).inflate(
-                                        R.layout.tip_not_applicable,
-                                        tipLayout,
-                                        false
+                                    Dialog().tip(
+                                        p.select(".alert_error").text(),
+                                        R.drawable.ic_baseline_close_24,
+                                        R.color.danger,
+                                        activity,
+                                        viewThread,
+                                        Dialog.TIME_SHORT
                                     )
-                                    v.findViewById<TextView>(R.id.text).text =
-                                        p.select(".alert_error").text()
-                                    tipLayout.removeAllViews()
-                                    tipLayout.addView(v)
-                                    tipLayout.postDelayed({
-                                        tipLayout.removeView(
-                                            v
-                                        )
-                                    }, 2000)
                                 }
                                 else -> {
                                     Dialog().create(
                                         activity,
-                                        activity.findViewById(R.id.view_thread),
+                                        activity.findViewById(R.id.viewThread),
                                         resources.getString(R.string.rate),
                                         resources.getString(R.string.rate_title),
                                         resources.getString(R.string.rate_description),
-                                        { v, w ->
+                                        { v, _ ->
                                             if (v.findViewById<TextView>(R.id.reason).text == "") {
-                                                val err = LayoutInflater.from(mCtx).inflate(
-                                                    R.layout.tip_not_applicable,
-                                                    tipLayout,
-                                                    false
+                                                Dialog().tip(
+                                                    resources.getString(R.string.require_reason),
+                                                    R.drawable.ic_baseline_close_24,
+                                                    R.color.danger,
+                                                    activity,
+                                                    viewThread,
+                                                    Dialog.TIME_SHORT
                                                 )
-                                                v.findViewById<TextView>(R.id.text).text =
-                                                    resources.getString(R.string.require_reason)
-                                                tipLayout.removeAllViews()
-                                                tipLayout.addView(err)
-                                                tipLayout.postDelayed({
-                                                    tipLayout.removeView(
-                                                        v
-                                                    )
-                                                }, 1000)
                                             } else {
                                                 val str = HttpExt().asyncPostPage(
                                                     "http://www.ditiezu.com/forum.php?mod=misc&action=rate&ratesubmit=yes&infloat=yes&inajax=1",
@@ -332,57 +315,43 @@ class ReplyItemAdapter(
                                                     )}&score4=${v.findViewById<Spinner>(R.id.score).selectedItem}"
                                                 )
 
-                                                tipLayout.removeAllViews()
                                                 val response = str.substring(
                                                     str.indexOf("_rate('") + 33,
                                                     str.indexOf(
                                                         "'", str.indexOf("_rate('") + 34
                                                     )
                                                 )
-                                                val tipView = when {
+                                                when {
                                                     str == "Failed Retrieved" -> {
-                                                        val lv = LayoutInflater.from(mCtx).inflate(
-                                                            R.layout.tip_access_denied,
-                                                            tipLayout,
-                                                            false
+                                                        Dialog().tip(
+                                                            resources.getString(R.string.failed_retrieved),
+                                                            R.drawable.ic_baseline_close_24,
+                                                            R.color.danger,
+                                                            activity,
+                                                            viewThread,
+                                                            Dialog.TIME_SHORT
                                                         )
-                                                        lv.findViewById<TextView>(R.id.text).text =
-                                                            resources.getString(R.string.failed_retrieved)
-                                                        lv
                                                     }
                                                     str.contains("succeed") -> {
-                                                        val lv = LayoutInflater.from(mCtx)
-                                                            .inflate(
-                                                                R.layout.tip_succeed,
-                                                                tipLayout,
-                                                                false
-                                                            )
-                                                        lv.findViewById<TextView>(R.id.text).text =
-                                                            response
-                                                        postDelayed({ w.dismiss() }, 1000)
-                                                        lv
+                                                        Dialog().tip(
+                                                            response,
+                                                            R.drawable.ic_baseline_check_24,
+                                                            R.color.primary500,
+                                                            activity,
+                                                            viewThread,
+                                                            Dialog.TIME_SHORT
+                                                        )
                                                     }
                                                     str.contains("error") -> {
-                                                        val lv =
-                                                            LayoutInflater.from(mCtx)
-                                                                .inflate(
-                                                                    R.layout.tip_not_applicable,
-                                                                    tipLayout,
-                                                                    false
-                                                                )
-                                                        lv.findViewById<TextView>(R.id.text).text =
-                                                            response
-                                                        lv
+                                                        Dialog().tip(
+                                                            response,
+                                                            R.drawable.ic_baseline_close_24,
+                                                            R.color.danger,
+                                                            activity,
+                                                            viewThread,
+                                                            Dialog.TIME_SHORT
+                                                        )
                                                     }
-                                                    else -> {
-                                                        null
-                                                    }
-                                                }
-                                                if (tipView != null) {
-                                                    tipLayout.addView(tipView)
-                                                    postDelayed({
-                                                        tipLayout.removeAllViews()
-                                                    }, 1000)
                                                 }
                                             }
                                         }) { v, w ->

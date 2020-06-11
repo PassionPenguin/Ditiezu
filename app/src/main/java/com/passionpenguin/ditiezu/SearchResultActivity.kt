@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -13,6 +12,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItem
 import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
@@ -99,61 +99,61 @@ class SearchResultActivity : AppCompatActivity() {
                 ) + "&searchsubmit=yes"
             )
             tips.removeAllViews()
-            val v = when {
+            when {
                 s == "Failed Retrieved" -> {
-                    val v = LayoutInflater.from(applicationContext).inflate(
-                        R.layout.tip_access_denied,
-                        tips,
-                        false
+                    Dialog().tip(
+                        resources.getString(R.string.failed_retrieved),
+                        R.drawable.ic_baseline_close_24,
+                        R.color.danger,
+                        this@SearchResultActivity,
+                        SearchResultActivity,
+                        Dialog.TIME_SHORT
                     )
-                    v.findViewById<TextView>(R.id.text).text =
-                        resources.getString(R.string.failed_retrieved)
-                    v
                 }
                 s.contains("用户登录") -> {
-                    LayoutInflater.from(applicationContext).inflate(
-                        R.layout.tip_login_required,
-                        tips,
-                        false
+                    Dialog().tip(
+                        resources.getString(R.string.login_tips),
+                        R.drawable.ic_baseline_close_24,
+                        R.color.danger,
+                        this@SearchResultActivity,
+                        SearchResultActivity,
+                        Dialog.TIME_SHORT
                     )
                 }
                 s.contains("只能进行一次搜索") -> {
-                    val v = LayoutInflater.from(applicationContext).inflate(
-                        R.layout.tip_access_denied,
-                        tips,
-                        false
+                    Dialog().tip(
+                        resources.getString(R.string.search_15s),
+                        R.drawable.ic_baseline_close_24,
+                        R.color.danger,
+                        this@SearchResultActivity,
+                        SearchResultActivity,
+                        Dialog.TIME_SHORT
                     )
-                    v.findViewById<TextView>(R.id.text).text =
-                        resources.getString(R.string.search_15s)
-                    v
                 }
                 s.contains("站点设置每分钟系统最多") -> {
-                    val v = LayoutInflater.from(applicationContext).inflate(
-                        R.layout.tip_access_denied,
-                        tips,
-                        false
+                    Dialog().tip(
+                        resources.getString(R.string.search_system_restriction),
+                        R.drawable.ic_baseline_close_24,
+                        R.color.danger,
+                        this@SearchResultActivity,
+                        SearchResultActivity,
+                        Dialog.TIME_SHORT
                     )
-                    v.findViewById<TextView>(R.id.text).text =
-                        resources.getString(R.string.search_system_restriction)
-                    v
                 }
                 s.contains("没有找到匹配结果") -> {
-                    val v = LayoutInflater.from(applicationContext).inflate(
-                        R.layout.tip_not_applicable,
-                        tips,
-                        false
+                    Dialog().tip(
+                        resources.getString(R.string.keyword_not_match, kw),
+                        R.drawable.ic_baseline_close_24,
+                        R.color.danger,
+                        this@SearchResultActivity,
+                        SearchResultActivity,
+                        Dialog.TIME_SHORT
                     )
-                    v.findViewById<TextView>(R.id.text).text =
-                        resources.getString(R.string.keyword_not_match, kw)
-                    v
                 }
                 else -> {
                     processResult(s)
-                    null
                 }
             }
-            if (v != null)
-                tips?.addView(v)
             LoadingMaskContainer.visibility = View.GONE
         }
         search()

@@ -1,8 +1,10 @@
 package com.passionpenguin.ditiezu.helper
 
 import android.app.Activity
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.*
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -89,5 +91,38 @@ class Dialog {
             window.statusBarColor = Color.TRANSPARENT
         }
         popupWindow.update()
+    }
+
+    fun tip(
+        text: String,
+        iconResource: Int,
+        iconColor: Int,
+        activity: Activity,
+        target: ViewGroup,
+        length: Long
+    ) {
+        val view = LayoutInflater.from(activity).inflate(R.layout.fragment_tips, target, false)
+        view.findViewById<ImageView>(R.id.icon).setImageResource(iconResource)
+        view.findViewById<ImageView>(R.id.icon).backgroundTintList =
+            ColorStateList.valueOf(activity.resources.getColor(iconColor, null))
+        view.findViewById<TextView>(R.id.text).text = text
+        val popupWindow = PopupWindow(
+            view,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            true
+        )
+        val window = activity.window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
+        view.postDelayed({
+            popupWindow.dismiss()
+        }, length)
+    }
+
+    companion object {
+        val TIME_SHORT: Long get() = 1000
+        val TIME_LONG: Long get() = 2000
     }
 }

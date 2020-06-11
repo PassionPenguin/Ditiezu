@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,9 +14,11 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ReplyItem
 import com.passionpenguin.ditiezu.helper.ReplyItemAdapter
+import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.activity_view_thread.*
 import org.jsoup.Jsoup
 import java.util.*
@@ -39,22 +40,26 @@ class ViewThread : AppCompatActivity() {
             HttpExt().retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
                 val parser = Jsoup.parse(result)
                 runOnUiThread {
+                    LoadingMaskContainer.visibility = View.GONE
                     if (result == "Failed Retrieved") {
-                        tips.removeAllViews()
-                        val v = LayoutInflater.from(applicationContext)
-                            .inflate(R.layout.tip_access_denied, tips, false)
-                        v.findViewById<TextView>(R.id.text).text =
-                            resources.getString(R.string.failed_retrieved)
-                        tips.addView(v)
-                        LoadingMaskContainer.visibility = View.GONE
+                        Dialog().tip(
+                            resources.getString(R.string.failed_retrieved),
+                            R.drawable.ic_baseline_close_24,
+                            R.color.danger,
+                            this@ViewThread,
+                            ViewThread,
+                            Dialog.TIME_SHORT
+                        )
                     }
                     if (parser.select("#messagetext").isNotEmpty()) {
-                        tips.removeAllViews()
-                        val v = LayoutInflater.from(applicationContext)
-                            .inflate(R.layout.tip_access_denied, tips, false)
-                        v.findViewById<TextView>(R.id.text).text =
-                            parser.select("#messagetext").text()
-                        tips.addView(v)
+                        Dialog().tip(
+                            parser.select("#messagetext").text(),
+                            R.drawable.ic_baseline_close_24,
+                            R.color.danger,
+                            this@ViewThread,
+                            ViewThread,
+                            Dialog.TIME_SHORT
+                        )
                         LoadingMaskContainer.visibility = View.GONE
                     }
                 }
@@ -206,7 +211,6 @@ class ViewThread : AppCompatActivity() {
                         0,
                         list,
                         this@ViewThread,
-                        tips,
                         parser.select("[name=\"formhash\"]").attr("value")
                     )
                     viewThread.addFooterView(footerPagination)
