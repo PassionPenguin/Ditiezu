@@ -15,14 +15,12 @@ import android.webkit.CookieManager
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.passionpenguin.ditiezu.R
-import kotlinx.android.synthetic.main.fragment_action_bar.view.*
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLConnection
 import java.nio.charset.Charset
 
 class HttpExt {
@@ -322,7 +320,6 @@ class HttpExt {
                 "keep-alive"
             )
             val it: String = c.getHeaderField("Location") ?: ""
-            Log.i(it, it)
             it.let {
                 result =
                     if (c.responseCode == HttpURLConnection.HTTP_MOVED_PERM || c.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {

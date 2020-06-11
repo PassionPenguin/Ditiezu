@@ -2,7 +2,6 @@ package com.passionpenguin.ditiezu
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -31,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
             ): Boolean {
                 val url = request?.url.toString()
                 return if (url.indexOf("mod=logging") == -1 || url.indexOf("ditiezu.com") == -1) {
-                    Log.i(url, url.indexOf("ditiezu.com").toString())
                     view?.evaluateJavascript(
                         "window.open('http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes');",
                         null

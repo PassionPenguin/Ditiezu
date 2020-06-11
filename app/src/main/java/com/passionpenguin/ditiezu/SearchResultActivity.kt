@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -15,10 +14,9 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.passionpenguin.ditiezu.helper.HttpExt
-import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
 import com.passionpenguin.ditiezu.helper.ThreadItem
+import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
 import kotlinx.android.synthetic.main.activity_search_result.*
-
 import org.jsoup.Jsoup
 import java.net.URLEncoder
 
@@ -53,9 +51,7 @@ class SearchResultActivity : AppCompatActivity() {
                             )
                         else
                             this.substring(this.indexOf("tid=") + 4)
-                    } catch (E: Exception) {
-                        Log.e("", E.toString())
-                        Log.e("", this)
+                    } catch (ignored: Exception) {
                     }
                 }
                 threadListContent.add(

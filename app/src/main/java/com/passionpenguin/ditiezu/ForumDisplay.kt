@@ -94,8 +94,7 @@ class ForumDisplay : AppCompatActivity() {
                                     if (it.className().contains("xw1"))
                                         text.background =
                                             resources.getDrawable(R.drawable.border_bottom, null)
-                                } catch (exception: Exception) {
-                                    Log.e("", this + exception.toString())
+                                } catch (ignored: Exception) {
                                 }
                                 list.findViewById<LinearLayout>(R.id.typesNavigation).addView(text)
                             }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.text.method.LinkMovementMethod
-import android.text.method.MovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,8 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
-import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.PostActivity
+import com.passionpenguin.ditiezu.R
 import com.passionpenguin.htmltextview.HtmlHttpImageGetter
 import com.passionpenguin.htmltextview.HtmlTextView
 import com.squareup.picasso.Picasso
@@ -246,8 +245,10 @@ class ReplyItemAdapter(
                 this.setOnClickListener {
                     val i = Intent(mCtx, PostActivity::class.java)
                     i.putExtra("type", "reply")
-                    i.putExtra("pid", replyItem.pid)
                     i.putExtra("tid", replyItem.tid)
+                    i.putExtra("pid", replyItem.pid)
+                    i.putExtra("reppid", replyItem.pid)
+                    i.putExtra("reppost", replyItem.pid)
                     i.flags = FLAG_ACTIVITY_NEW_TASK
                     mCtx.startActivity(i)
                 }

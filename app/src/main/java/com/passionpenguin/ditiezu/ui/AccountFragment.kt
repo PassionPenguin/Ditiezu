@@ -2,7 +2,6 @@ package com.passionpenguin.ditiezu.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,7 +66,6 @@ class AccountFragment : Fragment() {
                     else -> {
                         val parser = Jsoup.parse(it)
                         val absUrl = parser.select("strong a").attr("href")
-                        Log.i("", absUrl)
                         val id = absUrl.substring(33, absUrl.lastIndexOf(".html"))
 
                         var metaList =

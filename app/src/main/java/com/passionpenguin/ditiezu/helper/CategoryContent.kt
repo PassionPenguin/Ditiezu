@@ -1,7 +1,6 @@
 package com.passionpenguin.ditiezu.helper
 
 import android.content.Context
-import android.util.Log
 import com.passionpenguin.ditiezu.R
 
 class CategoryContent(val context: Context) {
@@ -9,8 +8,7 @@ class CategoryContent(val context: Context) {
         var str = ""
         try {
             str = context.resources.getString(id)
-        } catch (e: Exception) {
-            Log.i("", e.toString())
+        } catch (ignored: Exception) {
         }
         return str
     }

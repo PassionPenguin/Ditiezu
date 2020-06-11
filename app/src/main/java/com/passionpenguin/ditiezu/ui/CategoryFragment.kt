@@ -2,12 +2,13 @@ package com.passionpenguin.ditiezu.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.passionpenguin.ditiezu.ForumDisplay
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.helper.CategoryAdapter
@@ -58,9 +59,18 @@ class CategoryFragment : Fragment() {
         HttpExt().retrievePage("http://www.ditiezu.com/") {
             when (it) {
                 "Failed Retrieved" -> {
-                    Log.i("HTTPEXT", "FAILED RETRIEVED")
-
+                    val v = LayoutInflater.from(context).inflate(
+                        R.layout.tip_access_denied,
+                        activity?.findViewById<LinearLayout>(R.id.tips),
+                        false
+                    )
+                    v.findViewById<TextView>(R.id.text).text =
+                        resources.getString(R.string.failed_retrieved)
                     activity?.runOnUiThread {
+                        categoryListView?.addHeaderView(v)
+                        categoryListView?.postDelayed({
+                            categoryListView.removeHeaderView(v)
+                        }, 1000)
                         categoryListView?.adapter =
                             context?.let { ctx ->
                                 categoryList?.let {
@@ -82,8 +92,7 @@ class CategoryFragment : Fragment() {
                                     "主题: " + child.text().replace("主题: ", "")
                                         .replace(" / ", ", 帖数: ")
                             }
-                    } catch (e: Exception) {
-                        Log.i("", e.toString())
+                    } catch (ignored: Exception) {
                     }
 
                     activity?.runOnUiThread {
