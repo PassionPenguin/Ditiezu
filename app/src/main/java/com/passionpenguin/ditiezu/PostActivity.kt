@@ -2,11 +2,13 @@ package com.passionpenguin.ditiezu
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.tintDrawable
@@ -31,7 +33,12 @@ class PostActivity : AppCompatActivity() {
         val typeNameList: ArrayList<String> = arrayListOf()
         val typeValueList: ArrayList<String> = arrayListOf()
         when (type) {
-            "reply" -> if (tid == null) onBackPressed()
+            "reply" -> {
+                if (tid == null) onBackPressed()
+                if (reppid != null)
+                    originParser =
+                        Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=reply&fid=$fid&tid=$tid&repquote=$reppid"))
+            }
             "edit" -> {
                 if (pid == null || tid == null) onBackPressed()
                 EditTextInput.setText(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid"))
@@ -89,7 +96,17 @@ class PostActivity : AppCompatActivity() {
                         } // New Thread
                         else -> {
                             if (reppid != null) {
-                                "&reppid=$reppid&reppost=$reppid"
+                                "&reppid=$reppid&reppost=$reppid&noticeauthor=${originParser.select(
+                                    "[name='noticeauthor']"
+                                ).attr("value")}&noticetrimstr=${URLEncoder.encode(
+                                    originParser.select(
+                                        "[name='noticetrimstr']"
+                                    ).attr("value"), "GBK"
+                                )}&noticeauthormsg=${URLEncoder.encode(
+                                    originParser.select(
+                                        "[name='noticeauthormsg']"
+                                    ).attr("value"), "GBK"
+                                )}"
                             } else {
                                 ""
                             }

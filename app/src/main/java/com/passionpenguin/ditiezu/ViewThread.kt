@@ -54,7 +54,6 @@ class ViewThread : AppCompatActivity() {
                             .inflate(R.layout.tip_access_denied, tips, false)
                         v.findViewById<TextView>(R.id.text).text =
                             parser.select("#messagetext").text()
-                        Log.i("", parser.select("#messagetext").text())
                         tips.addView(v)
                         LoadingMaskContainer.visibility = View.GONE
                     }
