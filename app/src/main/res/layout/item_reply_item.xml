@@ -125,6 +125,12 @@
                         android:text="@string/title_reply" />
                 </LinearLayout>
             </RelativeLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbarSize="0dp" />
         </LinearLayout>
     </LinearLayout>
 

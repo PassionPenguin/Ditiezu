@@ -24,7 +24,6 @@ class NotificationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity?.findViewById<LinearLayout>(R.id.tips)?.removeAllViews()
         return inflater.inflate(R.layout.fragment_notifications, container, false)
     }
 
@@ -33,7 +32,6 @@ class NotificationsFragment : Fragment() {
 
         fun retriever(url: String) {
             activity?.runOnUiThread {
-                activity?.findViewById<LinearLayout>(R.id.tips)?.removeAllViews()
                 activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
                     View.VISIBLE
             }

@@ -123,7 +123,6 @@ class PostActivity : AppCompatActivity() {
                         InputMethodManager.HIDE_NOT_ALWAYS
                     )
                 }
-                tips.removeAllViews()
                 val response = str.substring(
                     str.indexOf("_rate('") + 33,
                     str.indexOf(

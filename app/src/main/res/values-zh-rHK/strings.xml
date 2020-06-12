@@ -100,4 +100,5 @@
     <string name="rate_title">評分回覆</string>
     <string name="require_reason">原因是必須要填寫的</string>
     <string name="rate_description">確認後您將對該帖子評分</string>
+    <string name="number_of_participants">評價數 %s</string>
 </resources>

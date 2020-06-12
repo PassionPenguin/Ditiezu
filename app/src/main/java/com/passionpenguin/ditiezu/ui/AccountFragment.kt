@@ -28,7 +28,6 @@ class AccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         isLogin = HttpExt().checkLogin()
-        activity?.findViewById<LinearLayout>(R.id.tips)?.removeAllViews()
         return when (isLogin) {
             true ->
                 inflater.inflate(R.layout.fragment_account, container, false)

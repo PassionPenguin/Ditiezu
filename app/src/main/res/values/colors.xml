@@ -17,7 +17,8 @@
     <color name="grey">#888</color>
     <color name="light">#ddd</color>
     <color name="dark">#333</color>
-    <color name="danger">#9c284d</color>
+    <color name="danger">#C62828</color>
+    <color name="warning">#F9A825</color>
     <color name="shadowMask">#44ffffff</color>
     <color name="transparentWhiteBackground">#88ffffff</color>
 </resources>

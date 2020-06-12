@@ -98,7 +98,6 @@ class SearchResultActivity : AppCompatActivity() {
                     "GBK"
                 ) + "&searchsubmit=yes"
             )
-            tips.removeAllViews()
             when {
                 s == "Failed Retrieved" -> {
                     Dialog().tip(

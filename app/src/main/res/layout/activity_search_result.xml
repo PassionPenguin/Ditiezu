@@ -65,16 +65,4 @@
         tools:context=".ui.ThreadItemFragment"
         tools:listitem="@layout/item_thread_item" />
 
-    <LinearLayout
-        android:id="@+id/tips"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@null"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/action_bar_layout"
-        app:layout_constraintVertical_bias="0.33" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

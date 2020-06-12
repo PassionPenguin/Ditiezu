@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,10 +13,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.passionpenguin.ditiezu.helper.Dialog
-import com.passionpenguin.ditiezu.helper.HttpExt
-import com.passionpenguin.ditiezu.helper.ReplyItem
-import com.passionpenguin.ditiezu.helper.ReplyItemAdapter
+import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.activity_view_thread.*
 import org.jsoup.Jsoup
@@ -63,13 +59,21 @@ class ViewThread : AppCompatActivity() {
                         LoadingMaskContainer.visibility = View.GONE
                     }
                 }
+
                 val list = mutableListOf<ReplyItem>()
+
                 parser.select("table[id^='pid']").forEach {
+                    var withPopularity = false
+                    var withMoney = false
+                    var withPrestige = false
+                    var participantsNum = ""
+                    val rateList = mutableListOf<RateItem>()
+                    var rateContent: String = ""
                     it.select(".tip, a").forEach { tipEl ->
                         if (tipEl.tagName() != "a" || tipEl.attr("href").contains("redirect"))
                             tipEl.remove()
                     }
-                    it.select(".pcb a").forEach { tipEl ->
+                    it.select(".t_fsz a").forEach { tipEl ->
                         tipEl.text("查看链接")
                         tipEl.attr("style", "color: #289c77")
                     }
@@ -86,9 +90,7 @@ class ViewThread : AppCompatActivity() {
                     }
                     it.select("img[smilieid]").forEach { img ->
                         val src = img.attr("src")
-                        Log.i("", src)
                         img.attr("src", "http://www.ditiezu.com/$src")
-                        Log.i("", img.attr("src"))
                     }
                     it.select("font[size]").forEach { size ->
                         when (size.attr("size").toInt()) {
@@ -105,6 +107,52 @@ class ViewThread : AppCompatActivity() {
                         blockQuote.attr("color", "#88888822")
                         blockQuote.attr("face", "monospaced")
                     }
+
+                    if (it.select("[id^='ratelog_']").isNotEmpty()) {
+                        val log = it.select("[id^='ratelog_']")
+                        with(log.select(".ratl tbody:first-child")) {
+                            if (this.text().contains("人气")) withPopularity = true
+                            if (this.text().contains("金钱")) withMoney = true
+                            if (this.text().contains("威望")) withPrestige = true
+                            participantsNum = this.select("th:first-child .xi1").text()
+                        }
+                        it.select(".ratl_l [id^='rate_']").forEach { el ->
+                            val index = arrayOf(
+                                if (withPopularity) {
+                                    if (withMoney) {
+                                        if (withPrestige) 2
+                                        else 1
+                                    } else if (withPrestige) 1
+                                    else 0
+                                } else -1,
+                                if (withMoney) {
+                                    if (withPrestige) 1
+                                    else 0
+                                } else -1,
+                                if (withPrestige) 0 else -1
+                            )
+                            rateList.add(
+                                RateItem(
+                                    with(el.select("a:nth-child(2)").attr("href")) {
+                                        if (this.indexOf("uid-") + 4 <= 0 || this.indexOf(".html") <= 0)
+                                            0
+                                        else this.substring(
+                                            this.indexOf("uid-") + 4,
+                                            this.indexOf(".html")
+                                        ).toInt()
+                                    },
+                                    el.select("a:nth-child(2)").text(),
+                                    if (index[0] != -1) el.select(".xg1, .xi1")[index[0]].text() else "",
+                                    if (index[1] != -1) el.select(".xg1, .xi1")[index[1]].text() else "",
+                                    if (index[2] != -1) el.select(".xg1, .xi1")[index[2]].text() else "",
+                                    el.select(".xg1").text()
+                                )
+                            )
+                        }
+                        rateContent =
+                            log.select(".ratc").html()
+                    }
+
                     list.add(
                         ReplyItem(
                             with(it.select(".avatar a").attr("href")) {
@@ -118,12 +166,18 @@ class ViewThread : AppCompatActivity() {
                             it.select("[id^='postmessage_']").html() + it.select(".pattl").html(),
                             it.select(".authi .xw1").text(),
                             it.select("[id^='authorposton']").text(),
-                            it.select(".fastre").isNotEmpty() && loginState,
                             it.select(".editp").isNotEmpty() && loginState,
+                            it.select(".fastre").isNotEmpty() && loginState,
                             it.select("[onclick^=\"showWindow('rate'\"]")
                                 .isNotEmpty() && loginState,
                             it.attr("id").substring(3).toInt(),
-                            tid
+                            tid,
+                            rateList,
+                            withPopularity,
+                            withMoney,
+                            withPrestige,
+                            participantsNum,
+                            rateContent
                         )
                     )
                 }
@@ -202,6 +256,7 @@ class ViewThread : AppCompatActivity() {
                     loadPage(tid, page)
                 }
                 nextPage2.text = (page + 2).toString()
+
                 this@ViewThread.runOnUiThread {
                     title = parser.select("#thread_subject").text()
                     threadTitle.text = parser.select("#thread_subject").text()

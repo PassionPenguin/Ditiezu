@@ -191,4 +191,6 @@
     <string name="rate_title">Rate Reply</string>
     <string name="rate_description">By clicking confirm, you rate the reply.</string>
     <string name="require_reason">Reason is required</string>
+    <string name="number_of_participants">Participants %s</string>
+    <string name="reason">Reason</string>
 </resources>

@@ -45,19 +45,20 @@ class HtmlTextView : JellyBeanSpanFixTextView {
         context,
         attrs
     )
+
     constructor(context: Context?) : super(context)
 
     /**
      * @see com.passionpenguin.htmltextview.HtmlTextView.setHtml
      */
-    private fun setHtml(@RawRes resId: Int) {
+    fun setHtml(@RawRes resId: Int) {
         setHtml(resId, null)
     }
 
     /**
      * @see com.passionpenguin.htmltextview.HtmlTextView.setHtml
      */
-    private fun setHtml(html: String) {
+    fun setHtml(html: String) {
         setHtml(html, null)
     }
 
@@ -70,7 +71,7 @@ class HtmlTextView : JellyBeanSpanFixTextView {
      * @param imageGetter for fetching images. Possible ImageGetter provided by this library:
      * HtmlLocalImageGetter and HtmlRemoteImageGetter
      */
-    private fun setHtml(@RawRes resId: Int, imageGetter: ImageGetter?) {
+    fun setHtml(@RawRes resId: Int, imageGetter: ImageGetter?) {
         val inputStreamText =
             context.resources.openRawResource(resId)
         setHtml(convertStreamToString(inputStreamText), imageGetter)

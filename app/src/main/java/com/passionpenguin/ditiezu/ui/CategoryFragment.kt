@@ -24,7 +24,6 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity?.findViewById<LinearLayout>(R.id.tips)?.removeAllViews()
         return inflater.inflate(R.layout.fragment_category, container, false)
     }
 

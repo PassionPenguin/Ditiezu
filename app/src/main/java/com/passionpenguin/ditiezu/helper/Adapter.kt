@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.text.method.LinkMovementMethod
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +76,7 @@ class ThreadListAdapter(
         authorName.text = threadItem.authorName
         meta.text = threadItem.meta
         Picasso.with(context)
-            .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${threadItem.authorId}")
+            .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${threadItem.authorId}")
             .placeholder(R.mipmap.noavatar_middle_rounded)
             .error(R.mipmap.noavatar_middle_rounded)
             .transform(CircularCornersTransform())
@@ -110,7 +111,7 @@ class ThreadItemListAdapter(
         view.findViewById<TextView>(R.id.threadMetaInfo).text = searchItem.meta
         view.findViewById<TextView>(R.id.threadAuthorName).text = searchItem.authorName
         Picasso.with(context)
-            .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${searchItem.authorId}")
+            .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${searchItem.authorId}")
             .placeholder(R.mipmap.noavatar_middle_rounded)
             .error(R.mipmap.noavatar_middle_rounded)
             .transform(CircularCornersTransform())
@@ -206,7 +207,13 @@ class ReplyItem(
     val replyable: Boolean = false,
     val rateable: Boolean = false,
     val pid: Int,
-    val tid: Int
+    val tid: Int,
+    var rateLog: List<RateItem>? = null,
+    val withPopularity: Boolean = false,
+    val withMoney: Boolean = false,
+    val withPrestige: Boolean = false,
+    val participantsNum: String = "",
+    val rateContent: String = ""
 )
 
 class ReplyItemAdapter(
@@ -417,6 +424,47 @@ class ReplyItemAdapter(
                     }
                 }
             }
+        with(replyItem.rateLog) {
+            if (this != null && this.isNotEmpty()) {
+                val log = LinearLayout(mCtx)
+                log.orientation = LinearLayout.VERTICAL
+                val v = layoutInflater.inflate(R.layout.item_rate_log_header, log, false)
+                v.findViewById<TextView>(R.id.participantsNum).text =
+                    mCtx.resources.getString(
+                        R.string.number_of_participants,
+                        replyItem.participantsNum
+                    )
+                if (replyItem.withPopularity) v.findViewById<TextView>(R.id.popularity).visibility =
+                    View.VISIBLE
+                if (replyItem.withMoney) v.findViewById<TextView>(R.id.money).visibility =
+                    View.VISIBLE
+                if (replyItem.withPrestige) v.findViewById<TextView>(R.id.prestige).visibility =
+                    View.VISIBLE
+                log.addView(v)
+                replyItem.rateLog?.forEach {
+                    log.addView(
+                        rateView(
+                            mCtx,
+                            it,
+                            replyItem.withPopularity,
+                            replyItem.withMoney,
+                            replyItem.withPrestige
+                        )
+                    )
+                }
+                val f = HtmlTextView(mCtx)
+                f.setHtml(replyItem.rateContent)
+                f.height = mCtx.resources.getDimension(R.dimen._32).toInt()
+                f.gravity = Gravity.CENTER_VERTICAL
+                f.textSize = 12F
+                log.addView(f)
+                view.findViewById<HorizontalScrollView>(R.id.Container).addView(log)
+                log.layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+        }
 
         Picasso.with(context)
             .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${replyItem.authorId}")
@@ -426,4 +474,42 @@ class ReplyItemAdapter(
             .into(view.findViewById<ImageView>(R.id.avatar))
         return view
     }
+}
+
+class RateItem(
+    val authorId: Int,
+    val authorName: String,
+    val popularity: String,
+    val money: String,
+    val prestige: String,
+    val reason: String
+)
+
+fun rateView(
+    mCtx: Context,
+    rateLog: RateItem,
+    withPopularity: Boolean = false,
+    withMoney: Boolean = false,
+    withPrestige: Boolean = false
+): View {
+    val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
+    val view: View = layoutInflater.inflate(R.layout.item_rate_log, null)
+    val popularity: TextView = view.findViewById(R.id.popularity)
+    val money: TextView = view.findViewById(R.id.money)
+    val prestige: TextView = view.findViewById(R.id.prestige)
+    view.findViewById<TextView>(R.id.reason).text = rateLog.reason
+    view.findViewById<TextView>(R.id.authorName).text = rateLog.authorName
+    popularity.text = rateLog.popularity
+    money.text = rateLog.money
+    prestige.text = rateLog.prestige
+    if (withPopularity) popularity.visibility = View.VISIBLE
+    if (withMoney) money.visibility = View.VISIBLE
+    if (withPrestige) prestige.visibility = View.VISIBLE
+    Picasso.with(mCtx)
+        .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${rateLog.authorId}")
+        .placeholder(R.mipmap.noavatar_middle_rounded)
+        .error(R.mipmap.noavatar_middle_rounded)
+        .transform(CircularCornersTransform())
+        .into(view.findViewById<ImageView>(R.id.avatar))
+    return view
 }
