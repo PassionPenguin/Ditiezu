@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:elevation="@dimen/_32"
+        android:elevation="@dimen/_8"
         android:background="@drawable/border_radius_8_no_padding"
         android:layout_marginHorizontal="@dimen/_32"
         android:layout_marginVertical="@dimen/_16"

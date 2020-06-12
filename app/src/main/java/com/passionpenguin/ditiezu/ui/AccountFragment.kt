@@ -15,7 +15,6 @@ import com.passionpenguin.ditiezu.LoginActivity
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.helper.*
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_account.*
 import org.jsoup.Jsoup
 import kotlin.properties.Delegates
@@ -60,7 +59,7 @@ class AccountFragment : Fragment() {
                                 R.drawable.ic_baseline_close_24,
                                 R.color.danger,
                                 activity,
-                                MainActivity,
+                                activity.findViewById(R.id.MainActivity),
                                 Dialog.TIME_SHORT
                             )
                         }
@@ -197,11 +196,13 @@ class AccountFragment : Fragment() {
                         }
                     }
                 }
-                activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
-                    View.GONE
+                activity?.runOnUiThread {
+                    activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                        View.GONE
 
-                activity?.findViewById<TextView>(R.id.title)?.text =
-                    resources.getString(R.string.settings_title)
+                    activity?.findViewById<TextView>(R.id.title)?.text =
+                        resources.getString(R.string.settings_title)
+                }
             }
     }
 }

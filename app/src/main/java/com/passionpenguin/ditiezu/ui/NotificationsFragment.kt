@@ -16,7 +16,6 @@ import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.NotificationItem
 import com.passionpenguin.ditiezu.helper.NotificationsAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import org.jsoup.Jsoup
 
 class NotificationsFragment : Fragment() {
@@ -45,7 +44,7 @@ class NotificationsFragment : Fragment() {
                                 R.drawable.ic_baseline_close_24,
                                 R.color.danger,
                                 activity,
-                                MainActivity,
+                                activity.findViewById(R.id.MainActivity),
                                 Dialog.TIME_SHORT
                             )
                         }
@@ -55,7 +54,7 @@ class NotificationsFragment : Fragment() {
                                 R.drawable.ic_baseline_close_24,
                                 R.color.danger,
                                 activity,
-                                MainActivity,
+                                activity.findViewById(R.id.MainActivity),
                                 Dialog.TIME_SHORT
                             )
                         }
@@ -65,7 +64,7 @@ class NotificationsFragment : Fragment() {
                                 R.drawable.ic_baseline_close_24,
                                 R.color.primary500,
                                 activity,
-                                MainActivity,
+                                activity.findViewById(R.id.MainActivity),
                                 Dialog.TIME_SHORT
                             )
                         }
@@ -95,7 +94,8 @@ class NotificationsFragment : Fragment() {
                                                     this.attr("href")
                                                         .indexOf(
                                                             "-",
-                                                            this.attr("href").indexOf("thread-") + 7
+                                                            this.attr("href")
+                                                                .indexOf("thread-") + 7
                                                         )
                                                 )
                                                 page = "1"
@@ -106,7 +106,9 @@ class NotificationsFragment : Fragment() {
 
                                     list.add(
                                         NotificationItem(
-                                            if (it.select("img").attr("src").contains("systempm")) {
+                                            if (it.select("img").attr("src")
+                                                    .contains("systempm")
+                                            ) {
                                                 "http://www.ditiezu.com/" + it.select("img")
                                                     .attr("src")
                                             } else it.select("img").attr("src"),
@@ -134,15 +136,12 @@ class NotificationsFragment : Fragment() {
                                     }
                                 }
                             }
-                            activity.runOnUiThread {
-                                activity.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
-                                    View.GONE
-                            }
                         }
                     }
                 }
             }
         }
+
         val tabs: TabLayout = view.findViewById(R.id.tabs)
         tabs.addTab(tabs.newTab().setText(resources.getString(R.string.unread_notifications)))
         tabs.addTab(tabs.newTab().setText(resources.getString(R.string.read_notifications)))

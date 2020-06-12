@@ -14,7 +14,6 @@ import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItem
 import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_item_list.*
 import org.jsoup.Jsoup
 
@@ -86,7 +85,7 @@ class ThreadItemFragment : Fragment() {
                                 R.drawable.ic_baseline_close_24,
                                 R.color.danger,
                                 activity,
-                                MainActivity,
+                                activity.findViewById(R.id.MainActivity),
                                 Dialog.TIME_SHORT
                             )
                         }

@@ -117,12 +117,9 @@ class CategoryFragment : Fragment() {
                     }
                 }
                 activity.runOnUiThread {
-                    activity.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
-                        View.GONE
+                    activity.findViewById<TextView>(R.id.title)?.text =
+                        resources.getString(R.string.category_title)
                 }
-
-                activity.findViewById<TextView>(R.id.title)?.text =
-                    resources.getString(R.string.category_title)
             }
         }
     }
