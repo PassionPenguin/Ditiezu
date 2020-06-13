@@ -101,6 +101,9 @@ class ViewThread : AppCompatActivity() {
                             7 -> size.html("<big><big><big><big>" + size.html() + "</big></big></big></big>")
                         }
                     }
+                    with(it.select(".pstatus")) {
+                        this.tagName("PSTATUS")
+                    }
 
                     if (it.select("[id^='ratelog_']").isNotEmpty()) {
                         val log = it.select("[id^='ratelog_']")
