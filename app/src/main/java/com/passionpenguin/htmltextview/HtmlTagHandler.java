@@ -174,7 +174,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
             if (src != null)
                 output.setSpan(new CustomIMGSpan(mContext, src), len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        if (tag.equalsIgnoreCase(BLOCKQUOTE_ITEM)) {
+        if (tag.equalsIgnoreCase(BLOCKQUOTE_ITEM) || tag.equalsIgnoreCase("PSTATUS")) {
             // 获取长度
             int len = output.length();
             if (len > 0)

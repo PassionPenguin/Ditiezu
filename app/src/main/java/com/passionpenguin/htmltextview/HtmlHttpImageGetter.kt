@@ -46,8 +46,9 @@ class HtmlHttpImageGetter(textView: TextView) : ImageGetter {
         matchParentWidth = false
     }
 
-    override fun getDrawable(source: String): Drawable {
+    override fun getDrawable(source: String?): Drawable {
         val urlDrawable = UrlDrawable()
+        if (source == null) return urlDrawable
 
         // get the actual source
         val asyncTask = ImageGetterAsyncTask(
