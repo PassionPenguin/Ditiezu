@@ -4,13 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.core.graphics.scale
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -19,6 +23,7 @@ import com.passionpenguin.ditiezu.R
 import com.passionpenguin.htmltextview.HtmlHttpImageGetter
 import com.passionpenguin.htmltextview.HtmlTextView
 import org.jsoup.Jsoup
+import java.io.IOException
 import java.net.URLEncoder
 
 
@@ -513,5 +518,41 @@ fun rateView(
         .error(R.mipmap.noavatar_middle_rounded)
         .apply(RequestOptions.bitmapTransform(CircleCrop()))
         .into(view.findViewById(R.id.avatar))
+    return view
+}
+
+fun attachImageView(
+    mCtx: Activity,
+    url: String
+): View {
+    val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
+    val view: View = layoutInflater.inflate(R.layout.item_image, null)
+
+    fun loadBitmap(URL: String, returnVal: (bitmap: Bitmap?) -> Unit) {
+        var bitmap: Bitmap?
+        Thread {
+            try {
+                HttpExt().openHttpUrlConn(URL) {
+                    bitmap = BitmapFactory.decodeStream(it)
+                    val height = bitmap!!.height
+                    val width = bitmap!!.width
+                    val size = mCtx.resources.getDimension(R.dimen._360)
+                    if (height > width)
+                        bitmap!!.scale((size * width / height).toInt(), size.toInt())
+                    else bitmap!!.scale(size.toInt(), (size * height / width).toInt())
+                    returnVal(bitmap)
+                }
+            } catch (ignored: IOException) {
+            }
+        }.start()
+    }
+    Log.i("", url)
+    loadBitmap("http://www.ditiezu.com/$url") {
+        mCtx.runOnUiThread {
+            Glide.with(mCtx)
+                .load(it)
+                .into(view.findViewById(R.id.image))
+        }
+    }
     return view
 }
