@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -13,10 +12,7 @@ import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.entity.LocalMedia
-import com.passionpenguin.ditiezu.helper.Dialog
-import com.passionpenguin.ditiezu.helper.GlideEngine
-import com.passionpenguin.ditiezu.helper.HttpExt
-import com.passionpenguin.ditiezu.helper.tintDrawable
+import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.activity_post.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -31,10 +27,32 @@ class PostActivity : AppCompatActivity() {
     private var fid: String? = null
     private var attachlist: ArrayList<String> = arrayListOf()
 
+    private fun insert(
+        contentBefore: String = "",
+        contentAfter: String = "",
+        replaceWith: String? = null
+    ) {
+        with(EditTextInput) {
+            val start = this.selectionStart
+            val end = this.selectionEnd
+            val t =
+                this.text.substring(0, start) + contentBefore + (replaceWith
+                    ?: this.text.substring(
+                        start,
+                        end
+                    )) + contentAfter + this.text.substring(
+                    end, this.length()
+                )
+            this.setText(t)
+            if (contentAfter.isEmpty() || contentBefore.isEmpty())
+                this.setSelection(end, end)
+            else this.setSelection(contentBefore.length + start, contentAfter.length + end)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val e = intent.extras
         val tid = e?.get("tid")
@@ -86,6 +104,23 @@ class PostActivity : AppCompatActivity() {
             s = s.substring(matcher.start() + 1) // ignore the just-matched and move on;
             matcher = pattern.matcher(s)
         }
+        var attachResult =
+            HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=ajax&action=imagelist&pid=$pid&fid=$fid&inajax=1&ajaxtarget=imgattachlist")
+                .substring(53)
+        if (attachResult.length > 11) {
+            attachResult = attachResult.substring(0, attachResult.length - 11)
+            Jsoup.parse(attachResult).select("[id^='imageattach']").forEach {
+                val v = attachImageView(
+                    this,
+                    it.select("img").attr("src")
+                )
+                v.setOnClickListener { _ ->
+                    insert("[attachimg]${it.attr("id").substring(11)}[/attachimg]", "", "")
+                }
+                ImageList.addView(v)
+            }
+        }
+
         uid = originParser.select("[name=\"uid\"]").attr("value")
 
         val formhash =
@@ -202,7 +237,6 @@ class PostActivity : AppCompatActivity() {
             }
         }
 
-
         fun setCompoundButtonColor(e: CompoundButton, isChecked: Boolean) {
             val color = R.color.grey
             val colorChecked = R.color.primary500
@@ -228,11 +262,6 @@ class PostActivity : AppCompatActivity() {
         }
 
         arrayOf(
-            fontBoldToggle,
-            fontItalicToggle,
-            fontStrikeThroughToggle,
-            fontUnderlinedToggle,
-            fontQuoteToggle,
             fontSizeToggle,
             listToggle
         ).forEach {
@@ -267,48 +296,33 @@ class PostActivity : AppCompatActivity() {
             }
         }
 
-        fun insert(
-            contentBefore: String = "",
-            contentAfter: String = "",
-            replaceWith: String? = null
-        ) {
-            with(EditTextInput) {
-                val start = this.selectionStart
-                val end = this.selectionEnd
-                val t =
-                    this.text.substring(0, start) + contentBefore + (replaceWith
-                        ?: this.text.substring(
-                            start,
-                            end
-                        )) + contentAfter + this.text.substring(
-                        end, this.length()
-                    )
-                this.setText(t)
-                this.setSelection(start + contentBefore.length, end + contentAfter.length - 1)
-            }
-        }
-
         fontBoldToggle.setOnClickListener {
+            setCompoundButtonColor(fontBoldToggle, true)
             insert("[b]", "[/b]")
         }
 
         fontItalicToggle.setOnClickListener {
+            setCompoundButtonColor(fontItalicToggle, true)
             insert("[i]", "[/i]")
         }
 
         fontUnderlinedToggle.setOnClickListener {
+            setCompoundButtonColor(fontUnderlinedToggle, true)
             insert("[u]", "[/u]")
         }
 
         fontStrikeThroughToggle.setOnClickListener {
+            setCompoundButtonColor(fontStrikeThroughToggle, true)
             insert("[s]", "[/s]")
         }
 
         fontQuoteToggle.setOnClickListener {
+            setCompoundButtonColor(fontQuoteToggle, true)
             insert("[quote]", "[/quote]")
         }
 
         imageSelectorToggle.setOnClickListener {
+            setCompoundButtonColor(imageSelectorToggle, true)
             PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
                 .imageEngine(GlideEngine.createGlideEngine())
@@ -352,7 +366,6 @@ class PostActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
@@ -361,9 +374,10 @@ class PostActivity : AppCompatActivity() {
                     // 结果回调
                     val selectList: List<LocalMedia> = PictureSelector.obtainMultipleResult(data)
                     selectList.forEach {
+
                         val s =
                             HttpExt().uploadFile(
-                                it.realPath,
+                                it.path,
                                 this@PostActivity,
                                 uid,
                                 attachHash,
@@ -371,6 +385,32 @@ class PostActivity : AppCompatActivity() {
                                 it.mimeType
                             )
                         if (Pattern.compile("^[0-9]*$").matcher(s).matches()) attachlist.add(s)
+                        else Dialog().tip(
+                            resources.getString(R.string.failed),
+                            R.drawable.ic_baseline_close_24,
+                            R.color.danger,
+                            this,
+                            PostActivity,
+                            Dialog.TIME_SHORT
+                        )
+                    }
+
+                    ImageList.removeAllViews()
+                    var attachResult =
+                        HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=ajax&action=imagelist&pid=$pid&fid=$fid&inajax=1&ajaxtarget=imgattachlist")
+                            .substring(53)
+                    if (attachResult.length > 11) {
+                        attachResult = attachResult.substring(0, attachResult.length - 11)
+                        Jsoup.parse(attachResult).select("[id^='imageattach']").forEach {
+                            val v = attachImageView(
+                                this,
+                                it.select("img").attr("src")
+                            )
+                            v.setOnClickListener { _ ->
+                                insert("[attachimg]${it.attr("id").substring(11)}[\\attachimg]", "")
+                            }
+                            ImageList.addView(v)
+                        }
                     }
                 }
             }
