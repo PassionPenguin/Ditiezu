@@ -8,6 +8,8 @@ import android.content.Context.DOWNLOAD_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -23,6 +25,24 @@ import java.net.URL
 import java.nio.charset.Charset
 
 class HttpExt {
+    @Throws(IOException::class)
+    fun openHttpUrlConn(strURL: String, returnVal: (inputStream: InputStream?) -> Unit) {
+        val t = Thread {
+            val url = URL(strURL)
+            val conn = url.openConnection() as HttpURLConnection
+            conn.setRequestProperty("Cookie", CookieManager.getInstance().getCookie(strURL))
+            try {
+                conn.requestMethod = "GET"
+                conn.connect()
+                if (conn.responseCode == HttpURLConnection.HTTP_OK) {
+                    returnVal(conn.inputStream)
+                }
+            } catch (ex: Exception) {
+            }
+        }
+        t.start()
+    }
+
     fun retrievePage(url: String, then: (res: String) -> Unit) {
         val urlConnection = URL(url).openConnection() as HttpURLConnection
         val cookieManager = CookieManager.getInstance()
@@ -405,8 +425,7 @@ class HttpExt {
         query.setFilterById(downloadId)
         val cursor: Cursor = downloadManager!!.query(query)
         if (cursor.moveToFirst()) {
-            val status: Int = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-            when (status) {
+            when (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))) {
                 DownloadManager.STATUS_PAUSED -> {
                 }
                 DownloadManager.STATUS_PENDING -> {
@@ -469,6 +488,23 @@ class HttpExt {
         }
     }
 
+    @Throws(FileNotFoundException::class, IOException::class)
+    fun getBitmapFormUri(ac: Activity, uri: Uri?): Bitmap? {
+        var input = ac.contentResolver.openInputStream(uri!!)
+        val onlyBoundsOptions = BitmapFactory.Options()
+        onlyBoundsOptions.inJustDecodeBounds = true
+        onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888 //optional
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
+        input!!.close()
+        val originalWidth = onlyBoundsOptions.outWidth
+        val originalHeight = onlyBoundsOptions.outHeight
+        if (originalWidth == -1 || originalHeight == -1) return null
+        input = ac.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(input, null, null)
+        input!!.close()
+        return bitmap
+    }
+
     fun uploadFile(
         sourceFileUri: String,
         activity: Activity,
@@ -484,14 +520,18 @@ class HttpExt {
         var bytesAvailable: Int
         var bufferSize: Int
         val maxBufferSize = 1 * 1024 * 1024
-        var serverResponseCode: Int
         var output = ""
         val sourceFile = File(sourceFileUri)
         return if (!sourceFile.isFile) {
-            Log.e("uploadFile", "Source File not exist : $sourceFileUri")
-            activity.runOnUiThread {
-                // Failed
-            }
+            Log.e("uploadFile", "Source File not exist : ${sourceFile.absolutePath}")
+            Dialog().tip(
+                activity.resources.getString(R.string.file_not_exist),
+                R.drawable.ic_baseline_close_24,
+                R.color.danger,
+                activity,
+                activity.findViewById(R.id.PostActivity),
+                Dialog.TIME_SHORT
+            )
             "ERROR"
         } else {
             val t = Thread {
@@ -559,17 +599,7 @@ class HttpExt {
                     dos.writeBytes(lineEnd)
                     dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
 
-                    // Responses from the server (code and message)
-                    serverResponseCode = conn.responseCode
-
-                    if (serverResponseCode == 200) {
-                        activity.runOnUiThread {
-                            val message = "File Upload Completed."
-                            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    //close the streams //
+                    // close the streams
                     fileInputStream.close()
                     dos.flush()
                     dos.close()
@@ -592,24 +622,12 @@ class HttpExt {
                     }
                 } catch (ex: MalformedURLException) {
                     ex.printStackTrace()
-                    activity.runOnUiThread {
-                        Toast.makeText(
-                            activity,
-                            "MalformedURLException : : check script url.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
                     Log.e("Upload file to server", "error: " + ex.message, ex)
+                    output = "Failed Retrieved"
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    activity.runOnUiThread {
-                        Toast.makeText(
-                            activity,
-                            "Got Exception : see logcat ",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    Log.e("", "Upload file to server Exception" + "Exception : " + e.message, e)
+                    Log.e("", "Exception" + "Exception : " + e.message, e)
+                    output = "Failed Retrieved"
                 }
             }
             t.start()
