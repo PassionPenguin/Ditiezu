@@ -18,6 +18,7 @@ import android.webkit.CookieManager
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.passionpenguin.ditiezu.R
+import net.bither.util.NativeUtil
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
@@ -522,6 +523,11 @@ class HttpExt {
         val maxBufferSize = 1 * 1024 * 1024
         var output = ""
         val sourceFile = File(sourceFileUri)
+        NativeUtil.compressBitmap(
+            getBitmapFormUri(activity, Uri.fromFile(sourceFile)),
+            sourceFile.absolutePath,
+            true
+        )
         return if (!sourceFile.isFile) {
             Log.e("uploadFile", "Source File not exist : ${sourceFile.absolutePath}")
             Dialog().tip(
