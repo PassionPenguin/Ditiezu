@@ -130,4 +130,5 @@
     <string name="require_reason">原因是必须填写的</string>
     <string name="number_of_participants">" 评价数 %s"</string>
     <string name="reason">原因</string>
+    <string name="file_not_exist">文件不存在</string>
 </resources>

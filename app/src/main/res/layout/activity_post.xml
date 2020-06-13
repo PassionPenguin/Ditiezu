@@ -5,252 +5,280 @@
     android:id="@+id/PostActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".PostActivity">
 
-    <include
-        android:id="@+id/action_bar_layout"
-        layout="@layout/fragment_action_bar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/NewThreadComponent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inputWrap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginHorizontal="@dimen/_16"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/action_bar_layout">
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Spinner
-            android:id="@+id/typeSelector"
-            android:layout_width="@dimen/_128"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:layout_gravity="center" />
-
-        <EditText
-            android:id="@+id/subject"
+        <include
+            android:id="@+id/action_bar_layout"
+            layout="@layout/fragment_action_bar"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autofillHints="@null"
-            android:inputType="text"
-            android:background="@null"
-            android:hint="@string/subject"
-            android:textSize="14sp"
-            android:paddingHorizontal="@dimen/_16" />
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/EditTextInput"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:autofillHints="@null"
-        android:inputType="textLongMessage|textAutoCorrect|textCapSentences|textMultiLine"
-        android:imeOptions="actionSend|flagNoEnterAction"
-        android:hint="@string/tip_input_content"
-        android:gravity="top"
-        android:padding="@dimen/_16"
-        android:background="@null"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintTop_toBottomOf="@+id/NewThreadComponent" />
-
-
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/_16"
-        android:background="@color/surface"
-        android:elevation="@dimen/_32"
-        app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:id="@+id/NewThreadComponent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="@dimen/_16"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/action_bar_layout">
 
-            <CheckBox
-                android:id="@+id/fontBoldToggle"
-                android:layout_width="24dp"
+            <Spinner
+                android:id="@+id/typeSelector"
+                android:layout_width="@dimen/_128"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:layout_gravity="center" />
+
+            <EditText
+                android:id="@+id/subject"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_format_bold_24"
-                android:gravity="center" />
-
-            <CheckBox
-                android:id="@+id/fontItalicToggle"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_format_italic_24"
-                android:gravity="center" />
-
-            <CheckBox
-                android:id="@+id/fontUnderlinedToggle"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_format_underlined_24"
-                android:gravity="center" />
-
-            <CheckBox
-                android:id="@+id/fontStrikeThroughToggle"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_format_strikethrough_24"
-                android:gravity="center" />
-
-            <CheckBox
-                android:id="@+id/fontQuoteToggle"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_format_quote_24"
-                android:gravity="center" />
-
-            <CheckBox
-                android:id="@+id/fontSizeToggle"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_format_size_24"
-                android:gravity="center" />
-
-            <CheckBox
-                android:id="@+id/imageSelectorToggle"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_image_24"
-                android:gravity="center" />
-
-            <net.cachapa.expandablelayout.ExpandableLayout
-                android:id="@+id/fontSizeSelector"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                app:el_duration="500"
-                app:el_expanded="false">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:padding="0dp"
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:button="@null"
-                        android:text="@string/_1x"
-                        android:textSize="12sp"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
-
-                    <RadioButton
-                        android:padding="0dp"
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:button="@null"
-                        android:text="@string/_2x"
-                        android:textSize="14sp"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
-
-                    <RadioButton
-                        android:padding="0dp"
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:button="@null"
-                        android:text="@string/_3x"
-                        android:textSize="16sp"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
-
-                    <RadioButton
-                        android:padding="0dp"
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:button="@null"
-                        android:text="@string/_4x"
-                        android:textSize="18sp"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
-
-                    <RadioButton
-                        android:padding="0dp"
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:button="@null"
-                        android:text="@string/_5x"
-                        android:textSize="20sp"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
-
-                    <RadioButton
-                        android:padding="0dp"
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:button="@null"
-                        android:text="@string/_6x"
-                        android:textSize="22sp"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
-
-                    <RadioButton
-                        android:padding="0dp"
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:button="@null"
-                        android:text="@string/_7x"
-                        android:textSize="24sp"
-                        android:gravity="center"
-                        android:layout_gravity="center" />
-                </LinearLayout>
-            </net.cachapa.expandablelayout.ExpandableLayout>
-
-            <CheckBox
-                android:id="@+id/listToggle"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="6dp"
-                android:button="@drawable/ic_baseline_list_24"
-                android:gravity="center" />
-
-            <net.cachapa.expandablelayout.ExpandableLayout
-                android:id="@+id/listSelector"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                app:el_duration="500"
-                app:el_expanded="false">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/bulletedList"
-                        android:layout_width="24dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="6dp"
-                        android:button="@drawable/ic_baseline_format_list_bulleted_24"
-                        android:gravity="center" />
-
-                    <RadioButton
-                        android:id="@+id/numberedList"
-                        android:layout_width="24dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="6dp"
-                        android:button="@drawable/ic_baseline_format_list_numbered_24"
-                        android:gravity="center" />
-                </LinearLayout>
-            </net.cachapa.expandablelayout.ExpandableLayout>
+                android:autofillHints="@null"
+                android:inputType="text"
+                android:background="@null"
+                android:hint="@string/subject"
+                android:textSize="14sp"
+                android:paddingHorizontal="@dimen/_16" />
         </LinearLayout>
-    </HorizontalScrollView>
+
+        <EditText
+            android:id="@+id/EditTextInput"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_256"
+            android:autofillHints="@null"
+            android:inputType="textLongMessage|textAutoCorrect|textCapSentences|textMultiLine"
+            android:hint="@string/tip_input_content"
+            android:gravity="top"
+            android:padding="@dimen/_16"
+            android:background="@null"
+            app:layout_constraintTop_toBottomOf="@id/NewThreadComponent" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_16"
+            android:background="@color/surface"
+            android:elevation="@dimen/_32"
+            android:layout_gravity="bottom"
+            app:layout_constraintTop_toBottomOf="@id/EditTextInput">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/fontBoldToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_bold_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontItalicToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_italic_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontUnderlinedToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_underlined_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontStrikeThroughToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_strikethrough_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontQuoteToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_quote_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/imageSelectorToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_image_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontSizeToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_size_24"
+                    android:gravity="center" />
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/fontSizeSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:el_duration="500"
+                    app:el_expanded="false">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_1x"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_2x"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_3x"
+                            android:textSize="16sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_4x"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_5x"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_6x"
+                            android:textSize="22sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_7x"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+                    </LinearLayout>
+                </net.cachapa.expandablelayout.ExpandableLayout>
+
+                <CheckBox
+                    android:id="@+id/listToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_list_24"
+                    android:gravity="center" />
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/listSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:el_duration="500"
+                    app:el_expanded="false">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/bulletedList"
+                            android:layout_width="24dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="6dp"
+                            android:button="@drawable/ic_baseline_format_list_bulleted_24"
+                            android:gravity="center" />
+
+                        <RadioButton
+                            android:id="@+id/numberedList"
+                            android:layout_width="24dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="6dp"
+                            android:button="@drawable/ic_baseline_format_list_numbered_24"
+                            android:gravity="center" />
+                    </LinearLayout>
+                </net.cachapa.expandablelayout.ExpandableLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputWrap">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_image">
+
+            <LinearLayout
+                android:id="@+id/ImageList"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
