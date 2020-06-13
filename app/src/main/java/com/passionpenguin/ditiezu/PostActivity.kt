@@ -9,15 +9,28 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import com.luck.picture.lib.PictureSelector
+import com.luck.picture.lib.config.PictureConfig
+import com.luck.picture.lib.config.PictureMimeType
+import com.luck.picture.lib.entity.LocalMedia
 import com.passionpenguin.ditiezu.helper.Dialog
+import com.passionpenguin.ditiezu.helper.GlideEngine
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.tintDrawable
 import kotlinx.android.synthetic.main.activity_post.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.net.URLEncoder
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class PostActivity : AppCompatActivity() {
+    private var attachHash = ""
+    private var uid = ""
+    private var pid: String? = null
+    private var fid: String? = null
+    private var attachlist: ArrayList<String> = arrayListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
@@ -27,22 +40,23 @@ class PostActivity : AppCompatActivity() {
         val tid = e?.get("tid")
         val reppid = e?.get("reppid")
         val type = e?.get("type") ?: "reply"
-        val pid = e?.get("pid")
-        val fid = e?.get("fid")
+        pid = e?.get("pid").toString()
+        fid = e?.get("fid").toString()
         lateinit var originParser: Document
         val typeNameList: ArrayList<String> = arrayListOf()
         val typeValueList: ArrayList<String> = arrayListOf()
-        var attachHash = ""
         when (type) {
             "reply" -> {
                 if (tid == null) onBackPressed()
-                if (reppid != null)
-                    originParser =
-                        Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=reply&fid=$fid&tid=$tid&repquote=$reppid"))
+                originParser = if (reppid != null)
+                    Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=reply&fid=$fid&tid=$tid&repquote=$reppid"))
+                else Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=reply&fid=$fid&tid=$tid"))
             }
             "edit" -> {
                 if (pid == null || tid == null) onBackPressed()
-                EditTextInput.setText(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid"))
+                originParser =
+                    Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid"))
+                EditTextInput.setText(originParser.select("textarea")[0].html())
             }
             "newthread" -> {
                 if (fid == null) onBackPressed()
@@ -64,6 +78,16 @@ class PostActivity : AppCompatActivity() {
         }
         attachHash = originParser.select("[name=\"hash\"]").attr("value")
 
+        var s = originParser.select("body").html()
+        val pattern = Pattern.compile("IMGUNUSEDAID\\[\\d*] = '(\\d*)'")
+        var matcher: Matcher = pattern.matcher(s)
+        while (matcher.find()) {
+            attachlist.add(matcher.group(1))
+            s = s.substring(matcher.start() + 1) // ignore the just-matched and move on;
+            matcher = pattern.matcher(s)
+        }
+        uid = originParser.select("[name=\"uid\"]").attr("value")
+
         val formhash =
             if (type == "newthread") originParser.select("[name='formhash']").attr("value") else
                 Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/search.php?mod=forum"))
@@ -80,6 +104,10 @@ class PostActivity : AppCompatActivity() {
         with(findViewById<RadioButton>(R.id.actionBar_rightButton)) {
             this.buttonDrawable = resources.getDrawable(R.drawable.ic_baseline_send_24, null)
             this.setOnClickListener {
+                var postAID = ""
+                attachlist.forEach {
+                    postAID += "&attachnew[$it][description]="
+                }
                 val str = HttpExt().asyncPostPage(
                     when (type) {
                         "edit" -> "http://www.ditiezu.com/forum.php?mod=post&action=edit&extra=&editsubmit=yes&inajax=1"
@@ -89,7 +117,7 @@ class PostActivity : AppCompatActivity() {
                     "message=" + URLEncoder.encode(
                         EditTextInput.text.toString(),
                         "GBK"
-                    ) + "&formhash=$formhash&subject=" + when (type) {
+                    ) + "&formhash=$formhash$postAID&subject=" + when (type) {
                         "edit" -> {
                             "&pid=$pid&tid=$tid"
                         } // Edit
@@ -280,6 +308,35 @@ class PostActivity : AppCompatActivity() {
             insert("[quote]", "[/quote]")
         }
 
+        imageSelectorToggle.setOnClickListener {
+            PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .imageEngine(GlideEngine.createGlideEngine())
+                .theme(R.style.picture_default_style)// xml样式配制 R.style.picture_default_style、picture_WeChat_style or 更多参考Demo
+                .selectionMode(PictureConfig.MULTIPLE)//单选or多选 PictureConfig.SINGLE PictureConfig.MULTIPLE
+                .isPageStrategy(true)//开启分页模式，默认开启另提供两个参数；pageSize每页总数；isFilterInvalidFile是否过滤损坏图片
+                .isSingleDirectReturn(true)//PictureConfig.SINGLE模式下是否直接返回
+                .isCamera(true)//列表是否显示拍照按钮
+                .isZoomAnim(true)//图片选择缩放效果
+                .maxSelectNum(20)//最大选择数量,默认9张
+                .minSelectNum(1)// 最小选择数量
+                .imageSpanCount(4)//列表每行显示个数
+                .isGif(true)//是否显示gif
+                .freeStyleCropEnabled(true)//裁剪框是否可拖拽
+                .circleDimmedLayer(true)// 是否开启圆形裁剪
+                .rotateEnabled(true)//裁剪是否可旋转图片
+                .scaleEnabled(true)//裁剪是否可放大缩小图片
+                .isDragFrame(true)//是否可拖动裁剪框(固定)
+                .compress(true)//是否压缩
+                .compressFocusAlpha(false)//压缩后是否保持图片的透明通道
+                .isMultipleSkipCrop(true)//多图裁剪是否支持跳过
+                .isMultipleRecyclerAnimation(true)// 多图裁剪底部列表显示动画效果
+                .isReturnEmpty(true)//未选择数据时按确定是否可以退出
+                .isAndroidQTransform(true)//Android Q版本下是否需要拷贝文件至应用沙盒内
+                .isOriginalImageControl(true)//开启原图选项
+                .forResult(PictureConfig.CHOOSE_REQUEST)
+        }
+
         (fontSizeSelector.children.toList()[0] as LinearLayout).children.forEachIndexed { index, el ->
             el.setOnClickListener {
                 insert("[size=$index]", "[/size]")
@@ -292,6 +349,31 @@ class PostActivity : AppCompatActivity() {
 
         numberedList.setOnClickListener {
             insert("[list=1]\n[*]", "\n[/list]")
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                PictureConfig.CHOOSE_REQUEST -> {
+                    // 结果回调
+                    val selectList: List<LocalMedia> = PictureSelector.obtainMultipleResult(data)
+                    selectList.forEach {
+                        val s =
+                            HttpExt().uploadFile(
+                                it.realPath,
+                                this@PostActivity,
+                                uid,
+                                attachHash,
+                                fid.toString(),
+                                it.mimeType
+                            )
+                        if (Pattern.compile("^[0-9]*$").matcher(s).matches()) attachlist.add(s)
+                    }
+                }
+            }
         }
     }
 }

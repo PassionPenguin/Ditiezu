@@ -56,4 +56,5 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.8'
 }
