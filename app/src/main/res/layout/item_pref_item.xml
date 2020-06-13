@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:textColor="@color/text"
             android:layout_gravity="start"
             tools:text="PREF NAME" />
 
@@ -34,6 +35,7 @@
             android:id="@+id/pref_item_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/text"
             android:visibility="gone"
             android:layout_gravity="start"
             tools:text="PREF DESCRIPTION" />
@@ -47,6 +49,7 @@
         android:paddingBottom="@dimen/_16"
         android:paddingStart="@dimen/_8"
         android:paddingEnd="@dimen/_16"
+        android:textColor="@color/text"
         android:gravity="center_vertical|end"
         android:layout_gravity="center_vertical|end"
         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"

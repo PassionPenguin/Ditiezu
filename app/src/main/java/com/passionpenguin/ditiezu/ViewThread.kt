@@ -102,11 +102,6 @@ class ViewThread : AppCompatActivity() {
                             7 -> size.html("<big><big><big><big>" + size.html() + "</big></big></big></big>")
                         }
                     }
-                    it.select("blockquote").forEach { blockQuote ->
-                        blockQuote.tagName("font")
-                        blockQuote.attr("color", "#88888822")
-                        blockQuote.attr("face", "monospaced")
-                    }
 
                     if (it.select("[id^='ratelog_']").isNotEmpty()) {
                         val log = it.select("[id^='ratelog_']")

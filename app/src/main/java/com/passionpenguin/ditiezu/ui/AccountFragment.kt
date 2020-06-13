@@ -10,11 +10,16 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.passionpenguin.ditiezu.AboutDitiezu
 import com.passionpenguin.ditiezu.LoginActivity
 import com.passionpenguin.ditiezu.R
-import com.passionpenguin.ditiezu.helper.*
-import com.squareup.picasso.Picasso
+import com.passionpenguin.ditiezu.helper.Dialog
+import com.passionpenguin.ditiezu.helper.HttpExt
+import com.passionpenguin.ditiezu.helper.PrefListItem
+import com.passionpenguin.ditiezu.helper.prefView
 import kotlinx.android.synthetic.main.fragment_account.*
 import org.jsoup.Jsoup
 import kotlin.properties.Delegates
@@ -120,12 +125,14 @@ class AccountFragment : Fragment() {
                             activity.runOnUiThread {
                                 userName.text =
                                     parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
-                                Picasso.with(context)
-                                    .load(parser.select(".avt img").attr("src"))
-                                    .placeholder(R.mipmap.noavatar_middle_rounded)
-                                    .error(R.mipmap.noavatar_middle_rounded)
-                                    .transform(CircularCornersTransform())
-                                    .into(avatar)
+                                context?.let { mCtx ->
+                                    Glide.with(mCtx)
+                                        .load(parser.select(".avt img").attr("src"))
+                                        .placeholder(R.mipmap.noavatar_middle_rounded)
+                                        .error(R.mipmap.noavatar_middle_rounded)
+                                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                                        .into(avatar)
+                                }
                                 value_level.text = parser.select(".pbm span a")[0].text()
 
                                 try {

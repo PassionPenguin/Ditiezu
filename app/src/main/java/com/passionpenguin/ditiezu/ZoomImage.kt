@@ -8,7 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import kotlin.math.sqrt
 
 class ZoomImage : AppCompatActivity(), View.OnTouchListener {
@@ -35,12 +35,13 @@ class ZoomImage : AppCompatActivity(), View.OnTouchListener {
         setContentView(R.layout.activity_zoom_image)
         val e = intent.extras
         val path = e?.getString("filePath", "-1") as String
-        if (path == "-1" || path.isEmpty()) onBackPressed()
-
-        val view: ImageView = findViewById<View>(R.id.imageView) as ImageView
+        Log.i("", path)
+//        if (path == "-1" || path.isEmpty()) onBackPressed()
+        val view: ImageView = findViewById(R.id.imageView)
         try {
-            Picasso.with(applicationContext).load(path).into(view)
+            Glide.with(applicationContext).load(path).into(view)
         } catch (ignored: Exception) {
+            Log.e("", ignored.toString())
             onBackPressed()
         }
         view.setOnTouchListener(this)
@@ -51,7 +52,7 @@ class ZoomImage : AppCompatActivity(), View.OnTouchListener {
         val view: ImageView = v as ImageView
         view.scaleType = ImageView.ScaleType.MATRIX
         val scale: Float
-        dumpEvent(event)
+//        dumpEvent(event)
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
                 savedMatrix.set(matrix)
@@ -75,15 +76,17 @@ class ZoomImage : AppCompatActivity(), View.OnTouchListener {
             }
             MotionEvent.ACTION_MOVE -> if (mode == drag) {
                 matrix.set(savedMatrix)
+                Log.i((event.x - start.x).toString(), (event.y - start.y).toString())
+                Log.i((view.width.toString()), view.height.toString())
+                val dX = event.x - start.x
+                val dY = event.y - start.y
                 matrix.postTranslate(
-                    event.x - start.x,
-                    event.y - start.y
-                ) // create the transformation in the matrix  of points
+                    dX,
+                    dY
+                ) // create the transformation in the matrix  of points}
             } else if (mode == zoom) {
                 // pinch zooming
                 val newDist = spacing(event)
-                Log.i("", (newDist / oldDist).toString())
-                Log.d(tag, "newDist=$newDist")
                 if (newDist > 5f) {
                     matrix.set(savedMatrix)
                     scale = newDist / oldDist // setting the scaling of the
@@ -137,36 +140,36 @@ class ZoomImage : AppCompatActivity(), View.OnTouchListener {
     }
 
     /** Show an event in the LogCat view, for debugging  */
-    private fun dumpEvent(event: MotionEvent) {
-        val names = arrayOf(
-            "DOWN",
-            "UP",
-            "MOVE",
-            "CANCEL",
-            "OUTSIDE",
-            "POINTER_DOWN",
-            "POINTER_UP",
-            "7?",
-            "8?",
-            "9?"
-        )
-        val sb = StringBuilder()
-        val action = event.action
-        val actionCode = action and MotionEvent.ACTION_MASK
-        sb.append("event ACTION_").append(names[actionCode])
-        if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP) {
-            sb.append("(pid ").append(action shr MotionEvent.ACTION_POINTER_ID_SHIFT)
-            sb.append(")")
-        }
-        sb.append("[")
-        for (i in 0 until event.pointerCount) {
-            sb.append("#").append(i)
-            sb.append("(pid ").append(event.getPointerId(i))
-            sb.append(")=").append(event.getX(i).toInt())
-            sb.append(",").append(event.getY(i).toInt())
-            if (i + 1 < event.pointerCount) sb.append(";")
-        }
-        sb.append("]")
-        Log.d("Touch Events ---------", sb.toString())
-    }
+//    private fun dumpEvent(event: MotionEvent) {
+//        val names = arrayOf(
+//            "DOWN",
+//            "UP",
+//            "MOVE",
+//            "CANCEL",
+//            "OUTSIDE",
+//            "POINTER_DOWN",
+//            "POINTER_UP",
+//            "7?",
+//            "8?",
+//            "9?"
+//        )
+//        val sb = StringBuilder()
+//        val action = event.action
+//        val actionCode = action and MotionEvent.ACTION_MASK
+//        sb.append("event ACTION_").append(names[actionCode])
+//        if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP) {
+//            sb.append("(pid ").append(action shr MotionEvent.ACTION_POINTER_ID_SHIFT)
+//            sb.append(")")
+//        }
+//        sb.append("[")
+//        for (i in 0 until event.pointerCount) {
+//            sb.append("#").append(i)
+//            sb.append("(pid ").append(event.getPointerId(i))
+//            sb.append(")=").append(event.getX(i).toInt())
+//            sb.append(",").append(event.getY(i).toInt())
+//            if (i + 1 < event.pointerCount) sb.append(";")
+//        }
+//        sb.append("]")
+//        Log.d("Touch Events ---------", sb.toString())
+//    }
 }

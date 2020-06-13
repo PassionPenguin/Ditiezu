@@ -11,12 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
-import androidx.core.graphics.drawable.toBitmap
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.passionpenguin.ditiezu.PostActivity
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.htmltextview.HtmlHttpImageGetter
 import com.passionpenguin.htmltextview.HtmlTextView
-import com.squareup.picasso.Picasso
 import org.jsoup.Jsoup
 import java.net.URLEncoder
 
@@ -38,14 +39,13 @@ class CategoryAdapter(
         val categoryItem = items[position]
         title.text = categoryItem.title
         meta.text = categoryItem.meta
-        icon.setImageBitmap(
-            CircularCornersTransform().transform(
-                mCtx.resources.getDrawable(
-                    categoryItem.icon,
-                    null
-                ).toBitmap()
+        Glide.with(mCtx).load(
+            mCtx.resources.getDrawable(
+                categoryItem.icon,
+                null
             )
-        )
+        ).apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(icon)
         return view
     }
 }
@@ -75,11 +75,11 @@ class ThreadListAdapter(
         title.text = threadItem.title
         authorName.text = threadItem.authorName
         meta.text = threadItem.meta
-        Picasso.with(context)
+        Glide.with(context)
             .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${threadItem.authorId}")
             .placeholder(R.mipmap.noavatar_middle_rounded)
             .error(R.mipmap.noavatar_middle_rounded)
-            .transform(CircularCornersTransform())
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(avatar)
         return view
     }
@@ -110,11 +110,11 @@ class ThreadItemListAdapter(
         view.findViewById<TextView>(R.id.threadPostTime).text = searchItem.time
         view.findViewById<TextView>(R.id.threadMetaInfo).text = searchItem.meta
         view.findViewById<TextView>(R.id.threadAuthorName).text = searchItem.authorName
-        Picasso.with(context)
+        Glide.with(context)
             .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${searchItem.authorId}")
             .placeholder(R.mipmap.noavatar_middle_rounded)
             .error(R.mipmap.noavatar_middle_rounded)
-            .transform(CircularCornersTransform())
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(view.findViewById<ImageView>(R.id.avatar))
         return view
     }
@@ -183,16 +183,16 @@ class NotificationsAdapter(
             extraInfo.text = notification.description
         else extraInfo.visibility = View.GONE
         if (notification.imageUrl.isEmpty())
-            Picasso.with(context)
+            Glide.with(context)
                 .load(R.mipmap.noavatar_middle_rounded)
-                .transform(CircularCornersTransform())
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(avatar)
         else
-            Picasso.with(context)
+            Glide.with(context)
                 .load(notification.imageUrl)
                 .placeholder(R.mipmap.noavatar_middle_rounded)
                 .error(R.mipmap.noavatar_middle_rounded)
-                .transform(CircularCornersTransform())
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(avatar)
         return view
     }
@@ -392,15 +392,17 @@ class ReplyItemAdapter(
                                                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                                                 }
                                         }
-                                        createFromResource(
-                                            activity,
-                                            R.array.popularity_score,
-                                            android.R.layout.simple_spinner_dropdown_item
-                                        ).also { adapter ->
-                                            // Specify the layout to use when the list of choices appears
-                                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                            // Apply the adapter to the spinner
-                                            v.findViewById<Spinner>(R.id.score).adapter = adapter
+                                        with(v.findViewById<Spinner>(R.id.score)) {
+                                            createFromResource(
+                                                activity,
+                                                R.array.popularity_score,
+                                                android.R.layout.simple_spinner_dropdown_item
+                                            ).also { adapter ->
+                                                // Specify the layout to use when the list of choices appears
+                                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                                // Apply the adapter to the spinner
+                                                this.adapter = adapter
+                                            }
                                         }
                                         with(p.select("td:last-child")[0].text().toInt()) {
                                             val restScore = v.findViewById<TextView>(R.id.rest)
@@ -466,11 +468,11 @@ class ReplyItemAdapter(
             }
         }
 
-        Picasso.with(context)
+        Glide.with(context)
             .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${replyItem.authorId}")
             .placeholder(R.mipmap.noavatar_middle_rounded)
             .error(R.mipmap.noavatar_middle_rounded)
-            .transform(CircularCornersTransform())
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(view.findViewById<ImageView>(R.id.avatar))
         return view
     }
@@ -505,11 +507,11 @@ fun rateView(
     if (withPopularity) popularity.visibility = View.VISIBLE
     if (withMoney) money.visibility = View.VISIBLE
     if (withPrestige) prestige.visibility = View.VISIBLE
-    Picasso.with(mCtx)
+    Glide.with(mCtx)
         .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${rateLog.authorId}")
         .placeholder(R.mipmap.noavatar_middle_rounded)
         .error(R.mipmap.noavatar_middle_rounded)
-        .transform(CircularCornersTransform())
-        .into(view.findViewById<ImageView>(R.id.avatar))
+        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+        .into(view.findViewById(R.id.avatar))
     return view
 }

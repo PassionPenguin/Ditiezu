@@ -17,6 +17,7 @@
     <color name="grey">#888</color>
     <color name="light">#333</color>
     <color name="dark">#ddd</color>
+    <color name="text">#bbb</color>
     <color name="danger">#9c284d</color>
     <color name="shadowMask">#44000000</color>
     <color name="transparentWhiteBackground">#dd000000</color>

@@ -78,23 +78,25 @@ class ThreadItemFragment : Fragment() {
                 View.VISIBLE
             HttpExt().retrievePage("http://www.ditiezu.com/") {
                 activity.runOnUiThread {
-                    when (it) {
-                        "Failed Retrieved" -> {
-                            Dialog().tip(
-                                resources.getString(R.string.login_tips),
-                                R.drawable.ic_baseline_close_24,
-                                R.color.danger,
-                                activity,
-                                activity.findViewById(R.id.MainActivity),
-                                Dialog.TIME_SHORT
-                            )
+                    activity.findViewById<ViewGroup>(R.id.MainActivity).postDelayed({
+                        when (it) {
+                            "Failed Retrieved" -> {
+                                Dialog().tip(
+                                    resources.getString(R.string.login_tips),
+                                    R.drawable.ic_baseline_close_24,
+                                    R.color.danger,
+                                    activity,
+                                    activity.findViewById(R.id.MainActivity),
+                                    Dialog.TIME_SHORT
+                                )
+                            }
+                            else -> {
+                                processResult(it)
+                            }
                         }
-                        else -> {
-                            processResult(it)
-                        }
-                    }
-                    activity.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
-                        View.GONE
+                        activity.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                            View.GONE
+                    }, 0)
                 }
             }
             activity.findViewById<TextView>(R.id.title)?.text =

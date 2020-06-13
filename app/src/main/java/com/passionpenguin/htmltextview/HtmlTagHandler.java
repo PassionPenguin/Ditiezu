@@ -23,12 +23,12 @@
 package com.passionpenguin.htmltextview;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.text.style.BulletSpan;
 import android.text.style.LeadingMarginSpan;
@@ -42,7 +42,6 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.Attributes;
 
-import java.util.Locale;
 import java.util.Stack;
 
 /**
@@ -55,7 +54,7 @@ public class HtmlTagHandler implements WrapperTagHandler {
     public static final String LIST_ITEM = "HTML_TEXTVIEW_ESCAPED_LI_TAG";
     public static final String A_ITEM = "HTML_TEXTVIEW_ESCAPED_A_TAG";
     public static final String PLACEHOLDER_ITEM = "HTML_TEXTVIEW_ESCAPED_PLACEHOLDER";
-    public static final String QUOTE_ITEM = "HTML_TEXTVIEW_ESCAPED_QUOTE";
+    public static final String BLOCKQUOTE_ITEM = "HTML_TEXTVIEW_ESCAPED_BLOCKQUOTE";
     private final Context mContext;
 
     public HtmlTagHandler(Context mCtx) {
@@ -84,8 +83,8 @@ public class HtmlTagHandler implements WrapperTagHandler {
         html = html.replace("</li>", "</" + LIST_ITEM + ">");
         html = html.replace("<a", "<" + A_ITEM);
         html = html.replace("</a>", "</" + A_ITEM + ">");
-        html = html.replace("<quote", "<" + QUOTE_ITEM + ">");
-        html = html.replace("</quote", "</" + QUOTE_ITEM + ">");
+        html = html.replace("<blockquote", "<" + BLOCKQUOTE_ITEM);
+        html = html.replace("</blockquote>", "</" + BLOCKQUOTE_ITEM + ">");
 
         return html;
     }
@@ -162,13 +161,11 @@ public class HtmlTagHandler implements WrapperTagHandler {
     private static class Td {
     }
 
-    private static class Quote {
-    }
-
     @Override
     public boolean handleTag(boolean opening, String tag, Editable output, Attributes attributes) {
 
-        if (tag.toLowerCase(Locale.getDefault()).equals("img") && output.length() > 0) {
+        assert tag != null;
+        if (tag.equalsIgnoreCase("img") && output.length() > 0) {
             // 获取长度
             int len = output.length();
             // 获取图片地址
@@ -176,6 +173,12 @@ public class HtmlTagHandler implements WrapperTagHandler {
             // 使图片可点击并监听点击事件
             if (src != null)
                 output.setSpan(new CustomIMGSpan(mContext, src), len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        if (tag.equalsIgnoreCase(BLOCKQUOTE_ITEM)) {
+            // 获取长度
+            int len = output.length();
+            if (len > 0)
+                output.setSpan(new AbsoluteSizeSpan((int) (12 * mContext.getResources().getDisplayMetrics().density)), 0, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         if (opening) {
             // opening tag
@@ -226,8 +229,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 start(output, new Th());
             } else if (tag.equalsIgnoreCase("td")) {
                 start(output, new Td());
-            } else if (tag.equalsIgnoreCase("quote")) {
-                start(output, new Quote());
             } else {
                 return false;
             }
@@ -332,8 +333,6 @@ public class HtmlTagHandler implements WrapperTagHandler {
                 end(output, Th.class, false);
             } else if (tag.equalsIgnoreCase("td")) {
                 end(output, Td.class, false);
-            } else if (tag.equalsIgnoreCase("quote")) {
-                end(output, Quote.class, false, new PaddingBackgroundColorSpan(Color.GRAY, 24));
             } else {
                 return false;
             }

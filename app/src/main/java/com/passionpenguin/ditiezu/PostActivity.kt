@@ -32,6 +32,7 @@ class PostActivity : AppCompatActivity() {
         lateinit var originParser: Document
         val typeNameList: ArrayList<String> = arrayListOf()
         val typeValueList: ArrayList<String> = arrayListOf()
+        var attachHash = ""
         when (type) {
             "reply" -> {
                 if (tid == null) onBackPressed()
@@ -61,6 +62,7 @@ class PostActivity : AppCompatActivity() {
                 typeSelector.adapter = adapter
             }
         }
+        attachHash = originParser.select("[name=\"hash\"]").attr("value")
 
         val formhash =
             if (type == "newthread") originParser.select("[name='formhash']").attr("value") else
@@ -171,6 +173,7 @@ class PostActivity : AppCompatActivity() {
                 }
             }
         }
+
 
         fun setCompoundButtonColor(e: CompoundButton, isChecked: Boolean) {
             val color = R.color.grey
