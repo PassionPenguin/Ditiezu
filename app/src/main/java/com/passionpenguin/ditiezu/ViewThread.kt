@@ -14,7 +14,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.passionpenguin.ditiezu.helper.*
-import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.activity_view_thread.*
 import org.jsoup.Jsoup
 import java.util.*
