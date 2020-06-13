@@ -154,7 +154,7 @@ class HttpExt {
             } finally {
                 urlConnection.disconnect()
             }
-        };
+        }
         thread.start()
         thread.join()
         return result
@@ -185,14 +185,14 @@ class HttpExt {
                     res += str
                     str = reader.readText()
                 }
-                result = res;
+                result = res
             } catch (e: Exception) {
                 result = "Failed Retrieved"
                 Log.i("HttpExt Exception", e.toString())
             } finally {
                 urlConnection.disconnect()
             }
-        };
+        }
         thread.start()
         thread.join()
         return result
@@ -256,14 +256,14 @@ class HttpExt {
                     res += str
                     str = reader.readText()
                 }
-                result = res;
+                result = res
             } catch (e: Exception) {
                 result = "Failed Retrieved"
                 Log.i("HttpExt Exception", e.toString())
             } finally {
                 urlConnection.disconnect()
             }
-        };
+        }
         thread.start()
         thread.join()
         return when (urlConnection.responseCode) {
@@ -284,12 +284,11 @@ class HttpExt {
         c.instanceFollowRedirects = false
         var result = arrayOf("-1", "1")
         val t = Thread {
+            c.requestMethod = "POST"
             c.setRequestProperty(
                 "Cookie",
                 CookieManager.getInstance().getCookie(url)
             )
-
-            c.requestMethod = "POST"
             c.setRequestProperty(
                 "Referer",
                 "http://www.ditiezu.com"
@@ -435,7 +434,7 @@ class HttpExt {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         //Android 7.0以上要使用FileProvider
         if (Build.VERSION.SDK_INT >= 24) {
-            val file = File(pathstr)
+            val file = File(pathstr.toString())
             //参数1 上下文, 参数2 Provider主机地址 和配置文件中保持一致   参数3  共享的文件
             val apkUri =
                 FileProvider.getUriForFile(
@@ -451,7 +450,7 @@ class HttpExt {
                 Uri.fromFile(
                     File(
                         Environment.DIRECTORY_DOWNLOADS,
-                        name
+                        name.toString()
                     )
                 ), "application/vnd.android.package-archive"
             )
@@ -473,22 +472,21 @@ class HttpExt {
     fun uploadFile(
         sourceFileUri: String,
         activity: Activity,
-        uid: Int,
-        hash: Int
+        uid: String,
+        hash: String,
+        fid: String,
+        filetype: String
     ): String {
-        val conn: HttpURLConnection?
-        val dos: DataOutputStream?
-        val lineEnd = "\r\n"
+        val lineEnd = "\n"
         val twoHyphens = "--"
-        val boundary = "*****"
+        val boundary = "----WebkitAppBoundary"
         var bytesRead: Int
         var bytesAvailable: Int
         var bufferSize: Int
-        val buffer: ByteArray
         val maxBufferSize = 1 * 1024 * 1024
-        val sourceFile = File(sourceFileUri)
-        var serverResponseCode = 0
+        var serverResponseCode: Int
         var output = ""
+        val sourceFile = File(sourceFileUri)
         return if (!sourceFile.isFile) {
             Log.e("uploadFile", "Source File not exist : $sourceFileUri")
             activity.runOnUiThread {
@@ -496,112 +494,127 @@ class HttpExt {
             }
             "ERROR"
         } else {
-            try {
-                // open a URL connection to the Servlet
-                val fileInputStream = FileInputStream(sourceFile)
-                val url =
-                    URL("http://www.ditiezu.com/misc.php?mod=swfupload&operation=upload&simple=1&type=image")
+            val t = Thread {
+                try {
+                    // open a URL connection to the Servlet
+                    val fileInputStream = FileInputStream(sourceFile)
+                    val url =
+                        URL("http://www.ditiezu.com/misc.php?mod=swfupload&operation=upload&hash=$hash&uid=$uid&type=image&filetype=$filetype&fid=$fid")
 
-                // Open a HTTP  connection to  the URL
-                conn = url.openConnection() as HttpURLConnection
-                conn.doInput = true // Allow Inputs
-                conn.doOutput = true // Allow Outputs
-                conn.useCaches = false // Don't use a Cached Copy
-                conn.requestMethod = "POST"
-                conn.setRequestProperty(
-                    "Cookie",
-                    CookieManager.getInstance().getCookie(url.toString())
-                )
-                conn.setRequestProperty("Referer", "http://www.ditiezu.com")
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;")
-                conn.setRequestProperty("Origin", "http://www.ditiezu.com")
-                conn.setRequestProperty("Host", "www.ditiezu.com")
-                conn.setRequestProperty("DNT", "1")
-                conn.setRequestProperty("Proxy-Connection", "keep-alive")
-                conn.setRequestProperty("Connection", "Keep-Alive")
-                conn.setRequestProperty("Cookie", "Keep-Alive")
-                conn.setRequestProperty("ENCTYPE", "multipart/form-data")
-                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=$boundary")
-                conn.setRequestProperty("Upgrade-Insecure-Requests", "1")
-                conn.setRequestProperty(
-                    "User-Agent",
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-                )
-                dos = DataOutputStream(conn.outputStream)
+                    // Open a HTTP  connection to  the URL
+                    val conn = url.openConnection() as HttpURLConnection
+                    conn.doInput = true // Allow Inputs
+                    conn.doOutput = true // Allow Outputs
+                    conn.useCaches = false // Don't use a Cached Copy
+                    conn.requestMethod = "POST"
+                    conn.setRequestProperty(
+                        "Cookie",
+                        CookieManager.getInstance().getCookie(url.toString())
+                    )
+                    conn.setRequestProperty("Referer", "http://www.ditiezu.com")
+                    conn.setRequestProperty(
+                        "Content-Type",
+                        "multipart/form-data; boundary=$boundary"
+                    )
+                    conn.setRequestProperty("Origin", "http://www.ditiezu.com")
+                    conn.setRequestProperty("Host", "www.ditiezu.com")
+                    conn.setRequestProperty("DNT", "1")
+                    conn.setRequestProperty("Proxy-Connection", "keep-alive")
+                    conn.setRequestProperty("Connection", "Keep-Alive")
+                    conn.setRequestProperty("Upgrade-Insecure-Requests", "1")
+                    conn.setRequestProperty(
+                        "User-Agent",
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+                    )
+                    val dos = DataOutputStream(conn.outputStream)
 
-                // add parameters
-                dos.writeBytes(twoHyphens + boundary + lineEnd)
-                dos.writeBytes(
-                    "Content-Disposition: form-data; name=\"uid\" $lineEnd$lineEnd$uid$lineEnd"
-                )
-                dos.writeBytes(twoHyphens + boundary + lineEnd)
-                dos.writeBytes(
-                    "Content-Disposition: form-data; name=\"hash\" $lineEnd$lineEnd$hash$lineEnd"
-                )
-                dos.writeBytes(twoHyphens + boundary + lineEnd)
-                dos.writeBytes("Content-Disposition: form-data; name='Filedata';filename='${sourceFile.name}'$lineEnd$lineEnd")
-                dos.writeBytes(twoHyphens + boundary + lineEnd)
-
-                // create a buffer of  maximum size
-                bytesAvailable = fileInputStream.available()
-                bufferSize = bytesAvailable.coerceAtMost(maxBufferSize)
-                buffer = ByteArray(bufferSize)
-
-                // read file and write it into form...
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize)
-                while (bytesRead > 0) {
-                    dos.write(buffer, 0, bufferSize)
+                    // add parameters
+                    dos.writeBytes(twoHyphens + boundary + lineEnd)
+                    dos.writeBytes(
+                        "Content-Disposition: form-data; name=\"uid\" $lineEnd$lineEnd$uid$lineEnd"
+                    )
+                    dos.writeBytes(twoHyphens + boundary + lineEnd)
+                    dos.writeBytes(
+                        "Content-Disposition: form-data; name=\"hash\" $lineEnd$lineEnd$hash$lineEnd"
+                    )
+                    dos.writeBytes(twoHyphens + boundary + lineEnd)
+                    dos.writeBytes(
+                        "Content-Disposition: form-data; name=\"Filedata\";${lineEnd}filename=\"${sourceFile.name}\"$lineEnd$lineEnd"
+                    )
+                    // create a buffer of  maximum size
                     bytesAvailable = fileInputStream.available()
-                    bufferSize = Math.min(bytesAvailable, maxBufferSize)
+                    bufferSize = bytesAvailable.coerceAtMost(maxBufferSize)
+                    val buffer = ByteArray(bufferSize)
+
+                    // read file and write it into form...
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize)
-                }
-
-                // send multipart form data necesssary after file data...
-                dos.writeBytes(lineEnd)
-                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
-
-                // Responses from the server (code and message)
-                serverResponseCode = conn.responseCode
-                output = conn.outputStream.toString()
-                val serverResponseMessage = conn.responseMessage
-                Log.i(
-                    "uploadFile",
-                    "HTTP Response is : $serverResponseMessage: $serverResponseCode"
-                )
-                if (serverResponseCode == 200) {
-                    activity.runOnUiThread {
-                        val message = "File Upload Completed."
-                        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+                    while (bytesRead > 0) {
+                        dos.write(buffer, 0, bufferSize)
+                        bytesAvailable = fileInputStream.available()
+                        bufferSize = bytesAvailable.coerceAtMost(maxBufferSize)
+                        bytesRead = fileInputStream.read(buffer, 0, bufferSize)
                     }
-                }
 
-                //close the streams //
-                fileInputStream.close()
-                dos.flush()
-                dos.close()
-            } catch (ex: MalformedURLException) {
-                ex.printStackTrace()
-                activity.runOnUiThread {
-                    Toast.makeText(
-                        activity,
-                        "MalformedURLException : : check script url.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    // send multipart form data necesssary after file data...
+                    dos.writeBytes(lineEnd)
+                    dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
+
+                    // Responses from the server (code and message)
+                    serverResponseCode = conn.responseCode
+
+                    if (serverResponseCode == 200) {
+                        activity.runOnUiThread {
+                            val message = "File Upload Completed."
+                            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    //close the streams //
+                    fileInputStream.close()
+                    dos.flush()
+                    dos.close()
+
+                    try {
+                        val inputStream: InputStream = conn.inputStream
+                        val reader = InputStreamReader(inputStream, "GBK")
+                        var str = reader.readText()
+                        var res = ""
+                        while (str != "") {
+                            res += str
+                            str = reader.readText()
+                        }
+                        output = res
+                    } catch (e: Exception) {
+                        output = "Failed Retrieved"
+                        Log.i("HttpExt Exception", e.toString())
+                    } finally {
+                        conn.disconnect()
+                    }
+                } catch (ex: MalformedURLException) {
+                    ex.printStackTrace()
+                    activity.runOnUiThread {
+                        Toast.makeText(
+                            activity,
+                            "MalformedURLException : : check script url.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    Log.e("Upload file to server", "error: " + ex.message, ex)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    activity.runOnUiThread {
+                        Toast.makeText(
+                            activity,
+                            "Got Exception : see logcat ",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    Log.e("", "Upload file to server Exception" + "Exception : " + e.message, e)
                 }
-                Log.e("Upload file to server", "error: " + ex.message, ex)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                activity.runOnUiThread {
-                    Toast.makeText(
-                        activity,
-                        "Got Exception : see logcat ",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                Log.e("", "Upload file to server Exception" + "Exception : " + e.message, e)
             }
-            Log.i("", output)
-            "code:$serverResponseCode output:$"
+            t.start()
+            t.join()
+            output
         }
     }
 }
