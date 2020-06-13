@@ -31,7 +31,7 @@ public class NativeUtil {
 
     public static void compressBitmap(Bitmap bit, String fileName,
                                       boolean optimize) {
-        int DEFAULT_QUALITY = 50;
+        int DEFAULT_QUALITY = 75;
         compressBitmap(bit, DEFAULT_QUALITY, fileName, optimize);
 
     }
