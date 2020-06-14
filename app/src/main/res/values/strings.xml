@@ -196,4 +196,6 @@
     <string name="file_not_exist">File not exist</string>
     <string name="compress_failed">Compress Failed</string>
     <string name="signature">Signature</string>
+    <string name="ad_app_id" translatable="false">ca-app-pub-2275811890061218~1899277240</string>
+    <string name="ad_splash_id" translatable="false">ca-app-pub-2275811890061218/5969071118</string>
 </resources>

@@ -25,7 +25,7 @@ import android.util.Log
 import android.view.View
 import com.passionpenguin.ditiezu.ViewThread
 
-class CustomURLSpan(
+open class CustomURLSpan(
     var URL: String?
 ) : ClickableSpan() {
 
