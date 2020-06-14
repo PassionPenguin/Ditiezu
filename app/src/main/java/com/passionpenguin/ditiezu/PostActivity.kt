@@ -335,27 +335,20 @@ class PostActivity : AppCompatActivity() {
             PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
                 .imageEngine(GlideEngine.createGlideEngine())
-                .theme(R.style.picture_default_style)// xml样式配制 R.style.picture_default_style、picture_WeChat_style or 更多参考Demo
-                .selectionMode(PictureConfig.MULTIPLE)//单选or多选 PictureConfig.SINGLE PictureConfig.MULTIPLE
-                .isPageStrategy(true)//开启分页模式，默认开启另提供两个参数；pageSize每页总数；isFilterInvalidFile是否过滤损坏图片
-                .isSingleDirectReturn(true)//PictureConfig.SINGLE模式下是否直接返回
-                .isCamera(true)//列表是否显示拍照按钮
-                .isZoomAnim(true)//图片选择缩放效果
-                .maxSelectNum(20)//最大选择数量,默认9张
-                .minSelectNum(1)// 最小选择数量
-                .imageSpanCount(4)//列表每行显示个数
-                .isGif(true)//是否显示gif
-                .freeStyleCropEnabled(true)//裁剪框是否可拖拽
-                .circleDimmedLayer(true)// 是否开启圆形裁剪
-                .rotateEnabled(true)//裁剪是否可旋转图片
-                .scaleEnabled(true)//裁剪是否可放大缩小图片
-                .isDragFrame(true)//是否可拖动裁剪框(固定)
-                .compressFocusAlpha(false)//压缩后是否保持图片的透明通道
-                .isMultipleSkipCrop(true)//多图裁剪是否支持跳过
-                .isMultipleRecyclerAnimation(true)// 多图裁剪底部列表显示动画效果
-                .isReturnEmpty(true)//未选择数据时按确定是否可以退出
-                .isAndroidQTransform(true)//Android Q版本下是否需要拷贝文件至应用沙盒内
-                .isOriginalImageControl(true)//开启原图选项
+                .theme(R.style.picture_WeChat_style)
+                .selectionMode(PictureConfig.MULTIPLE)
+                .isPageStrategy(true, 240, true)
+                .isSingleDirectReturn(true)
+                .isCamera(true)
+                .isZoomAnim(true)
+                .maxSelectNum(20)
+                .minSelectNum(1)
+                .imageSpanCount(3)
+                .isGif(true)
+                .isReturnEmpty(true)
+                .isAndroidQTransform(true)
+                .isOriginalImageControl(true)
+                .imageFormat("JPG")
                 .forResult(PictureConfig.CHOOSE_REQUEST)
         }
 

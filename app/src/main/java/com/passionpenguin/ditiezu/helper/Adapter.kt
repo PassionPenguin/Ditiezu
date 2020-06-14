@@ -234,10 +234,14 @@ class ReplyItemAdapter(
         val view: View = layoutInflater.inflate(R.layout.item_reply_item, parent, false)
         val replyItem = items[position]
         with(view.findViewById<HtmlTextView>(R.id.threadContent)) {
-            this.setHtml(
-                replyItem.content,
-                HtmlHttpImageGetter(this)
-            )
+            try {
+                this.setHtml(
+                    replyItem.content,
+                    HtmlHttpImageGetter(this)
+                )
+            } catch (ignored: Exception) {
+
+            }
             this.movementMethod = LinkMovementMethod.getInstance()
         }
         view.findViewById<TextView>(R.id.threadMetaInfo).text = replyItem.time
