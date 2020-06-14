@@ -523,11 +523,22 @@ class HttpExt {
         val maxBufferSize = 1 * 1024 * 1024
         var output = ""
         val sourceFile = File(sourceFileUri)
-        NativeUtil.compressBitmap(
-            getBitmapFormUri(activity, Uri.fromFile(sourceFile)),
-            sourceFile.absolutePath,
-            true
-        )
+        try {
+            NativeUtil.compressBitmap(
+                getBitmapFormUri(activity, Uri.fromFile(sourceFile)),
+                sourceFile.absolutePath,
+                true
+            )
+        } catch (e: Exception) {
+            Dialog().tip(
+                activity.resources.getString(R.string.compress_failed),
+                R.drawable.ic_baseline_close_24,
+                R.color.danger,
+                activity,
+                activity.findViewById(R.id.PostActivity),
+                Dialog.TIME_SHORT
+            )
+        }
         return if (!sourceFile.isFile) {
             Log.e("uploadFile", "Source File not exist : ${sourceFile.absolutePath}")
             Dialog().tip(
