@@ -192,6 +192,18 @@
       "versionName": "Watermelon Milkshake v8.2",
       "versionDate": "Sun Jun 14 2020 15:06:59 GMT+0800 (中国标准时间)",
       "versionLog": "优化引用依赖库，更新样式、脚本，修复错误"
+    },
+    {
+      "versionCode": 36,
+      "versionName": "Watermelon Milkshake v8.3",
+      "versionDate": "Sun Jun 14 2020 15:34:11 GMT+0800 (中国标准时间)",
+      "versionLog": "持续优化，修复错误"
+    },
+    {
+      "versionCode": 37,
+      "versionName": "Watermelon Milkshake v8.4",
+      "versionDate": "Sun Jun 14 2020 17:25:23 GMT+0800 (中国标准时间)",
+      "versionLog": "嵌入Firebase以支持错误日志"
     }
   ]
 }
