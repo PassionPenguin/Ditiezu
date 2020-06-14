@@ -172,7 +172,10 @@ public class HtmlTagHandler implements WrapperTagHandler {
             String src = attributes != null ? attributes.getValue("src") : null;
             // 使图片可点击并监听点击事件
             if (src != null)
-                output.setSpan(new CustomIMGSpan(mContext, src), len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (attributes.getIndex("smilieid") == -1)
+                    output.setSpan(new CustomIMGSpan(mContext, src), len - 1, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                else
+                    output.setSpan(new CustomIMGSpan(mContext, src), len, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         if (tag.equalsIgnoreCase(BLOCKQUOTE_ITEM) || tag.equalsIgnoreCase("PSTATUS")) {
             // 获取长度

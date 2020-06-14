@@ -24,6 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border_radius_8"
+                android:backgroundTint="@color/surface"
                 android:padding="@dimen/_16"
                 android:orientation="vertical">
 
@@ -38,7 +39,7 @@
                         android:id="@+id/avatar"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@mipmap/noavatar_middle_rounded"
+                        android:src="@mipmap/noavatar_middle"
                         android:contentDescription="@string/avatar" />
 
                     <LinearLayout
@@ -329,6 +330,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16"
                 android:background="@drawable/border_radius_4_no_padding"
+                android:backgroundTint="@color/surface"
                 android:orientation="vertical" />
 
             <LinearLayout
@@ -337,6 +339,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16"
                 android:background="@drawable/border_radius_4_no_padding"
+                android:backgroundTint="@color/surface"
                 android:orientation="vertical" />
         </LinearLayout>
     </ScrollView>

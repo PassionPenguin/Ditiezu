@@ -21,7 +21,7 @@
 
         <ImageView
             android:id="@+id/avatar"
-            android:src="@mipmap/noavatar_middle_rounded"
+            android:src="@mipmap/noavatar_middle"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="top|center_horizontal"
@@ -77,52 +77,95 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true">
+                    android:layout_alignParentBottom="true"
+                    tools:ignore="UseCompoundDrawables">
 
-                    <CheckBox
+                    <LinearLayout
                         android:id="@+id/rate"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"
-                        android:scaleX="0.8"
-                        android:scaleY="0.8"
-                        android:layout_gravity="center|end"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|end"
                         android:textColor="@color/grey"
-                        android:textSize="16sp"
-                        android:button="@drawable/ic_baseline_thumb_up_24"
-                        android:buttonTint="@color/grey"
+                        android:orientation="horizontal"
                         android:paddingHorizontal="@dimen/_8"
+                        android:paddingVertical="@dimen/_4"
                         android:visibility="gone"
-                        android:text="@string/rate" />
+                        android:background="@drawable/ripple"
+                        android:backgroundTint="@color/surface">
 
-                    <CheckBox
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_thumb_up_24"
+                            android:contentDescription="@null"
+                            android:tint="@color/grey"
+                            android:layout_marginEnd="@dimen/_8" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="@string/rate" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/edit"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"
-                        android:scaleX="0.8"
-                        android:scaleY="0.8"
-                        android:layout_gravity="center|end"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|end"
                         android:textColor="@color/grey"
-                        android:textSize="16sp"
-                        android:button="@drawable/ic_baseline_edit_24"
-                        android:buttonTint="@color/grey"
+                        android:orientation="horizontal"
                         android:paddingHorizontal="@dimen/_8"
+                        android:paddingVertical="@dimen/_4"
                         android:visibility="gone"
-                        android:text="@string/edit" />
+                        android:background="@drawable/ripple"
+                        android:backgroundTint="@color/surface">
 
-                    <CheckBox
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_edit_24"
+                            android:contentDescription="@null"
+                            android:tint="@color/grey"
+                            android:layout_marginEnd="@dimen/_8" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="@string/edit" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/reply"
                         android:layout_width="wrap_content"
-                        android:layout_height="24dp"
-                        android:scaleX="0.8"
-                        android:scaleY="0.8"
-                        android:layout_gravity="center|end"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|end"
                         android:textColor="@color/grey"
-                        android:textSize="16sp"
-                        android:button="@drawable/ic_baseline_reply_24"
-                        android:buttonTint="@color/grey"
+                        android:orientation="horizontal"
                         android:paddingHorizontal="@dimen/_8"
+                        android:paddingVertical="@dimen/_4"
                         android:visibility="gone"
-                        android:text="@string/title_reply" />
+                        android:background="@drawable/ripple"
+                        android:backgroundTint="@color/surface">
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_reply_24"
+                            android:contentDescription="@null"
+                            android:tint="@color/grey"
+                            android:layout_marginEnd="@dimen/_8" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="@string/title_reply" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
 

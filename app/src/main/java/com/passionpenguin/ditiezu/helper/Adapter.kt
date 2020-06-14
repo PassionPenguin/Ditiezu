@@ -16,7 +16,7 @@ import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.core.graphics.scale
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.passionpenguin.ditiezu.PostActivity
 import com.passionpenguin.ditiezu.R
@@ -44,48 +44,10 @@ class CategoryAdapter(
         val categoryItem = items[position]
         title.text = categoryItem.title
         meta.text = categoryItem.meta
-        Glide.with(mCtx).load(
-            mCtx.resources.getDrawable(
-                categoryItem.icon,
-                null
-            )
-        ).apply(RequestOptions.bitmapTransform(CircleCrop()))
+        Glide.with(mCtx)
+            .load(mCtx.resources.getDrawable(categoryItem.icon, null))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
             .into(icon)
-        return view
-    }
-}
-
-class ThreadListItem(
-    val authorId: Int,
-    val title: String,
-    val authorName: String,
-    val meta: String,
-    val target: Int
-)
-
-class ThreadListAdapter(
-    private var mCtx: Context,
-    resource: Int,
-    private var items: List<ThreadListItem>
-) : ArrayAdapter<ThreadListItem>(mCtx, resource, items) {
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_thread_list_item, parent, false)
-        val avatar: ImageView = view.findViewById(R.id.avatar)
-        val title: TextView = view.findViewById(R.id.threadTitle)
-        val authorName: TextView = view.findViewById(R.id.threadAuthorName)
-        val meta: TextView = view.findViewById(R.id.threadMetaInfo)
-        val threadItem = items[position]
-        title.text = threadItem.title
-        authorName.text = threadItem.authorName
-        meta.text = threadItem.meta
-        Glide.with(context)
-            .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${threadItem.authorId}")
-            .placeholder(R.mipmap.noavatar_middle_rounded)
-            .error(R.mipmap.noavatar_middle_rounded)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(avatar)
         return view
     }
 }
@@ -117,10 +79,10 @@ class ThreadItemListAdapter(
         view.findViewById<TextView>(R.id.threadAuthorName).text = searchItem.authorName
         Glide.with(context)
             .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${searchItem.authorId}")
-            .placeholder(R.mipmap.noavatar_middle_rounded)
-            .error(R.mipmap.noavatar_middle_rounded)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(view.findViewById<ImageView>(R.id.avatar))
+            .placeholder(R.mipmap.noavatar_middle)
+            .error(R.mipmap.noavatar_middle)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
+            .into(view.findViewById(R.id.avatar))
         return view
     }
 }
@@ -189,16 +151,15 @@ class NotificationsAdapter(
         else extraInfo.visibility = View.GONE
         if (notification.imageUrl.isEmpty())
             Glide.with(context)
-                .load(R.mipmap.noavatar_middle_rounded)
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .load(R.mipmap.noavatar_middle)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
                 .into(avatar)
-        else
-            Glide.with(context)
-                .load(notification.imageUrl)
-                .placeholder(R.mipmap.noavatar_middle_rounded)
-                .error(R.mipmap.noavatar_middle_rounded)
-                .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                .into(avatar)
+        else Glide.with(context)
+            .load(notification.imageUrl)
+            .placeholder(R.mipmap.noavatar_middle)
+            .error(R.mipmap.noavatar_middle)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
+            .into(avatar)
         return view
     }
 }
@@ -248,7 +209,7 @@ class ReplyItemAdapter(
         view.findViewById<TextView>(R.id.threadAuthorName).text = replyItem.authorName
 
         if (replyItem.editable)
-            with(view.findViewById<CheckBox>(R.id.edit)) {
+            with(view.findViewById<LinearLayout>(R.id.edit)) {
                 this.visibility = View.VISIBLE
                 this.setOnClickListener {
                     val i = Intent(mCtx, PostActivity::class.java)
@@ -260,7 +221,7 @@ class ReplyItemAdapter(
                 }
             }
         if (replyItem.replyable)
-            with(view.findViewById<CheckBox>(R.id.reply)) {
+            with(view.findViewById<LinearLayout>(R.id.reply)) {
                 this.visibility = View.VISIBLE
                 this.setOnClickListener {
                     val i = Intent(mCtx, PostActivity::class.java)
@@ -274,7 +235,7 @@ class ReplyItemAdapter(
                 }
             }
         if (replyItem.rateable)
-            with(view.findViewById<CheckBox>(R.id.rate)) {
+            with(view.findViewById<LinearLayout>(R.id.rate)) {
                 this.visibility = View.VISIBLE
                 this.setOnClickListener {
                     val viewThread = activity.findViewById<ViewGroup>(R.id.viewThread)
@@ -479,10 +440,10 @@ class ReplyItemAdapter(
 
         Glide.with(context)
             .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${replyItem.authorId}")
-            .placeholder(R.mipmap.noavatar_middle_rounded)
-            .error(R.mipmap.noavatar_middle_rounded)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(view.findViewById<ImageView>(R.id.avatar))
+            .placeholder(R.mipmap.noavatar_middle)
+            .error(R.mipmap.noavatar_middle)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
+            .into(view.findViewById(R.id.avatar))
         return view
     }
 }
@@ -518,9 +479,9 @@ fun rateView(
     if (withPrestige) prestige.visibility = View.VISIBLE
     Glide.with(mCtx)
         .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${rateLog.authorId}")
-        .placeholder(R.mipmap.noavatar_middle_rounded)
-        .error(R.mipmap.noavatar_middle_rounded)
-        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+        .placeholder(R.mipmap.noavatar_middle)
+        .error(R.mipmap.noavatar_middle)
+        .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
         .into(view.findViewById(R.id.avatar))
     return view
 }

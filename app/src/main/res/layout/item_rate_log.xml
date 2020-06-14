@@ -22,7 +22,7 @@
                 android:id="@+id/avatar"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@mipmap/noavatar_middle_rounded"
+                android:src="@mipmap/noavatar_middle"
                 android:contentDescription="@null" />
 
             <TextView

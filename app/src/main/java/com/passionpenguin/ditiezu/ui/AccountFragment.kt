@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.passionpenguin.ditiezu.AboutDitiezu
 import com.passionpenguin.ditiezu.LoginActivity
@@ -141,9 +141,9 @@ class AccountFragment : Fragment() {
                                 context?.let { mCtx ->
                                     Glide.with(mCtx)
                                         .load(parser.select(".avt img").attr("src"))
-                                        .placeholder(R.mipmap.noavatar_middle_rounded)
-                                        .error(R.mipmap.noavatar_middle_rounded)
-                                        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                                        .placeholder(R.mipmap.noavatar_middle)
+                                        .error(R.mipmap.noavatar_middle)
+                                        .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
                                         .into(avatar)
                                 }
                                 value_level.text = parser.select(".pbm span a")[0].text()

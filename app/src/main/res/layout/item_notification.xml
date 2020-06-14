@@ -15,12 +15,14 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:background="@drawable/border_radius_4_no_padding"
+        android:backgroundTint="@color/surface"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/ripple"
+            android:backgroundTint="@color/surface"
             android:orientation="vertical"
             android:paddingBottom="12dp"
             android:paddingHorizontal="24dp">
@@ -33,10 +35,11 @@
 
                 <ImageView
                     android:id="@+id/avatar"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/_32"
+                    android:layout_height="@dimen/_32"
                     android:layout_gravity="center"
                     android:layout_marginEnd="12dp"
+                    android:src="@mipmap/noavatar_middle"
                     android:contentDescription="@null" />
 
                 <LinearLayout
@@ -59,23 +62,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="16sp"
+                        android:textColor="@color/text"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="Notification Value" />
+
+                    <TextView
+                        android:id="@+id/extraInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/dark"
+                        android:textSize="13sp"
+                        tools:text="？？" />
                 </LinearLayout>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/extraInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="13sp"
-                android:textStyle="italic"
-                android:drawableStart="@drawable/style_quote"
-                android:drawablePadding="@dimen/_8"
-                tools:text="？？" />
         </LinearLayout>
     </LinearLayout>
 

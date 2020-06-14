@@ -89,7 +89,8 @@ class ViewThread : AppCompatActivity() {
                     }
                     it.select("img[smilieid]").forEach { img ->
                         val src = img.attr("src")
-                        img.attr("src", "http://www.ditiezu.com/$src")
+                        img.tagName("span")
+                        img.html(" <img src='http://www.ditiezu.com/$src' smilieid /> ")
                     }
                     it.select("font[size]").forEach { size ->
                         when (size.attr("size").toInt()) {
