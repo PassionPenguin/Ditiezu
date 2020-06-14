@@ -115,7 +115,7 @@ class PostActivity : AppCompatActivity() {
                     it.select("img").attr("src")
                 )
                 v.setOnClickListener { _ ->
-                    insert("[attachimg]${it.attr("id").substring(11)}[/attachimg]", "", "")
+                    insert("", "[attachimg]${it.attr("id").substring(11)}[/attachimg]")
                 }
                 ImageList.addView(v)
             }
@@ -189,10 +189,8 @@ class PostActivity : AppCompatActivity() {
                     )
                 }
                 val response = str.substring(
-                    str.indexOf("_rate('") + 33,
-                    str.indexOf(
-                        "'", str.indexOf("_rate('") + 34
-                    )
+                    str.indexOf("', '", str.indexOf("handle")) + 4,
+                    str.indexOf("'", str.indexOf("', '", str.indexOf("handle")) + 4)
                 )
                 when {
                     str == "Failed Retrieved" -> {
@@ -208,8 +206,8 @@ class PostActivity : AppCompatActivity() {
                     str.contains("succeed") -> {
                         Dialog().tip(
                             response,
-                            R.drawable.ic_baseline_close_24,
-                            R.color.danger,
+                            R.drawable.ic_baseline_check_24,
+                            R.color.primary500,
                             this@PostActivity,
                             PostActivity,
                             Dialog.TIME_SHORT
@@ -407,7 +405,7 @@ class PostActivity : AppCompatActivity() {
                                 it.select("img").attr("src")
                             )
                             v.setOnClickListener { _ ->
-                                insert("[attachimg]${it.attr("id").substring(11)}[\\attachimg]", "")
+                                insert("", "[attachimg]${it.attr("id").substring(11)}[/attachimg]")
                             }
                             ImageList.addView(v)
                         }
