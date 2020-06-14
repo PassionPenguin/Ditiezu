@@ -20,15 +20,14 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.provider.Browser
-import android.text.ParcelableSpan
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
 import com.passionpenguin.ditiezu.ViewThread
 
-open class CustomURLSpan(
+class CustomURLSpan(
     var URL: String?
-) : ClickableSpan(), ParcelableSpan {
+) : ClickableSpan() {
 
     override fun onClick(widget: View) {
         val uri = Uri.parse(URL)
