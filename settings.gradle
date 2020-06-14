@@ -1,3 +1,2 @@
-include ':jsoup-1.13.1'
-include ':app'
+include ':app', ':picture_library'
 rootProject.name = "Ditiezu"

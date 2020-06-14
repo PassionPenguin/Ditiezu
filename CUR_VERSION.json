@@ -1,6 +1,6 @@
 {
-  "versionCode": 34,
-  "versionName": "Watermelon Milkshake v8.1",
-  "versionDate": "Sun Jun 14 2020 00:20:51 GMT+0800 (中国标准时间)",
-  "versionLog": "支持对图片进行有损（75）/无损（未开放）压缩，更新样式"
+  "versionCode": 35,
+  "versionName": "Watermelon Milkshake v8.2",
+  "versionDate": "Sun Jun 14 2020 15:06:59 GMT+0800 (中国标准时间)",
+  "versionLog": "优化引用依赖库，更新样式、脚本，修复错误"
 }
