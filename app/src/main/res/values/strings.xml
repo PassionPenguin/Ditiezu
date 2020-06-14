@@ -195,4 +195,5 @@
     <string name="reason">Reason</string>
     <string name="file_not_exist">File not exist</string>
     <string name="compress_failed">Compress Failed</string>
+    <string name="signature">Signature</string>
 </resources>

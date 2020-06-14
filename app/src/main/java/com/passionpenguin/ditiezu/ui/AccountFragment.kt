@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.passionpenguin.ditiezu.AboutDitiezu
 import com.passionpenguin.ditiezu.LoginActivity
+import com.passionpenguin.ditiezu.PostActivity
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
@@ -95,6 +96,18 @@ class AccountFragment : Fragment() {
                                     parser.select("#pbbs>:first-child").textNodes()[0].text(),
                                     false
                                 ) {}
+                            )
+                            prefItem.add(
+                                PrefListItem(
+                                    resources.getString(R.string.signature),
+                                    "",
+                                    "",
+                                    true
+                                ) {
+                                    val i = Intent(context, PostActivity::class.java)
+                                    i.putExtra("type", "sightml")
+                                    activity.startActivity(i)
+                                }
                             )
                             prefItem.add(
                                 PrefListItem(

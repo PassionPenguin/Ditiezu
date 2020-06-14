@@ -54,29 +54,34 @@ class PostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
-        val e = intent.extras
-        val tid = e?.get("tid")
-        val reppid = e?.get("reppid")
-        val type = e?.get("type") ?: "reply"
-        pid = e?.get("pid").toString()
-        fid = e?.get("fid").toString()
+        val e = intent.extras ?: return
+        val type = e.get("type") ?: return
+        val tid = e.get("tid")
+        val reppid = e.get("reppid")
+        pid = e.get("pid").toString()
+        fid = e.get("fid").toString()
         lateinit var originParser: Document
         val typeNameList: ArrayList<String> = arrayListOf()
         val typeValueList: ArrayList<String> = arrayListOf()
         when (type) {
-            "reply" -> {
+            TYPE_REPLY -> {
                 if (tid == null) onBackPressed()
                 originParser = if (reppid != null)
                     Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=reply&fid=$fid&tid=$tid&repquote=$reppid"))
                 else Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=reply&fid=$fid&tid=$tid"))
             }
-            "edit" -> {
+            TYPE_EDIT -> {
                 if (pid == null || tid == null) onBackPressed()
                 originParser =
                     Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid"))
                 EditTextInput.setText(originParser.select("textarea")[0].html())
             }
-            "newthread" -> {
+            TYPE_SIGHTML -> {
+                imageSelectorToggle.visibility = View.GONE
+                imageListWrap.visibility = View.GONE
+                EditTextInput.setText(Preference(this@PostActivity).getString(TYPE_SIGHTML))
+            }
+            TYPE_NEW -> {
                 if (fid == null) onBackPressed()
                 NewThreadComponent.visibility = View.VISIBLE
                 originParser =
@@ -94,37 +99,39 @@ class PostActivity : AppCompatActivity() {
                 typeSelector.adapter = adapter
             }
         }
-        attachHash = originParser.select("[name=\"hash\"]").attr("value")
+        if (type != TYPE_SIGHTML) {
+            attachHash = originParser.select("[name=\"hash\"]").attr("value")
 
-        var s = originParser.select("body").html()
-        val pattern = Pattern.compile("IMGUNUSEDAID\\[\\d*] = '(\\d*)'")
-        var matcher: Matcher = pattern.matcher(s)
-        while (matcher.find()) {
-            attachlist.add(matcher.group(1))
-            s = s.substring(matcher.start() + 1) // ignore the just-matched and move on;
-            matcher = pattern.matcher(s)
-        }
-        var attachResult =
-            HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=ajax&action=imagelist&pid=$pid&fid=$fid&inajax=1&ajaxtarget=imgattachlist")
-                .substring(53)
-        if (attachResult.length > 11) {
-            attachResult = attachResult.substring(0, attachResult.length - 11)
-            Jsoup.parse(attachResult).select("[id^='imageattach']").forEach {
-                val v = attachImageView(
-                    this,
-                    it.select("img").attr("src")
-                )
-                v.setOnClickListener { _ ->
-                    insert("", "[attachimg]${it.attr("id").substring(11)}[/attachimg]")
-                }
-                ImageList.addView(v)
+            var s = originParser.select("body").html()
+            val pattern = Pattern.compile("IMGUNUSEDAID\\[\\d*] = '(\\d*)'")
+            var matcher: Matcher = pattern.matcher(s)
+            while (matcher.find()) {
+                attachlist.add(matcher.group(1).toString())
+                s = s.substring(matcher.start() + 1) // ignore the just-matched and move on;
+                matcher = pattern.matcher(s)
             }
-        }
+            var attachResult =
+                HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=ajax&action=imagelist&pid=$pid&fid=$fid&inajax=1&ajaxtarget=imgattachlist")
+                    .substring(53)
+            if (attachResult.length > 11) {
+                attachResult = attachResult.substring(0, attachResult.length - 11)
+                Jsoup.parse(attachResult).select("[id^='imageattach']").forEach {
+                    val v = attachImageView(
+                        this,
+                        it.select("img").attr("src")
+                    )
+                    v.setOnClickListener { _ ->
+                        insert("", "[attachimg]${it.attr("id").substring(11)}[/attachimg]")
+                    }
+                    ImageList.addView(v)
+                }
+            }
 
-        uid = originParser.select("[name=\"uid\"]").attr("value")
+            uid = originParser.select("[name=\"uid\"]").attr("value")
+        }
 
         val formhash =
-            if (type == "newthread") originParser.select("[name='formhash']").attr("value") else
+            if (type == TYPE_NEW) originParser.select("[name='formhash']").attr("value") else
                 Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/search.php?mod=forum"))
                     .select("[name=\"formhash\"]").attr("value")
 
@@ -145,20 +152,21 @@ class PostActivity : AppCompatActivity() {
                 }
                 val str = HttpExt().asyncPostPage(
                     when (type) {
-                        "edit" -> "http://www.ditiezu.com/forum.php?mod=post&action=edit&extra=&editsubmit=yes&inajax=1"
-                        "newthread" -> "http://www.ditiezu.com/forum.php?mod=post&action=newthread&fid=$fid&extra=&topicsubmit=yes&inajax=1"
+                        TYPE_EDIT -> "http://www.ditiezu.com/forum.php?mod=post&action=edit&extra=&editsubmit=yes&inajax=1"
+                        TYPE_NEW -> "http://www.ditiezu.com/forum.php?mod=post&action=newthread&fid=$fid&extra=&topicsubmit=yes&inajax=1"
+                        TYPE_SIGHTML -> "http://www.ditiezu.com/home.php?mod=spacecp&ac=profile"
                         else -> "http://www.ditiezu.com/forum.php?mod=post&action=reply&tid=$tid&replysubmit=yes&inajax=1"
                     },
                     "message=" + URLEncoder.encode(
                         EditTextInput.text.toString(),
                         "GBK"
                     ) + "&formhash=$formhash$postAID&subject=" + when (type) {
-                        "edit" -> {
-                            "&pid=$pid&tid=$tid"
-                        } // Edit
-                        "newthread" -> {
-                            "&typeid=" + typeValueList[typeSelector.selectedItemPosition] + "&subject=" + subject.text.toString()
-                        } // New Thread
+                        TYPE_EDIT -> "&pid=$pid&tid=$tid" // Edit
+                        TYPE_NEW -> "&typeid=" + typeValueList[typeSelector.selectedItemPosition] + "&subject=" + subject.text.toString() // New Thread
+                        TYPE_SIGHTML -> "&profilesubmit=true&sightml=${URLEncoder.encode(
+                            EditTextInput.text.toString(),
+                            "GBK"
+                        )}"
                         else -> {
                             if (reppid != null) {
                                 "&reppid=$reppid&reppost=$reppid&noticeauthor=${originParser.select(
@@ -203,7 +211,7 @@ class PostActivity : AppCompatActivity() {
                             Dialog.TIME_SHORT
                         )
                     }
-                    str.contains("succeed") -> {
+                    str.contains("succeed") || str.contains("success") -> {
                         Dialog().tip(
                             response,
                             R.drawable.ic_baseline_check_24,
@@ -219,6 +227,10 @@ class PostActivity : AppCompatActivity() {
                             setResult(Activity.RESULT_OK, intent)
                             finish()
                         }, 1500)
+                        if (type == TYPE_SIGHTML) Preference(this@PostActivity).edit(
+                            TYPE_SIGHTML,
+                            EditTextInput.text.toString()
+                        )
                     }
                     str.contains("error") -> {
                         Dialog().tip(
@@ -229,7 +241,6 @@ class PostActivity : AppCompatActivity() {
                             PostActivity,
                             Dialog.TIME_SHORT
                         )
-
                     }
                 }
             }
@@ -339,7 +350,6 @@ class PostActivity : AppCompatActivity() {
                 .rotateEnabled(true)//裁剪是否可旋转图片
                 .scaleEnabled(true)//裁剪是否可放大缩小图片
                 .isDragFrame(true)//是否可拖动裁剪框(固定)
-                .compress(true)//是否压缩
                 .compressFocusAlpha(false)//压缩后是否保持图片的透明通道
                 .isMultipleSkipCrop(true)//多图裁剪是否支持跳过
                 .isMultipleRecyclerAnimation(true)// 多图裁剪底部列表显示动画效果
@@ -413,5 +423,12 @@ class PostActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        const val TYPE_REPLY = "reply"
+        const val TYPE_EDIT = "edit"
+        const val TYPE_NEW = "newthread"
+        const val TYPE_SIGHTML = "sightml"
     }
 }
