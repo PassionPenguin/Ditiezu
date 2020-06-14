@@ -19,7 +19,6 @@ package com.passionpenguin.htmltextview
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcel
 import android.provider.Browser
 import android.text.ParcelableSpan
 import android.text.style.ClickableSpan
@@ -77,15 +76,4 @@ open class CustomURLSpan(
             }
         }
     }
-
-    override fun getSpanTypeId(): Int {
-        return 0
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {}
-
 }
