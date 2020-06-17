@@ -30,7 +30,6 @@ class CategoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let { activity ->
-
             with(actionBar.findViewById<EditText>(R.id.app_search_input)) {
                 this?.setOnKeyListener(object : View.OnKeyListener {
                     override fun onKey(
@@ -52,13 +51,13 @@ class CategoryFragment : Fragment() {
                 })
             }
             actionBar.setBackgroundColor(resources.getColor(R.color.surface, null))
+            actionBarLayout.findViewById<TextView>(R.id.appName)
+                .setTextColor(resources.getColor(R.color.black, null))
             val categoryContent = CategoryContent(activity)
             val list = categoryContent.categoryList
             val adapter = CategoryItemAdapter(activity, list)
             categoryList.layoutManager = GridLayoutManager(activity, 2)
             categoryList.adapter = adapter
-            actionBarLayout.findViewById<TextView>(R.id.appName)
-                .setTextColor(resources.getColor(R.color.black, null))
         }
     }
 }

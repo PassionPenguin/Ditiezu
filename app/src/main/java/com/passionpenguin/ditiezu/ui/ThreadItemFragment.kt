@@ -34,7 +34,7 @@ class ThreadItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        actionBar.elevation = resources.getDimension(R.dimen._16)
         with(actionBar.findViewById<EditText>(R.id.app_search_input)) {
             this?.setOnKeyListener(object : View.OnKeyListener {
                 override fun onKey(

@@ -283,37 +283,65 @@ class NotificationItem(
     val page: String? = "1"
 )
 
-class NotificationsAdapter(
-    private var mCtx: Context,
-    resource: Int,
-    private var items: List<NotificationItem>
-) : ArrayAdapter<NotificationItem>(mCtx, resource, items) {
+class NotificationItemAdapter(val activity: Activity, items: List<NotificationItem>) :
+    RecyclerView.Adapter<NotificationItemAdapter.ViewHolder>() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_notification, parent, false)
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
+    var mItems: List<NotificationItem> = items
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            mInflater.inflate(
+                R.layout.item_notification,
+                parent,
+                false
+            )
+        )
+    }
+
+
+    override fun getItemCount(): Int {
+        return mItems.size
+    }
+
+    class ViewHolder(view: View) :
+        RecyclerView.ViewHolder(view) {
         val avatar: ImageView = view.findViewById(R.id.avatar)
         val value: TextView = view.findViewById(R.id.notification_value)
         val meta: TextView = view.findViewById(R.id.notification_meta)
         val extraInfo: TextView = view.findViewById(R.id.extraInfo)
-        val notification = items[position]
-        value.text = notification.value
-        meta.text = notification.time
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        val notification = mItems[position]
+        holder.value.text = notification.value
+        holder.meta.text = notification.time
         if (notification.description != null)
-            extraInfo.text = notification.description
-        else extraInfo.visibility = View.GONE
+            holder.extraInfo.text = notification.description
+        else holder.extraInfo.visibility = View.GONE
         if (notification.imageUrl.isEmpty())
-            Glide.with(context)
+            Glide.with(activity)
                 .load(R.mipmap.noavatar_middle)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-                .into(avatar)
-        else Glide.with(context)
+                .into(holder.avatar)
+        else Glide.with(activity)
             .load(notification.imageUrl)
             .placeholder(R.mipmap.noavatar_middle)
             .error(R.mipmap.noavatar_middle)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-            .into(avatar)
-        return view
+            .into(holder.avatar)
+
+        holder.itemView.setOnClickListener {
+            if (notification.tid != "-1") {
+                val i = Intent(activity, ViewThread::class.java)
+                i.putExtra("tid", notification.tid?.toInt())
+                i.putExtra("page", notification.page?.toInt())
+                activity.startActivity(i)
+            }
+        }
     }
 }
 

@@ -5,24 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/fragment_action_bar" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         style="@style/Theme.Ditiezu.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/actionBar" />
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/NotificationList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabs">
-
-        <ListView
-            android:id="@+id/NotificationList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@null"
-            tools:listitem="@layout/item_notification" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        app:layout_constraintTop_toBottomOf="@id/tabs"
+        tools:listitem="@layout/item_notification" />
 </androidx.constraintlayout.widget.ConstraintLayout>

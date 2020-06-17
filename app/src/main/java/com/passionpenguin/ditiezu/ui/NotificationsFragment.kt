@@ -2,20 +2,24 @@ package com.passionpenguin.ditiezu.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.passionpenguin.ditiezu.R
-import com.passionpenguin.ditiezu.ViewThread
+import com.passionpenguin.ditiezu.SearchResultActivity
 import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.NotificationItem
-import com.passionpenguin.ditiezu.helper.NotificationsAdapter
+import com.passionpenguin.ditiezu.helper.NotificationItemAdapter
+import kotlinx.android.synthetic.main.fragment_action_bar.*
+import kotlinx.android.synthetic.main.fragment_notifications.*
 import org.jsoup.Jsoup
 
 class NotificationsFragment : Fragment() {
@@ -28,6 +32,30 @@ class NotificationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        with(actionBar.findViewById<EditText>(R.id.app_search_input)) {
+            this?.setOnKeyListener(object : View.OnKeyListener {
+                override fun onKey(
+                    v: View?,
+                    keyCode: Int,
+                    event: KeyEvent
+                ): Boolean {
+                    val t = v as EditText
+                    if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && t.text.toString()
+                            .trim().isNotEmpty()
+                    ) {
+                        val i = Intent(context, SearchResultActivity::class.java)
+                        i.putExtra("kw", t.text.toString())
+                        context.startActivity(i)
+                        return true
+                    }
+                    return false
+                }
+            })
+        }
+        actionBar.setBackgroundColor(resources.getColor(R.color.surface, null))
+        actionBarLayout.findViewById<TextView>(R.id.appName)
+            .setTextColor(resources.getColor(R.color.black, null))
 
         fun retriever(url: String) {
             activity?.runOnUiThread {
@@ -123,18 +151,8 @@ class NotificationsFragment : Fragment() {
                                 }
                             }
                             activity.runOnUiThread {
-                                val listView =
-                                    activity.findViewById<ListView>(R.id.NotificationList)
-                                listView?.adapter =
-                                    context?.let { ctx -> NotificationsAdapter(ctx, 0, list) }
-                                listView?.setOnItemClickListener { _, _, position, _ ->
-                                    if (list[position].tid != "-1") {
-                                        val i = Intent(context, ViewThread::class.java)
-                                        i.putExtra("tid", list[position].tid?.toInt())
-                                        i.putExtra("page", list[position].page?.toInt())
-                                        activity.startActivity(i)
-                                    }
-                                }
+                                NotificationList.adapter = NotificationItemAdapter(activity, list)
+                                NotificationList.layoutManager = LinearLayoutManager(activity)
                             }
                         }
                     }
