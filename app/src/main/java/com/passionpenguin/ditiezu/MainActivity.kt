@@ -1,12 +1,9 @@
 package com.passionpenguin.ditiezu
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.MotionEvent
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -33,22 +30,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
 
-        val input = findViewById<EditText>(R.id.app_search_input)
-
-        input.setOnKeyListener(object : View.OnKeyListener {
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && input.text.toString()
-                        .trim().isNotEmpty()
-                ) {
-                    val i = Intent(this@MainActivity, SearchResultActivity::class.java)
-                    i.putExtra("kw", input.text.toString())
-                    startActivity(i)
-                    return true
-                }
-                return false
-            }
-        })
-
         val value =
             HttpExt().asyncRetrieveNonForumPage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/CUR_VERSION.json")
         if (value != "Failed Retrieved") {
@@ -72,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 }
         }
     }
-
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus

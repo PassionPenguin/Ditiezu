@@ -198,4 +198,7 @@
     <string name="signature">Signature</string>
     <string name="ad_app_id" translatable="false">ca-app-pub-2275811890061218~1899277240</string>
     <string name="ad_splash_id" translatable="false">ca-app-pub-2275811890061218/5969071118</string>
+    <string name="history">History</string>
+    <string name="discovery">Discovery</string>
+    <string name="account">Account</string>
 </resources>

@@ -4,10 +4,10 @@
     android:id="@+id/threadItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/surface"
     android:clickable="false"
     android:focusable="false"
     android:orientation="vertical"
+    android:background="@color/surface"
     tools:ignore="SmallSp">
 
     <LinearLayout
@@ -24,8 +24,8 @@
             android:layout_height="wrap_content"
             android:paddingVertical="@dimen/_8"
             android:paddingHorizontal="@dimen/_16"
-            tools:text="2020/05/30 13:00"
-            android:textColor="@color/dark"/>
+            android:textColor="@color/dark"
+            tools:text="2020/05/30 13:00" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,8 +44,8 @@
                 android:fontFamily="sans-serif-medium"
                 android:textSize="18sp"
                 android:paddingTop="12dp"
-                tools:text="Thread Title"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                tools:text="Thread Title" />
 
             <TextView
                 android:id="@+id/threadContent"
@@ -53,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4"
                 android:textSize="13sp"
-                tools:text="Thread Content"
-                android:textColor="@color/dark" />
+                android:textColor="@color/dark"
+                tools:text="Thread Content" />
 
             <LinearLayout
                 android:layout_width="match_parent"

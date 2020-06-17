@@ -15,11 +15,13 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.core.graphics.scale
+import androidx.core.view.get
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.passionpenguin.ditiezu.PostActivity
-import com.passionpenguin.ditiezu.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.passionpenguin.ditiezu.*
 import com.passionpenguin.htmltextview.HtmlHttpImageGetter
 import com.passionpenguin.htmltextview.HtmlTextView
 import org.jsoup.Jsoup
@@ -27,30 +29,60 @@ import java.io.IOException
 import java.net.URLEncoder
 
 
-class CategoryItem(val title: String, val description: String, val icon: Int, var meta: String)
+class CategoryItem(
+    val name: String,
+    val description: String,
+    val icon: Int,
+    val meta: String,
+    val id: Int
+)
 
-class CategoryAdapter(
-    private var mCtx: Context,
-    resource: Int,
-    private var items: List<CategoryItem>
-) : ArrayAdapter<CategoryItem>(mCtx, resource, items) {
+class CategoryItemAdapter(val activity: Activity, items: List<CategoryItem>) :
+    RecyclerView.Adapter<CategoryItemAdapter.ViewHolder>() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_category, parent, false)
-        val icon: ImageView = view.findViewById(R.id.categoryIcon)
-        val title: TextView = view.findViewById(R.id.categoryName)
-        val meta: TextView = view.findViewById(R.id.categoryMeta)
-        val categoryItem = items[position]
-        title.text = categoryItem.title
-        meta.text = categoryItem.meta
-        Glide.with(mCtx)
-            .load(mCtx.resources.getDrawable(categoryItem.icon, null))
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
+    var mItems: List<CategoryItem> = items
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            mInflater.inflate(
+                R.layout.item_category,
+                parent,
+                false
+            )
+        )
+    }
+
+
+    override fun getItemCount(): Int {
+        return mItems.size
+    }
+
+    class ViewHolder(view: View) :
+        RecyclerView.ViewHolder(view) {
+        var categoryIcon: ImageView = view.findViewById(R.id.categoryIcon)
+        var categoryName: TextView = view.findViewById(R.id.categoryName)
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        holder.categoryName.text = mItems[position].name
+        Glide.with(activity)
+            .load(activity.resources.getDrawable(mItems[position].icon, null))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-            .into(icon)
-        return view
+            .into(holder.categoryIcon)
+        holder.itemView.setOnClickListener {
+            val i = Intent(activity, ForumDisplay::class.java)
+            i.putExtra("fid", mItems[position].id)
+            i.putExtra("id", position)
+            i.flags = FLAG_ACTIVITY_NEW_TASK
+            activity.startActivity(i)
+        }
     }
 }
+
 
 class ThreadItem(
     val authorId: Int,
@@ -84,6 +116,127 @@ class ThreadItemListAdapter(
             .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
             .into(view.findViewById(R.id.avatar))
         return view
+    }
+}
+
+class ThreadItemAdapter(val activity: Activity, items: List<ThreadItem>) :
+    RecyclerView.Adapter<ThreadItemAdapter.ViewHolder>() {
+
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
+    var mItems: List<ThreadItem> = items
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) 0 else 1
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return if (viewType == 0) {
+            val vh = ViewHolder(
+                mInflater.inflate(
+                    R.layout.item_home_header,
+                    parent,
+                    false
+                )
+            )
+            vh.init(viewType)
+            vh
+        } else {
+            val vh = ViewHolder(
+                mInflater.inflate(
+                    R.layout.item_thread_item,
+                    parent,
+                    false
+                )
+            )
+            vh.init(viewType)
+            vh
+        }
+    }
+
+
+    override fun getItemCount(): Int {
+        return mItems.size + 1
+    }
+
+    class ViewHolder(private val view: View) :
+        RecyclerView.ViewHolder(view) {
+        lateinit var recentView: LinearLayout
+        lateinit var discoveryNew: LinearLayout
+        lateinit var categoryList: LinearLayout
+        lateinit var accountView: LinearLayout
+        lateinit var itemThreadTitle: TextView
+        lateinit var itemThreadContent: TextView
+        lateinit var itemThreadPostTime: TextView
+        lateinit var itemThreadMetaInfo: TextView
+        lateinit var itemThreadAuthorName: TextView
+        lateinit var itemAvatar: ImageView
+
+        fun init(viewType: Int) {
+            if (viewType == 0) {
+                recentView = view.findViewById(R.id.recentView)
+                discoveryNew = view.findViewById(R.id.discoveryNew)
+                categoryList = view.findViewById(R.id.categoryList)
+                accountView = view.findViewById(R.id.accountView)
+            } else {
+                itemThreadTitle = view.findViewById(R.id.threadTitle)
+                itemThreadContent = view.findViewById(R.id.threadContent)
+                itemThreadPostTime = view.findViewById(R.id.threadPostTime)
+                itemThreadMetaInfo = view.findViewById(R.id.threadMetaInfo)
+                itemThreadAuthorName = view.findViewById(R.id.threadAuthorName)
+                itemAvatar = view.findViewById(R.id.avatar)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        if (position == 0) {
+            holder.recentView.setOnClickListener {
+            }
+            holder.discoveryNew.setOnClickListener {
+                val i = Intent(activity, SearchResultActivity::class.java)
+                i.flags = FLAG_ACTIVITY_NEW_TASK
+                i.putExtra("kw", "")
+                activity.startActivity(i)
+            }
+            holder.categoryList.setOnClickListener {
+                (activity.findViewById<BottomNavigationView>(R.id.nav_view)[0] as ViewGroup)[1].performClick()
+            }
+            holder.accountView.setOnClickListener {
+                (activity.findViewById<BottomNavigationView>(R.id.nav_view)[0] as ViewGroup)[3].performClick()
+            }
+        } else {
+            val item = mItems[position - 1]
+            holder.itemThreadTitle.text = item.title
+            holder.itemThreadContent.text = item.content
+            holder.itemThreadPostTime.text = item.time
+            holder.itemThreadMetaInfo.text = item.meta
+            holder.itemThreadAuthorName.text = item.authorName
+            Glide.with(activity)
+                .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${item.authorId}")
+                .placeholder(R.mipmap.noavatar_middle)
+                .error(R.mipmap.noavatar_middle)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
+                .into(holder.itemAvatar)
+
+            holder.itemView.setOnClickListener {
+                if (position != 0) {
+                    val i = Intent(activity, ViewThread::class.java)
+                    i.putExtra("tid", mItems[position - 1].target)
+                    i.flags = FLAG_ACTIVITY_NEW_TASK
+                    activity.startActivity(i)
+                }
+            }
+
+            holder.itemView.setOnLongClickListener {
+                if (position != 0) {
+                    TODO("MENU")
+                }
+                true
+            }
+        }
     }
 }
 

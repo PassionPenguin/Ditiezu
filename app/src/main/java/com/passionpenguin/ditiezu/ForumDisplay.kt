@@ -21,26 +21,20 @@ class ForumDisplay : AppCompatActivity() {
         setContentView(R.layout.activity_forum_display)
 
         val extras = intent.extras
-        var fid = 23
-        if (extras != null) {
-            fid = extras.getInt("fid")
-        } else finish()
+        var id = extras?.getInt("id", -1)
+        if (id == -1 || id == null) return
+
+        val categoryContent =
+            CategoryContent(applicationContext)
+        val categoryList = categoryContent.categoryList[id]
+        val threadListView = ThreadList
 
         fab.setOnClickListener {
             val i = Intent(this@ForumDisplay, PostActivity::class.java)
             i.putExtra("type", "newthread")
-            i.putExtra("fid", fid)
+            i.putExtra("fid", categoryList.id)
             startActivity(i)
         }
-
-        val categoryContent =
-            CategoryContent(applicationContext)
-        val categoryList = categoryContent.categoryList
-        val categoryId = categoryContent.categoryId
-        if (categoryId.indexOf(fid) == -1) return
-        findViewById<TextView>(R.id.title).text = categoryList[categoryId.indexOf(fid)].title
-
-        val threadListView = ThreadList
 
         fun loadForumContent(page: Int, ext: String = "") {
             fun processResult(result: String) {
@@ -125,16 +119,16 @@ class ForumDisplay : AppCompatActivity() {
                     bannerView.findViewById<ImageView>(R.id.CategoryIcon)
                         .setImageDrawable(
                             resources.getDrawable(
-                                categoryList[categoryId.indexOf(fid)].icon,
+                                categoryList.icon,
                                 null
                             )
                         )
                     bannerView.findViewById<TextView>(R.id.CategoryTitle).text =
-                        categoryList[categoryId.indexOf(fid)].title
+                        categoryList.name
                     bannerView.findViewById<TextView>(R.id.CategoryMeta).text =
                         parser.select(".xw0.xs1.i").text().replace("|", " | ")
                     bannerView.findViewById<TextView>(R.id.CategoryDescription).text =
-                        categoryList[categoryId.indexOf(fid)].description
+                        categoryList.description
                     threadListView.addHeaderView(bannerView)
 
                     val footerPagination =
@@ -267,7 +261,7 @@ class ForumDisplay : AppCompatActivity() {
                     }
                 }
             }
-            HttpExt().retrievePage("http://www.ditiezu.com/forum-$fid-$page.html$ext") {
+            HttpExt().retrievePage("http://www.ditiezu.com/forum-${categoryList.id}-$page.html$ext") {
                 if (it == "Failed Retrieved")
                     Dialog().tip(
                         resources.getString(R.string.failed_retrieved),

@@ -4,10 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import kotlinx.android.synthetic.main.activity_splash.*
 
 
 class Splash : AppCompatActivity() {
@@ -15,25 +11,26 @@ class Splash : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        MobileAds.initialize(
-            this
-        ) { }
-
-        adView.loadAd(AdRequest.Builder().build())
-        adView.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(p0: Int) {
-                super.onAdFailedToLoad(p0)
-                startActivity(Intent(this@Splash, MainActivity::class.java))
-            }
-
-            override fun onAdClosed() {
-                super.onAdClosed()
-                startActivity(Intent(this@Splash, MainActivity::class.java))
-            }
-        }
-
+//        MobileAds.initialize(
+//            this
+//        ) { }
+//
+//        adView.loadAd(AdRequest.Builder().build())
+//        adView.adListener = object : AdListener() {
+//            override fun onAdFailedToLoad(p0: Int) {
+//                super.onAdFailedToLoad(p0)
+//                startActivity(Intent(this@Splash, MainActivity::class.java))
+//            }
+//
+//            override fun onAdClosed() {
+//                super.onAdClosed()
+//                startActivity(Intent(this@Splash, MainActivity::class.java))
+//            }
+//        }
+//
         window.decorView.apply {
             systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         }
+        startActivity(Intent(this@Splash, MainActivity::class.java))
     }
 }

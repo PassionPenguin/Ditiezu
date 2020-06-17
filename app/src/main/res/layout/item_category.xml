@@ -3,47 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="12dp"
     android:orientation="horizontal"
-    android:padding="3dp"
-    tools:ignore="SmallSp">
+    tools:ignore="SmallSp,UseCompoundDrawables,UselessParent">
 
     <LinearLayout
+        android:layout_marginHorizontal="@dimen/_16"
+        android:layout_marginVertical="@dimen/_8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_32"
-        android:layout_marginVertical="@dimen/_8"
-        android:orientation="horizontal">
+        android:background="@drawable/ripple"
+        android:backgroundTint="@color/surface"
+        android:elevation="@dimen/_2"
+        android:padding="@dimen/_4">
 
         <ImageView
             android:id="@+id/categoryIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="@dimen/_8"
             android:contentDescription="@string/category_title"
             android:src="@color/surface_secondary"
             tools:src="@drawable/guangzhou" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/categoryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="6dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/categoryName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-medium"
-                tools:text="@string/category_Guangzhou" />
-
-            <TextView
-                android:id="@+id/categoryMeta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="11sp"
-                tools:text="主题: 99999, 帖数: 9999999" />
-        </LinearLayout>
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_gravity="center_vertical"
+            tools:text="@string/category_Guangzhou" />
     </LinearLayout>
 </LinearLayout>

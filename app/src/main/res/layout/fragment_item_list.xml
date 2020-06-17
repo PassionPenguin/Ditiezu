@@ -1,67 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_item_list"
     android:name="com.passionpenguin.ditiezu.ThreadItemFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/_16"
-    android:layout_marginRight="@dimen/_16">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/fragment_action_bar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/threadItemList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:smoothScrollbar="true"
+        android:background="@color/surface"
+        tools:context=".ui.ThreadItemFragment"
+        tools:listitem="@layout/item_thread_item" />
 
-        <LinearLayout
-            android:id="@+id/LoadingMaskContainer"
+    <LinearLayout
+        android:id="@+id/LoadingAnimation"
+        android:layout_width="180dp"
+        android:layout_height="150dp"
+        android:background="@drawable/border_radius_16"
+        android:elevation="@dimen/_32"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="180dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center|top"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/primary500"
+            android:paddingTop="16dp" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:background="@color/shadowMask"
-            android:elevation="@dimen/_8"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/LoadingAnimation"
-                android:layout_width="180dp"
-                android:layout_height="150dp"
-                android:background="@drawable/border_radius_16"
-                android:elevation="@dimen/_32"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ProgressBar
-                    android:layout_width="180dp"
-                    android:layout_height="96dp"
-                    android:layout_gravity="center|top"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/primary500"
-                    android:paddingTop="16dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:text="@string/loading_description"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/threadItemList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:divider="@null"
-            android:smoothScrollbar="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.ThreadItemFragment"
-            tools:listitem="@layout/item_thread_item"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+            android:text="@string/loading_description"
+            android:textSize="16sp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

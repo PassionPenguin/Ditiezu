@@ -5,13 +5,8 @@
     android:id="@+id/MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/surface_secondary"
     tools:context=".MainActivity">
-
-    <include
-        android:id="@+id/action_bar_layout"
-        layout="@layout/fragment_action_bar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -36,7 +31,7 @@
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/action_bar_layout"
+        app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

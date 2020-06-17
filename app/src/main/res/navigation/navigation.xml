@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_item_list" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_category"
         android:name="com.passionpenguin.ditiezu.ui.CategoryFragment"
         android:label="@string/category_title"
         tools:layout="@layout/fragment_category" />

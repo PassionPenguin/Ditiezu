@@ -6,12 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/fragment_action_bar" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
         android:smoothScrollbar="true"
+        android:paddingTop="96dp"
         tools:context=".ui.ThreadItemFragment"
         tools:listitem="@layout/item_category" />
 </FrameLayout>
