@@ -119,43 +119,83 @@ class ThreadItemListAdapter(
     }
 }
 
-class ThreadItemAdapter(val activity: Activity, items: List<ThreadItem>) :
-    RecyclerView.Adapter<ThreadItemAdapter.ViewHolder>() {
+class ThreadItemAdapter(
+    val activity: Activity,
+    items: List<ThreadItem>,
+    private val isHome: Boolean = false,
+    private val withHeader: Boolean = false,
+    private val withNavigation: Boolean = false,
+    private val curCategoryItem: CategoryItem?,
+    private val curPage: Int = 0,
+    private val lastPage: Int = 0,
+    private val disabledCurPage: Boolean = false,
+    private val enabledPrev: Boolean = false,
+    private val enabledNext: Boolean = false,
+    private val onNavClicked: (page: Int) -> Unit
+) : RecyclerView.Adapter<ThreadItemAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     var mItems: List<ThreadItem> = items
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0) 0 else 1
+        // HEADER: 0
+        // NORMAL: 1
+        // NAVIGATION: 2
+        return if (isHome) {
+            if (position == 0) 0 else 1
+        } else if (withHeader) {
+            if (position == 0) 0 else if (withNavigation && position == mItems.size + 1) 2 else 1
+        } else if (withNavigation) {
+            if (position == mItems.size) 2 else 1
+        } else 1
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return if (viewType == 0) {
-            val vh = ViewHolder(
-                mInflater.inflate(
-                    R.layout.item_home_header,
-                    parent,
-                    false
+        return when (viewType) {
+            0 -> {
+                val vh = ViewHolder(
+                    mInflater.inflate(
+                        if (isHome) R.layout.item_home_header else R.layout.item_category_info_header,
+                        parent,
+                        false
+                    )
                 )
-            )
-            vh.init(viewType)
-            vh
-        } else {
-            val vh = ViewHolder(
-                mInflater.inflate(
-                    R.layout.item_thread_item,
-                    parent,
-                    false
+                vh.init(viewType, isHome, withHeader, withNavigation)
+                vh
+            }
+            2 -> {
+                val vh = ViewHolder(
+                    mInflater.inflate(
+                        R.layout.item_category_pagination_navigation,
+                        parent,
+                        false
+                    )
                 )
-            )
-            vh.init(viewType)
-            vh
+                vh.init(viewType, isHome, withHeader, withNavigation)
+                vh
+            }
+            else -> {
+                val vh = ViewHolder(
+                    mInflater.inflate(
+                        R.layout.item_thread_item,
+                        parent,
+                        false
+                    )
+                )
+                vh.init(viewType, isHome, withHeader, withNavigation)
+                vh
+            }
         }
     }
 
 
     override fun getItemCount(): Int {
-        return mItems.size + 1
+        return if (isHome) mItems.size + 1 else {
+            if (withHeader) {
+                if (withNavigation) mItems.size + 2
+                else mItems.size + 1
+            } else if (withNavigation) mItems.size + 1 else mItems.size
+        }
     }
 
     class ViewHolder(private val view: View) :
@@ -170,13 +210,50 @@ class ThreadItemAdapter(val activity: Activity, items: List<ThreadItem>) :
         lateinit var itemThreadMetaInfo: TextView
         lateinit var itemThreadAuthorName: TextView
         lateinit var itemAvatar: ImageView
+        lateinit var categoryIcon: ImageView
+        lateinit var categoryName: TextView
+        lateinit var categoryMeta: TextView
+        lateinit var categoryDescription: TextView
+        lateinit var curPage: TextView
+        lateinit var firstPage: ImageButton
+        lateinit var lastPage: ImageButton
+        lateinit var prevPage: ImageButton
+        lateinit var nextPage: ImageButton
+        lateinit var prev1Page: TextView
+        lateinit var prev2Page: TextView
+        lateinit var next1Page: TextView
+        lateinit var next2Page: TextView
 
-        fun init(viewType: Int) {
+        fun init(
+            viewType: Int,
+            isHome: Boolean = false,
+            withHeader: Boolean = false,
+            withNavigation: Boolean = false
+        ) {
             if (viewType == 0) {
-                recentView = view.findViewById(R.id.recentView)
-                discoveryNew = view.findViewById(R.id.discoveryNew)
-                categoryList = view.findViewById(R.id.categoryList)
-                accountView = view.findViewById(R.id.accountView)
+                if (isHome) {
+                    recentView = view.findViewById(R.id.recentView)
+                    discoveryNew = view.findViewById(R.id.discoveryNew)
+                    categoryList = view.findViewById(R.id.categoryList)
+                    accountView = view.findViewById(R.id.accountView)
+                } else if (withHeader) {
+                    categoryIcon = view.findViewById(R.id.CategoryIcon)
+                    categoryName = view.findViewById(R.id.CategoryTitle)
+                    categoryMeta = view.findViewById(R.id.CategoryMeta)
+                    categoryDescription = view.findViewById(R.id.CategoryDescription)
+                }
+            } else if (viewType == 2) {
+                if (withNavigation) {
+                    curPage = view.findViewById(R.id.curPage)
+                    firstPage = view.findViewById(R.id.firstPage)
+                    lastPage = view.findViewById(R.id.lastPage)
+                    prevPage = view.findViewById(R.id.prevPage)
+                    nextPage = view.findViewById(R.id.nextPage)
+                    prev1Page = view.findViewById(R.id.prevPage1)
+                    prev2Page = view.findViewById(R.id.prevPage2)
+                    next1Page = view.findViewById(R.id.nextPage1)
+                    next2Page = view.findViewById(R.id.nextPage2)
+                }
             } else {
                 itemThreadTitle = view.findViewById(R.id.threadTitle)
                 itemThreadContent = view.findViewById(R.id.threadContent)
@@ -192,24 +269,100 @@ class ThreadItemAdapter(val activity: Activity, items: List<ThreadItem>) :
         holder: ViewHolder,
         position: Int
     ) {
-        if (position == 0) {
-            holder.recentView.setOnClickListener {
+        if (position == 0 && (isHome || withHeader)) {
+            if (isHome) {
+                holder.recentView.setOnClickListener {
+                }
+                holder.discoveryNew.setOnClickListener {
+                    val i = Intent(activity, SearchResultActivity::class.java)
+                    i.flags = FLAG_ACTIVITY_NEW_TASK
+                    i.putExtra("kw", "")
+                    activity.startActivity(i)
+                }
+                holder.categoryList.setOnClickListener {
+                    (activity.findViewById<BottomNavigationView>(R.id.nav_view)[0] as ViewGroup)[1].performClick()
+                }
+                holder.accountView.setOnClickListener {
+                    (activity.findViewById<BottomNavigationView>(R.id.nav_view)[0] as ViewGroup)[3].performClick()
+                }
+            } else if (withHeader) {
+                holder.categoryIcon.setImageDrawable(
+                    curCategoryItem?.icon?.let {
+                        activity.resources.getDrawable(
+                            it,
+                            null
+                        )
+                    }
+                )
+                holder.categoryName.text = curCategoryItem?.name
+                holder.categoryMeta.text = curCategoryItem?.meta
+                holder.categoryDescription.text = curCategoryItem?.description
             }
-            holder.discoveryNew.setOnClickListener {
-                val i = Intent(activity, SearchResultActivity::class.java)
-                i.flags = FLAG_ACTIVITY_NEW_TASK
-                i.putExtra("kw", "")
-                activity.startActivity(i)
+        } else if (position == mItems.size + (if (withHeader) 1 else 0)) {
+            if (!disabledCurPage) holder.curPage.text = curPage.toString()
+            else {
+                holder.curPage.visibility = View.GONE
+                holder.firstPage.visibility = View.GONE
+                holder.lastPage.visibility = View.GONE
+                holder.prev1Page.visibility = View.GONE
+                holder.prev2Page.visibility = View.GONE
+                holder.next1Page.visibility = View.GONE
+                holder.next2Page.visibility = View.GONE
             }
-            holder.categoryList.setOnClickListener {
-                (activity.findViewById<BottomNavigationView>(R.id.nav_view)[0] as ViewGroup)[1].performClick()
+
+            if (curPage == 1) holder.firstPage.visibility = View.GONE
+            else holder.firstPage.setOnClickListener {
+                onNavClicked(0)
             }
-            holder.accountView.setOnClickListener {
-                (activity.findViewById<BottomNavigationView>(R.id.nav_view)[0] as ViewGroup)[3].performClick()
+
+            if (curPage >= lastPage) holder.lastPage.visibility = View.GONE
+            else holder.lastPage.setOnClickListener {
+                onNavClicked(lastPage)
             }
+
+            if (curPage - 1 > 1 || enabledPrev) {
+                holder.prevPage.setOnClickListener {
+                    onNavClicked(curPage - 1)
+                }
+                holder.prev1Page.setOnClickListener {
+                    onNavClicked(curPage - 1)
+                }
+                if (!enabledPrev) holder.prev1Page.text = (curPage - 1).toString()
+                else holder.prev1Page.visibility = View.GONE
+            } else {
+                holder.prevPage.visibility = View.GONE
+                holder.prev1Page.visibility = View.GONE
+            }
+
+            if (curPage - 2 < 1) holder.prev2Page.visibility = View.GONE
+            else holder.prev2Page.setOnClickListener {
+                onNavClicked(curPage - 2)
+            }
+            holder.prev2Page.text = (curPage - 2).toString()
+
+            if (curPage + 1 < lastPage || enabledNext) {
+                holder.nextPage.setOnClickListener {
+                    onNavClicked(curPage + 1)
+                }
+                holder.next1Page.setOnClickListener {
+                    onNavClicked(curPage + 1)
+                }
+                if (!enabledNext) holder.next1Page.text = (curPage + 1).toString()
+                else holder.next1Page.visibility = View.GONE
+            } else {
+                holder.nextPage.visibility = View.GONE
+                holder.next1Page.visibility = View.GONE
+            }
+
+            if (curPage + 2 > lastPage) holder.next2Page.visibility = View.GONE
+            else holder.next2Page.setOnClickListener {
+                onNavClicked(curPage + 2)
+            }
+            holder.next2Page.text = (curPage + 2).toString()
         } else {
-            val item = mItems[position - 1]
+            val item = mItems[position - (if (withHeader || isHome) 1 else 0)]
             holder.itemThreadTitle.text = item.title
+            if (item.content.isEmpty()) holder.itemThreadContent.visibility = View.GONE
             holder.itemThreadContent.text = item.content
             holder.itemThreadPostTime.text = item.time
             holder.itemThreadMetaInfo.text = item.meta

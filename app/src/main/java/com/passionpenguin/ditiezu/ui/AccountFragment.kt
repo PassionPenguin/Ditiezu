@@ -1,6 +1,8 @@
 package com.passionpenguin.ditiezu.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +15,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.passionpenguin.ditiezu.AboutDitiezu
-import com.passionpenguin.ditiezu.LoginActivity
-import com.passionpenguin.ditiezu.PostActivity
-import com.passionpenguin.ditiezu.R
+import com.passionpenguin.ditiezu.*
 import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.PrefListItem
@@ -50,6 +49,7 @@ class AccountFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -134,10 +134,21 @@ class AccountFragment : Fragment() {
                                     }
                                 }
                             )
+                            prefItem.add(
+                                PrefListItem(
+                                    resources.getString(R.string.post_record),
+                                    "", "",
+                                    true
+                                ) {
+                                    val i = Intent(activity, PersonalHistory::class.java)
+                                    i.putExtra("uid", id.toInt())
+                                    startActivity(i)
+                                }
+                            )
 
                             activity.runOnUiThread {
                                 userName.text =
-                                    parser.select("h2.mbn")[0].childNodes()[0].outerHtml()
+                                    parser.select("h2.mbn")[0].childNodes()[0].outerHtml().trim()
                                 context?.let { mCtx ->
                                     Glide.with(mCtx)
                                         .load(parser.select(".avt img").attr("src"))
@@ -167,14 +178,50 @@ class AccountFragment : Fragment() {
                                     value_threads.text = "N/A"
                                 }
 
-                                userIntegral.text = resources.getString(
-                                    R.string.user_integral,
+
+                                val pts =
                                     parser.select("#psts li")[0].textNodes()[0].text().trim()
                                         .toInt()
-                                )
+                                val max = when (pts) {
+                                    0 -> 0
+                                    in 1..49 -> 50
+                                    in 50..199 -> 200
+                                    in 200..499 -> 500
+                                    in 500..999 -> 1000
+                                    in 1000..1999 -> 2000
+                                    in 2000..2999 -> 3000
+                                    in 3000..4999 -> 5000
+                                    in 5000..9999 -> 10000
+                                    in 10000..19999 -> 20000
+                                    in 20000..50000 -> 50000
+                                    else -> 0
+                                }
+                                val min = when (pts) {
+                                    0 -> 0
+                                    in 1..49 -> 0
+                                    in 50..199 -> 50
+                                    in 200..499 -> 200
+                                    in 500..999 -> 500
+                                    in 1000..1999 -> 1000
+                                    in 2000..2999 -> 2000
+                                    in 3000..4999 -> 3000
+                                    in 5000..9999 -> 5000
+                                    in 10000..19999 -> 10000
+                                    in 20000..50000 -> 20000
+                                    else -> 0
+                                }
+                                progressBar.max = max - min
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                                    progressBar.postDelayed({
+                                        progressBar.setProgress(
+                                            pts - min, true
+                                        )
+                                    }, 1000)
+                                else progressBar.progress = pts - min
+                                level.text = parser.select(".pbm span a")[0].text()
+                                points.text = "$pts / $max"
 
-                                value_points.text =
-                                    parser.select("#psts li")[0].textNodes()[0].text().trim()
+                                value_points.text = pts.toString()
                                 value_prestige.text =
                                     parser.select("#psts li")[1].textNodes()[0].text().trim()
                                 value_money.text =

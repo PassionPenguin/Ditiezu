@@ -5,7 +5,9 @@
     android:id="@+id/fragment_account"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AccountFragment">
+    android:paddingTop="@dimen/_64"
+    tools:context=".ui.AccountFragment"
+    tools:ignore="SmallSp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -57,17 +59,48 @@
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
-                        <TextView
-                            android:id="@+id/userIntegral"
-                            android:text="@string/user_name"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:background="@drawable/user_integral_drawable"
-                            android:paddingVertical="3dp"
-                            android:paddingHorizontal="12dp"
-                            android:gravity="center"
-                            android:textColor="#333" />
+                            android:orientation="vertical">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/level"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="10sp"
+                                    android:textAllCaps="true"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:text="LEVEL 1" />
+
+                                <TextView
+                                    android:id="@+id/points"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="8sp"
+                                    android:textAllCaps="true"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintRight_toRightOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:text="6500 / 10000" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <ProgressBar
+                                android:id="@+id/progressBar"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_marginVertical="@dimen/_4"
+                                android:minHeight="@dimen/_4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:progressDrawable="@drawable/progress" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 

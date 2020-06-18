@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ForumDisplay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ForumDisplay">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:divider="@null"
+        android:focusable="true"
+        android:paddingTop="@dimen/_32"
+        tools:listitem="@layout/item_thread_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

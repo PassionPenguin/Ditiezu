@@ -87,7 +87,19 @@ class ThreadItemFragment : Fragment() {
                 threadItemList.layoutManager = layoutManager
 
                 val adapter =
-                    ThreadItemAdapter(activity, threadListContent)
+                    ThreadItemAdapter(
+                        activity,
+                        threadListContent,
+                        isHome = true,
+                        withHeader = false,
+                        withNavigation = false,
+                        curCategoryItem = null,
+                        curPage = 0,
+                        lastPage = 0,
+                        disabledCurPage = false,
+                        enabledPrev = false,
+                        enabledNext = false
+                    ) {}
                 threadItemList.adapter = adapter
                 var mDistance = 0
                 threadItemList.addOnScrollListener(object : RecyclerView.OnScrollListener() {

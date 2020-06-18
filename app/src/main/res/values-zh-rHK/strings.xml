@@ -103,4 +103,8 @@
     <string name="number_of_participants">評價數 %s</string>
     <string name="compress_failed">壓縮失敗</string>
     <string name="signature">簽名</string>
+    <string name="account">zh帳號</string>
+    <string name="discovery">發現</string>
+    <string name="history">歷史</string>
+    <string name="post_record">發帖紀錄</string>
 </resources>

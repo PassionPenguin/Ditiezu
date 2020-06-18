@@ -136,7 +136,6 @@ class PostActivity : AppCompatActivity() {
                     .select("[name=\"formhash\"]").attr("value")
 
         findViewById<EditText>(R.id.app_search_input).visibility = View.GONE
-        findViewById<TextView>(R.id.title).text = resources.getString(R.string.edit)
         with(findViewById<RadioButton>(R.id.actionBar_leftButton)) {
             this.buttonDrawable = resources.getDrawable(R.drawable.ic_baseline_close_24, null)
             this.setOnClickListener {

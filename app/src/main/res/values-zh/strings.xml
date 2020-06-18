@@ -133,4 +133,8 @@
     <string name="file_not_exist">文件不存在</string>
     <string name="compress_failed">压缩失败</string>
     <string name="signature">签名</string>
+    <string name="history">历史</string>
+    <string name="discovery">发现</string>
+    <string name="account">账号</string>
+    <string name="post_record">发帖记录</string>
 </resources>

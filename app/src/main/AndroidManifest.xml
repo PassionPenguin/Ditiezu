@@ -32,6 +32,7 @@
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
 
+        <activity android:name=".PersonalHistory" />
         <activity android:name=".AboutDitiezu" />
         <activity android:name=".ZoomImage" />
         <activity android:name=".PostActivity" />
