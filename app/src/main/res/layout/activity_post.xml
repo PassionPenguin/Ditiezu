@@ -118,6 +118,14 @@
                     android:gravity="center" />
 
                 <CheckBox
+                    android:id="@+id/emotionSelectorToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_emoji_emotions_24"
+                    android:gravity="center" />
+
+                <CheckBox
                     android:id="@+id/imageSelectorToggle"
                     android:layout_width="24dp"
                     android:layout_height="match_parent"
@@ -261,13 +269,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/imageListWrap"
+        android:id="@+id/bottomWrap"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputWrap">
 
         <HorizontalScrollView
+            android:id="@+id/imageWrap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/item_image">
@@ -278,6 +287,32 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal" />
         </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/emotionWrap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/emotionList"
+                android:paddingHorizontal="@dimen/_16"
+                android:paddingVertical="@dimen/_4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240" />
+
+            <HorizontalScrollView
+                android:id="@+id/emotionSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/emotionSelectorList"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </HorizontalScrollView>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

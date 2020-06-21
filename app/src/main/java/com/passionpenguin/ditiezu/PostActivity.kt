@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.recyclerview.widget.GridLayoutManager
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
@@ -78,7 +79,7 @@ class PostActivity : AppCompatActivity() {
             }
             TYPE_SIGHTML -> {
                 imageSelectorToggle.visibility = View.GONE
-                imageListWrap.visibility = View.GONE
+                imageWrap.visibility = View.GONE
                 EditTextInput.setText(Preference(this@PostActivity).getString(TYPE_SIGHTML))
             }
             TYPE_NEW -> {
@@ -351,6 +352,52 @@ class PostActivity : AppCompatActivity() {
                 .forResult(PictureConfig.CHOOSE_REQUEST)
         }
 
+        emotionSelectorToggle.setOnClickListener {
+            setCompoundButtonColor(emotionSelectorToggle, false)
+            if ((it as CheckBox).isChecked) {
+                imageWrap.visibility = View.GONE
+                emotionWrap.visibility = View.VISIBLE
+            } else {
+                imageWrap.visibility = View.VISIBLE
+                emotionWrap.visibility = View.GONE
+            }
+        }
+
+        emotionList.layoutManager = GridLayoutManager(
+            this,
+            with((windowManager.defaultDisplay.width / resources.getDimension(R.dimen._32)).toInt() - 2) {
+                if (this > 0) this else 1
+            }
+        )
+        var emlist = emotionData[0]
+        emotionList.adapter =
+            EmotionItemAdapter(this, emlist[1] as List<EmotionItem>, emlist[0] as String) {
+                insert("", "", it)
+            }
+        emotionData.forEach {
+            val text = TextView(this)
+            text.text = (it[2] as String)
+            text.setTextColor(resources.getColor(R.color.black, null))
+            text.setOnClickListener { _ ->
+                emotionList.adapter =
+                    EmotionItemAdapter(this, it[1] as List<EmotionItem>, it[0] as String) { value ->
+                        insert("", "", value)
+                    }
+                emotionSelectorList.children.toList().forEach { v ->
+                    v.background = null
+                }
+                text.background = resources.getDrawable(R.drawable.border_bottom, null)
+            }
+            text.setPadding(
+                resources.getDimension(R.dimen._8).toInt(),
+                resources.getDimension(R.dimen._16).toInt(),
+                resources.getDimension(R.dimen._8).toInt(),
+                resources.getDimension(R.dimen._16).toInt()
+            )
+            emotionSelectorList.addView(text)
+        }
+        (emotionSelectorList.children.toList()[0] as TextView).background =
+            resources.getDrawable(R.drawable.border_bottom, null)
         (fontSizeSelector.children.toList()[0] as LinearLayout).children.forEachIndexed { index, el ->
             el.setOnClickListener {
                 insert("[size=$index]", "[/size]")

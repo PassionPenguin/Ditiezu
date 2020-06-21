@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.scale
 import androidx.core.view.get
 import androidx.core.view.isEmpty
@@ -80,6 +81,59 @@ class CategoryItemAdapter(val activity: Activity, items: List<CategoryItem>) :
             i.putExtra("id", position)
             i.flags = FLAG_ACTIVITY_NEW_TASK
             activity.startActivity(i)
+        }
+    }
+}
+
+class EmotionItem(
+    val insert: String,
+    val src: String
+)
+
+class EmotionItemAdapter(
+    val activity: Activity,
+    items: List<EmotionItem>,
+    val name: String,
+    val onClickListener: (insert: String) -> Unit
+) : RecyclerView.Adapter<EmotionItemAdapter.ViewHolder>() {
+
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
+    private var mItems: List<EmotionItem> = items
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            mInflater.inflate(
+                R.layout.item_emotion,
+                parent,
+                false
+            )
+        )
+    }
+
+
+    override fun getItemCount(): Int {
+        return mItems.size
+    }
+
+    class ViewHolder(view: View) :
+        RecyclerView.ViewHolder(view) {
+        val image = view.findViewById<ImageView>(R.id.image)
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        Glide.with(activity)
+            .load(BitmapFactory.decodeStream(activity.assets.open("smiley/$name/" + mItems[position].src)))
+            .fitCenter()
+            .error(
+                BitmapFactory.decodeStream(activity.assets.open("smiley/xiaobai/1.gif"))
+                    .toDrawable(activity.resources)
+            )
+            .into(holder.image)
+        holder.itemView.setOnClickListener {
+            onClickListener(mItems[position].insert)
         }
     }
 }
