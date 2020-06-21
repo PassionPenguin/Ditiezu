@@ -111,6 +111,17 @@ class AccountFragment : Fragment() {
                             )
                             prefItem.add(
                                 PrefListItem(
+                                    resources.getString(R.string.post_record),
+                                    "", "",
+                                    true
+                                ) {
+                                    val i = Intent(activity, PersonalHistory::class.java)
+                                    i.putExtra("uid", id.toInt())
+                                    startActivity(i)
+                                }
+                            )
+                            prefItem.add(
+                                PrefListItem(
                                     resources.getString(R.string.logout),
                                     resources.getString(
                                         R.string.logout_description
@@ -132,17 +143,6 @@ class AccountFragment : Fragment() {
                                         }
                                         w.dismiss()
                                     }
-                                }
-                            )
-                            prefItem.add(
-                                PrefListItem(
-                                    resources.getString(R.string.post_record),
-                                    "", "",
-                                    true
-                                ) {
-                                    val i = Intent(activity, PersonalHistory::class.java)
-                                    i.putExtra("uid", id.toInt())
-                                    startActivity(i)
                                 }
                             )
 

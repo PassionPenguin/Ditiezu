@@ -6,9 +6,10 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.text.method.LinkMovementMethod
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,14 +17,14 @@ import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.core.graphics.scale
 import androidx.core.view.get
+import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.passionpenguin.ditiezu.*
-import com.passionpenguin.htmltextview.HtmlHttpImageGetter
-import com.passionpenguin.htmltextview.HtmlTextView
 import org.jsoup.Jsoup
 import java.io.IOException
 import java.net.URLEncoder
@@ -41,7 +42,7 @@ class CategoryItemAdapter(val activity: Activity, items: List<CategoryItem>) :
     RecyclerView.Adapter<CategoryItemAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
-    var mItems: List<CategoryItem> = items
+    private var mItems: List<CategoryItem> = items
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -94,31 +95,6 @@ class ThreadItem(
     val target: Int
 )
 
-class ThreadItemListAdapter(
-    private var mCtx: Context,
-    resource: Int,
-    private var items: List<ThreadItem>
-) : ArrayAdapter<ThreadItem>(mCtx, resource, items) {
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_thread_item, parent, false)
-        val searchItem = items[position]
-        view.findViewById<TextView>(R.id.threadTitle).text = searchItem.title
-        view.findViewById<TextView>(R.id.threadContent).text = searchItem.content
-        view.findViewById<TextView>(R.id.threadPostTime).text = searchItem.time
-        view.findViewById<TextView>(R.id.threadMetaInfo).text = searchItem.meta
-        view.findViewById<TextView>(R.id.threadAuthorName).text = searchItem.authorName
-        Glide.with(context)
-            .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${searchItem.authorId}")
-            .placeholder(R.mipmap.noavatar_middle)
-            .error(R.mipmap.noavatar_middle)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-            .into(view.findViewById(R.id.avatar))
-        return view
-    }
-}
-
 class ThreadItemAdapter(
     val activity: Activity,
     items: List<ThreadItem>,
@@ -136,6 +112,10 @@ class ThreadItemAdapter(
 
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     var mItems: List<ThreadItem> = items
+
+    fun changeData(position: Int) {
+        notifyItemChanged(position)
+    }
 
     override fun getItemViewType(position: Int): Int {
         // HEADER: 0
@@ -298,7 +278,7 @@ class ThreadItemAdapter(
                 holder.categoryMeta.text = curCategoryItem?.meta
                 holder.categoryDescription.text = curCategoryItem?.description
             }
-        } else if (position == mItems.size + (if (withHeader) 1 else 0)) {
+        } else if (position == mItems.size + (if (withHeader || isHome) 1 else 0)) {
             if (!disabledCurPage) holder.curPage.text = curPage.toString()
             else {
                 holder.curPage.visibility = View.GONE
@@ -320,7 +300,7 @@ class ThreadItemAdapter(
                 onNavClicked(lastPage)
             }
 
-            if (curPage - 1 > 1 || enabledPrev) {
+            if (curPage - 1 >= 1 || enabledPrev) {
                 holder.prevPage.setOnClickListener {
                     onNavClicked(curPage - 1)
                 }
@@ -334,13 +314,13 @@ class ThreadItemAdapter(
                 holder.prev1Page.visibility = View.GONE
             }
 
-            if (curPage - 2 < 1) holder.prev2Page.visibility = View.GONE
+            if (curPage - 2 <= 1) holder.prev2Page.visibility = View.GONE
             else holder.prev2Page.setOnClickListener {
                 onNavClicked(curPage - 2)
             }
             holder.prev2Page.text = (curPage - 2).toString()
 
-            if (curPage + 1 < lastPage || enabledNext) {
+            if (curPage + 1 <= lastPage || enabledNext) {
                 holder.nextPage.setOnClickListener {
                     onNavClicked(curPage + 1)
                 }
@@ -354,7 +334,7 @@ class ThreadItemAdapter(
                 holder.next1Page.visibility = View.GONE
             }
 
-            if (curPage + 2 > lastPage) holder.next2Page.visibility = View.GONE
+            if (curPage + 2 >= lastPage) holder.next2Page.visibility = View.GONE
             else holder.next2Page.setOnClickListener {
                 onNavClicked(curPage + 2)
             }
@@ -440,7 +420,7 @@ class NotificationItemAdapter(val activity: Activity, items: List<NotificationIt
     RecyclerView.Adapter<NotificationItemAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
-    var mItems: List<NotificationItem> = items
+    private var mItems: List<NotificationItem> = items
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -500,9 +480,9 @@ class NotificationItemAdapter(val activity: Activity, items: List<NotificationIt
 
 class ReplyItem(
     val authorId: Int,
-    val content: String,
+    val contentExecFunc: (container: LinearLayout, position: Int) -> Unit,
     val authorName: String,
-    val time: String,
+    val metaInfo: HashMap<String, String>,
     val editable: Boolean = false,
     val replyable: Boolean = false,
     val rateable: Boolean = false,
@@ -512,273 +492,412 @@ class ReplyItem(
     val withPopularity: Boolean = false,
     val withMoney: Boolean = false,
     val withPrestige: Boolean = false,
-    val participantsNum: String = "",
-    val rateContent: String = ""
+    val participantsNum: String = ""
 )
 
 class ReplyItemAdapter(
-    private var mCtx: Context,
-    resource: Int,
-    private var items: List<ReplyItem>,
-    private val activity: Activity,
-    private val formhash: String
-) : ArrayAdapter<ReplyItem>(mCtx, resource, items) {
+    val activity: Activity,
+    items: List<ReplyItem>,
+    private val formhash: String,
+    private val curPage: Int = 0,
+    private val lastPage: Int = 0,
+    private val onNavClicked: (page: Int) -> Unit
+) : RecyclerView.Adapter<ReplyItemAdapter.ViewHolder>() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(R.layout.item_reply_item, parent, false)
-        val replyItem = items[position]
-        with(view.findViewById<HtmlTextView>(R.id.threadContent)) {
-            try {
-                this.setHtml(
-                    replyItem.content,
-                    HtmlHttpImageGetter(this)
-                )
-            } catch (ignored: Exception) {
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
+    private var mItems: List<ReplyItem> = items
 
+    override fun getItemViewType(position: Int): Int {
+        return if (position < mItems.size) 1 else 0
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val vh = ViewHolder(
+            mInflater.inflate(
+                when (viewType) {
+                    1 -> R.layout.item_reply_item
+                    else -> R.layout.item_category_pagination_navigation
+                },
+                parent,
+                false
+            ), viewType
+        )
+        vh.init()
+        return vh
+    }
+
+    override fun getItemCount(): Int {
+        return mItems.size + 1
+    }
+
+    class ViewHolder(val view: View, private val viewType: Int) :
+        RecyclerView.ViewHolder(view) {
+        lateinit var avatar: ImageView
+        lateinit var authorName: TextView
+        lateinit var threadMeta: TextView
+        lateinit var content: LinearLayout
+        lateinit var rateButton: LinearLayout
+        lateinit var editButton: LinearLayout
+        lateinit var replyButton: LinearLayout
+        lateinit var rateContainer: LinearLayout
+        lateinit var curPage: TextView
+        lateinit var firstPage: ImageButton
+        lateinit var lastPage: ImageButton
+        lateinit var prevPage: ImageButton
+        lateinit var nextPage: ImageButton
+        lateinit var prev1Page: TextView
+        lateinit var prev2Page: TextView
+        lateinit var next1Page: TextView
+        lateinit var next2Page: TextView
+        fun init() {
+            when (viewType) {
+                1 -> {
+                    avatar = view.findViewById(R.id.avatar)
+                    authorName = view.findViewById(R.id.threadAuthorName)
+                    threadMeta = view.findViewById(R.id.threadReplyMeta)
+                    content = view.findViewById(R.id.threadContent)
+                    rateButton = view.findViewById(R.id.rate)
+                    editButton = view.findViewById(R.id.edit)
+                    replyButton = view.findViewById(R.id.reply)
+                    rateContainer = view.findViewById(R.id.rateContainer)
+                }
+                else -> {
+                    curPage = view.findViewById(R.id.curPage)
+                    firstPage = view.findViewById(R.id.firstPage)
+                    lastPage = view.findViewById(R.id.lastPage)
+                    prevPage = view.findViewById(R.id.prevPage)
+                    nextPage = view.findViewById(R.id.nextPage)
+                    prev1Page = view.findViewById(R.id.prevPage1)
+                    prev2Page = view.findViewById(R.id.prevPage2)
+                    next1Page = view.findViewById(R.id.nextPage1)
+                    next2Page = view.findViewById(R.id.nextPage2)
+                }
             }
-            this.movementMethod = LinkMovementMethod.getInstance()
         }
-        view.findViewById<TextView>(R.id.threadMetaInfo).text = replyItem.time
-        view.findViewById<TextView>(R.id.threadAuthorName).text = replyItem.authorName
+    }
 
-        if (replyItem.editable)
-            with(view.findViewById<LinearLayout>(R.id.edit)) {
-                this.visibility = View.VISIBLE
-                this.setOnClickListener {
-                    val i = Intent(mCtx, PostActivity::class.java)
-                    i.putExtra("type", "edit")
-                    i.putExtra("pid", replyItem.pid)
-                    i.putExtra("tid", replyItem.tid)
-                    i.flags = FLAG_ACTIVITY_NEW_TASK
-                    mCtx.startActivity(i)
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        if (position == mItems.size) {
+            holder.curPage.text = curPage.toString()
+
+            if (curPage == 1) holder.firstPage.visibility = View.GONE
+            else holder.firstPage.setOnClickListener {
+                onNavClicked(0)
+            }
+
+            if (curPage >= lastPage) holder.lastPage.visibility = View.GONE
+            else holder.lastPage.setOnClickListener {
+                onNavClicked(lastPage)
+            }
+
+            if (curPage - 1 >= 1) {
+                holder.prevPage.setOnClickListener {
+                    onNavClicked(curPage - 1)
+                }
+                holder.prev1Page.setOnClickListener {
+                    onNavClicked(curPage - 1)
+                }
+                holder.prev1Page.text = (curPage - 1).toString()
+            } else {
+                holder.prevPage.visibility = View.GONE
+                holder.prev1Page.visibility = View.GONE
+            }
+
+            if (curPage - 2 <= 1) holder.prev2Page.visibility = View.GONE
+            else holder.prev2Page.setOnClickListener {
+                onNavClicked(curPage - 2)
+            }
+            holder.prev2Page.text = (curPage - 2).toString()
+
+            if (curPage + 1 <= lastPage) {
+                holder.nextPage.setOnClickListener {
+                    onNavClicked(curPage + 1)
+                }
+                holder.next1Page.setOnClickListener {
+                    onNavClicked(curPage + 1)
+                }
+                holder.next1Page.text = (curPage + 1).toString()
+            } else {
+                holder.nextPage.visibility = View.GONE
+                holder.next1Page.visibility = View.GONE
+            }
+
+            if (curPage + 2 >= lastPage) holder.next2Page.visibility = View.GONE
+            else holder.next2Page.setOnClickListener {
+                onNavClicked(curPage + 2)
+            }
+            holder.next2Page.text = (curPage + 2).toString()
+        } else {
+            val replyItem = mItems[position]
+            replyItem.contentExecFunc(holder.content, position)
+            val meta =
+                SpannableString(replyItem.metaInfo["floor"] + " - " + replyItem.metaInfo["posttime"])
+            replyItem.metaInfo["floor"]?.length?.let {
+                meta.setSpan(
+                    ForegroundColorSpan(activity.resources.getColor(R.color.grey, null)),
+                    0,
+                    it,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            replyItem.metaInfo["floor"]?.length?.plus(3)?.let {
+                replyItem.metaInfo["posttime"]?.length?.let { it1 ->
+                    meta.setSpan(
+                        ForegroundColorSpan(activity.resources.getColor(R.color.grey, null)),
+                        it,
+                        it + it1,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
             }
-        if (replyItem.replyable)
-            with(view.findViewById<LinearLayout>(R.id.reply)) {
-                this.visibility = View.VISIBLE
-                this.setOnClickListener {
-                    val i = Intent(mCtx, PostActivity::class.java)
-                    i.putExtra("type", "reply")
-                    i.putExtra("tid", replyItem.tid)
-                    i.putExtra("pid", replyItem.pid)
-                    i.putExtra("reppid", replyItem.pid)
-                    i.putExtra("reppost", replyItem.pid)
-                    i.flags = FLAG_ACTIVITY_NEW_TASK
-                    mCtx.startActivity(i)
-                }
-            }
-        if (replyItem.rateable)
-            with(view.findViewById<LinearLayout>(R.id.rate)) {
-                this.visibility = View.VISIBLE
-                this.setOnClickListener {
-                    val viewThread = activity.findViewById<ViewGroup>(R.id.viewThread)
-                    var s =
-                        HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=misc&action=rate&tid=${replyItem.tid}&pid=${replyItem.pid}&infloat=yes&handlekey=rate&t=&inajax=1&ajaxtarget=fwin_content_rate")
-                    when (s) {
-                        "Failed Retrieved" -> {
-                            Dialog().tip(
-                                resources.getString(R.string.failed_retrieved),
-                                R.drawable.ic_baseline_close_24,
-                                R.color.danger,
-                                activity,
-                                viewThread,
-                                Dialog.TIME_SHORT
-                            )
-                        }
-                        else -> {
-                            s = s.substring(53, s.length - 10)
-                            val p = Jsoup.parse(s)
-                            when {
-                                p.select(".alert_error").isNotEmpty() -> {
-                                    Dialog().tip(
-                                        p.select(".alert_error").text(),
-                                        R.drawable.ic_baseline_close_24,
-                                        R.color.danger,
-                                        activity,
-                                        viewThread,
-                                        Dialog.TIME_SHORT
-                                    )
-                                }
-                                else -> {
-                                    Dialog().create(
-                                        activity,
-                                        activity.findViewById(R.id.viewThread),
-                                        resources.getString(R.string.rate),
-                                        resources.getString(R.string.rate_title),
-                                        resources.getString(R.string.rate_description),
-                                        { v, _ ->
-                                            if (v.findViewById<TextView>(R.id.reason).text == "") {
-                                                Dialog().tip(
-                                                    resources.getString(R.string.require_reason),
-                                                    R.drawable.ic_baseline_close_24,
-                                                    R.color.danger,
-                                                    activity,
-                                                    viewThread,
-                                                    Dialog.TIME_SHORT
-                                                )
-                                            } else {
-                                                val str = HttpExt().asyncPostPage(
-                                                    "http://www.ditiezu.com/forum.php?mod=misc&action=rate&ratesubmit=yes&infloat=yes&inajax=1",
-                                                    "formhash=$formhash&tid=${replyItem.tid}&pid=${replyItem.pid}&handlekey=rate&reason=${URLEncoder.encode(
-                                                        v.findViewById<EditText>(R.id.reason).text.toString(),
-                                                        "GBK"
-                                                    )}&score4=${v.findViewById<Spinner>(R.id.score).selectedItem}"
-                                                )
+            holder.threadMeta.text = meta
+            holder.authorName.text = replyItem.authorName
 
-                                                val response = str.substring(
-                                                    str.indexOf("_rate('") + 33,
-                                                    str.indexOf(
-                                                        "'", str.indexOf("_rate('") + 34
-                                                    )
-                                                )
-                                                when {
-                                                    str == "Failed Retrieved" -> {
-                                                        Dialog().tip(
-                                                            resources.getString(R.string.failed_retrieved),
-                                                            R.drawable.ic_baseline_close_24,
-                                                            R.color.danger,
-                                                            activity,
-                                                            viewThread,
-                                                            Dialog.TIME_SHORT
-                                                        )
-                                                    }
-                                                    str.contains("succeed") -> {
-                                                        Dialog().tip(
-                                                            response,
-                                                            R.drawable.ic_baseline_check_24,
-                                                            R.color.primary500,
-                                                            activity,
-                                                            viewThread,
-                                                            Dialog.TIME_SHORT
-                                                        )
-                                                    }
-                                                    str.contains("error") -> {
-                                                        Dialog().tip(
-                                                            response,
-                                                            R.drawable.ic_baseline_close_24,
-                                                            R.color.danger,
-                                                            activity,
-                                                            viewThread,
-                                                            Dialog.TIME_SHORT
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                        }) { v, w ->
-                                        v.addView(
-                                            LayoutInflater.from(mCtx)
-                                                .inflate(R.layout.fragment_rate, v, false)
+            if (replyItem.editable)
+                with(holder.editButton) {
+                    this.visibility = View.VISIBLE
+                    this.setOnClickListener {
+                        val i = Intent(activity, PostActivity::class.java)
+                        i.putExtra("type", "edit")
+                        i.putExtra("pid", replyItem.pid)
+                        i.putExtra("tid", replyItem.tid)
+                        i.flags = FLAG_ACTIVITY_NEW_TASK
+                        activity.startActivity(i)
+                    }
+                }
+            if (replyItem.replyable)
+                with(holder.replyButton) {
+                    this.visibility = View.VISIBLE
+                    this.setOnClickListener {
+                        val i = Intent(activity, PostActivity::class.java)
+                        i.putExtra("type", "reply")
+                        i.putExtra("tid", replyItem.tid)
+                        i.putExtra("pid", replyItem.pid)
+                        i.putExtra("reppid", replyItem.pid)
+                        i.putExtra("reppost", replyItem.pid)
+                        i.flags = FLAG_ACTIVITY_NEW_TASK
+                        activity.startActivity(i)
+                    }
+                }
+            if (replyItem.rateable)
+                with(holder.rateButton) {
+                    this.visibility = View.VISIBLE
+                    this.setOnClickListener {
+                        val viewThread =
+                            activity.findViewById<ViewGroup>(R.id.viewThread)
+                        var s =
+                            HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=misc&action=rate&tid=${replyItem.tid}&pid=${replyItem.pid}&infloat=yes&handlekey=rate&t=&inajax=1&ajaxtarget=fwin_content_rate")
+                        when (s) {
+                            "Failed Retrieved" -> {
+                                Dialog().tip(
+                                    resources.getString(R.string.failed_retrieved),
+                                    R.drawable.ic_baseline_close_24,
+                                    R.color.danger,
+                                    activity,
+                                    viewThread,
+                                    Dialog.TIME_SHORT
+                                )
+                            }
+                            else -> {
+                                s = s.substring(53, s.length - 10)
+                                val p = Jsoup.parse(s)
+                                when {
+                                    p.select(".alert_error").isNotEmpty() -> {
+                                        Dialog().tip(
+                                            p.select(".alert_error").text(),
+                                            R.drawable.ic_baseline_close_24,
+                                            R.color.danger,
+                                            activity,
+                                            viewThread,
+                                            Dialog.TIME_SHORT
                                         )
-                                        with(v.findViewById<Spinner>(R.id.reasonList)) {
-                                            createFromResource(
-                                                activity,
-                                                R.array.rate_reason,
-                                                android.R.layout.simple_spinner_dropdown_item
-                                            ).also { adapter ->
-                                                // Specify the layout to use when the list of choices appears
-                                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                                // Apply the adapter to the spinner
-                                                this.adapter = adapter
-                                            }
-                                            this.onItemSelectedListener =
-                                                object : OnItemSelectedListener {
-                                                    override fun onItemSelected(
-                                                        parent: AdapterView<*>?,
-                                                        view: View,
-                                                        position: Int,
-                                                        id: Long
-                                                    ) {
-                                                        v.findViewById<EditText>(R.id.reason)
-                                                            .setText(resources.getStringArray(R.array.rate_reason)[position])
-                                                    }
-
-                                                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                                                }
-                                        }
-                                        with(v.findViewById<Spinner>(R.id.score)) {
-                                            createFromResource(
-                                                activity,
-                                                R.array.popularity_score,
-                                                android.R.layout.simple_spinner_dropdown_item
-                                            ).also { adapter ->
-                                                // Specify the layout to use when the list of choices appears
-                                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                                // Apply the adapter to the spinner
-                                                this.adapter = adapter
-                                            }
-                                        }
-                                        with(p.select("td:last-child")[0].text().toInt()) {
-                                            val restScore = v.findViewById<TextView>(R.id.rest)
-                                            restScore.text =
-                                                resources.getString(
-                                                    R.string.rest_score, this
-                                                )
-                                            if (this < 3)
-                                                restScore.setTextColor(
-                                                    resources.getColor(
+                                    }
+                                    else -> {
+                                        Dialog().create(
+                                            activity,
+                                            activity.findViewById(R.id.viewThread),
+                                            resources.getString(R.string.rate),
+                                            resources.getString(R.string.rate_title),
+                                            resources.getString(R.string.rate_description),
+                                            { v, _ ->
+                                                if (v.findViewById<TextView>(R.id.reason).text == "") {
+                                                    Dialog().tip(
+                                                        resources.getString(R.string.require_reason),
+                                                        R.drawable.ic_baseline_close_24,
                                                         R.color.danger,
-                                                        null
+                                                        activity,
+                                                        viewThread,
+                                                        Dialog.TIME_SHORT
                                                     )
-                                                )
+                                                } else {
+                                                    val str = HttpExt().asyncPostPage(
+                                                        "http://www.ditiezu.com/forum.php?mod=misc&action=rate&ratesubmit=yes&infloat=yes&inajax=1",
+                                                        "formhash=$formhash&tid=${replyItem.tid}&pid=${replyItem.pid}&handlekey=rate&reason=${URLEncoder.encode(
+                                                            v.findViewById<EditText>(R.id.reason).text.toString(),
+                                                            "GBK"
+                                                        )}&score4=${v.findViewById<Spinner>(R.id.score).selectedItem}"
+                                                    )
+
+                                                    val response = str.substring(
+                                                        str.indexOf("_rate('") + 33,
+                                                        str.indexOf(
+                                                            "'", str.indexOf("_rate('") + 34
+                                                        )
+                                                    )
+                                                    when {
+                                                        str == "Failed Retrieved" -> {
+                                                            Dialog().tip(
+                                                                resources.getString(R.string.failed_retrieved),
+                                                                R.drawable.ic_baseline_close_24,
+                                                                R.color.danger,
+                                                                activity,
+                                                                viewThread,
+                                                                Dialog.TIME_SHORT
+                                                            )
+                                                        }
+                                                        str.contains("succeed") -> {
+                                                            Dialog().tip(
+                                                                response,
+                                                                R.drawable.ic_baseline_check_24,
+                                                                R.color.primary500,
+                                                                activity,
+                                                                viewThread,
+                                                                Dialog.TIME_SHORT
+                                                            )
+                                                        }
+                                                        str.contains("error") -> {
+                                                            Dialog().tip(
+                                                                response,
+                                                                R.drawable.ic_baseline_close_24,
+                                                                R.color.danger,
+                                                                activity,
+                                                                viewThread,
+                                                                Dialog.TIME_SHORT
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }) { v, w ->
+                                            v.addView(
+                                                LayoutInflater.from(activity)
+                                                    .inflate(
+                                                        R.layout.fragment_rate,
+                                                        v,
+                                                        false
+                                                    )
+                                            )
+                                            with(v.findViewById<Spinner>(R.id.reasonList)) {
+                                                ArrayAdapter.createFromResource(
+                                                    activity,
+                                                    R.array.rate_reason,
+                                                    android.R.layout.simple_spinner_dropdown_item
+                                                ).also { adapter ->
+                                                    // Specify the layout to use when the list of choices appears
+                                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                                    // Apply the adapter to the spinner
+                                                    this.adapter = adapter
+                                                }
+                                                this.onItemSelectedListener =
+                                                    object : OnItemSelectedListener {
+                                                        override fun onItemSelected(
+                                                            parent: AdapterView<*>?,
+                                                            view: View,
+                                                            position: Int,
+                                                            id: Long
+                                                        ) {
+                                                            v.findViewById<EditText>(R.id.reason)
+                                                                .setText(resources.getStringArray(R.array.rate_reason)[position])
+                                                        }
+
+                                                        override fun onNothingSelected(parent: AdapterView<*>?) {}
+                                                    }
+                                            }
+                                            with(v.findViewById<Spinner>(R.id.score)) {
+                                                ArrayAdapter.createFromResource(
+                                                    activity,
+                                                    R.array.popularity_score,
+                                                    android.R.layout.simple_spinner_dropdown_item
+                                                ).also { adapter ->
+                                                    // Specify the layout to use when the list of choices appears
+                                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                                    // Apply the adapter to the spinner
+                                                    this.adapter = adapter
+                                                }
+                                            }
+                                            with(p.select("td:last-child")[0].text().toInt()) {
+                                                val restScore =
+                                                    v.findViewById<TextView>(R.id.rest)
+                                                restScore.text =
+                                                    resources.getString(
+                                                        R.string.rest_score,
+                                                        this
+                                                    )
+                                                if (this < 3)
+                                                    restScore.setTextColor(
+                                                        resources.getColor(
+                                                            R.color.danger,
+                                                            null
+                                                        )
+                                                    )
+                                            }
+                                            w.update()
                                         }
-                                        w.update()
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-        with(replyItem.rateLog) {
-            if (this != null && this.isNotEmpty()) {
-                val log = LinearLayout(mCtx)
-                log.orientation = LinearLayout.VERTICAL
-                val v = layoutInflater.inflate(R.layout.item_rate_log_header, log, false)
-                v.findViewById<TextView>(R.id.participantsNum).text =
-                    mCtx.resources.getString(
-                        R.string.number_of_participants,
-                        replyItem.participantsNum
-                    )
-                if (replyItem.withPopularity) v.findViewById<TextView>(R.id.popularity).visibility =
-                    View.VISIBLE
-                if (replyItem.withMoney) v.findViewById<TextView>(R.id.money).visibility =
-                    View.VISIBLE
-                if (replyItem.withPrestige) v.findViewById<TextView>(R.id.prestige).visibility =
-                    View.VISIBLE
-                log.addView(v)
-                replyItem.rateLog?.forEach {
-                    log.addView(
-                        rateView(
-                            mCtx,
-                            it,
-                            replyItem.withPopularity,
-                            replyItem.withMoney,
-                            replyItem.withPrestige
+            with(replyItem.rateLog) {
+                if (this != null && this.isNotEmpty() && holder.rateContainer.isEmpty()) {
+                    val log = LinearLayout(activity)
+                    log.orientation = LinearLayout.VERTICAL
+                    val v =
+                        LayoutInflater.from(activity)
+                            .inflate(R.layout.item_rate_log_header, log, false)
+                    v.findViewById<TextView>(R.id.participantsNum).text =
+                        activity.resources.getString(
+                            R.string.number_of_participants,
+                            replyItem.participantsNum
                         )
+                    if (replyItem.withPopularity) v.findViewById<TextView>(R.id.popularity).visibility =
+                        View.VISIBLE
+                    if (replyItem.withMoney) v.findViewById<TextView>(R.id.money).visibility =
+                        View.VISIBLE
+                    if (replyItem.withPrestige) v.findViewById<TextView>(R.id.prestige).visibility =
+                        View.VISIBLE
+                    log.addView(v)
+                    replyItem.rateLog?.forEach {
+                        log.addView(
+                            rateView(
+                                activity,
+                                it,
+                                replyItem.withPopularity,
+                                replyItem.withMoney,
+                                replyItem.withPrestige
+                            )
+                        )
+                    }
+                    log.layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
                     )
+                    holder.rateContainer.addView(log)
                 }
-                val f = HtmlTextView(mCtx)
-                f.setHtml(replyItem.rateContent)
-                f.height = mCtx.resources.getDimension(R.dimen._32).toInt()
-                f.gravity = Gravity.CENTER_VERTICAL
-                f.textSize = 12F
-                log.addView(f)
-                view.findViewById<HorizontalScrollView>(R.id.Container).addView(log)
-                log.layoutParams = FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT
-                )
             }
-        }
 
-        Glide.with(context)
-            .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${replyItem.authorId}")
-            .placeholder(R.mipmap.noavatar_middle)
-            .error(R.mipmap.noavatar_middle)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-            .into(view.findViewById(R.id.avatar))
-        return view
+            Glide.with(activity)
+                .load("http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${replyItem.authorId}")
+                .placeholder(R.mipmap.noavatar_middle)
+                .error(R.mipmap.noavatar_middle)
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
+                .into(holder.avatar)
+        }
     }
 }
 
@@ -836,9 +955,10 @@ fun attachImageView(
                     val height = bitmap!!.height
                     val width = bitmap!!.width
                     val size = mCtx.resources.getDimension(R.dimen._360)
-                    if (height > width)
-                        bitmap!!.scale((size * width / height).toInt(), size.toInt())
-                    else bitmap!!.scale(size.toInt(), (size * height / width).toInt())
+                    bitmap = if (height > width) bitmap!!.scale(
+                        (size * width / height).toInt(),
+                        size.toInt()
+                    ) else bitmap!!.scale(size.toInt(), (size * height / width).toInt())
                     returnVal(bitmap)
                 }
             } catch (ignored: IOException) {

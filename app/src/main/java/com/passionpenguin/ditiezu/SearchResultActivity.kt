@@ -1,7 +1,6 @@
 package com.passionpenguin.ditiezu
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.KeyEvent
@@ -9,12 +8,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItem
-import com.passionpenguin.ditiezu.helper.ThreadItemListAdapter
+import com.passionpenguin.ditiezu.helper.ThreadItemAdapter
 import kotlinx.android.synthetic.main.activity_search_result.*
 import org.jsoup.Jsoup
 import java.net.URLEncoder
@@ -24,6 +24,7 @@ class SearchResultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_result)
+        findViewById<TextView>(R.id.appName).setTextColor(resources.getColor(R.color.black, null))
 
         val i = intent.extras
         if (i?.getString("kw", null) == null) finish()
@@ -70,20 +71,21 @@ class SearchResultActivity : AppCompatActivity() {
             }
 
             runOnUiThread {
-                val list = findViewById<ListView>(R.id.threadItemList)
-                list?.adapter =
-                    ThreadItemListAdapter(
-                        applicationContext,
-                        0,
-                        threadListContent
-                    )
-
-                findViewById<ListView>(R.id.threadItemList)
-                    ?.setOnItemClickListener { _, _, position, _ ->
-                        val intent = Intent(this@SearchResultActivity, ViewThread::class.java)
-                        intent.putExtra("tid", threadListContent[position].target)
-                        startActivity(intent)
-                    }
+                threadItemList.adapter =
+                    ThreadItemAdapter(
+                        this,
+                        threadListContent,
+                        isHome = false,
+                        withHeader = false,
+                        withNavigation = false,
+                        curCategoryItem = null,
+                        curPage = 0,
+                        lastPage = 0,
+                        disabledCurPage = false,
+                        enabledPrev = false,
+                        enabledNext = false
+                    ) {}
+                threadItemList.layoutManager = LinearLayoutManager(this)
             }
         }
 

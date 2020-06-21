@@ -28,6 +28,9 @@ class PersonalHistory : AppCompatActivity() {
                 val parser = Jsoup.parse(result)
                 runOnUiThread {
                     val threadListContent = mutableListOf<ThreadItem>()
+                    val userName = with(parser.select("title")) {
+                        this.html().substring(0, this.html().length - 8)
+                    }
                     parser.select(".tl table tr:not(.th)").forEach {
                         val typ = it.select("td:nth-child(3)").text()
                         val views = it.select(".num em").text()
@@ -45,7 +48,7 @@ class PersonalHistory : AppCompatActivity() {
                                 uid,
                                 title.text(),
                                 "",
-                                "",
+                                userName,
                                 views + resources.getString(R.string.views) + " " + replies + " " + resources.getString(
                                     R.string.replies
                                 ),

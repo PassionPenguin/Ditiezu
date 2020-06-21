@@ -8,9 +8,12 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.core.view.isEmpty
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.activity_forum_display.*
 import org.jsoup.Jsoup
@@ -21,13 +24,11 @@ class ForumDisplay : AppCompatActivity() {
         setContentView(R.layout.activity_forum_display)
 
         val extras = intent.extras
-        var id = extras?.getInt("id", -1)
-        if (id == -1 || id == null) return
+        val id = extras?.getInt("id") ?: return
 
         val categoryContent =
             CategoryContent(applicationContext)
         val categoryList = categoryContent.categoryList[id]
-        val threadListView = ThreadList
 
         fab.setOnClickListener {
             val i = Intent(this@ForumDisplay, PostActivity::class.java)
@@ -36,19 +37,26 @@ class ForumDisplay : AppCompatActivity() {
             startActivity(i)
         }
 
+        var adapter = ThreadItemAdapter(
+            this@ForumDisplay,
+            listOf(),
+            isHome = false,
+            withHeader = true,
+            withNavigation = true,
+            curCategoryItem = categoryList,
+            curPage = 1,
+            lastPage = 1,
+            disabledCurPage = false,
+            enabledPrev = false,
+            enabledNext = false
+        ) {
+        }
+
         fun loadForumContent(page: Int, ext: String = "") {
             fun processResult(result: String) {
                 val parser = Jsoup.parse(result)
                 runOnUiThread {
-                    threadListView.removeHeaderView(threadListView.findViewById(R.id.categoryHeader))
-                    threadListView.removeFooterView(threadListView.findViewById(R.id.paginationNavigation))
-
-                    if (threadListView.findViewById<HorizontalScrollView>(R.id.typeNavigationWrap) === null) {
-                        val list = layoutInflater.inflate(
-                            R.layout.fragment_types_list,
-                            threadListView,
-                            false
-                        )
+                    if (typesNavigation.isEmpty()) {
                         val t = TextView(applicationContext)
                         t.text = resources.getString(R.string.all)
                         t.setTextColor(resources.getColor(R.color.black, null))
@@ -62,7 +70,7 @@ class ForumDisplay : AppCompatActivity() {
                             resources.getDimension(R.dimen._16).toInt()
                         )
                         t.background = resources.getDrawable(R.drawable.border_bottom, null)
-                        list.findViewById<LinearLayout>(R.id.typesNavigation).addView(t)
+                        typesNavigation.addView(t)
                         parser.select("#thread_types li:not(.fold):not(#ttp_all)").forEach {
                             with(it.select("a").attr("href")) {
                                 val text = TextView(applicationContext)
@@ -86,17 +94,15 @@ class ForumDisplay : AppCompatActivity() {
                                             resources.getDrawable(R.drawable.border_bottom, null)
                                 } catch (ignored: Exception) {
                                 }
-                                list.findViewById<LinearLayout>(R.id.typesNavigation).addView(text)
+                                typesNavigation.addView(text)
                             }
                         }
-                        threadListView.addHeaderView(list)
                     } else {
-                        threadListView.findViewById<LinearLayout>(R.id.typesNavigation).children.toList()
-                            .forEach {
-                                it.background = null
-                            }
+                        typesNavigation.children.toList().forEach {
+                            it.background = null
+                        }
                         if (!ext.contains("typeid"))
-                            threadListView.findViewById<LinearLayout>(R.id.typesNavigation).children.toList()[0].background =
+                            typesNavigation.children.toList()[0].background =
                                 resources.getDrawable(R.drawable.border_bottom, null)
                         else {
                             var i = -1
@@ -105,104 +111,10 @@ class ForumDisplay : AppCompatActivity() {
                                     if (e.className().contains("xw1")) i = index
                                 }
                             if (i == -1) i = 0
-                            threadListView.findViewById<LinearLayout>(R.id.typesNavigation).children.toList()[i].background =
+                            typesNavigation.children.toList()[i].background =
                                 resources.getDrawable(R.drawable.border_bottom, null)
                         }
                     }
-
-                    val bannerView =
-                        layoutInflater.inflate(
-                            R.layout.item_category_info_header,
-                            threadListView,
-                            false
-                        )
-                    bannerView.findViewById<ImageView>(R.id.CategoryIcon)
-                        .setImageDrawable(
-                            resources.getDrawable(
-                                categoryList.icon,
-                                null
-                            )
-                        )
-                    bannerView.findViewById<TextView>(R.id.CategoryTitle).text =
-                        categoryList.name
-                    bannerView.findViewById<TextView>(R.id.CategoryMeta).text =
-                        parser.select(".xw0.xs1.i").text().replace("|", " | ")
-                    bannerView.findViewById<TextView>(R.id.CategoryDescription).text =
-                        categoryList.description
-                    threadListView.addHeaderView(bannerView)
-
-                    val footerPagination =
-                        layoutInflater.inflate(
-                            R.layout.item_category_pagination_navigation,
-                            threadListView,
-                            false
-                        )
-                    val lastPage =
-                        if (!parser.select(".last").isEmpty())
-                            parser.select(".last")[0].text().substring(4).toInt()
-                        else if (!parser.select("#pgt .pg a:not(.nxt)")
-                                .isEmpty()
-                        ) parser.select("#pgt .pg a:not(.nxt)")
-                            .last().text().toInt() else 1
-
-                    footerPagination.findViewById<TextView>(R.id.curPage).text = page.toString()
-
-                    val firstPageView = footerPagination.findViewById<ImageButton>(R.id.firstPage)
-                    if (page == 1) firstPageView.visibility = View.GONE
-                    else firstPageView.setOnClickListener {
-                        loadForumContent(1)
-                    }
-
-                    val lastPageView = footerPagination.findViewById<ImageButton>(R.id.lastPage)
-                    if (page >= lastPage) lastPageView.visibility = View.GONE
-                    else lastPageView.setOnClickListener {
-                        loadForumContent(lastPage)
-                    }
-
-                    val prevPage = footerPagination.findViewById<ImageButton>(R.id.prevPage)
-                    val prevPage1 = footerPagination.findViewById<TextView>(R.id.prevPage1)
-                    if (page - 1 < 1) {
-                        prevPage.visibility = View.GONE
-                        prevPage1.visibility = View.GONE
-                    } else {
-                        prevPage.setOnClickListener {
-                            loadForumContent(page - 1)
-                        }
-                        prevPage1.setOnClickListener {
-                            loadForumContent(page - 1)
-                        }
-                        prevPage1.text = (page - 1).toString()
-                    }
-
-                    val prevPage2 = footerPagination.findViewById<TextView>(R.id.prevPage2)
-                    if (page - 2 < 1) prevPage2.visibility = View.GONE
-                    else prevPage2.setOnClickListener {
-                        loadForumContent(page - 2)
-                    }
-                    prevPage2.text = (page - 2).toString()
-
-                    val nextPage = footerPagination.findViewById<ImageButton>(R.id.nextPage)
-                    val nextPage1 = footerPagination.findViewById<TextView>(R.id.nextPage1)
-                    if (page + 1 > lastPage) {
-                        nextPage.visibility = View.GONE
-                        nextPage1.visibility = View.GONE
-                    } else {
-                        nextPage.setOnClickListener {
-                            loadForumContent(page + 1)
-                        }
-                        nextPage1.setOnClickListener {
-                            loadForumContent(page + 1)
-                        }
-                        nextPage1.text = (page + 1).toString()
-                    }
-
-                    val nextPage2 = footerPagination.findViewById<TextView>(R.id.nextPage2)
-                    if (page + 2 > lastPage) nextPage2.visibility = View.GONE
-                    else nextPage2.setOnClickListener {
-                        loadForumContent(page + 2)
-                    }
-                    nextPage2.text = (page + 2).toString()
-                    threadListView.addFooterView(footerPagination)
 
                     val threadListContent = mutableListOf<ThreadItem>()
                     parser.select("[id^='normalthread_']").forEach {
@@ -241,23 +153,29 @@ class ForumDisplay : AppCompatActivity() {
                                 targetId
                             )
                         )
-                        threadListView.adapter =
-                            ThreadItemListAdapter(
-                                this,
-                                0,
-                                threadListContent
-                            )
-
-                        threadListView.setOnItemClickListener { _, _, position, _ ->
-                            if (position - 2 >= 0) {
-                                val i = Intent(this@ForumDisplay, ViewThread::class.java)
-                                i.putExtra(
-                                    "tid",
-                                    threadListContent[position - 2].target
-                                )
-                                startActivity(i)
-                            }
+                        adapter.mItems.forEachIndexed { i, _ -> adapter.changeData(i) }
+                        adapter = ThreadItemAdapter(
+                            this@ForumDisplay,
+                            threadListContent,
+                            isHome = false,
+                            withHeader = true,
+                            withNavigation = true,
+                            curCategoryItem = categoryList,
+                            curPage = page,
+                            lastPage = if (!parser.select(".last").isEmpty())
+                                parser.select(".last")[0].text().substring(4).toInt()
+                            else if (!parser.select("#pgt .pg a:not(.nxt)")
+                                    .isEmpty()
+                            ) parser.select("#pgt .pg a:not(.nxt)")
+                                .last().text().toInt() else 1,
+                            disabledCurPage = false,
+                            enabledPrev = false,
+                            enabledNext = false
+                        ) { p ->
+                            loadForumContent(p)
                         }
+                        ThreadList.adapter = adapter
+                        ThreadList.layoutManager = LinearLayoutManager(this@ForumDisplay)
                     }
                 }
             }

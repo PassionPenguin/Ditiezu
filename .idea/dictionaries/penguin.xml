@@ -2,10 +2,17 @@
   <dictionary name="penguin">
     <words>
       <w>ditiezu</w>
+      <w>formhash</w>
       <w>httpext</w>
+      <w>kmhf</w>
       <w>newthread</w>
+      <w>normalthread</w>
       <w>reppid</w>
+      <w>searchsubmit</w>
       <w>sightml</w>
+      <w>smilieid</w>
+      <w>srchtxt</w>
+      <w>typeid</w>
     </words>
   </dictionary>
 </component>

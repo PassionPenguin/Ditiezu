@@ -106,7 +106,7 @@ class PostActivity : AppCompatActivity() {
             val pattern = Pattern.compile("IMGUNUSEDAID\\[\\d*] = '(\\d*)'")
             var matcher: Matcher = pattern.matcher(s)
             while (matcher.find()) {
-                attachlist.add(matcher.group(1).toString())
+                matcher.group(1)?.toString()?.let { attachlist.add(it) }
                 s = s.substring(matcher.start() + 1) // ignore the just-matched and move on;
                 matcher = pattern.matcher(s)
             }
