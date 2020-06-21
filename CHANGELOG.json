@@ -204,6 +204,12 @@
       "versionName": "Watermelon Milkshake v8.4",
       "versionDate": "Sun Jun 14 2020 17:25:23 GMT+0800 (中国标准时间)",
       "versionLog": "嵌入Firebase以支持错误日志"
+    },
+    {
+      "versionCode": 38,
+      "versionName": "Watermelon Milkshake v9",
+      "versionDate": "Sun Jun 21 2020 19:24:36 GMT+0800 (中国标准时间)",
+      "versionLog": "支持表情，全应用下使用Reyclerview重构，优化UI"
     }
   ]
 }

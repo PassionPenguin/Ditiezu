@@ -34,9 +34,7 @@ class ZoomImage : AppCompatActivity(), View.OnTouchListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_zoom_image)
         val e = intent.extras
-        val path = e?.getString("filePath", "-1") as String
-        Log.i("", path)
-//        if (path == "-1" || path.isEmpty()) onBackPressed()
+        val path = e?.getString("filePath") ?: return
         val view: ImageView = findViewById(R.id.imageView)
         try {
             Glide.with(applicationContext).load(path).into(view)

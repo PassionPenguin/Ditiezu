@@ -218,6 +218,15 @@ class ViewThread : AppCompatActivity() {
                                                                 )
                                                             ).fitCenter()
                                                             .into(i)
+                                                        i.setOnClickListener {
+                                                            val intent =
+                                                                Intent(this, ZoomImage::class.java)
+                                                            intent.putExtra(
+                                                                "filePath",
+                                                                n.attr("src")
+                                                            )
+                                                            startActivity(intent)
+                                                        }
                                                         v.addView(i)
                                                     }
                                                     ((n as Element).select("[id^='aimg_']")

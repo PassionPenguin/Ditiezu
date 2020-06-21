@@ -58,9 +58,12 @@ class NotificationsFragment : Fragment() {
             .setTextColor(resources.getColor(R.color.black, null))
 
         fun retriever(url: String) {
-            activity?.runOnUiThread {
-                activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
-                    View.VISIBLE
+            try {
+                activity?.runOnUiThread {
+                    activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
+                        View.VISIBLE
+                }
+            } catch (ignored: Exception) {
             }
             HttpExt().retrievePage(url) { s ->
                 val parser = Jsoup.parse(s)
