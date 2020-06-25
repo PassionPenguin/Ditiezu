@@ -641,10 +641,7 @@ public class PictureFileUtils {
      * @return
      */
     public static boolean isFileExists(String path) {
-        if (!TextUtils.isEmpty(path) && !new File(path).exists()) {
-            return false;
-        }
-        return true;
+        return TextUtils.isEmpty(path) || new File(path).exists();
     }
 
     @SuppressWarnings("ConstantConditions")

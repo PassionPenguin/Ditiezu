@@ -34,17 +34,17 @@ import java.util.List;
  */
 
 public class FolderPopWindow extends PopupWindow {
-    private Context context;
-    private View window;
+    private final Context context;
+    private final View window;
     private View rootView;
     private RecyclerView mRecyclerView;
     private PictureAlbumDirectoryAdapter adapter;
     private boolean isDismiss = false;
     private ImageView ivArrowView;
     private Drawable drawableUp, drawableDown;
-    private int chooseMode;
-    private PictureSelectionConfig config;
-    private int maxHeight;
+    private final int chooseMode;
+    private final PictureSelectionConfig config;
+    private final int maxHeight;
     private View rootViewBg;
 
     public FolderPopWindow(Context context, PictureSelectionConfig config) {

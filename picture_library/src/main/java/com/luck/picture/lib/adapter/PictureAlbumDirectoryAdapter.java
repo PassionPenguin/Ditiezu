@@ -26,7 +26,7 @@ import java.util.List;
 public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAlbumDirectoryAdapter.ViewHolder> {
     private List<LocalMediaFolder> folders = new ArrayList<>();
     private int chooseMode;
-    private PictureSelectionConfig config;
+    private final PictureSelectionConfig config;
     private OnAlbumItemClickListener onAlbumItemClickListener;
 
     public PictureAlbumDirectoryAdapter(PictureSelectionConfig config) {

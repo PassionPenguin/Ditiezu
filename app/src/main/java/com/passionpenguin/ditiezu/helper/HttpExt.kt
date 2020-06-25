@@ -31,6 +31,10 @@ class HttpExt {
         val t = Thread {
             val url = URL(strURL)
             val conn = url.openConnection() as HttpURLConnection
+            conn.setRequestProperty(
+                "User-Agent",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+            )
             conn.setRequestProperty("Cookie", CookieManager.getInstance().getCookie(strURL))
             try {
                 conn.requestMethod = "GET"
@@ -42,6 +46,31 @@ class HttpExt {
             }
         }
         t.start()
+    }
+
+    @Throws(IOException::class)
+    fun asyncOpenHttpUrlConn(strURL: String): InputStream {
+        var i: InputStream = "null".byteInputStream()
+        val t = Thread {
+            val url = URL(strURL)
+            val conn = url.openConnection() as HttpURLConnection
+            conn.setRequestProperty(
+                "User-Agent",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+            )
+            conn.setRequestProperty("Cookie", CookieManager.getInstance().getCookie(strURL))
+            try {
+                conn.requestMethod = "GET"
+                conn.connect()
+                if (conn.responseCode == HttpURLConnection.HTTP_OK) {
+                    i = conn.inputStream
+                }
+            } catch (ex: Exception) {
+            }
+        }
+        t.start()
+        t.join()
+        return i
     }
 
     fun retrievePage(url: String, then: (res: String) -> Unit) {
@@ -111,6 +140,87 @@ class HttpExt {
             }
         }.start()
 
+    }
+
+    fun postPage(
+        url: String,
+        params: String,
+        followRedirected: Boolean = true,
+        returnVal: (res: String) -> Unit
+    ) {
+        val urlConnection = URL(url).openConnection() as HttpURLConnection
+        urlConnection.instanceFollowRedirects = followRedirected
+        val cookieManager = CookieManager.getInstance()
+        var cookie = cookieManager.getCookie(url)
+
+        val thread = Thread {
+            var result = ""
+            if (cookie == null)
+                cookie = ""
+
+            urlConnection.setRequestProperty(
+                "Cookie",
+                cookie
+            )
+
+            urlConnection.requestMethod = "POST"
+            urlConnection.setRequestProperty(
+                "Referer",
+                "http://www.ditiezu.com"
+            )
+            urlConnection.setRequestProperty(
+                "Content-Type",
+                "application/x-www-form-urlencoded;"
+            )
+            urlConnection.setRequestProperty(
+                "Origin",
+                "http://www.ditiezu.com"
+            )
+            urlConnection.setRequestProperty(
+                "Host",
+                "www.ditiezu.com"
+            )
+            urlConnection.setRequestProperty(
+                "User-Agent",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+            )
+            urlConnection.setRequestProperty(
+                "DNT",
+                "1"
+            )
+            urlConnection.setRequestProperty(
+                "Proxy-Connection",
+                "keep-alive"
+            )
+            urlConnection.doOutput = true
+            urlConnection.outputStream.write(params.toByteArray(Charset.forName("GBK")))
+
+            try {
+                val inputStream: InputStream = urlConnection.inputStream
+                val reader = InputStreamReader(inputStream, "GBK")
+                var str = reader.readText()
+                var res = ""
+                while (str != "") {
+                    res += str
+                    str = reader.readText()
+                }
+                result = res
+            } catch (e: Exception) {
+                result = "Failed Retrieved"
+                Log.i("HttpExt Exception", e.toString())
+            } finally {
+                urlConnection.disconnect()
+            }
+
+            returnVal(
+                when (urlConnection.responseCode) {
+                    in 300..399 -> "succeed, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
+                    in 400..599 -> "error, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
+                    else -> result
+                }
+            )
+        }
+        thread.start()
     }
 
     fun asyncRetrievePage(url: String, charsetName: String = "GBK"): String {

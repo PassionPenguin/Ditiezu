@@ -257,7 +257,7 @@ public class SubsamplingScaleImageView extends View {
     // Long click listener
     private OnLongClickListener onLongClickListener;
     // Long click handler
-    private Handler handler;
+    private final Handler handler;
     // Paint objects created once and reused for efficiency
     private Paint bitmapPaint;
     private Paint debugPaint;
@@ -267,11 +267,11 @@ public class SubsamplingScaleImageView extends View {
     private ScaleAndTranslate satTemp;
     private Matrix matrix;
     private RectF sRect;
-    private float[] srcArray = new float[8];
-    private float[] dstArray = new float[8];
+    private final float[] srcArray = new float[8];
+    private final float[] dstArray = new float[8];
 
     //The logical density of the display
-    private float density;
+    private final float density;
 
 
     public SubsamplingScaleImageView(Context context, AttributeSet attr) {
@@ -2858,7 +2858,7 @@ public class SubsamplingScaleImageView extends View {
 
     private static class ScaleAndTranslate {
         private float scale;
-        private PointF vTranslate;
+        private final PointF vTranslate;
 
         private ScaleAndTranslate(float scale, PointF vTranslate) {
             this.scale = scale;

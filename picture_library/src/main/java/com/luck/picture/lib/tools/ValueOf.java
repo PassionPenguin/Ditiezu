@@ -119,11 +119,7 @@ public class ValueOf {
         boolean value;
         try {
             String s = o.toString().trim();
-            if ("false".equals(s.trim())) {
-                value = false;
-            } else {
-                value = true;
-            }
+            value = !"false".equals(s.trim());
         } catch (Exception e) {
             value = defaultValue;
         }

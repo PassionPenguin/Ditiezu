@@ -88,7 +88,7 @@ public class CustomCameraView extends RelativeLayout {
     private long recordTime = 0;
     private File mVideoFile;
     private File mPhotoFile;
-    private TextureView.SurfaceTextureListener surfaceTextureListener = new TextureView.SurfaceTextureListener() {
+    private final TextureView.SurfaceTextureListener surfaceTextureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             startVideoPlay(mVideoFile);
@@ -483,13 +483,13 @@ public class CustomCameraView extends RelativeLayout {
      * 拍照回调
      */
     private static class MyImageResultCallback implements ImageCapture.OnImageSavedCallback {
-        private WeakReference<Context> mContextReference;
-        private WeakReference<PictureSelectionConfig> mConfigReference;
-        private WeakReference<File> mFileReference;
-        private WeakReference<ImageView> mImagePreviewReference;
-        private WeakReference<CaptureLayout> mCaptureLayoutReference;
-        private WeakReference<ImageCallbackListener> mImageCallbackListenerReference;
-        private WeakReference<CameraListener> mCameraListenerReference;
+        private final WeakReference<Context> mContextReference;
+        private final WeakReference<PictureSelectionConfig> mConfigReference;
+        private final WeakReference<File> mFileReference;
+        private final WeakReference<ImageView> mImagePreviewReference;
+        private final WeakReference<CaptureLayout> mCaptureLayoutReference;
+        private final WeakReference<ImageCallbackListener> mImageCallbackListenerReference;
+        private final WeakReference<CameraListener> mCameraListenerReference;
 
         public MyImageResultCallback(Context context, PictureSelectionConfig config,
                                      File imageOutFile, ImageView imagePreview,

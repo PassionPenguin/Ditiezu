@@ -11,8 +11,8 @@ import android.text.TextUtils;
  * @describe：刷新相册
  */
 public class PictureMediaScannerConnection implements MediaScannerConnection.MediaScannerConnectionClient {
-    private MediaScannerConnection mMs;
-    private String mPath;
+    private final MediaScannerConnection mMs;
+    private final String mPath;
     private ScanListener mListener;
 
     public PictureMediaScannerConnection(Context context, String path, ScanListener l) {

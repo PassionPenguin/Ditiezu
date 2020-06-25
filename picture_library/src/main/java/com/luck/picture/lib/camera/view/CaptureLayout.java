@@ -45,9 +45,9 @@ public class CaptureLayout extends FrameLayout {
     private ImageView iv_custom_left;            //左边自定义按钮
     private ImageView iv_custom_right;            //右边自定义按钮
     private TextView txt_tip;               //提示文本
-    private int layout_width;
-    private int layout_height;
-    private int button_size;
+    private final int layout_width;
+    private final int layout_height;
+    private final int button_size;
     private int iconLeft = 0;
     private int iconRight = 0;
 

@@ -996,7 +996,7 @@ public final class PictureThreadUtils {
     static final class ThreadPoolExecutor4Util extends ThreadPoolExecutor {
 
         private final AtomicInteger mSubmittedCount = new AtomicInteger();
-        private LinkedBlockingQueue4Util mWorkQueue;
+        private final LinkedBlockingQueue4Util mWorkQueue;
 
         ThreadPoolExecutor4Util(int corePoolSize, int maximumPoolSize,
                                 long keepAliveTime, TimeUnit unit,
@@ -1325,7 +1325,7 @@ public final class PictureThreadUtils {
 
     private static class TaskInfo {
         private TimerTask mTimerTask;
-        private ExecutorService mService;
+        private final ExecutorService mService;
 
         private TaskInfo(ExecutorService service) {
             mService = service;

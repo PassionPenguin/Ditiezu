@@ -5,35 +5,23 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ImageSpan
-import android.text.style.StyleSpan
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.scale
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
-import com.passionpenguin.ditiezu.helper.*
+import com.passionpenguin.ditiezu.helper.Dialog
+import com.passionpenguin.ditiezu.helper.HttpExt
 import kotlinx.android.synthetic.main.activity_view_thread.*
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
-import java.util.*
-import java.util.regex.Pattern
+import java.net.URLEncoder
 import kotlin.properties.Delegates
 
 class ViewThread : AppCompatActivity() {
@@ -41,19 +29,244 @@ class ViewThread : AppCompatActivity() {
     private var tid by Delegates.notNull<Int>()
     private var page by Delegates.notNull<Int>()
     private var loginState by Delegates.notNull<Boolean>()
-    private var t: Long = 0
-    private lateinit var adapter: ReplyItemAdapter
+    private var formhash by Delegates.notNull<String>()
+
+    inner class WebViewInterface {
+        @JavascriptInterface
+        fun load(page: Int) {
+            HttpExt().retrievePage("http://www.ditiezu.com/thread-$tid-$page-1.html") {
+                runOnUiThread {
+                    webView.evaluateJavascript("onPageLoaded(`$it`, $page)", null)
+                }
+            }
+        }
+
+        @JavascriptInterface
+        fun rate(pid: Int, index: Int) {
+            println("$pid - $tid")
+            runOnUiThread {
+                webView.evaluateJavascript("onLoading()", null)
+            }
+            var s =
+                HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=misc&action=rate&tid=$tid&pid=$pid&infloat=yes&handlekey=rate&t=&inajax=1&ajaxtarget=fwin_content_rate")
+            runOnUiThread {
+                webView.evaluateJavascript("onLoaded()", null)
+            }
+
+            when (s) {
+                "Failed Retrieved" -> {
+                    Dialog().tip(
+                        resources.getString(R.string.failed_retrieved),
+                        R.drawable.ic_baseline_close_24,
+                        R.color.danger,
+                        this@ViewThread,
+                        ViewThread,
+                        Dialog.TIME_SHORT
+                    )
+                }
+                else -> {
+                    s = s.substring(53, s.length - 10)
+                    val p = Jsoup.parse(s)
+                    when {
+                        p.select(".alert_error").isNotEmpty() -> {
+                            Dialog().tip(
+                                p.select(".alert_error").text(),
+                                R.drawable.ic_baseline_close_24,
+                                R.color.danger,
+                                this@ViewThread,
+                                ViewThread,
+                                Dialog.TIME_SHORT
+                            )
+                        }
+                        else -> {
+                            Dialog().create(
+                                this@ViewThread,
+                                ViewThread,
+                                resources.getString(R.string.rate),
+                                resources.getString(R.string.rate_title),
+                                resources.getString(R.string.rate_description),
+                                { v, _ ->
+                                    if (v.findViewById<TextView>(R.id.reason).text == "") {
+                                        Dialog().tip(
+                                            resources.getString(R.string.require_reason),
+                                            R.drawable.ic_baseline_close_24,
+                                            R.color.danger,
+                                            this@ViewThread,
+                                            ViewThread,
+                                            Dialog.TIME_SHORT
+                                        )
+                                    } else {
+                                        webView.evaluateJavascript("onLoading()", null)
+                                        val str = HttpExt().asyncPostPage(
+                                            "http://www.ditiezu.com/forum.php?mod=misc&action=rate&ratesubmit=yes&infloat=yes&inajax=1",
+                                            "formhash=$formhash&tid=${tid}&pid=${pid}&handlekey=rate&reason=${URLEncoder.encode(
+                                                v.findViewById<EditText>(R.id.reason).text.toString(),
+                                                "GBK"
+                                            )}&score4=${v.findViewById<Spinner>(R.id.score).selectedItem}"
+                                        )
+                                        webView.evaluateJavascript("onLoaded()", null)
+
+                                        val response = str.substring(
+                                            str.indexOf("_rate('") + 33,
+                                            str.indexOf(
+                                                "'", str.indexOf("_rate('") + 34
+                                            )
+                                        )
+                                        when {
+                                            str == "Failed Retrieved" -> {
+                                                Dialog().tip(
+                                                    resources.getString(R.string.failed_retrieved),
+                                                    R.drawable.ic_baseline_close_24,
+                                                    R.color.danger,
+                                                    this@ViewThread,
+                                                    ViewThread,
+                                                    Dialog.TIME_SHORT
+                                                )
+                                            }
+                                            str.contains("succeed") -> {
+                                                Dialog().tip(
+                                                    response,
+                                                    R.drawable.ic_baseline_check_24,
+                                                    R.color.primary500,
+                                                    this@ViewThread,
+                                                    ViewThread,
+                                                    Dialog.TIME_SHORT
+                                                )
+                                                webView.evaluateJavascript("onLoading()", null)
+                                                webView.evaluateJavascript(
+                                                    "onReloadIndex(`${HttpExt().asyncRetrievePage(
+                                                        "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&viewpid=$pid&inajax=1&ajaxtarget=post_$pid"
+                                                    )}`, $index)", null
+                                                )
+                                                webView.evaluateJavascript("onLoaded()", null)
+                                            }
+                                            str.contains("error") -> {
+                                                Dialog().tip(
+                                                    response,
+                                                    R.drawable.ic_baseline_close_24,
+                                                    R.color.danger,
+                                                    this@ViewThread,
+                                                    ViewThread,
+                                                    Dialog.TIME_SHORT
+                                                )
+                                            }
+                                        }
+                                    }
+                                }) { v, w ->
+                                v.addView(
+                                    LayoutInflater.from(this@ViewThread)
+                                        .inflate(
+                                            R.layout.fragment_rate,
+                                            v,
+                                            false
+                                        )
+                                )
+                                with(v.findViewById<Spinner>(R.id.reasonList)) {
+                                    ArrayAdapter.createFromResource(
+                                        this@ViewThread,
+                                        R.array.reason_list,
+                                        android.R.layout.simple_spinner_dropdown_item
+                                    ).also { adapter ->
+                                        // Specify the layout to use when the list of choices appears
+                                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                        // Apply the adapter to the spinner
+                                        this.adapter = adapter
+                                    }
+                                    this.onItemSelectedListener =
+                                        object : AdapterView.OnItemSelectedListener {
+                                            override fun onItemSelected(
+                                                parent: AdapterView<*>?,
+                                                view: View,
+                                                position: Int,
+                                                id: Long
+                                            ) {
+                                                v.findViewById<EditText>(R.id.reason)
+                                                    .setText(resources.getStringArray(R.array.reason_list)[position])
+                                            }
+
+                                            override fun onNothingSelected(parent: AdapterView<*>?) {}
+                                        }
+                                }
+                                with(v.findViewById<Spinner>(R.id.score)) {
+                                    ArrayAdapter.createFromResource(
+                                        this@ViewThread,
+                                        R.array.popularity_score,
+                                        android.R.layout.simple_spinner_dropdown_item
+                                    ).also { adapter ->
+                                        // Specify the layout to use when the list of choices appears
+                                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                        // Apply the adapter to the spinner
+                                        this.adapter = adapter
+                                    }
+                                }
+                                with(p.select("td:last-child")[0].text().toInt()) {
+                                    val restScore =
+                                        v.findViewById<TextView>(R.id.rest)
+                                    restScore.text =
+                                        resources.getString(
+                                            R.string.rest_score,
+                                            this
+                                        )
+                                    if (this < 3)
+                                        restScore.setTextColor(
+                                            resources.getColor(
+                                                R.color.danger,
+                                                null
+                                            )
+                                        )
+                                }
+                                w.update()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @JavascriptInterface
+        fun reply(pid: Int) {
+            val i = Intent(this@ViewThread, PostActivity::class.java)
+            i.putExtra("type", "reply")
+            i.putExtra("tid", tid)
+            i.putExtra("pid", pid)
+            i.putExtra("reppid", pid)
+            i.putExtra("reppost", pid)
+            startActivity(i)
+        }
+
+        @JavascriptInterface
+        fun edit(pid: Int) {
+            val i = Intent(this@ViewThread, PostActivity::class.java)
+            i.putExtra("type", "edit")
+            i.putExtra("pid", pid)
+            i.putExtra("tid", tid)
+            startActivity(i)
+        }
+
+        @JavascriptInterface
+        fun isDarkMode(): Boolean {
+            return darkMode
+        }
+
+        @JavascriptInterface
+        fun toggleLogin() {
+            startActivity(
+                Intent(
+                    this@ViewThread,
+                    LoginActivity::class.java
+                )
+            )
+        }
+    }
 
     private fun retrieveThreadContent() {
-        t = Calendar.getInstance().time.time
-        runOnUiThread {
-            LoadingMaskContainer.visibility = View.VISIBLE
-        }
         fun loadPage(threadId: Int = this.tid, pageId: Int = this.page) {
+            runOnUiThread {
+                webView.evaluateJavascript("onLoading()", null)
+            }
             HttpExt().retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
-                val parser = Jsoup.parse(result)
                 runOnUiThread {
-                    LoadingMaskContainer.visibility = View.GONE
+                    webView.evaluateJavascript("onLoaded()", null)
                     if (result == "Failed Retrieved") {
                         Dialog().tip(
                             resources.getString(R.string.failed_retrieved),
@@ -64,6 +277,10 @@ class ViewThread : AppCompatActivity() {
                             Dialog.TIME_SHORT
                         )
                     }
+                    val parser = Jsoup.parse(result)
+                    formhash = parser.select("[name=\"formhash\"]").attr("value")
+                    title = parser.select("#thread_subject").text()
+                    threadTitle.text = title
                     if (parser.select("#messagetext").isNotEmpty()) {
                         Dialog().tip(
                             parser.select("#messagetext").text(),
@@ -73,297 +290,8 @@ class ViewThread : AppCompatActivity() {
                             ViewThread,
                             Dialog.TIME_SHORT
                         )
-                        LoadingMaskContainer.visibility = View.GONE
                     }
-                }
-
-                val list = mutableListOf<ReplyItem>()
-
-                parser.select("table[id^='pid']").forEachIndexed { index: Int, it: Element ->
-                    var withPopularity = false
-                    var withMoney = false
-                    var withPrestige = false
-                    var participantsNum = ""
-                    val rateList = mutableListOf<RateItem>()
-//                    var rateContent: String = ""
-                    it.select(".tip, a").forEach { tipEl ->
-                        if (tipEl.tagName() != "a" || tipEl.attr("href").contains("redirect"))
-                            tipEl.remove()
-                    }
-                    it.select(".t_fsz a").forEach { tipEl ->
-                        tipEl.text("查看链接")
-                        tipEl.attr("style", "color: #289c77")
-                    }
-                    it.select("ignore_js_op").forEach { el ->
-                        el.tagName("img")
-                        el.attr("src", el.select("[id^='a_img']").attr("file"))
-                    }
-                    it.select("img").forEach { img ->
-                        if (img.attr("src").contains("none.gif"))
-                            img.attr(
-                                "src",
-                                img.attr("file")
-                            )
-                    }
-                    it.html(
-                        Pattern.compile(
-                            "<img src=\"static/image/(\\S+?)\" smilieid=\"\\S+?\" border=\"0\" alt=\"\">",
-                            Pattern.MULTILINE
-                        ).matcher(it.html()).replaceAll("[emotion]$1[/emotion]")
-                    )
-                    it.select("img[smilieid]").forEach { img ->
-                        img.tagName("span")
-                    }
-                    it.select("font[size]").forEach { size ->
-                        when (size.attr("size").toInt()) {
-                            1 -> size.html("<small><small>" + size.html() + "</small></small>")
-                            2 -> size.html("<small>" + size.html() + "</small>")
-                            4 -> size.html("<big>" + size.html() + "</big>")
-                            5 -> size.html("<big><big>" + size.html() + "</big></big>")
-                            6 -> size.html("<big><big><big>" + size.html() + "</big></big></big>")
-                            7 -> size.html("<big><big><big><big>" + size.html() + "</big></big></big></big>")
-                        }
-                    }
-                    with(it.select(".pstatus")) {
-                        this.tagName("PSTATUS")
-                    }
-
-                    if (it.select("[id^='ratelog_']").isNotEmpty()) {
-                        val log = it.select("[id^='ratelog_']")
-                        with(log.select(".ratl tbody:first-child")) {
-                            if (this.text().contains("人气")) withPopularity = true
-                            if (this.text().contains("金钱")) withMoney = true
-                            if (this.text().contains("威望")) withPrestige = true
-                            participantsNum = this.select("th:first-child .xi1").text()
-                        }
-                        it.select(".ratl_l [id^='rate_']").forEach { el ->
-                            val index = arrayOf(
-                                if (withPopularity) {
-                                    if (withMoney) {
-                                        if (withPrestige) 2
-                                        else 1
-                                    } else if (withPrestige) 1
-                                    else 0
-                                } else -1,
-                                if (withMoney) {
-                                    if (withPrestige) 1
-                                    else 0
-                                } else -1,
-                                if (withPrestige) 0 else -1
-                            )
-                            rateList.add(
-                                RateItem(
-                                    with(el.select("a:nth-child(2)").attr("href")) {
-                                        if (this.indexOf("uid-") + 4 <= 0 || this.indexOf(".html") <= 0)
-                                            0
-                                        else this.substring(
-                                            this.indexOf("uid-") + 4,
-                                            this.indexOf(".html")
-                                        ).toInt()
-                                    },
-                                    el.select("a:nth-child(2)").text(),
-                                    if (index[0] != -1) el.select(".xg1, .xi1")[index[0]].text() else "",
-                                    if (index[1] != -1) el.select(".xg1, .xi1")[index[1]].text() else "",
-                                    if (index[2] != -1) el.select(".xg1, .xi1")[index[2]].text() else "",
-                                    el.select(".xg1").text()
-                                )
-                            )
-                        }
-//                        rateContent =
-//                            log.select(".ratc").html()
-                    }
-
-                    list.add(
-                        ReplyItem(
-                            with(it.select(".avatar a").attr("href")) {
-                                if (this.indexOf("uid-") + 4 <= 0 || this.indexOf(".html") <= 0)
-                                    0
-                                else this.substring(
-                                    this.indexOf("uid-") + 4,
-                                    this.indexOf(".html")
-                                ).toInt()
-                            },
-                            { v: LinearLayout, _i: Int ->
-                                v.removeAllViews()
-                                val p = parser.select("[id^='pid']")[_i]
-                                p.select("[id^='postmessage_']")[0].html(
-                                    p.select("[id^='postmessage_']")[0].html()
-                                        .replace("&nbsp;", "\n").replace("<br>", "\n")
-                                        .replace("[\r\n]+", "\n").trim()
-                                )
-                                p.select("[id^='postmessage_']")[0].children().forEach { n ->
-                                    if (n.tagName() == "br" && n.nextElementSibling() != null && n.nextElementSibling()
-                                            .tagName() == "br"
-                                    ) n.remove()
-                                }
-                                p.select("[id^='postmessage_'], .pattl").forEach { data ->
-                                    data.childNodes().forEach { n ->
-                                        when (n.nodeName()) {
-                                            "img" -> {
-                                                when {
-                                                    (n.attr("src").isNotEmpty()) -> {
-                                                        val i = ImageView(this)
-                                                        i.adjustViewBounds = true
-                                                        i.setPadding(0, 0, 0, 0)
-                                                        i.layoutParams = ViewGroup.LayoutParams(
-                                                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                            ViewGroup.LayoutParams.WRAP_CONTENT
-                                                        )
-                                                        Glide.with(this)
-                                                            .load(n.attr("src"))
-                                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                            .apply(
-                                                                RequestOptions.bitmapTransform(
-                                                                    RoundedCorners(8)
-                                                                )
-                                                            ).fitCenter()
-                                                            .into(i)
-                                                        i.setOnClickListener {
-                                                            val intent =
-                                                                Intent(this, ZoomImage::class.java)
-                                                            intent.putExtra(
-                                                                "filePath",
-                                                                n.attr("src")
-                                                            )
-                                                            startActivity(intent)
-                                                        }
-                                                        v.addView(i)
-                                                    }
-                                                    ((n as Element).select("[id^='aimg_']")
-                                                        .isNotEmpty()
-                                                            ) -> {
-                                                        val i = ImageView(this)
-                                                        i.adjustViewBounds = true
-                                                        i.setPadding(0, 0, 0, 0)
-                                                        i.layoutParams = ViewGroup.LayoutParams(
-                                                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                            ViewGroup.LayoutParams.WRAP_CONTENT
-                                                        )
-                                                        Glide.with(this)
-                                                            .load(
-                                                                n.select("[id^='aimg_']")[0].attr(
-                                                                    "src"
-                                                                )
-                                                            )
-                                                            .fitCenter()
-                                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                            .apply(
-                                                                RequestOptions.bitmapTransform(
-                                                                    RoundedCorners(8)
-                                                                )
-                                                            ).into(i)
-                                                        v.addView(i)
-                                                    }
-                                                    (n.select("[id^='attach_']")
-                                                        .isNotEmpty()
-                                                            ) -> {
-                                                        // TODO: ATTACH VIEW
-                                                    }
-                                                }
-                                            }
-                                            "#text" -> {
-                                                val t = TextView(this)
-                                                t.layoutParams = ViewGroup.LayoutParams(
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT
-                                                )
-                                                t.textSize = 16f
-                                                t.setLineSpacing(0f, 1.5f)
-                                                t.setPadding(0, 6, 0, 6)
-                                                val s = SpannableString(n.outerHtml())
-                                                val emotionMatcher =
-                                                    Pattern.compile("\\[emotion](\\S+?)\\[/emotion]")
-                                                        .matcher(n.outerHtml())
-
-                                                fun bitmapFromUrl(url: String): Bitmap {
-                                                    var bitmap = try {
-                                                        BitmapFactory.decodeStream(assets.open(url))
-                                                    } catch (e: Exception) {
-                                                        println(e)
-                                                        BitmapFactory.decodeStream(assets.open("smiley/xiaobai/1.gif"))
-                                                    }
-                                                    val height = bitmap.height
-                                                    val width = bitmap.width
-                                                    val size =
-                                                        resources.getDimension(R.dimen._32)
-                                                    bitmap = if (height > width) bitmap.scale(
-                                                        (size * width / height).toInt(),
-                                                        size.toInt()
-                                                    )
-                                                    else bitmap.scale(
-                                                        size.toInt(),
-                                                        (size * height / width).toInt()
-                                                    )
-                                                    return bitmap
-                                                }
-                                                while (emotionMatcher.find()) {
-                                                    s.setSpan(
-                                                        ImageSpan(
-                                                            this,
-                                                            bitmapFromUrl(emotionMatcher.group(1))
-                                                        ),
-                                                        emotionMatcher.start(),
-                                                        emotionMatcher.end(),
-                                                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                                                    )
-                                                }
-                                                s.setSpan(
-                                                    StyleSpan(Typeface.BOLD),
-                                                    0,
-                                                    n.outerHtml().length,
-                                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                                                )
-                                                t.text = s
-                                                v.addView(t)
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            it.select(".authi .xw1").text(),
-                            hashMapOf(
-                                Pair(
-                                    "posttime",
-                                    it.select("[id^='authorposton']").text().substring(4)
-                                ),
-                                Pair("floor", "${(page - 1) * 15 + index + 1} 层")
-                            ),
-                            it.select(".editp").isNotEmpty() && loginState,
-                            it.select(".fastre").isNotEmpty() && loginState,
-                            it.select("[onclick^=\"showWindow('rate'\"]")
-                                .isNotEmpty() && loginState,
-                            it.attr("id").substring(3).toInt(),
-                            tid,
-                            rateList,
-                            withPopularity,
-                            withMoney,
-                            withPrestige,
-                            participantsNum
-//                            , rateContent
-                        )
-                    )
-                }
-
-                this@ViewThread.runOnUiThread {
-                    title = parser.select("#thread_subject").text()
-                    threadTitle.text = parser.select("#thread_subject").text()
-                    adapter = ReplyItemAdapter(
-                        this,
-                        list,
-                        parser.select("[name=\"formhash\"]").attr("value"),
-                        curPage = page,
-                        lastPage = if (!parser.select(".last").isEmpty())
-                            parser.select(".last")[0].text().substring(4).toInt()
-                        else if (!parser.select("#pgt .pg a:not(.nxt)")
-                                .isEmpty()
-                        ) parser.select("#pgt .pg a:not(.nxt)")
-                            .last().text().toInt() else 1
-                    ) { p ->
-                        this.page = p
-                        loadPage(tid, page)
-                    }
-                    viewThread.adapter = adapter
-                    LoadingMaskContainer.visibility = View.GONE
+                    webView.evaluateJavascript("onPageLoaded(`$result`, $pageId)", null)
                 }
             }
         }
@@ -399,7 +327,7 @@ class ViewThread : AppCompatActivity() {
                 )
                 clipboard.setPrimaryClip(clip)
                 Snackbar.make(
-                    viewThread,
+                    ViewThread,
                     resources.getString(R.string.copied),
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -416,7 +344,7 @@ class ViewThread : AppCompatActivity() {
                     startActivity(i)
                 } else {
                     Snackbar.make(
-                        viewThread,
+                        ViewThread,
                         resources.getString(R.string.login_description),
                         Snackbar.LENGTH_LONG
                     ).setAction(resources.getString(R.string.login)) {
@@ -442,23 +370,62 @@ class ViewThread : AppCompatActivity() {
             this.page = (extras.get("page") ?: 1) as Int
         } else finish()
 
-        loginState = HttpExt().checkLogin()
-        adapter = ReplyItemAdapter(this, listOf(), "", 0, 0) {}
+        webView.loadUrl("file:///android_asset/webHelper/viewthread.html")
+        webView.addJavascriptInterface(WebViewInterface(), "android")
+        webView.settings.javaScriptEnabled = true
+        WebView.setWebContentsDebuggingEnabled(true)
 
+        webView.webViewClient = (object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                val url = request?.url.toString()
+                if (url.indexOf("ditiezu.com/") != -1) {
+                    if (url.indexOf("mod=viewthread") != -1 || url.indexOf("thread-") != -1) {
+                        // ViewThread
+                        val tid = if (url.indexOf("viewthread") == -1) {
+                            url.substring(
+                                url.indexOf("thread-") + 7,
+                                url.indexOf("-1-1")
+                            ).toInt()
+                        } else {
+                            url.substring(
+                                url.indexOf("tid=") + 4,
+                                url.indexOf("&", url.indexOf("tid="))
+                            ).toInt()
+                        }
+                        val page = if (url.indexOf("viewthread") == -1) {
+                            url.substring(
+                                url.indexOf("-") + 1,
+                                url.indexOf("-1")
+                            ).toInt()
+                        } else {
+                            url.substring(
+                                url.indexOf("page=") + 5,
+                                url.indexOf("&", url.indexOf("page="))
+                            ).toInt()
+                        }
+                        val i = Intent(this@ViewThread, ViewThread::class.java)
+                        i.putExtra("tid", tid)
+                        i.putExtra("page", page)
+                        startActivity(i)
+                    }
+                }
+                view?.evaluateJavascript(
+                    "window.open('$url')",
+                    null
+                )
+                return true
+            }
+        })
+        loginState = HttpExt().checkLogin()
         this.darkMode =
             this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
-        viewThread.layoutManager = LinearLayoutManager(this)
 
         BackButton.setOnClickListener {
             onBackPressed()
         }
         retrieveThreadContent()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (intent.extras?.get("reload") == true)
-            retrieveThreadContent()
     }
 }

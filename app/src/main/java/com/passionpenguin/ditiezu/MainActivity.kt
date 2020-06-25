@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         super.onCreate(savedInstanceState)
         actionBar?.hide()
         setContentView(R.layout.activity_main)

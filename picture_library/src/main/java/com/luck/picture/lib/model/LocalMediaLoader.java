@@ -76,9 +76,9 @@ public final class LocalMediaLoader {
             String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
             String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
     };
-    private Context mContext;
-    private boolean isAndroidQ;
-    private PictureSelectionConfig config;
+    private final Context mContext;
+    private final boolean isAndroidQ;
+    private final PictureSelectionConfig config;
 
     public LocalMediaLoader(Context context, PictureSelectionConfig config) {
         this.mContext = context.getApplicationContext();

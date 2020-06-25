@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>View Thread</title>
+    <style>
+        /* fallback */
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: url(MaterialIcons-Regular.woff2) format('woff2');
+        }
+
+        .material-icons {
+            font-family: 'Material Icons', sans-serif;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        @keyframes indeterminate-rotate {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        * {
+            transition: 250ms ease-in-out;
+        }
+
+        body {
+            margin: 0;
+            background: var(--lightGrey);
+            --white: #fff;
+            --black: #000;
+            --lightGrey: #f6f7f9;
+            --mediumGrey: #efefef;
+            --darkGrey: #b0bec5;
+            --text: #333333;
+            --primary: #1b3a57;
+            --secondary: #476282;
+            --tertiary: #476282;
+            --disabled: #8ea1b9;
+        }
+
+        app {
+            box-sizing: border-box;
+            width: 100%;
+            height: fit-content;
+            display: block;
+            padding: 12px;
+        }
+
+        .loading-anim {
+            align-items: center;
+            background-color: var(--lightGrey);
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            left: 0;
+            opacity: 1;
+            position: fixed;
+            right: 0;
+            top: 0;
+            transform: translateZ(0);
+            z-index: 999;
+        }
+
+        .loading-anim .spinner {
+            animation: indeterminate-rotate 1s linear infinite;
+            animation-fill-mode: forwards;
+        }
+
+        .loading-anim .spinner path {
+            stroke: var(--darkGrey);
+        }
+
+        .view {
+            padding: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .app .view {
+            display: block;
+        }
+
+        .view img.avatar {
+            width: 36px;
+            border-radius: 8px;
+            margin-right: 12px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .view .Meta {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .view span.authorName {
+            display: block;
+            font: bold 15px/1 sans-serif;
+            text-transform: uppercase;
+            color: var(--secondary);
+        }
+
+        .view span.threadMeta {
+            font: 400 12px/1 sans-serif;
+            margin-top: 6px;
+            display: block;
+            color: var(--text);
+        }
+
+        .view div.threadContent {
+            margin-left: 48px;
+            margin-top: 12px;
+            display: block;
+            padding: 8px 0;
+            color: var(--text);
+            font: 15px/30px sans-serif;
+        }
+
+        .view div.threadCtrl {
+            display: block;
+            margin: 12px 24px 0 24px;
+            border-bottom: 1px solid var(--mediumGrey);
+            height: 24px;
+        }
+
+        .threadCtrl > span > i.material-icons {
+            padding: 0 12px;
+            font-size: 16px;
+            color: var(--secondary);
+            float: right;
+        }
+
+        .pagination span {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            vertical-align: middle;
+            border: 2px solid var(--darkGrey);
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary);
+            text-align: center;
+            line-height: 30px;
+        }
+
+        .pagination span:hover, .pagination span:focus {
+            outline: none;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        blockquote {
+            background: var(--mediumGrey) url(icon_quote_s.gif) no-repeat 12px 12px;
+            background-size: 24px;
+            margin: 10px 0;
+            padding: 8px 8px 8px 48px;
+            zoom: 1;
+            border-radius: 4px;
+        }
+
+        img.zoomable {
+            width: 100%;
+            padding: 8px 20px;
+            box-sizing: border-box;
+        }
+
+        i.pstatus {
+            display: block;
+            font-size: 12px;
+        }
+
+        .ratl {
+            margin-top: 12px;
+            width: 100%;
+            font: 13px/1 sans-serif;
+            text-transform: uppercase;
+        }
+
+        [id^='rate_'] td img {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            vertical-align: middle;
+        }
+
+        [id^="rate_"] td:first-child a:nth-child(2) {
+            display: inline-block;
+            vertical-align: middle;
+            text-decoration: none;
+            color: var(--secondary);
+            margin-left: 12px;
+            width: 100px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        [id^='rate_'] td:last-child {
+            margin: 12px 0;
+            display: block;
+            vertical-align: middle;
+        }
+
+        [id^="rate_"] td:not(:first-child):not(:last-child) {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            width: 40px;
+        }
+
+        [id^='rate_'] td:first-child {
+            display: inline-block;
+            vertical-align: middle;
+            width: 180px;
+        }
+
+        dd .ratl tr {
+            display: block;
+            width: 100%;
+        }
+
+        dd table.ratl tbody {
+            display: block;
+            width: 100%;
+        }
+
+        .ratl tbody:first-child th:first-child {
+            width: 180px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .ratl tbody:first-child th:not(:first-child) {
+            width: 40px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .ratl tbody:first-child {
+            margin-bottom: 12px;
+        }
+
+        .ratl tbody:first-child th a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .ratl tbody:first-child * {
+            text-decoration: none;
+            font-style: normal;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="view">
+    <img alt="Avatar" class="avatar" src="noavatar_middle.png"/>
+    <div class="Meta" data-name="Meta">
+        <span class="authorName" data-name="Author Name" data-text="霜羽"></span>
+        <span class="threadMeta" data-name="Thread Meta"
+              data-text="第 N 楼 - 2020/06/22 19:30"></span>
+    </div>
+    <div class="threadContent" data-name="Thread Content">
+
+    </div>
+    <div class="threadCtrl" data-name="Thread Ctrl">
+        <span class="rate">
+            <i class="material-icons">star_rate</i>
+        </span>
+        <span class="reply">
+            <i class="material-icons">quickreply</i>
+        </span>
+        <span class="edit">
+            <i class="material-icons">edit</i>
+        </span>
+    </div>
+</div>
+<div class="loading-anim">
+    <svg class="spinner" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21a9 9 0 1 0-9-9" fill="none" stroke-linecap="round" stroke-width="2"></path>
+    </svg>
+</div>
+<app class="app" data-name="View Thread">
+    <div class="content-area"></div>
+    <div class="pagination">
+        <span class="first-page material-icons">first_page</span>
+        <span class="previous-page material-icons">chevron_left</span>
+        <span class="previous-page-2-number"></span>
+        <span class="previous-page-number"></span>
+        <span class="current-page"></span>
+        <span class="next-page-number"></span>
+        <span class="next-page-2-number"></span>
+        <span class="next-page material-icons">chevron_right</span>
+        <span class="last-page material-icons">last_page</span>
+    </div>
+</app>
+<script src="data.js"></script>
+<script>
+    window.startPoint = new Date().getMilliseconds();
+    window.$ = (selector = "body", context = document) => {
+        return context.querySelectorAll(selector);
+    };
+    window.createElement = (data = {
+        type: "div",
+        ns: null,
+        innerText: null,
+        innerHTML: null,
+        attr: [],
+        onclick: null
+    }) => {
+        let el;
+        if (data.ns)
+            el = document.createElementNS(data.ns, data.type);
+        else el = document.createElement(data.type);
+        if (data.innerText)
+            el.innerText = data.innerText;
+        if (data.innerHTML)
+            el.innerHTML = data.innerHTML;
+        if (data.attr)
+            data.attr.forEach(e => {
+                el.setAttribute(e[0], e[1])
+            });
+        if (data.onclick)
+            el.onclick = data.onclick;
+        return el;
+    };
+    Element.prototype.bcr = HTMLDocument.prototype.bcr = function () {
+        return this.getBoundingClientRect();
+    };
+    Element.prototype.fadeIn = HTMLDocument.prototype.fadeIn = function (displayMode = "unset", visibility = "visible") {
+        this.style.opacity = "1";
+        this.style.display = displayMode;
+        this.style.visibility = visibility;
+        this.style.transition += " opacity 500ms ease-in-out";
+    };
+    Element.prototype.fadeOut = HTMLDocument.prototype.fadeOut = function (remove = false) {
+        this.style.opacity = "0";
+        setTimeout(() => {
+            this.style.display = "none";
+            if (remove)
+                this.parentElement.removeChild(this);
+        }, 500);
+    };
+    Element.prototype.on = window.on = HTMLDocument.prototype.on = function (types, func, options = {}) {
+        if (!(types || func)) {
+            return;
+        }
+        types = Array.isArray(types) ? types : [types];
+        types.forEach(type => {
+            this.addEventListener(type, func, options);
+        });
+    };
+    HTMLCollection.prototype.on = NodeList.prototype.on = function (types, func, options = {}) {
+        this.forEach(e => {
+            e.on(types, func, options)
+        });
+    };
+    Element.prototype.appendNewChild = function (data = {
+        type: "div",
+        ns: null,
+        innerText: null,
+        innerHTML: null,
+        attr: [],
+        onclick: null
+    }) {
+        let el = createElement(data);
+        this.appendChild(el);
+        return el;
+    };
+    Element.prototype.$ = HTMLDocument.prototype.$ = function (selector) {
+        return this.querySelectorAll(selector);
+    };
+    Element.prototype.attr = function (attrName) {
+        return this.getAttribute(attrName);
+    };
+    Array.prototype.last = HTMLCollection.prototype.last = NodeList.prototype.last = function () {
+        return this[this.length - 1];
+    };
+    HTMLCollection.prototype.forEach = NamedNodeMap.prototype.forEach = Array.prototype.forEach;
+    HTMLCollection.prototype.remove = NodeList.prototype.remove = function () {
+        for (let i = 0; i < this.length; i++) {
+            this[i].remove();
+        }
+    };
+    HTMLCollection.prototype.isEmpty = NodeList.prototype.isEmpty = function () {
+        return this.length === 0
+    }
+    HTMLCollection.prototype.isNotEmpty = NodeList.prototype.isNotEmpty = function () {
+        return this.length !== 0
+    }
+    NodeList.prototype.map = HTMLCollection.prototype.map = Array.prototype.map;
+    NodeList.prototype.addClass = function (value) {
+        for (let i = 0; i < this.length; i++) this[i].classList.add(value);
+    };
+    NodeList.prototype.removeClass = function (value) {
+        for (let i = 0; i < this.length; i++) this[i].classList.remove(value);
+    };
+    Element.prototype.addClass = function (value) {
+        return this.classList.add(value)
+    };
+    Element.prototype.removeClass = function (value) {
+        return this.classList.remove(value)
+    };
+    String.prototype.toInt = function () {
+        return parseInt(this);
+    };
+    window.page = 1;
+    window.initThreadContent = (element, index, dom, pid) => {
+        dom.$("ignore_js_op .mbn").remove();
+        dom.$("img[file]").forEach(img => {
+            img.setAttribute("src", img.attr("file"));
+            img.attributes.forEach(attr => {
+                (dom.name !== "src" && dom.name !== "class") ? img.removeAttribute(attr.name) : void (0);
+            });
+            img.addClass("zoomable");
+            if (img.attr("onclick") != null)
+                img.setAttribute("onclick", "")
+        });
+        dom.$(".quote blockquote font[size='2'] a").remove();
+        dom.$("[smilieid]").forEach(smiley => {
+            smiley.src = smiley.src.replace("static/image/", "").replace(/(http|https)?:\/\/(www.)?ditiezu.com\//, "")
+        });
+        dom.$("[onclick^='toggleRatelogCollapse'], .ratc [title=\"查看全部评分\"]").remove();
+        dom.$("[title=\"查看全部评分\"]").forEach(a => {
+            a.setAttribute("href", "javascript:void(0)");
+        });
+        dom.$(".ratl tbody:first-child th:last-child").remove();
+        const src = dom.$(".avatar a")[0].attr("href");
+        const uid = ((src.indexOf("uid-") + 4 <= 0 || src.indexOf(".html") <= 0) ? 0 : src.substring(src.indexOf("uid-") + 4, src.indexOf(".html"))).toInt();
+
+        element.$(".avatar")[0].onerror = () => {
+            this.src = "noavatar_middle.png";
+        };
+        element.$(".avatar")[0].src = `http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${uid}`;
+        element.$(".authorName")[0].innerText = dom.$(".authi .xw1")[0].innerText;
+        element.$(".threadMeta")[0].innerText = "第" + ((page - 1) * 15 + index + 1) + "楼 - " + dom.$("[id^='authorposton']")[0].innerText.substring(4);
+        element.$(".threadContent")[0].innerHTML = dom.$(".t_fsz")[0].$("[id^='postmessage']")[0].innerHTML + (dom.$(".t_fsz")[0].$(".pattl")[0] !== undefined ? dom.$(".t_fsz")[0].$(".pattl")[0].innerHTML : "") + (dom.$("[id^='ratelog_']")[0] !== undefined ? dom.$("[id^='ratelog_']")[0].innerHTML : "");
+
+        let rate = element.$(".rate i")[0];
+        if (dom.$("[onclick^=\"showWindow('rate'\"]")[0] !== undefined) {
+            rate.onclick = () => {
+                android.rate(pid.toInt(), index);
+            };
+        } else rate.style.display = "none";
+
+        let reply = element.$(".reply i")[0];
+        if (dom.$(".fastre")[0] !== undefined) {
+            reply.onclick = () => {
+                android.reply(pid.toInt());
+            };
+        } else reply.style.display = "none";
+
+        let edit = element.$(".edit i")[0];
+        if (dom.$(".editp")[0] !== undefined) {
+            edit.onclick = () => {
+                android.edit(pid.toInt());
+            };
+        } else edit.style.display = "none";
+    }
+    window.onPageLoaded = (pageResult, page) => {
+        // Will be called from Android
+        // Removed the boot anim
+        window.page = page;
+
+        if (new Date().getMilliseconds() - startPoint < 1000)
+            setTimeout(() => {
+                $(".loading-anim")[0].fadeOut();
+            }, 1000);
+        else $(".loading-anim")[0].remove();
+
+        const ViewHolder = $(".view")[0];
+        const app = $(".content-area")[0];
+        app.children.forEach(e => {
+            e.fadeOut();
+        });
+
+        window.dom = new DOMParser().parseFromString(pageResult, "text/html");
+        dom.$("table[id^='pid']").forEach((e, index) => {
+            const holder = ViewHolder.cloneNode(true);
+            initThreadContent(holder, index, e, e.id.substring(3))
+            app.appendChild(holder);
+        });
+        let currentPage = page;
+        let lastPage = 1;
+        if (dom.$(".last").isNotEmpty())
+            lastPage = dom.$(".last")[0].innerText.substring(4).trim().toInt()
+        else if (dom.$("#pgt .pg a:not(.nxt)").isNotEmpty())
+            lastPage = dom.$("#pgt .pg a:not(.nxt)").last().innerText.trim().toInt()
+
+        if (lastPage === 1) {
+            $(".pagination")[0].style.display = "none";
+        }
+
+        if (currentPage === 1) {
+            $(".first-page")[0].style.display = "none";
+            $(".previous-page")[0].style.display = "none";
+            $(".previous-page-number")[0].style.display = "none";
+            $(".previous-page-2-number")[0].style.display = "none";
+        }
+        if (currentPage === lastPage) {
+            $(".last-page")[0].style.display = "none";
+            $(".next-page")[0].style.display = "none";
+            $(".next-page-number")[0].style.display = "none";
+            $(".next-page-2-number")[0].style.display = "none";
+        }
+        if (currentPage === 2) $(".previous-page-2-number").style.display = "none";
+        if (currentPage >= lastPage - 2) $(".next-page-2-number").style.display = "none";
+        $(".previous-page-2-number")[0].innerText = currentPage - 2;
+        $(".previous-page-number")[0].innerText = currentPage - 1;
+        $(".current-page")[0].innerText = currentPage;
+        $(".next-page-number")[0].innerText = currentPage + 1;
+        $(".next-page-2-number")[0].innerText = currentPage + 2;
+
+        $(".first-page").on("click", () => {
+            loadPageContent(1);
+        });
+        $(".previous-page, .previous-page-number").on("click", () => {
+            loadPageContent(currentPage - 1);
+        });
+        $(".previous-page-2-number").on("click", () => {
+            loadPageContent(currentPage - 2);
+        });
+        $(".last-page").on("click", () => {
+            loadPageContent(lastPage);
+        });
+        $(".next-page, .next-page-number").on("click", () => {
+            loadPageContent(currentPage + 1);
+        });
+        $(".next-page-2-number").on("click", () => {
+            loadPageContent(currentPage + 2);
+        });
+    }
+    window.onReloadIndex = (str, index) => {
+        const dom = new DOMParser().parseFromString(str, "text/xml");
+        const html = dom.children[0].innerHTML;
+        initThreadContent($(".app")[0].$(".view")[index], index, new DOMParser().parseFromString(html.substring(9, html.length - 4), "text/html"));
+    };
+    window.loadPageContent = (page) => {
+        $(".loading-anim")[0].fadeIn("flex");
+        android.load(page);
+    };
+    window.onLoading = () => {
+        $(".loading-anim")[0].fadeIn("flex");
+    };
+    window.onLoaded = () => {
+        $(".loading-anim")[0].fadeOut();
+    };
+
+
+</script>
+</body>
+</html>

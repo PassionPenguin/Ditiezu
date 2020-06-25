@@ -1,14 +1,25 @@
 <component name="ProjectDictionaryState">
   <dictionary name="penguin">
     <words>
+      <w>ajaxtarget</w>
+      <w>cookietime</w>
       <w>ditiezu</w>
       <w>formhash</w>
       <w>httpext</w>
+      <w>inajax</w>
+      <w>khtml</w>
       <w>kmhf</w>
+      <w>loginfield</w>
+      <w>loginhash</w>
+      <w>mozilla</w>
       <w>newthread</w>
       <w>normalthread</w>
+      <w>questionid</w>
       <w>reppid</w>
       <w>searchsubmit</w>
+      <w>seccode</w>
+      <w>seccodeverify</w>
+      <w>sechash</w>
       <w>sightml</w>
       <w>smilieid</w>
       <w>srchtxt</w>

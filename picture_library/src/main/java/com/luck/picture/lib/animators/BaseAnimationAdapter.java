@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @describe：BaseAnimationAdapter
  */
 public abstract class BaseAnimationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
+    private final RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
     private int mDuration = 250;
     private Interpolator mInterpolator = new LinearInterpolator();
     private int mLastPosition = -1;

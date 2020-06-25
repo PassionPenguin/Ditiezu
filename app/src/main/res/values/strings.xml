@@ -202,4 +202,7 @@
     <string name="discovery">Discovery</string>
     <string name="account">Account</string>
     <string name="post_record">Post Record</string>
+    <string name="password">Password</string>
+    <string name="answer">Answer</string>
+    <string name="security_code">Security Code</string>
 </resources>

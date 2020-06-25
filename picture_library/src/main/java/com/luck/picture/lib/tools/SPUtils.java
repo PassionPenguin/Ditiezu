@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public class SPUtils {
     private static final Map<String, SPUtils> SP_UTILS_MAP = new HashMap<>();
-    private SharedPreferences sp;
+    private final SharedPreferences sp;
 
     private SPUtils(final String spName) {
         sp = getApplicationByReflect().getSharedPreferences(spName, Context.MODE_PRIVATE);
@@ -388,7 +388,7 @@ public class SPUtils {
      * or {@code Collections.<String>emptySet()} otherwise
      */
     public Set<String> getStringSet(@NonNull final String key) {
-        return getStringSet(key, Collections.<String>emptySet());
+        return getStringSet(key, Collections.emptySet());
     }
 
     /**

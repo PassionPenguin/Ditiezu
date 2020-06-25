@@ -43,12 +43,12 @@ import java.util.List;
  */
 public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
+    private final Context context;
     private boolean showCamera;
     private OnPhotoSelectChangedListener imageSelectChangedListener;
     private List<LocalMedia> data = new ArrayList<>();
     private List<LocalMedia> selectData = new ArrayList<>();
-    private PictureSelectionConfig config;
+    private final PictureSelectionConfig config;
 
     public PictureImageGridAdapter(Context context, PictureSelectionConfig config) {
         this.context = context;

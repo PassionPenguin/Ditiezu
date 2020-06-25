@@ -109,8 +109,8 @@ public final class LocalMediaPageLoader {
             MediaStore.MediaColumns.DISPLAY_NAME,
             COLUMN_BUCKET_ID};
     private static LocalMediaPageLoader instance;
-    private Context mContext;
-    private PictureSelectionConfig config;
+    private final Context mContext;
+    private final PictureSelectionConfig config;
 
 
     public LocalMediaPageLoader(Context context, PictureSelectionConfig config) {

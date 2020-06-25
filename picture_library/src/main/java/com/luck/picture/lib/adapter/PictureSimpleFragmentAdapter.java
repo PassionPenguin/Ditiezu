@@ -43,8 +43,8 @@ public class PictureSimpleFragmentAdapter extends PagerAdapter {
      */
     private static final int MAX_CACHE_SIZE = 20;
     private List<LocalMedia> data;
-    private OnCallBackActivity onBackPressed;
-    private PictureSelectionConfig config;
+    private final OnCallBackActivity onBackPressed;
+    private final PictureSelectionConfig config;
     /**
      * To cache the view
      */

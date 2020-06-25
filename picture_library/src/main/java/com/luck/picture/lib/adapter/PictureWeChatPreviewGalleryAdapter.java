@@ -24,7 +24,7 @@ import java.util.List;
 public class PictureWeChatPreviewGalleryAdapter
         extends RecyclerView.Adapter<PictureWeChatPreviewGalleryAdapter.ViewHolder> {
     private List<LocalMedia> list;
-    private PictureSelectionConfig config;
+    private final PictureSelectionConfig config;
     private OnItemClickListener listener;
 
     public PictureWeChatPreviewGalleryAdapter(PictureSelectionConfig config) {
