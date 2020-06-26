@@ -8,11 +8,11 @@
   "variantName": "processReleaseResources",
   "elements": [
     {
-      "type": "SINGLE",
-      "filters": [],
-      "versionCode": 38,
-      "versionName": "Watermelon Milkshake v9",
-      "outputFile": "app-release.apk"
+        "type": "SINGLE",
+        "filters": [],
+        "versionCode": 39,
+        "versionName": "v10.0 [ICE CREAM]",
+        "outputFile": "app-release.apk"
     }
   ]
 }

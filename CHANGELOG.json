@@ -1,215 +1,221 @@
 {
-  "pref_name": "CHANGELOG",
-  "changelog_history": [
-    {
-      "versionCode": 1,
-      "versionName": "1",
-      "versionDate": "Mon Mar 16 2020 20:59:28 GMT+0800 (中国标准时间)",
-      "versionLog": "创建项目，支持登录、分板块查看帖子列表、看帖（图片可分享缩放旋转）、下载附件"
-    },
-    {
-      "versionCode": 2,
-      "versionName": "Watermelon Milkshake v2.1 Canary",
-      "versionDate": "Mon May 25 2020 21:17:04 GMT+0800 (中国标准时间)",
-      "versionLog": "创建项目，支持登录、分板块查看帖子列表、看帖（包括图片，不支持下载）"
-    },
-    {
-      "versionCode": 3,
-      "versionName": "Watermelon Milkshake v2.2 Canary",
-      "versionDate": "Mon May 28 2020 22:13:00 GMT+0800 (中国标准时间)",
-      "versionLog": "更新分类页入口与界面，修复错误"
-    },
-    {
-      "versionCode": 4,
-      "versionName": "Watermelon Milkshake v3.1 Canary",
-      "versionDate": "Mon May 29 2020 21:04:04 GMT+0800 (中国标准时间)",
-      "versionLog": "更新提醒页，修复错误"
-    },
-    {
-      "versionCode": 5,
-      "versionName": "Watermelon Milkshake v3.2 Canary",
-      "versionDate": "Sat May 30 2020 17:30:29 GMT+0800 (中国标准时间)",
-      "versionLog": "更新搜索页，修复错误"
-    },
-    {
-      "versionCode": 6,
-      "versionName": "Watermelon Milkshake v3.3 Canary",
-      "versionDate": "Sat May 30 2020 22:14:58 GMT+0800 (中国标准时间)",
-      "versionLog": "更新帖子页面的工具栏，修复错误"
-    },
-    {
-      "versionCode": 7,
-      "versionName": "Watermelon Milkshake v3.4 Canary",
-      "versionDate": "Sun May 31 2020 13:00:34 GMT+0800 (中国标准时间)",
-      "versionLog": "适配Android 7-"
-    },
-    {
-      "versionCode": 8,
-      "versionName": "Watermelon Milkshake v3.5 Canary",
-      "versionDate": "Sun May 31 2020 13:58:51 GMT+0800 (中国标准时间)",
-      "versionLog": "支持应用内更新数据"
-    },
-    {
-      "versionCode": 11,
-      "versionName": "Watermelon Milkshake v4 Canary",
-      "versionDate": "Fri Jun 05 2020 23:20:37 GMT+0800 (中国标准时间)",
-      "versionLog": "支持选择标签"
-    },
-    {
-      "versionCode": 12,
-      "versionName": "Watermelon Milkshake v4.1 Canary",
-      "versionDate": "Sat Jun 06 2020 00:33:25 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误，优化界面样式、用户体验"
-    },
-    {
-      "versionCode": 13,
-      "versionName": "Watermelon Milkshake v4.2 Canary",
-      "versionDate": "Sat Jun 06 2020 12:03:32 GMT+0800 (中国标准时间)",
-      "versionLog": "优化界面"
-    },
-    {
-      "versionCode": 14,
-      "versionName": "Watermelon Milkshake v4.3 Canary",
-      "versionDate": "Sat Jun 06 2020 13:45:17 GMT+0800 (中国标准时间)",
-      "versionLog": "更新分类，支持更多分区"
-    },
-    {
-      "versionCode": 15,
-      "versionName": "Watermelon Milkshake v4.4 Canary",
-      "versionDate": "Sat Jun 06 2020 22:42:08 GMT+0800 (中国标准时间)",
-      "versionLog": "更新错误时提醒"
-    },
-    {
-      "versionCode": 16,
-      "versionName": "Watermelon Milkshake v4.5 Canary",
-      "versionDate": "Sat Jun 06 2020 22:46:50 GMT+0800 (中国标准时间)",
-      "versionLog": "支持应用内更新数据"
-    },
-    {
-      "versionCode": 17,
-      "versionName": "Watermelon Milkshake v5 Canary",
-      "versionDate": "Sun Jun 07 2020 13:44:25 GMT+0800 (中国标准时间)",
-      "versionLog": "支持回复帖子"
-    },
-    {
-      "versionCode": 18,
-      "versionName": "Watermelon Milkshake v5.1",
-      "versionDate": "Sun Jun 07 2020 20:07:51 GMT+0800 (中国标准时间)",
-      "versionLog": "支持显示图片、迁移库"
-    },
-    {
-      "versionCode": 19,
-      "versionName": "Watermelon Milkshake v5.2",
-      "versionDate": "Sun Jun 07 2020 20:44:05 GMT+0800 (中国标准时间)",
-      "versionLog": "更好支持跳转链接显示内容"
-    },
-    {
-      "versionCode": 20,
-      "versionName": "Watermelon Milkshake v5.3",
-      "versionDate": "Sun Jun 07 2020 21:02:45 GMT+0800 (中国标准时间)",
-      "versionLog": "查看帖子页支持翻页，修复错误"
-    },
-    {
-      "versionCode": 21,
-      "versionName": "Watermelon Milkshake v6",
-      "versionDate": "Sun Jun 07 2020 22:44:23 GMT+0800 (中国标准时间)",
-      "versionLog": "支持发帖"
-    },
-    {
-      "versionCode": 22,
-      "versionName": "Watermelon Milkshake v6.1",
-      "versionDate": "Mon Jun 08 2020 21:49:14 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误，更新布局"
-    },
-    {
-      "versionCode": 23,
-      "versionName": "Watermelon Milkshake v6.2",
-      "versionDate": "Mon Jun 08 2020 22:28:34 GMT+0800 (中国标准时间)",
-      "versionLog": "将部分库迁移至Kotlin架构"
-    },
-    {
-      "versionCode": 24,
-      "versionName": "Watermelon Milkshake v6.3",
-      "versionDate": "Tue Jun 09 2020 20:12:56 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误"
-    },
-    {
-      "versionCode": 25,
-      "versionName": "Watermelon Milkshake v6.4",
-      "versionDate": "Tue Jun 09 2020 21:59:17 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误 - 支持图像"
-    },
-    {
-      "versionCode": 26,
-      "versionName": "Watermelon Milkshake v6.5",
-      "versionDate": "Wed Jun 10 2020 20:13:22 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误 - 支持图像，优化布局"
-    },
-    {
-      "versionCode": 28,
-      "versionName": "Watermelon Milkshake v6.6",
-      "versionDate": "Wed Jun 10 2020 22:26:03 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误，支持表情，迁移设置，在首页弹出更新通知"
-    },
-    {
-      "versionCode": 29,
-      "versionName": "Watermelon Milkshake v7",
-      "versionDate": "Thu Jun 11 2020 22:21:01 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误，支持评分，修改布局"
-    },
-    {
-      "versionCode": 30,
-      "versionName": "Watermelon Milkshake v7.1",
-      "versionDate": "Fri Jun 12 2020 00:01:58 GMT+0800 (中国标准时间)",
-      "versionLog": "优化布局，修复错误"
-    },
-    {
-      "versionCode": 31,
-      "versionName": "Watermelon Milkshake v7.2",
-      "versionDate": "Fri Jun 12 2020 00:01:58 GMT+0800 (中国标准时间)",
-      "versionLog": "支持显示评分数据，移除无用内容，修复错误（回复与编辑）"
-    },
-    {
-      "versionCode": 32,
-      "versionName": "Watermelon Milkshake v7.3",
-      "versionDate": "Fri Jun 12 2020 21:48:01 GMT+0800 (中国标准时间)",
-      "versionLog": "修复错误(thread - view)"
-    },
-    {
-      "versionCode": 33,
-      "versionName": "Watermelon Milkshake v8",
-      "versionDate": "Sat Jun 13 2020 19:01:00 GMT+0800 (中国标准时间)",
-      "versionLog": "支持上传并发送图片，修复致命错误，使用Glide优化加载速度"
-    },
-    {
-      "versionCode": 34,
-      "versionName": "Watermelon Milkshake v8.1",
-      "versionDate": "Sun Jun 14 2020 00:20:51 GMT+0800 (中国标准时间)",
-      "versionLog": "支持对图片进行有损（75）/无损（未开放）压缩，更新样式"
-    },
-    {
-      "versionCode": 35,
-      "versionName": "Watermelon Milkshake v8.2",
-      "versionDate": "Sun Jun 14 2020 15:06:59 GMT+0800 (中国标准时间)",
-      "versionLog": "优化引用依赖库，更新样式、脚本，修复错误"
-    },
-    {
-      "versionCode": 36,
-      "versionName": "Watermelon Milkshake v8.3",
-      "versionDate": "Sun Jun 14 2020 15:34:11 GMT+0800 (中国标准时间)",
-      "versionLog": "持续优化，修复错误"
-    },
-    {
-      "versionCode": 37,
-      "versionName": "Watermelon Milkshake v8.4",
-      "versionDate": "Sun Jun 14 2020 17:25:23 GMT+0800 (中国标准时间)",
-      "versionLog": "嵌入Firebase以支持错误日志"
-    },
-    {
-      "versionCode": 38,
-      "versionName": "Watermelon Milkshake v9",
-      "versionDate": "Sun Jun 21 2020 19:24:36 GMT+0800 (中国标准时间)",
-      "versionLog": "支持表情，全应用下使用Reyclerview重构，优化UI"
-    }
-  ]
+    "pref_name": "CHANGELOG",
+    "changelog_history": [
+        {
+            "versionCode": 1,
+            "versionName": "1",
+            "versionDate": "Mon Mar 16 2020 20:59:28 GMT+0800 (中国标准时间)",
+            "versionLog": "创建项目，支持登录、分板块查看帖子列表、看帖（图片可分享缩放旋转）、下载附件"
+        },
+        {
+            "versionCode": 2,
+            "versionName": "Watermelon Milkshake v2.1 Canary",
+            "versionDate": "Mon May 25 2020 21:17:04 GMT+0800 (中国标准时间)",
+            "versionLog": "创建项目，支持登录、分板块查看帖子列表、看帖（包括图片，不支持下载）"
+        },
+        {
+            "versionCode": 3,
+            "versionName": "Watermelon Milkshake v2.2 Canary",
+            "versionDate": "Mon May 28 2020 22:13:00 GMT+0800 (中国标准时间)",
+            "versionLog": "更新分类页入口与界面，修复错误"
+        },
+        {
+            "versionCode": 4,
+            "versionName": "Watermelon Milkshake v3.1 Canary",
+            "versionDate": "Mon May 29 2020 21:04:04 GMT+0800 (中国标准时间)",
+            "versionLog": "更新提醒页，修复错误"
+        },
+        {
+            "versionCode": 5,
+            "versionName": "Watermelon Milkshake v3.2 Canary",
+            "versionDate": "Sat May 30 2020 17:30:29 GMT+0800 (中国标准时间)",
+            "versionLog": "更新搜索页，修复错误"
+        },
+        {
+            "versionCode": 6,
+            "versionName": "Watermelon Milkshake v3.3 Canary",
+            "versionDate": "Sat May 30 2020 22:14:58 GMT+0800 (中国标准时间)",
+            "versionLog": "更新帖子页面的工具栏，修复错误"
+        },
+        {
+            "versionCode": 7,
+            "versionName": "Watermelon Milkshake v3.4 Canary",
+            "versionDate": "Sun May 31 2020 13:00:34 GMT+0800 (中国标准时间)",
+            "versionLog": "适配Android 7-"
+        },
+        {
+            "versionCode": 8,
+            "versionName": "Watermelon Milkshake v3.5 Canary",
+            "versionDate": "Sun May 31 2020 13:58:51 GMT+0800 (中国标准时间)",
+            "versionLog": "支持应用内更新数据"
+        },
+        {
+            "versionCode": 11,
+            "versionName": "Watermelon Milkshake v4 Canary",
+            "versionDate": "Fri Jun 05 2020 23:20:37 GMT+0800 (中国标准时间)",
+            "versionLog": "支持选择标签"
+        },
+        {
+            "versionCode": 12,
+            "versionName": "Watermelon Milkshake v4.1 Canary",
+            "versionDate": "Sat Jun 06 2020 00:33:25 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误，优化界面样式、用户体验"
+        },
+        {
+            "versionCode": 13,
+            "versionName": "Watermelon Milkshake v4.2 Canary",
+            "versionDate": "Sat Jun 06 2020 12:03:32 GMT+0800 (中国标准时间)",
+            "versionLog": "优化界面"
+        },
+        {
+            "versionCode": 14,
+            "versionName": "Watermelon Milkshake v4.3 Canary",
+            "versionDate": "Sat Jun 06 2020 13:45:17 GMT+0800 (中国标准时间)",
+            "versionLog": "更新分类，支持更多分区"
+        },
+        {
+            "versionCode": 15,
+            "versionName": "Watermelon Milkshake v4.4 Canary",
+            "versionDate": "Sat Jun 06 2020 22:42:08 GMT+0800 (中国标准时间)",
+            "versionLog": "更新错误时提醒"
+        },
+        {
+            "versionCode": 16,
+            "versionName": "Watermelon Milkshake v4.5 Canary",
+            "versionDate": "Sat Jun 06 2020 22:46:50 GMT+0800 (中国标准时间)",
+            "versionLog": "支持应用内更新数据"
+        },
+        {
+            "versionCode": 17,
+            "versionName": "Watermelon Milkshake v5 Canary",
+            "versionDate": "Sun Jun 07 2020 13:44:25 GMT+0800 (中国标准时间)",
+            "versionLog": "支持回复帖子"
+        },
+        {
+            "versionCode": 18,
+            "versionName": "Watermelon Milkshake v5.1",
+            "versionDate": "Sun Jun 07 2020 20:07:51 GMT+0800 (中国标准时间)",
+            "versionLog": "支持显示图片、迁移库"
+        },
+        {
+            "versionCode": 19,
+            "versionName": "Watermelon Milkshake v5.2",
+            "versionDate": "Sun Jun 07 2020 20:44:05 GMT+0800 (中国标准时间)",
+            "versionLog": "更好支持跳转链接显示内容"
+        },
+        {
+            "versionCode": 20,
+            "versionName": "Watermelon Milkshake v5.3",
+            "versionDate": "Sun Jun 07 2020 21:02:45 GMT+0800 (中国标准时间)",
+            "versionLog": "查看帖子页支持翻页，修复错误"
+        },
+        {
+            "versionCode": 21,
+            "versionName": "Watermelon Milkshake v6",
+            "versionDate": "Sun Jun 07 2020 22:44:23 GMT+0800 (中国标准时间)",
+            "versionLog": "支持发帖"
+        },
+        {
+            "versionCode": 22,
+            "versionName": "Watermelon Milkshake v6.1",
+            "versionDate": "Mon Jun 08 2020 21:49:14 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误，更新布局"
+        },
+        {
+            "versionCode": 23,
+            "versionName": "Watermelon Milkshake v6.2",
+            "versionDate": "Mon Jun 08 2020 22:28:34 GMT+0800 (中国标准时间)",
+            "versionLog": "将部分库迁移至Kotlin架构"
+        },
+        {
+            "versionCode": 24,
+            "versionName": "Watermelon Milkshake v6.3",
+            "versionDate": "Tue Jun 09 2020 20:12:56 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误"
+        },
+        {
+            "versionCode": 25,
+            "versionName": "Watermelon Milkshake v6.4",
+            "versionDate": "Tue Jun 09 2020 21:59:17 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误 - 支持图像"
+        },
+        {
+            "versionCode": 26,
+            "versionName": "Watermelon Milkshake v6.5",
+            "versionDate": "Wed Jun 10 2020 20:13:22 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误 - 支持图像，优化布局"
+        },
+        {
+            "versionCode": 28,
+            "versionName": "Watermelon Milkshake v6.6",
+            "versionDate": "Wed Jun 10 2020 22:26:03 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误，支持表情，迁移设置，在首页弹出更新通知"
+        },
+        {
+            "versionCode": 29,
+            "versionName": "Watermelon Milkshake v7",
+            "versionDate": "Thu Jun 11 2020 22:21:01 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误，支持评分，修改布局"
+        },
+        {
+            "versionCode": 30,
+            "versionName": "Watermelon Milkshake v7.1",
+            "versionDate": "Fri Jun 12 2020 00:01:58 GMT+0800 (中国标准时间)",
+            "versionLog": "优化布局，修复错误"
+        },
+        {
+            "versionCode": 31,
+            "versionName": "Watermelon Milkshake v7.2",
+            "versionDate": "Fri Jun 12 2020 00:01:58 GMT+0800 (中国标准时间)",
+            "versionLog": "支持显示评分数据，移除无用内容，修复错误（回复与编辑）"
+        },
+        {
+            "versionCode": 32,
+            "versionName": "Watermelon Milkshake v7.3",
+            "versionDate": "Fri Jun 12 2020 21:48:01 GMT+0800 (中国标准时间)",
+            "versionLog": "修复错误(thread - view)"
+        },
+        {
+            "versionCode": 33,
+            "versionName": "Watermelon Milkshake v8",
+            "versionDate": "Sat Jun 13 2020 19:01:00 GMT+0800 (中国标准时间)",
+            "versionLog": "支持上传并发送图片，修复致命错误，使用Glide优化加载速度"
+        },
+        {
+            "versionCode": 34,
+            "versionName": "Watermelon Milkshake v8.1",
+            "versionDate": "Sun Jun 14 2020 00:20:51 GMT+0800 (中国标准时间)",
+            "versionLog": "支持对图片进行有损（75）/无损（未开放）压缩，更新样式"
+        },
+        {
+            "versionCode": 35,
+            "versionName": "Watermelon Milkshake v8.2",
+            "versionDate": "Sun Jun 14 2020 15:06:59 GMT+0800 (中国标准时间)",
+            "versionLog": "优化引用依赖库，更新样式、脚本，修复错误"
+        },
+        {
+            "versionCode": 36,
+            "versionName": "Watermelon Milkshake v8.3",
+            "versionDate": "Sun Jun 14 2020 15:34:11 GMT+0800 (中国标准时间)",
+            "versionLog": "持续优化，修复错误"
+        },
+        {
+            "versionCode": 37,
+            "versionName": "Watermelon Milkshake v8.4",
+            "versionDate": "Sun Jun 14 2020 17:25:23 GMT+0800 (中国标准时间)",
+            "versionLog": "嵌入Firebase以支持错误日志"
+        },
+        {
+            "versionCode": 38,
+            "versionName": "Watermelon Milkshake v9",
+            "versionDate": "Sun Jun 21 2020 19:24:36 GMT+0800 (中国标准时间)",
+            "versionLog": "支持表情，全应用下使用Reyclerview重构，优化UI"
+        },
+        {
+            "versionCode": 39,
+            "versionName": "v10.0 [ICE CREAM]",
+            "versionDate": "Sun Jun 21 2020 19:24:36 GMT+0800 (中国标准时间)",
+            "versionLog": "全面更新（下次更新将于2020/08/01后）"
+        }
+    ]
 }

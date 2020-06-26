@@ -30,7 +30,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.concurrent:concurrent-futures:1.0.0"
     implementation 'com.squareup.okio:okio:2.7.0-alpha.lockfree.2'
-    implementation "androidx.camera:camera-lifecycle:1.0.0-beta05"
+    implementation "androidx.camera:camera-lifecycle:1.0.0-beta06"
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0"
-    implementation "androidx.camera:camera-view:1.0.0-alpha12"
+    implementation "androidx.camera:camera-view:1.0.0-alpha13"
 }
