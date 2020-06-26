@@ -49,8 +49,6 @@
         body {
             margin: 0;
             background: var(--lightGrey);
-            --white: #fff;
-            --black: #000;
             --lightGrey: #f6f7f9;
             --mediumGrey: #efefef;
             --darkGrey: #b0bec5;
@@ -134,10 +132,16 @@
         .view div.threadContent {
             margin-left: 48px;
             margin-top: 12px;
+            max-width: 100%;
             display: block;
             padding: 8px 0;
             color: var(--text);
             font: 15px/30px sans-serif;
+        }
+
+        .view div.threadContent * {
+            white-space: normal;
+            word-break: break-all;
         }
 
         .view div.threadCtrl {
@@ -152,28 +156,6 @@
             font-size: 16px;
             color: var(--secondary);
             float: right;
-        }
-
-        .pagination span {
-            width: 30px;
-            height: 30px;
-            display: inline-block;
-            vertical-align: middle;
-            border: 2px solid var(--darkGrey);
-            border-radius: 6px;
-            cursor: pointer;
-            color: var(--primary);
-            text-align: center;
-            line-height: 30px;
-        }
-
-        .pagination span:hover, .pagination span:focus {
-            outline: none;
-        }
-
-        .pagination {
-            text-align: center;
-            margin: 0 auto;
         }
 
         blockquote {
@@ -195,6 +177,7 @@
             display: block;
             font-size: 12px;
         }
+
 
         .ratl {
             margin-top: 12px;
@@ -276,8 +259,6 @@
             text-decoration: none;
             font-style: normal;
         }
-
-
     </style>
 </head>
 <body>
@@ -311,18 +292,17 @@
 <app class="app" data-name="View Thread">
     <div class="content-area"></div>
     <div class="pagination">
-        <span class="first-page material-icons">first_page</span>
-        <span class="previous-page material-icons">chevron_left</span>
+        <span class="first-page"></span>
+        <span class="previous-page"></span>
         <span class="previous-page-2-number"></span>
         <span class="previous-page-number"></span>
         <span class="current-page"></span>
+        <span class="next-page"></span>
         <span class="next-page-number"></span>
         <span class="next-page-2-number"></span>
-        <span class="next-page material-icons">chevron_right</span>
-        <span class="last-page material-icons">last_page</span>
+        <span class="last-page"></span>
     </div>
 </app>
-<script src="data.js"></script>
 <script>
     window.startPoint = new Date().getMilliseconds();
     window.$ = (selector = "body", context = document) => {
@@ -434,7 +414,6 @@
     };
     window.page = 1;
     window.initThreadContent = (element, index, dom, pid) => {
-        dom.$("ignore_js_op .mbn").remove();
         dom.$("img[file]").forEach(img => {
             img.setAttribute("src", img.attr("file"));
             img.attributes.forEach(attr => {
@@ -444,7 +423,9 @@
             if (img.attr("onclick") != null)
                 img.setAttribute("onclick", "")
         });
-        dom.$(".quote blockquote font[size='2'] a").remove();
+        dom.$(".quote blockquote font[size='2'] a").forEach(a => {
+            a.remove();
+        });
         dom.$("[smilieid]").forEach(smiley => {
             smiley.src = smiley.src.replace("static/image/", "").replace(/(http|https)?:\/\/(www.)?ditiezu.com\//, "")
         });
@@ -502,7 +483,7 @@
             e.fadeOut();
         });
 
-        window.dom = new DOMParser().parseFromString(pageResult, "text/html");
+        const dom = new DOMParser().parseFromString(pageResult, "text/html");
         dom.$("table[id^='pid']").forEach((e, index) => {
             const holder = ViewHolder.cloneNode(true);
             initThreadContent(holder, index, e, e.id.substring(3))
@@ -510,10 +491,11 @@
         });
         let currentPage = page;
         let lastPage = 1;
-        if (dom.$(".last").isNotEmpty())
-            lastPage = dom.$(".last")[0].innerText.substring(4).trim().toInt()
-        else if (dom.$("#pgt .pg a:not(.nxt)").isNotEmpty())
+        if (!dom.$(".last").isEmpty())
+            lastPage = dom.$(".last")[0].innerText().substring(4).trim().toInt()
+        else if (!dom.$("#pgt .pg a:not(.nxt)").isEmpty()) {
             lastPage = dom.$("#pgt .pg a:not(.nxt)").last().innerText.trim().toInt()
+        }
 
         if (lastPage === 1) {
             $(".pagination")[0].style.display = "none";
@@ -531,31 +513,27 @@
             $(".next-page-number")[0].style.display = "none";
             $(".next-page-2-number")[0].style.display = "none";
         }
-        if (currentPage === 2) $(".previous-page-2-number").style.display = "none";
-        if (currentPage >= lastPage - 2) $(".next-page-2-number").style.display = "none";
-        $(".previous-page-2-number")[0].innerText = currentPage - 2;
-        $(".previous-page-number")[0].innerText = currentPage - 1;
-        $(".current-page")[0].innerText = currentPage;
-        $(".next-page-number")[0].innerText = currentPage + 1;
-        $(".next-page-2-number")[0].innerText = currentPage + 2;
+        if (currentPage === 2) $(".previous-page-2-number")[0].style.display = "none";
+        if (currentPage === lastPage - 1) $(".next-page-2-number")[0].style.display = "none";
+        $(".current-page").innerText = currentPage;
 
         $(".first-page").on("click", () => {
-            loadPageContent(1);
+            loadPageContent(1)
         });
         $(".previous-page, .previous-page-number").on("click", () => {
-            loadPageContent(currentPage - 1);
+            loadPageContent(currentPage - 1)
         });
         $(".previous-page-2-number").on("click", () => {
-            loadPageContent(currentPage - 2);
+            loadPageContent(currentPage - 2)
         });
         $(".last-page").on("click", () => {
-            loadPageContent(lastPage);
+            loadPageContent(lastPage)
         });
         $(".next-page, .next-page-number").on("click", () => {
-            loadPageContent(currentPage + 1);
+            loadPageContent(currentPage + 1)
         });
         $(".next-page-2-number").on("click", () => {
-            loadPageContent(currentPage + 2);
+            loadPageContent(currentPage + 2)
         });
     }
     window.onReloadIndex = (str, index) => {
@@ -564,17 +542,15 @@
         initThreadContent($(".app")[0].$(".view")[index], index, new DOMParser().parseFromString(html.substring(9, html.length - 4), "text/html"));
     };
     window.loadPageContent = (page) => {
-        $(".loading-anim")[0].fadeIn("flex");
+        $(".loading-anim")[0].fadeIn();
         android.load(page);
     };
     window.onLoading = () => {
-        $(".loading-anim")[0].fadeIn("flex");
+        $(".loading-anim")[0].fadeIn();
     };
     window.onLoaded = () => {
         $(".loading-anim")[0].fadeOut();
     };
-
-
 </script>
 </body>
 </html>
