@@ -1,5 +1,6 @@
 package com.passionpenguin.ditiezu
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -15,6 +16,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.passionpenguin.ditiezu.helper.Dialog
@@ -31,27 +33,27 @@ class ViewThread : AppCompatActivity() {
     private var loginState by Delegates.notNull<Boolean>()
     private var formhash by Delegates.notNull<String>()
 
+    private fun evaluate(code: String, @Nullable resultCallback: ((res: String) -> Unit)?) {
+        runOnUiThread {
+            webView.evaluateJavascript(code, resultCallback)
+        }
+    }
+
     inner class WebViewInterface {
         @JavascriptInterface
         fun load(page: Int) {
             HttpExt().retrievePage("http://www.ditiezu.com/thread-$tid-$page-1.html") {
-                runOnUiThread {
-                    webView.evaluateJavascript("onPageLoaded(`$it`, $page)", null)
-                }
+                evaluate("onPageLoaded(`$it`, $page)", null)
             }
         }
 
         @JavascriptInterface
         fun rate(pid: Int, index: Int) {
             println("$pid - $tid")
-            runOnUiThread {
-                webView.evaluateJavascript("onLoading()", null)
-            }
+            evaluate("onLoading()", null)
             var s =
                 HttpExt().asyncRetrievePage("http://www.ditiezu.com/forum.php?mod=misc&action=rate&tid=$tid&pid=$pid&infloat=yes&handlekey=rate&t=&inajax=1&ajaxtarget=fwin_content_rate")
-            runOnUiThread {
-                webView.evaluateJavascript("onLoaded()", null)
-            }
+            evaluate("onLoaded()", null)
 
             when (s) {
                 "Failed Retrieved" -> {
@@ -96,7 +98,7 @@ class ViewThread : AppCompatActivity() {
                                             Dialog.TIME_SHORT
                                         )
                                     } else {
-                                        webView.evaluateJavascript("onLoading()", null)
+                                        evaluate("onLoading()", null)
                                         val str = HttpExt().asyncPostPage(
                                             "http://www.ditiezu.com/forum.php?mod=misc&action=rate&ratesubmit=yes&infloat=yes&inajax=1",
                                             "formhash=$formhash&tid=${tid}&pid=${pid}&handlekey=rate&reason=${URLEncoder.encode(
@@ -104,7 +106,7 @@ class ViewThread : AppCompatActivity() {
                                                 "GBK"
                                             )}&score4=${v.findViewById<Spinner>(R.id.score).selectedItem}"
                                         )
-                                        webView.evaluateJavascript("onLoaded()", null)
+                                        evaluate("onLoaded()", null)
 
                                         val response = str.substring(
                                             str.indexOf("_rate('") + 33,
@@ -132,13 +134,13 @@ class ViewThread : AppCompatActivity() {
                                                     ViewThread,
                                                     Dialog.TIME_SHORT
                                                 )
-                                                webView.evaluateJavascript("onLoading()", null)
-                                                webView.evaluateJavascript(
+                                                evaluate("onLoading()", null)
+                                                evaluate(
                                                     "onReloadIndex(`${HttpExt().asyncRetrievePage(
                                                         "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&viewpid=$pid&inajax=1&ajaxtarget=post_$pid"
                                                     )}`, $index)", null
                                                 )
-                                                webView.evaluateJavascript("onLoaded()", null)
+                                                evaluate("onLoaded()", null)
                                             }
                                             str.contains("error") -> {
                                                 Dialog().tip(
@@ -261,12 +263,10 @@ class ViewThread : AppCompatActivity() {
 
     private fun retrieveThreadContent() {
         fun loadPage(threadId: Int = this.tid, pageId: Int = this.page) {
-            runOnUiThread {
-                webView.evaluateJavascript("onLoading()", null)
-            }
+            evaluate("onLoading()", null)
             HttpExt().retrievePage("http://www.ditiezu.com/thread-$threadId-$pageId-1.html") { result ->
                 runOnUiThread {
-                    webView.evaluateJavascript("onLoaded()", null)
+                    evaluate("onLoaded()", null)
                     if (result == "Failed Retrieved") {
                         Dialog().tip(
                             resources.getString(R.string.failed_retrieved),
@@ -291,7 +291,8 @@ class ViewThread : AppCompatActivity() {
                             Dialog.TIME_SHORT
                         )
                     }
-                    webView.evaluateJavascript("onPageLoaded(`$result`, $pageId)", null)
+                    println(pageId)
+                    evaluate("onPageLoaded(`$result`, $pageId)", null)
                 }
             }
         }
@@ -359,6 +360,7 @@ class ViewThread : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_thread)
@@ -412,7 +414,7 @@ class ViewThread : AppCompatActivity() {
                         startActivity(i)
                     }
                 }
-                view?.evaluateJavascript(
+                evaluate(
                     "window.open('$url')",
                     null
                 )
