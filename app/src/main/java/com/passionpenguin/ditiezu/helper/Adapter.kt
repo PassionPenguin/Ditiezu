@@ -22,10 +22,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.microsoft.appcenter.utils.AppCenterLog
 import com.passionpenguin.ditiezu.ForumDisplay
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.SearchResultActivity
 import com.passionpenguin.ditiezu.ViewThread
+import com.tencent.bugly.crashreport.BuglyLog
+import java.io.FileNotFoundException
 import java.io.IOException
 
 
@@ -122,14 +125,21 @@ class EmotionItemAdapter(
         holder: ViewHolder,
         position: Int
     ) {
-        Glide.with(activity)
-            .load(BitmapFactory.decodeStream(activity.assets.open("webHelper/smiley/$name/" + mItems[position].src)))
-            .fitCenter()
-            .error(
-                BitmapFactory.decodeStream(activity.assets.open("webHelper/smiley/xiaobai/1.gif"))
-                    .toDrawable(activity.resources)
-            )
-            .into(holder.image)
+        try {
+            Glide.with(activity)
+                .load(BitmapFactory.decodeStream(activity.assets.open("webHelper/smiley/$name/" + mItems[position].src)))
+                .fitCenter()
+                .error(
+                    BitmapFactory.decodeStream(activity.assets.open("webHelper/smiley/xiaobai/1.gif"))
+                        .toDrawable(activity.resources)
+                )
+                .into(holder.image)
+        } catch (fne: FileNotFoundException) {
+            AppCenterLog.error("[ADAPTER - SMILEY]", fne.toString())
+            BuglyLog.e("[ADAPTER - SMILEY]", fne.toString())
+        } catch (ignored: Exception) {
+
+        }
         holder.itemView.setOnClickListener {
             onClickListener(mItems[position].insert)
         }
