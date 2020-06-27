@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import com.microsoft.appcenter.utils.AppCenterLog
 import com.passionpenguin.ditiezu.R
 
 class Dialog {
@@ -30,7 +31,6 @@ class Dialog {
                 true
             )
             val window = activity.window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.argb(192, 123, 123, 123)
 
@@ -64,36 +64,59 @@ class Dialog {
         action: (layout: ViewGroup, popupWindow: PopupWindow) -> Unit
     ) {
         activity.runOnUiThread {
-            val popupContentView: View =
-                LayoutInflater.from(activity).inflate(R.layout.fragment_dialog, target, false)
-            val popupWindow = PopupWindow(
-                popupContentView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                true
-            )
-            val window = activity.window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = Color.argb(192, 123, 123, 123)
+            try {
+                val popupContentView: View =
+                    LayoutInflater.from(activity).inflate(R.layout.fragment_dialog, target, false)
+                val popupWindow = PopupWindow(
+                    popupContentView,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    true
+                )
+                val window = activity.window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.statusBarColor = Color.argb(192, 123, 123, 123)
 
-            popupWindow.showAtLocation(target, Gravity.CENTER, 0, 0)
-            popupWindow.animationStyle = android.R.style.Animation_Dialog
-            popupContentView.findViewById<TextView>(R.id.dialog_request).text = request
-            popupContentView.findViewById<TextView>(R.id.dialog_name).text = title
-            popupContentView.findViewById<TextView>(R.id.CancelButton)
-                .setTextColor(activity.resources.getColor(R.color.black, null))
-            popupContentView.findViewById<TextView>(R.id.dialogDescription).text = description
-            popupContentView.findViewById<TextView>(R.id.CancelButton).setOnClickListener {
-                popupWindow.dismiss()
-                window.statusBarColor = Color.TRANSPARENT
+                popupWindow.showAtLocation(target, Gravity.CENTER, 0, 0)
+                popupWindow.animationStyle = android.R.style.Animation_Dialog
+                popupContentView.findViewById<TextView>(R.id.dialog_request).text = request
+                popupContentView.findViewById<TextView>(R.id.dialog_name).text = title
+                popupContentView.findViewById<TextView>(R.id.CancelButton)
+                    .setTextColor(activity.resources.getColor(R.color.black, null))
+                popupContentView.findViewById<TextView>(R.id.dialogDescription).text = description
+                popupContentView.findViewById<TextView>(R.id.CancelButton).setOnClickListener {
+                    popupWindow.dismiss()
+                    window.statusBarColor = Color.TRANSPARENT
+                }
+                popupContentView.findViewById<TextView>(R.id.ConfirmButton).setOnClickListener {
+                    action(popupContentView as ViewGroup, popupWindow)
+                    popupWindow.dismiss()
+                    window.statusBarColor = Color.TRANSPARENT
+                }
+                popupWindow.update()
+            } catch (exp: Exception) {
+                AppCenterLog.error("[DIALOG]", exp.toString())
+
+                val view =
+                    LayoutInflater.from(activity).inflate(R.layout.fragment_tips, target, false)
+                view.findViewById<ImageView>(R.id.icon)
+                    .setImageResource(R.drawable.ic_baseline_close_24)
+                view.findViewById<ImageView>(R.id.icon).backgroundTintList =
+                    ColorStateList.valueOf(activity.resources.getColor(R.color.danger, null))
+                view.findViewById<TextView>(R.id.text).text = activity.getString(R.string.failed)
+                val popupWindow = PopupWindow(
+                    activity.findViewById(android.R.id.content),
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    true
+                )
+                val window = activity.window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
+                view.postDelayed({
+                    popupWindow.dismiss()
+                }, TIME_SHORT)
             }
-            popupContentView.findViewById<TextView>(R.id.ConfirmButton).setOnClickListener {
-                action(popupContentView as ViewGroup, popupWindow)
-                popupWindow.dismiss()
-                window.statusBarColor = Color.TRANSPARENT
-            }
-            popupWindow.update()
         }
     }
 
@@ -106,24 +129,48 @@ class Dialog {
         length: Long
     ) {
         activity.runOnUiThread {
-            val view = LayoutInflater.from(activity).inflate(R.layout.fragment_tips, target, false)
-            view.findViewById<ImageView>(R.id.icon).setImageResource(iconResource)
-            view.findViewById<ImageView>(R.id.icon).backgroundTintList =
-                ColorStateList.valueOf(activity.resources.getColor(iconColor, null))
-            view.findViewById<TextView>(R.id.text).text = text
-            val popupWindow = PopupWindow(
-                view,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                true
-            )
-            val window = activity.window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
-            view.postDelayed({
-                popupWindow.dismiss()
-            }, length)
+            try {
+                val view =
+                    LayoutInflater.from(activity).inflate(R.layout.fragment_tips, target, false)
+                view.findViewById<ImageView>(R.id.icon).setImageResource(iconResource)
+                view.findViewById<ImageView>(R.id.icon).backgroundTintList =
+                    ColorStateList.valueOf(activity.resources.getColor(iconColor, null))
+                view.findViewById<TextView>(R.id.text).text = text
+                val popupWindow = PopupWindow(
+                    view,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    true
+                )
+                val window = activity.window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
+                view.postDelayed({
+                    popupWindow.dismiss()
+                }, length)
+            } catch (exp: Exception) {
+                AppCenterLog.error("[DIALOG]", exp.toString())
+
+                val view =
+                    LayoutInflater.from(activity).inflate(R.layout.fragment_tips, target, false)
+                view.findViewById<ImageView>(R.id.icon)
+                    .setImageResource(R.drawable.ic_baseline_close_24)
+                view.findViewById<ImageView>(R.id.icon).backgroundTintList =
+                    ColorStateList.valueOf(activity.resources.getColor(R.color.danger, null))
+                view.findViewById<TextView>(R.id.text).text = activity.getString(R.string.failed)
+                val popupWindow = PopupWindow(
+                    activity.findViewById(android.R.id.content),
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    true
+                )
+                val window = activity.window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
+                view.postDelayed({
+                    popupWindow.dismiss()
+                }, TIME_SHORT)
+            }
         }
     }
 

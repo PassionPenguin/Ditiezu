@@ -56,7 +56,6 @@ class CategoryItemAdapter(val activity: Activity, items: List<CategoryItem>) :
         )
     }
 
-
     override fun getItemCount(): Int {
         return mItems.size
     }

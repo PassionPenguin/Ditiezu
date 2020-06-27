@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.microsoft.appcenter.utils.AppCenterLog
 import com.passionpenguin.ditiezu.R
 import com.passionpenguin.ditiezu.SearchResultActivity
 import com.passionpenguin.ditiezu.helper.Dialog
@@ -105,50 +106,54 @@ class ThreadItemFragment : Fragment() {
                     threadItemList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                             mDistance += dy
-                            when {
-                                mDistance == 0 -> {
-                                    actionBar.setBackgroundColor(
-                                        Color.argb(
-                                            0,
-                                            255,
-                                            255,
-                                            255
-                                        )
-                                    )
-                                    actionBar.findViewById<TextView>(R.id.appName)
-                                        .setTextColor(
-                                            Color.rgb(
+                            try {
+                                when {
+                                    mDistance == 0 -> {
+                                        actionBar.setBackgroundColor(
+                                            Color.argb(
+                                                0,
                                                 255,
                                                 255,
                                                 255
                                             )
                                         )
-                                }
-                                mDistance <= 204 -> {
-                                    actionBar.setBackgroundColor(
-                                        Color.argb(
-                                            (mDistance * 1f / 204 * 255).toInt(),
-                                            255,
-                                            255,
-                                            255
-                                        )
-                                    )
-                                    actionBar.findViewById<TextView>(R.id.appName)
-                                        .setTextColor(
-                                            Color.rgb(
-                                                ((204 - mDistance * 1f) / 204 * 255).toInt(),
-                                                ((204 - mDistance * 1f) / 204 * 255).toInt(),
-                                                ((204 - mDistance * 1f) / 204 * 255).toInt()
+                                        actionBar.findViewById<TextView>(R.id.appName)
+                                            .setTextColor(
+                                                Color.rgb(
+                                                    255,
+                                                    255,
+                                                    255
+                                                )
+                                            )
+                                    }
+                                    mDistance <= 204 -> {
+                                        actionBar.setBackgroundColor(
+                                            Color.argb(
+                                                (mDistance * 1f / 204 * 255).toInt(),
+                                                255,
+                                                255,
+                                                255
                                             )
                                         )
+                                        actionBar.findViewById<TextView>(R.id.appName)
+                                            .setTextColor(
+                                                Color.rgb(
+                                                    ((204 - mDistance * 1f) / 204 * 255).toInt(),
+                                                    ((204 - mDistance * 1f) / 204 * 255).toInt(),
+                                                    ((204 - mDistance * 1f) / 204 * 255).toInt()
+                                                )
+                                            )
+                                    }
+                                    else -> {
+                                        actionBar.setBackgroundColor(
+                                            Color.rgb(255, 255, 255)
+                                        )
+                                        actionBar.findViewById<TextView>(R.id.appName)
+                                            .setTextColor(Color.rgb(0, 0, 0))
+                                    }
                                 }
-                                else -> {
-                                    actionBar.setBackgroundColor(
-                                        Color.rgb(255, 255, 255)
-                                    )
-                                    actionBar.findViewById<TextView>(R.id.appName)
-                                        .setTextColor(Color.rgb(0, 0, 0))
-                                }
+                            } catch (exp: Exception) {
+                                AppCenterLog.error("[TIF]", exp.toString())
                             }
                         }
                     })

@@ -68,97 +68,99 @@ class NotificationsFragment : Fragment() {
             HttpExt().retrievePage(url) { s ->
                 val parser = Jsoup.parse(s)
                 activity?.let { activity ->
-                    when {
-                        s == "Failed Retrieved" -> {
-                            Dialog().tip(
-                                resources.getString(R.string.failed_retrieved),
-                                R.drawable.ic_baseline_close_24,
-                                R.color.danger,
-                                activity,
-                                activity.findViewById(R.id.MainActivity),
-                                Dialog.TIME_SHORT
-                            )
-                        }
-                        s.contains("用户登录") -> {
-                            Dialog().tip(
-                                resources.getString(R.string.login_tips),
-                                R.drawable.ic_baseline_close_24,
-                                R.color.danger,
-                                activity,
-                                activity.findViewById(R.id.MainActivity),
-                                Dialog.TIME_SHORT
-                            )
-                        }
-                        parser.select(".emp").text().contains("暂时没有新提醒") -> {
-                            Dialog().tip(
-                                resources.getString(R.string.no_notification),
-                                R.drawable.ic_baseline_close_24,
-                                R.color.primary500,
-                                activity,
-                                activity.findViewById(R.id.MainActivity),
-                                Dialog.TIME_SHORT
-                            )
-                        }
-                        else -> {
-                            val list = mutableListOf<NotificationItem>()
-                            parser.select("[notice]").forEach {
-                                try {
-                                    var quote: String? = null
-                                    if (!it.select(".quote").isEmpty()) {
-                                        quote = it.select(".quote").text()
-                                        it.select(".quote").remove()
-                                    }
-                                    var page = "1"
-                                    var tid: String
-                                    with(it.select(".ntc_body a:last-child")) {
-                                        when {
-                                            this.isEmpty() -> tid = "-1"
-                                            this.attr("href").contains("findpost") -> {
-                                                val result =
-                                                    HttpExt().retrieveRedirect(this.attr("href"))
-                                                tid = result?.get(0) ?: "1"
-                                                page = result?.get(1) ?: "1"
-                                            }
-                                            this.attr("href").contains("thread-") -> {
-                                                tid = this.attr("href").substring(
-                                                    this.attr("href").indexOf("thread-") + 7,
-                                                    this.attr("href")
-                                                        .indexOf(
-                                                            "-",
-                                                            this.attr("href")
-                                                                .indexOf("thread-") + 7
-                                                        )
-                                                )
-                                                page = "1"
-                                            }
-                                            else -> tid = "-1"
+                    if (NotificationList != null)
+                        when {
+                            s == "Failed Retrieved" -> {
+                                Dialog().tip(
+                                    resources.getString(R.string.failed_retrieved),
+                                    R.drawable.ic_baseline_close_24,
+                                    R.color.danger,
+                                    activity,
+                                    activity.findViewById(R.id.MainActivity),
+                                    Dialog.TIME_SHORT
+                                )
+                            }
+                            s.contains("用户登录") -> {
+                                Dialog().tip(
+                                    resources.getString(R.string.login_tips),
+                                    R.drawable.ic_baseline_close_24,
+                                    R.color.danger,
+                                    activity,
+                                    activity.findViewById(R.id.MainActivity),
+                                    Dialog.TIME_SHORT
+                                )
+                            }
+                            parser.select(".emp").text().contains("暂时没有新提醒") -> {
+                                Dialog().tip(
+                                    resources.getString(R.string.no_notification),
+                                    R.drawable.ic_baseline_close_24,
+                                    R.color.primary500,
+                                    activity,
+                                    activity.findViewById(R.id.MainActivity),
+                                    Dialog.TIME_SHORT
+                                )
+                            }
+                            else -> {
+                                val list = mutableListOf<NotificationItem>()
+                                parser.select("[notice]").forEach {
+                                    try {
+                                        var quote: String? = null
+                                        if (!it.select(".quote").isEmpty()) {
+                                            quote = it.select(".quote").text()
+                                            it.select(".quote").remove()
                                         }
-                                    }
+                                        var page = "1"
+                                        var tid: String
+                                        with(it.select(".ntc_body a:last-child")) {
+                                            when {
+                                                this.isEmpty() -> tid = "-1"
+                                                this.attr("href").contains("findpost") -> {
+                                                    val result =
+                                                        HttpExt().retrieveRedirect(this.attr("href"))
+                                                    tid = result?.get(0) ?: "1"
+                                                    page = result?.get(1) ?: "1"
+                                                }
+                                                this.attr("href").contains("thread-") -> {
+                                                    tid = this.attr("href").substring(
+                                                        this.attr("href").indexOf("thread-") + 7,
+                                                        this.attr("href")
+                                                            .indexOf(
+                                                                "-",
+                                                                this.attr("href")
+                                                                    .indexOf("thread-") + 7
+                                                            )
+                                                    )
+                                                    page = "1"
+                                                }
+                                                else -> tid = "-1"
+                                            }
+                                        }
 
-                                    list.add(
-                                        NotificationItem(
-                                            if (it.select("img").attr("src")
-                                                    .contains("systempm")
-                                            ) {
-                                                "http://www.ditiezu.com/" + it.select("img")
-                                                    .attr("src")
-                                            } else it.select("img").attr("src"),
-                                            it.select(".ntc_body").text(),
-                                            quote,
-                                            it.select("dt span").text(),
-                                            tid,
-                                            page
+                                        list.add(
+                                            NotificationItem(
+                                                if (it.select("img").attr("src")
+                                                        .contains("systempm")
+                                                ) {
+                                                    "http://www.ditiezu.com/" + it.select("img")
+                                                        .attr("src")
+                                                } else it.select("img").attr("src"),
+                                                it.select(".ntc_body").text(),
+                                                quote,
+                                                it.select("dt span").text(),
+                                                tid,
+                                                page
+                                            )
                                         )
-                                    )
-                                } catch (ignored: Exception) {
+                                    } catch (ignored: Exception) {
+                                    }
+                                }
+                                activity.runOnUiThread {
+                                    NotificationList.adapter =
+                                        NotificationItemAdapter(activity, list)
+                                    NotificationList.layoutManager = LinearLayoutManager(activity)
                                 }
                             }
-                            activity.runOnUiThread {
-                                NotificationList.adapter = NotificationItemAdapter(activity, list)
-                                NotificationList.layoutManager = LinearLayoutManager(activity)
-                            }
                         }
-                    }
                 }
             }
         }
