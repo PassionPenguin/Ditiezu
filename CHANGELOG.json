@@ -216,6 +216,12 @@
             "versionName": "v10.0 [ICE CREAM]",
             "versionDate": "Sun Jun 21 2020 19:24:36 GMT+0800 (中国标准时间)",
             "versionLog": "全面更新（下次更新将于2020/08/01后）"
+        },
+        {
+            "versionCode": 40,
+            "versionName": "v10.1 [ICE CREAM]",
+            "versionDate": "Sat Jun 27 2020 12:21:19 GMT+0800 (中国标准时间)",
+            "versionLog": "[Scheduled] Fix Bug"
         }
     ]
 }

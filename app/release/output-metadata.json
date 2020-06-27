@@ -10,8 +10,8 @@
     {
         "type": "SINGLE",
         "filters": [],
-        "versionCode": 39,
-        "versionName": "v10.0 [ICE CREAM]",
+        "versionCode": 40,
+        "versionName": "v10.1 [ICE CREAM]",
         "outputFile": "app-release.apk"
     }
   ]

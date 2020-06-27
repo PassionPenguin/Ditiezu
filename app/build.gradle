@@ -13,8 +13,8 @@ android {
     defaultConfig {
         applicationId "com.passionpenguin.ditiezu"
         targetSdkVersion 30
-        versionCode 39
-        versionName 'v10.0 [ICE CREAM]'
+        versionCode 40
+        versionName 'v10.1 [ICE CREAM]'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         minSdkVersion 23
