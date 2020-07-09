@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 MainActivity.postDelayed({
                     Dialog.tip(resources.getString(R.string.welcome_user, this.getString("user_name")),
                         R.drawable.ic_baseline_check_24,
-                        R.color.primary500,
+                        R.color.success,
                         this@MainActivity,
                         MainActivity,
                         Dialog.TIME_SHORT)

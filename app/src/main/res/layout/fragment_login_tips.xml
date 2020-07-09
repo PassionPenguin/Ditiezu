@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/login"
-            android:backgroundTint="@color/primary500"
+            android:backgroundTint="@color/primary_default"
             android:elevation="64dp" />
 
         <TextView

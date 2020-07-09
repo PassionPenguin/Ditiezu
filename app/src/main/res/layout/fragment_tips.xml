@@ -27,7 +27,7 @@
             android:src="@drawable/ic_baseline_check_24"
             android:contentDescription="@null"
             android:background="@drawable/circle"
-            android:backgroundTint="@color/primary500"
+            android:backgroundTint="@color/primary_default"
             android:tint="@color/white" />
 
         <TextView

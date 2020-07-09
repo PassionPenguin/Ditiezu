@@ -38,7 +38,7 @@
             android:layout_height="96dp"
             android:layout_gravity="center|top"
             android:indeterminate="true"
-            android:indeterminateTint="@color/primary500"
+            android:indeterminateTint="@color/primary_default"
             android:paddingTop="16dp" />
 
         <TextView

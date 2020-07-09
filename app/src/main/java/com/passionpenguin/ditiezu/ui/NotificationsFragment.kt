@@ -89,7 +89,7 @@ class NotificationsFragment : Fragment() {
                                 Dialog.tip(
                                     resources.getString(R.string.no_notification),
                                     R.drawable.ic_baseline_close_24,
-                                    R.color.primary500,
+                                    R.color.success,
                                     activity,
                                     activity.findViewById(R.id.MainActivity),
                                     Dialog.TIME_SHORT

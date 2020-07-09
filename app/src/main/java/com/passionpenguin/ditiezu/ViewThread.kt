@@ -141,7 +141,7 @@ class ViewThread : AppCompatActivity() {
                                                                 Dialog.tip(
                                                                     response,
                                                                     R.drawable.ic_baseline_check_24,
-                                                                    R.color.primary500,
+                                                                    R.color.success,
                                                                     this@ViewThread,
                                                                     ViewThread,
                                                                     Dialog.TIME_SHORT
@@ -323,7 +323,7 @@ class ViewThread : AppCompatActivity() {
                                             if (index == selectedUserGroup.size - 1) {
                                                 Dialog.tip(resources.getString(R.string.successful_and_fail_times, successfullyTimes, selectedUserGroup.size - successfullyTimes),
                                                     if (selectedUserGroup.size - successfullyTimes > 0) R.drawable.ic_baseline_close_24 else R.drawable.ic_baseline_check_24,
-                                                    if (selectedUserGroup.size - successfullyTimes > 0) R.color.danger else R.color.primary500,
+                                                    if (selectedUserGroup.size - successfullyTimes > 0) R.color.danger else R.color.success,
                                                     this@ViewThread, ViewThread, Dialog.TIME_LONG)
                                             }
                                         }

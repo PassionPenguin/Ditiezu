@@ -48,7 +48,7 @@
             android:paddingHorizontal="@dimen/_8"
             android:text="@string/rest_score"
             android:textSize="12sp"
-            android:textColor="@color/primary500"
+            android:textColor="@color/primary_default"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 

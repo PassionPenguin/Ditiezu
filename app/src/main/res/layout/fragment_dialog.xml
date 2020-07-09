@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4"
                 android:paddingHorizontal="@dimen/_32"
-                android:backgroundTint="@color/primary500"
+                android:backgroundTint="@color/primary_default"
                 android:textColor="@color/white"
                 android:text="@string/confirm"
                 tools:text="Confirm" />

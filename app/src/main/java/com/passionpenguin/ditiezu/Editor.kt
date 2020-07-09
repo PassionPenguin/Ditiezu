@@ -303,7 +303,7 @@ class Editor : AppCompatActivity() {
                         Dialog.tip(
                             response,
                             R.drawable.ic_baseline_check_24,
-                            R.color.primary500,
+                            R.color.success,
                             this@Editor,
                             Editor,
                             Dialog.TIME_SHORT
@@ -338,7 +338,7 @@ class Editor : AppCompatActivity() {
 
         fun setCompoundButtonColor(e: CompoundButton, isChecked: Boolean) {
             val color = R.color.grey
-            val colorChecked = R.color.primary500
+            val colorChecked = R.color.primary_default
             if (e.buttonDrawable != null)
                 e.buttonDrawable = tintDrawable(
                     e.buttonDrawable, getColorStateList(
