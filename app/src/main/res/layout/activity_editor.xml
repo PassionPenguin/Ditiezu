@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Editor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/action_bar_layout"
+        android:layout_marginTop="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/action_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/BackButton"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                    android:contentDescription="@null"
+                    android:layout_marginStart="@dimen/_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/editorTitle"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:ellipsize="end"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginStart="@dimen/_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/BackButton"
+                    app:layout_constraintRight_toLeftOf="@id/SubmitButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/SubmitButton"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_baseline_send_24"
+                    android:contentDescription="@null"
+                    android:layout_marginEnd="@dimen/_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/NewThreadComponent"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="@dimen/_16"
+                android:layout_marginTop="@dimen/_16"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/action_bar">
+
+                <Spinner
+                    android:id="@+id/typeSelector"
+                    android:layout_width="@dimen/_128"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:layout_gravity="center" />
+
+                <EditText
+                    android:id="@+id/subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="@null"
+                    android:inputType="text"
+                    android:background="@null"
+                    android:hint="@string/subject"
+                    android:textSize="14sp"
+                    android:paddingHorizontal="@dimen/_16" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/EditTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_256"
+        android:autofillHints="@null"
+        android:inputType="textLongMessage|textAutoCorrect|textCapSentences|textMultiLine"
+        android:hint="@string/tip_input_content"
+        android:gravity="top"
+        android:padding="@dimen/_16"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/EditTextInput"
+        tools:ignore="RelativeOverlap">
+
+        <RelativeLayout
+            android:id="@+id/permWrap"
+            android:background="@drawable/ripple"
+            android:backgroundTint="@color/surface"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:paddingVertical="@dimen/_4"
+            android:paddingHorizontal="@dimen/_16"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
+                android:text="@string/permission" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:text="@string/everyone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rewardsWrap"
+            android:background="@drawable/ripple"
+            android:backgroundTint="@color/surface"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:paddingVertical="@dimen/_4"
+            android:paddingHorizontal="@dimen/_16"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
+                android:text="@string/rewards" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:text="@string/none" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/signature"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:paddingVertical="@dimen/_4"
+            android:paddingHorizontal="@dimen/_16"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
+                android:text="@string/signature" />
+
+            <CheckBox
+                android:id="@+id/signatureInput"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:gravity="center_vertical"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:elevation="@dimen/_32"
+        android:background="@color/surface_secondary"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_16"
+            android:background="@color/surface"
+            android:layout_gravity="bottom">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/fontBoldToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_bold_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontItalicToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_italic_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontUnderlinedToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_underlined_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontStrikeThroughToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_strikethrough_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontQuoteToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_quote_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/emotionSelectorToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_emoji_emotions_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/imageSelectorToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_image_24"
+                    android:gravity="center" />
+
+                <CheckBox
+                    android:id="@+id/fontSizeToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_format_size_24"
+                    android:gravity="center" />
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/fontSizeSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:el_duration="500"
+                    app:el_expanded="false">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_1x"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_2x"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_3x"
+                            android:textSize="16sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_4x"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_5x"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_6x"
+                            android:textSize="22sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <RadioButton
+                            android:padding="0dp"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:text="@string/_7x"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+                    </LinearLayout>
+                </net.cachapa.expandablelayout.ExpandableLayout>
+
+                <CheckBox
+                    android:id="@+id/listToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="6dp"
+                    android:button="@drawable/ic_baseline_list_24"
+                    android:gravity="center" />
+
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/listSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:el_duration="500"
+                    app:el_expanded="false">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/bulletedList"
+                            android:layout_width="24dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="6dp"
+                            android:button="@drawable/ic_baseline_format_list_bulleted_24"
+                            android:gravity="center" />
+
+                        <RadioButton
+                            android:id="@+id/numberedList"
+                            android:layout_width="24dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="6dp"
+                            android:button="@drawable/ic_baseline_format_list_numbered_24"
+                            android:gravity="center" />
+                    </LinearLayout>
+                </net.cachapa.expandablelayout.ExpandableLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/emotionWrap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/emotionList"
+                android:paddingHorizontal="@dimen/_16"
+                android:paddingVertical="@dimen/_4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240" />
+
+            <HorizontalScrollView
+                android:id="@+id/emotionSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/emotionSelectorList"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/photoWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/openGallery"
+                android:text="@string/gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_16"
+                android:paddingVertical="@dimen/_8" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

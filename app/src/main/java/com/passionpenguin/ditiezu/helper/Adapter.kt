@@ -10,10 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.scale
 import androidx.core.view.get
@@ -31,6 +28,62 @@ import com.tencent.bugly.crashreport.BuglyLog
 import java.io.FileNotFoundException
 import java.io.IOException
 
+
+class User(
+    val uid: Int,
+    val name: String,
+    val avatarUrl: String,
+    var isChecked: Boolean = false
+)
+
+class InviteUserAdapter(val activity: Activity, items: List<User>) :
+    RecyclerView.Adapter<InviteUserAdapter.ViewHolder>() {
+
+    private val mInflater: LayoutInflater = LayoutInflater.from(activity)
+    private var mItems: List<User> = items
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return with(ViewHolder(
+            mInflater.inflate(
+                R.layout.item_invite,
+                parent,
+                false
+            )
+        )) {
+            this.setIsRecyclable(false)
+            this
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return mItems.size
+    }
+
+    class ViewHolder(view: View) :
+        RecyclerView.ViewHolder(view) {
+        var userName: TextView = view.findViewById(R.id.userName)
+        var avatar: ImageView = view.findViewById(R.id.avatar)
+        var checkbox: CheckBox = view.findViewById(R.id.checkbox)
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        holder.userName.text = mItems[position].name
+        Glide.with(activity)
+            .load(mItems[position].avatarUrl)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
+            .into(holder.avatar)
+        holder.checkbox.setOnCheckedChangeListener { _, b ->
+            mItems[position].isChecked = b
+        }
+        holder.avatar.setOnClickListener {
+            holder.checkbox.performClick()
+        }
+        holder.checkbox.isChecked = mItems[position].isChecked
+    }
+}
 
 class CategoryItem(
     val name: String,
@@ -426,7 +479,7 @@ class ThreadItemAdapter(
 
             holder.itemView.setOnLongClickListener {
                 if (position != 0) {
-                    TODO("MENU")
+//                    TODO("MENU")
                 }
                 true
             }
@@ -588,7 +641,7 @@ fun attachImageView(
         var bitmap: Bitmap?
         Thread {
             try {
-                HttpExt().openHttpUrlConn(URL) {
+                HttpExt.openHttpUrlConn(URL) {
                     bitmap = BitmapFactory.decodeStream(it)
                     val height = bitmap!!.height
                     val width = bitmap!!.width

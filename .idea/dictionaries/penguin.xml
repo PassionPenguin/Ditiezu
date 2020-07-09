@@ -3,7 +3,11 @@
     <words>
       <w>ajaxtarget</w>
       <w>cookietime</w>
+      <w>crashlytics</w>
       <w>ditiezu</w>
+      <w>fastloginfield</w>
+      <w>filedata</w>
+      <w>filetype</w>
       <w>formhash</w>
       <w>httpext</w>
       <w>inajax</w>
@@ -16,6 +20,7 @@
       <w>normalthread</w>
       <w>questionid</w>
       <w>reppid</w>
+      <w>scod</w>
       <w>searchsubmit</w>
       <w>seccode</w>
       <w>seccodeverify</w>
@@ -23,7 +28,9 @@
       <w>sightml</w>
       <w>smilieid</w>
       <w>srchtxt</w>
+      <w>succeedhandle</w>
       <w>typeid</w>
+      <w>useragent</w>
       <w>viewthread</w>
     </words>
   </dictionary>

@@ -38,7 +38,7 @@ public class StringUtils {
      * @return
      */
     public static int stringToInt(String str) {
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
+        Pattern pattern = Pattern.compile("^[-+]?[\\d]+$");
         return pattern.matcher(str).matches() ? Integer.valueOf(str) : 0;
     }
 

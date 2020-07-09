@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/_32"
+    android:background="@color/surface"
     tools:context=".ViewThread">
 
     <androidx.appcompat.widget.Toolbar
@@ -55,14 +56,5 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/action_bar_in_thread" />
-
-    <!--        <androidx.recyclerview.widget.RecyclerView-->
-    <!--            android:id="@+id/viewThread"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:divider="@null"-->
-    <!--            android:smoothScrollbar="true"-->
-    <!--            tools:listitem="@layout/item_reply_item" />-->
-    <!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

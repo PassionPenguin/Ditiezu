@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="PictureThemeWindowStyle">
         <item name="android:windowEnterAnimation">@anim/picture_anim_album_show</item>
         <item name="android:windowExitAnimation">@anim/picture_anim_album_dismiss</item>
@@ -158,10 +157,9 @@
     </style>
 
     <style name="Picture.Theme.Translucent" parent="Base.Theme.NoActionBar">
-        <item name="android:windowBackground">@color/picture_color_transparent
-        </item> <!-- 背景色透明度 -->
-        <item name="android:windowNoTitle">true</item><!-- 无标题 -->
-        <item name="android:windowIsTranslucent">true</item><!-- 半透明,设置为false无透明效果 -->
+        <item name="android:windowBackground">@color/picture_color_transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="Base.Theme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" />

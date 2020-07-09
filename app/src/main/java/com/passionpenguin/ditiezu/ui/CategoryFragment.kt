@@ -32,15 +32,9 @@ class CategoryFragment : Fragment() {
         activity?.let { activity ->
             with(actionBar.findViewById<EditText>(R.id.app_search_input)) {
                 this?.setOnKeyListener(object : View.OnKeyListener {
-                    override fun onKey(
-                        v: View?,
-                        keyCode: Int,
-                        event: KeyEvent
-                    ): Boolean {
+                    override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
                         val t = v as EditText
-                        if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && t.text.toString()
-                                .trim().isNotEmpty()
-                        ) {
+                        if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && t.text.toString().trim().isNotEmpty()) {
                             val i = Intent(context, SearchResultActivity::class.java)
                             i.putExtra("kw", t.text.toString())
                             context.startActivity(i)
@@ -51,8 +45,7 @@ class CategoryFragment : Fragment() {
                 })
             }
             actionBar.setBackgroundColor(resources.getColor(R.color.surface, null))
-            actionBarLayout.findViewById<TextView>(R.id.appName)
-                .setTextColor(resources.getColor(R.color.black, null))
+            actionBarLayout.findViewById<TextView>(R.id.appName).setTextColor(resources.getColor(R.color.black, null))
             val categoryContent = CategoryContent(activity)
             val list = categoryContent.categoryList
             val adapter = CategoryItemAdapter(activity, list)

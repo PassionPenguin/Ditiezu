@@ -21,6 +21,8 @@ import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItem
 import com.passionpenguin.ditiezu.helper.ThreadItemAdapter
 import kotlinx.android.synthetic.main.fragment_item_list.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 
 
@@ -37,15 +39,9 @@ class ThreadItemFragment : Fragment() {
         actionBar.elevation = resources.getDimension(R.dimen._16)
         with(actionBar.findViewById<EditText>(R.id.app_search_input)) {
             this?.setOnKeyListener(object : View.OnKeyListener {
-                override fun onKey(
-                    v: View?,
-                    keyCode: Int,
-                    event: KeyEvent
-                ): Boolean {
+                override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
                     val t = v as EditText
-                    if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && t.text.toString()
-                            .trim().isNotEmpty()
-                    ) {
+                    if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && t.text.toString().trim().isNotEmpty()) {
                         val i = Intent(context, SearchResultActivity::class.java)
                         i.putExtra("kw", t.text.toString())
                         context.startActivity(i)
@@ -68,17 +64,13 @@ class ThreadItemFragment : Fragment() {
                         val title = it.select(".blackvs")
                         threadListContent.add(
                             ThreadItem(
-                                author.attr("href").substring(
-                                    author.attr("href").indexOf("uid-") + 4,
-                                    author.attr("href").indexOf(".html")
-                                ).toInt(),
+                                author.attr("href").substring(author.attr("href").indexOf("uid-") + 4, author.attr("href").indexOf(".html")).toInt(),
                                 title.text(),
                                 "",
                                 authorName,
                                 "[$category]",
                                 "来自头条推荐",
-                                title.attr("href")
-                                    .substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
+                                title.attr("href").substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
                             )
                         )
                     }
@@ -109,47 +101,17 @@ class ThreadItemFragment : Fragment() {
                             try {
                                 when {
                                     mDistance == 0 -> {
-                                        actionBar.setBackgroundColor(
-                                            Color.argb(
-                                                0,
-                                                255,
-                                                255,
-                                                255
-                                            )
-                                        )
-                                        actionBar.findViewById<TextView>(R.id.appName)
-                                            .setTextColor(
-                                                Color.rgb(
-                                                    255,
-                                                    255,
-                                                    255
-                                                )
-                                            )
+                                        actionBar.setBackgroundColor(Color.argb(0, 255, 255, 255))
+                                        actionBar.findViewById<TextView>(R.id.appName).setTextColor(Color.rgb(255, 255, 255))
                                     }
                                     mDistance <= 204 -> {
-                                        actionBar.setBackgroundColor(
-                                            Color.argb(
-                                                (mDistance * 1f / 204 * 255).toInt(),
-                                                255,
-                                                255,
-                                                255
-                                            )
-                                        )
+                                        actionBar.setBackgroundColor(Color.argb((mDistance * 1f / 204 * 255).toInt(), 255, 255, 255))
                                         actionBar.findViewById<TextView>(R.id.appName)
-                                            .setTextColor(
-                                                Color.rgb(
-                                                    ((204 - mDistance * 1f) / 204 * 255).toInt(),
-                                                    ((204 - mDistance * 1f) / 204 * 255).toInt(),
-                                                    ((204 - mDistance * 1f) / 204 * 255).toInt()
-                                                )
-                                            )
+                                            .setTextColor(Color.rgb(((204 - mDistance * 1f) / 204 * 255).toInt(), ((204 - mDistance * 1f) / 204 * 255).toInt(), ((204 - mDistance * 1f) / 204 * 255).toInt()))
                                     }
                                     else -> {
-                                        actionBar.setBackgroundColor(
-                                            Color.rgb(255, 255, 255)
-                                        )
-                                        actionBar.findViewById<TextView>(R.id.appName)
-                                            .setTextColor(Color.rgb(0, 0, 0))
+                                        actionBar.setBackgroundColor(Color.rgb(255, 255, 255))
+                                        actionBar.findViewById<TextView>(R.id.appName).setTextColor(Color.rgb(0, 0, 0))
                                     }
                                 }
                             } catch (exp: Exception) {
@@ -159,14 +121,15 @@ class ThreadItemFragment : Fragment() {
                     })
                 }
 
-                activity.findViewById<LinearLayout>(R.id.LoadingAnimation)?.visibility =
-                    View.VISIBLE
-                HttpExt().retrievePage("http://www.ditiezu.com/") {
+                activity.findViewById<LinearLayout>(R.id.LoadingAnimation)?.visibility = View.VISIBLE
+
+                GlobalScope.launch {
+                    val it = HttpExt.retrievePage("http://www.ditiezu.com/")
                     activity.runOnUiThread {
                         activity.findViewById<ViewGroup>(R.id.MainActivity).postDelayed({
                             when (it) {
                                 "Failed Retrieved" -> {
-                                    Dialog().tip(
+                                    Dialog.tip(
                                         resources.getString(R.string.login_tips),
                                         R.drawable.ic_baseline_close_24,
                                         R.color.danger,
@@ -179,8 +142,7 @@ class ThreadItemFragment : Fragment() {
                                     processResult(it)
                                 }
                             }
-                            activity.findViewById<LinearLayout>(R.id.LoadingAnimation)?.visibility =
-                                View.GONE
+                            activity.findViewById<LinearLayout>(R.id.LoadingAnimation)?.visibility = View.GONE
                         }, 0)
                     }
                 }

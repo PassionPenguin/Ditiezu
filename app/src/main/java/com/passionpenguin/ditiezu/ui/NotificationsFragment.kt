@@ -20,6 +20,8 @@ import com.passionpenguin.ditiezu.helper.NotificationItem
 import com.passionpenguin.ditiezu.helper.NotificationItemAdapter
 import kotlinx.android.synthetic.main.fragment_action_bar.*
 import kotlinx.android.synthetic.main.fragment_notifications.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 
 class NotificationsFragment : Fragment() {
@@ -35,15 +37,9 @@ class NotificationsFragment : Fragment() {
 
         with(actionBar.findViewById<EditText>(R.id.app_search_input)) {
             this?.setOnKeyListener(object : View.OnKeyListener {
-                override fun onKey(
-                    v: View?,
-                    keyCode: Int,
-                    event: KeyEvent
-                ): Boolean {
+                override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
                     val t = v as EditText
-                    if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && t.text.toString()
-                            .trim().isNotEmpty()
-                    ) {
+                    if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && t.text.toString().trim().isNotEmpty()) {
                         val i = Intent(context, SearchResultActivity::class.java)
                         i.putExtra("kw", t.text.toString())
                         context.startActivity(i)
@@ -54,24 +50,23 @@ class NotificationsFragment : Fragment() {
             })
         }
         actionBar.setBackgroundColor(resources.getColor(R.color.surface, null))
-        actionBarLayout.findViewById<TextView>(R.id.appName)
-            .setTextColor(resources.getColor(R.color.black, null))
+        actionBarLayout.findViewById<TextView>(R.id.appName).setTextColor(resources.getColor(R.color.black, null))
 
         fun retriever(url: String) {
             try {
                 activity?.runOnUiThread {
-                    activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility =
-                        View.VISIBLE
+                    activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.VISIBLE
                 }
             } catch (ignored: Exception) {
             }
-            HttpExt().retrievePage(url) { s ->
+            GlobalScope.launch {
+                val s = HttpExt.retrievePage(url)
                 val parser = Jsoup.parse(s)
                 activity?.let { activity ->
                     if (NotificationList != null)
                         when {
                             s == "Failed Retrieved" -> {
-                                Dialog().tip(
+                                Dialog.tip(
                                     resources.getString(R.string.failed_retrieved),
                                     R.drawable.ic_baseline_close_24,
                                     R.color.danger,
@@ -81,7 +76,7 @@ class NotificationsFragment : Fragment() {
                                 )
                             }
                             s.contains("用户登录") -> {
-                                Dialog().tip(
+                                Dialog.tip(
                                     resources.getString(R.string.login_tips),
                                     R.drawable.ic_baseline_close_24,
                                     R.color.danger,
@@ -91,7 +86,7 @@ class NotificationsFragment : Fragment() {
                                 )
                             }
                             parser.select(".emp").text().contains("暂时没有新提醒") -> {
-                                Dialog().tip(
+                                Dialog.tip(
                                     resources.getString(R.string.no_notification),
                                     R.drawable.ic_baseline_close_24,
                                     R.color.primary500,
@@ -102,62 +97,55 @@ class NotificationsFragment : Fragment() {
                             }
                             else -> {
                                 val list = mutableListOf<NotificationItem>()
-                                parser.select("[notice]").forEach {
-                                    try {
-                                        var quote: String? = null
-                                        if (!it.select(".quote").isEmpty()) {
-                                            quote = it.select(".quote").text()
-                                            it.select(".quote").remove()
-                                        }
-                                        var page = "1"
-                                        var tid: String
-                                        with(it.select(".ntc_body a:last-child")) {
-                                            when {
-                                                this.isEmpty() -> tid = "-1"
-                                                this.attr("href").contains("findpost") -> {
-                                                    val result =
-                                                        HttpExt().retrieveRedirect(this.attr("href"))
-                                                    tid = result?.get(0) ?: "1"
-                                                    page = result?.get(1) ?: "1"
-                                                }
-                                                this.attr("href").contains("thread-") -> {
-                                                    tid = this.attr("href").substring(
-                                                        this.attr("href").indexOf("thread-") + 7,
-                                                        this.attr("href")
-                                                            .indexOf(
-                                                                "-",
-                                                                this.attr("href")
-                                                                    .indexOf("thread-") + 7
-                                                            )
-                                                    )
-                                                    page = "1"
-                                                }
-                                                else -> tid = "-1"
+                                GlobalScope.launch {
+                                    parser.select("[notice]").forEach {
+                                        try {
+                                            var quote: String? = null
+                                            if (!it.select(".quote").isEmpty()) {
+                                                quote = it.select(".quote").text()
+                                                it.select(".quote").remove()
                                             }
-                                        }
+                                            var page = "1"
+                                            var tid: String
+                                            with(it.select(".ntc_body a:last-child")) {
+                                                when {
+                                                    this.isEmpty() -> tid = "-1"
+                                                    this.attr("href").contains("findpost") -> {
+                                                        val result = HttpExt.retrieveRedirect(this.attr("href"))
+                                                        tid = result?.get(0) ?: "1"
+                                                        page = result?.get(1) ?: "1"
+                                                    }
+                                                    this.attr("href").contains("thread-") -> {
+                                                        tid = this.attr("href").substring(
+                                                            this.attr("href").indexOf("thread-") + 7,
+                                                            this.attr("href").indexOf("-", this.attr("href").indexOf("thread-") + 7)
+                                                        )
+                                                        page = "1"
+                                                    }
+                                                    else -> tid = "-1"
+                                                }
+                                            }
 
-                                        list.add(
-                                            NotificationItem(
-                                                if (it.select("img").attr("src")
-                                                        .contains("systempm")
-                                                ) {
-                                                    "http://www.ditiezu.com/" + it.select("img")
-                                                        .attr("src")
-                                                } else it.select("img").attr("src"),
-                                                it.select(".ntc_body").text(),
-                                                quote,
-                                                it.select("dt span").text(),
-                                                tid,
-                                                page
+                                            list.add(
+                                                NotificationItem(
+                                                    if (it.select("img").attr("src").contains("systempm")) {
+                                                        "http://www.ditiezu.com/" + it.select("img").attr("src")
+                                                    } else it.select("img").attr("src"),
+                                                    it.select(".ntc_body").text(),
+                                                    quote,
+                                                    it.select("dt span").text(),
+                                                    tid,
+                                                    page
+                                                )
                                             )
-                                        )
-                                    } catch (ignored: Exception) {
+                                        } catch (ignored: Exception) {
+                                        }
                                     }
-                                }
-                                activity.runOnUiThread {
-                                    NotificationList.adapter =
-                                        NotificationItemAdapter(activity, list)
-                                    NotificationList.layoutManager = LinearLayoutManager(activity)
+                                    activity.runOnUiThread {
+                                        NotificationList.adapter =
+                                            NotificationItemAdapter(activity, list)
+                                        NotificationList.layoutManager = LinearLayoutManager(activity)
+                                    }
                                 }
                             }
                         }

@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.microsoft.appcenter.utils.AppCenterLog
 import com.passionpenguin.ditiezu.R
 
-class Dialog {
+internal object Dialog {
     fun create(
         activity: Activity,
         target: ViewGroup,
@@ -31,10 +31,8 @@ class Dialog {
                 true
             )
             val window = activity.window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = Color.argb(192, 123, 123, 123)
 
-            popupWindow.showAtLocation(target, Gravity.CENTER, 0, 0)
+            popupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0)
             popupWindow.animationStyle = android.R.style.Animation_Dialog
             popupContentView.findViewById<TextView>(R.id.dialog_request).text = request
             popupContentView.findViewById<TextView>(R.id.dialog_name).text = title
@@ -74,10 +72,8 @@ class Dialog {
                     true
                 )
                 val window = activity.window
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = Color.argb(192, 123, 123, 123)
 
-                popupWindow.showAtLocation(target, Gravity.CENTER, 0, 0)
+                popupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0)
                 popupWindow.animationStyle = android.R.style.Animation_Dialog
                 popupContentView.findViewById<TextView>(R.id.dialog_request).text = request
                 popupContentView.findViewById<TextView>(R.id.dialog_name).text = title
@@ -146,7 +142,10 @@ class Dialog {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
                 view.postDelayed({
-                    popupWindow.dismiss()
+                    view.animate().alpha(0F).setDuration(250).start()
+                    view.postDelayed({
+                        popupWindow.dismiss()
+                    }, 250)
                 }, length)
             } catch (exp: Exception) {
                 AppCenterLog.error("[DIALOG]", exp.toString())
@@ -168,14 +167,15 @@ class Dialog {
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
                 view.postDelayed({
-                    popupWindow.dismiss()
-                }, TIME_SHORT)
+                    view.animate().alpha(0F).setDuration(250).start()
+                    view.postDelayed({
+                        popupWindow.dismiss()
+                    }, 250)
+                }, length)
             }
         }
     }
 
-    companion object {
-        val TIME_SHORT: Long get() = 1000
-        val TIME_LONG: Long get() = 2000
-    }
+    val TIME_SHORT: Long get() = 1000
+    val TIME_LONG: Long get() = 2000
 }

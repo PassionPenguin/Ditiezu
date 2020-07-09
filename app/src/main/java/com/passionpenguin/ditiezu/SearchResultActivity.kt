@@ -1,3 +1,5 @@
+@file:Suppress("BlockingMethodInNonBlockingContext")
+
 package com.passionpenguin.ditiezu
 
 import android.content.Context
@@ -16,6 +18,8 @@ import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItem
 import com.passionpenguin.ditiezu.helper.ThreadItemAdapter
 import kotlinx.android.synthetic.main.activity_search_result.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import java.net.URLEncoder
 
@@ -28,11 +32,10 @@ class SearchResultActivity : AppCompatActivity() {
 
         val i = intent.extras
         if (i?.getString("kw", null) == null) finish()
-        var kw = i?.getString("kw", "霜羽")
+        var kw = i?.getString("kw", "")
 
-        val formhash =
-            Jsoup.parse(HttpExt().asyncRetrievePage("http://www.ditiezu.com/search.php?mod=forum"))
-                .select("[name=\"formhash\"]").attr("value")
+        var formhash: String = ""
+        GlobalScope.launch { Jsoup.parse(HttpExt.retrievePage("http://www.ditiezu.com/search.php?mod=forum")).select("[name=\"formhash\"]").attr("value") }
 
         fun processResult(result: String) {
             val parser = Jsoup.parse(result)
@@ -91,69 +94,73 @@ class SearchResultActivity : AppCompatActivity() {
 
         fun search() {
             LoadingMaskContainer.visibility = View.VISIBLE
-            val s = HttpExt().asyncPostPage(
-                "http://ditiezu.com/search.php?mod=forum",
-                "formhash=$formhash&srchtxt=" + URLEncoder.encode(
-                    kw.toString(),
-                    "GBK"
-                ) + "&searchsubmit=yes"
-            )
-            when {
-                s == "Failed Retrieved" -> {
-                    Dialog().tip(
-                        resources.getString(R.string.failed_retrieved),
-                        R.drawable.ic_baseline_close_24,
-                        R.color.danger,
-                        this@SearchResultActivity,
-                        SearchResultActivity,
-                        Dialog.TIME_SHORT
-                    )
-                }
-                s.contains("用户登录") -> {
-                    Dialog().tip(
-                        resources.getString(R.string.login_tips),
-                        R.drawable.ic_baseline_close_24,
-                        R.color.danger,
-                        this@SearchResultActivity,
-                        SearchResultActivity,
-                        Dialog.TIME_SHORT
-                    )
-                }
-                s.contains("只能进行一次搜索") -> {
-                    Dialog().tip(
-                        resources.getString(R.string.search_15s),
-                        R.drawable.ic_baseline_close_24,
-                        R.color.danger,
-                        this@SearchResultActivity,
-                        SearchResultActivity,
-                        Dialog.TIME_SHORT
-                    )
-                }
-                s.contains("站点设置每分钟系统最多") -> {
-                    Dialog().tip(
-                        resources.getString(R.string.search_system_restriction),
-                        R.drawable.ic_baseline_close_24,
-                        R.color.danger,
-                        this@SearchResultActivity,
-                        SearchResultActivity,
-                        Dialog.TIME_SHORT
-                    )
-                }
-                s.contains("没有找到匹配结果") -> {
-                    Dialog().tip(
-                        resources.getString(R.string.keyword_not_match, kw),
-                        R.drawable.ic_baseline_close_24,
-                        R.color.danger,
-                        this@SearchResultActivity,
-                        SearchResultActivity,
-                        Dialog.TIME_SHORT
-                    )
-                }
-                else -> {
-                    processResult(s)
+            GlobalScope.launch {
+                val s = HttpExt.postPage(
+                    "http://ditiezu.com/search.php?mod=forum",
+                    "formhash=$formhash&srchtxt=" + URLEncoder.encode(
+                        kw.toString(),
+                        "GBK"
+                    ) + "&searchsubmit=yes"
+                )
+                runOnUiThread {
+                    when {
+                        s == "Failed Retrieved" -> {
+                            Dialog.tip(
+                                resources.getString(R.string.failed_retrieved),
+                                R.drawable.ic_baseline_close_24,
+                                R.color.danger,
+                                this@SearchResultActivity,
+                                SearchResultActivity,
+                                Dialog.TIME_SHORT
+                            )
+                        }
+                        s.contains("用户登录") -> {
+                            Dialog.tip(
+                                resources.getString(R.string.login_tips),
+                                R.drawable.ic_baseline_close_24,
+                                R.color.danger,
+                                this@SearchResultActivity,
+                                SearchResultActivity,
+                                Dialog.TIME_SHORT
+                            )
+                        }
+                        s.contains("只能进行一次搜索") -> {
+                            Dialog.tip(
+                                resources.getString(R.string.search_15s),
+                                R.drawable.ic_baseline_close_24,
+                                R.color.danger,
+                                this@SearchResultActivity,
+                                SearchResultActivity,
+                                Dialog.TIME_SHORT
+                            )
+                        }
+                        s.contains("站点设置每分钟系统最多") -> {
+                            Dialog.tip(
+                                resources.getString(R.string.search_system_restriction),
+                                R.drawable.ic_baseline_close_24,
+                                R.color.danger,
+                                this@SearchResultActivity,
+                                SearchResultActivity,
+                                Dialog.TIME_SHORT
+                            )
+                        }
+                        s.contains("没有找到匹配结果") -> {
+                            Dialog.tip(
+                                resources.getString(R.string.keyword_not_match, kw),
+                                R.drawable.ic_baseline_close_24,
+                                R.color.danger,
+                                this@SearchResultActivity,
+                                SearchResultActivity,
+                                Dialog.TIME_SHORT
+                            )
+                        }
+                        else -> {
+                            processResult(s)
+                        }
+                    }
+                    LoadingMaskContainer.visibility = View.GONE
                 }
             }
-            LoadingMaskContainer.visibility = View.GONE
         }
         search()
 

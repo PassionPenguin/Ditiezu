@@ -1,3 +1,5 @@
+@file:Suppress("BlockingMethodInNonBlockingContext")
+
 package com.passionpenguin.ditiezu.helper
 
 import android.app.Activity
@@ -13,19 +15,48 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.NetworkOnMainThreadException
 import android.util.Log
 import android.webkit.CookieManager
 import android.widget.Toast
+import androidx.annotation.WorkerThread
 import androidx.core.content.FileProvider
 import com.passionpenguin.ditiezu.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.bither.util.NativeUtil
+import org.jsoup.Jsoup
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
 
-class HttpExt {
+internal object HttpExt {
+    @WorkerThread
+    @Throws(NetworkOnMainThreadException::class)
+    private fun openConn(url: String, retrieveAsDesktopPage: Boolean): HttpURLConnection {
+        val urlConnection = URL(url).openConnection() as HttpURLConnection
+        urlConnection.setRequestProperty("Cookie", CookieManager.getInstance().getCookie(url) ?: "")
+        urlConnection.setRequestProperty("Referer", "http://www.ditiezu.com")
+        urlConnection.setRequestProperty("Origin", "http://www.ditiezu.com")
+        urlConnection.setRequestProperty("Host", "www.ditiezu.com")
+        urlConnection.setRequestProperty("DNT", "1")
+        urlConnection.setRequestProperty("Proxy-Connection", "keep-alive")
+        if (retrieveAsDesktopPage)
+            urlConnection.setRequestProperty("User-Agent", USERAGENT_DESKTOP)
+        return urlConnection
+    }
+
+    @WorkerThread
+    private fun storeCookie(urlConnection: HttpURLConnection) {
+        with(urlConnection.headerFields[SET_COOKIE]) {
+            this?.forEach {
+                CookieManager.getInstance().setCookie(urlConnection.url.toString(), it)
+            }
+        }
+    }
+
     @Throws(IOException::class)
     fun openHttpUrlConn(strURL: String, returnVal: (inputStream: InputStream?) -> Unit) {
         val t = Thread {
@@ -33,7 +64,7 @@ class HttpExt {
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty(
                 "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
+                USERAGENT_DESKTOP
             )
             conn.setRequestProperty("Cookie", CookieManager.getInstance().getCookie(strURL))
             try {
@@ -48,77 +79,22 @@ class HttpExt {
         t.start()
     }
 
-    @Throws(IOException::class)
-    fun asyncOpenHttpUrlConn(strURL: String): InputStream {
-        var i: InputStream = "null".byteInputStream()
-        val t = Thread {
-            val url = URL(strURL)
-            val conn = url.openConnection() as HttpURLConnection
-            conn.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-            )
-            conn.setRequestProperty("Cookie", CookieManager.getInstance().getCookie(strURL))
-            try {
-                conn.requestMethod = "GET"
-                conn.connect()
-                if (conn.responseCode == HttpURLConnection.HTTP_OK) {
-                    i = conn.inputStream
-                }
-            } catch (ex: Exception) {
-            }
-        }
-        t.start()
-        t.join()
-        return i
-    }
+    suspend fun retrievePage(
+        url: String, retrieveAsDesktopPage: Boolean = true, charsetName: String = "GBK",
+        customHeader: Array<HttpHeader> = arrayOf()
+    ): String {
+        /**
+         * [Function] retrievePage
+         * @param url: String -> Remote URL
+         * @param retrieveAsDesktopPage: Boolean -> if true: use USERAGENT_DESKTOP as User-Agent
+         * @param charsetName: String -> Charset Name for input stream reader
+         * @param customHeader: Array<HttpHeader> -> Headers that will be sent with the request
+         */
 
-    fun retrievePage(url: String, then: (res: String) -> Unit) {
-        val urlConnection = URL(url).openConnection() as HttpURLConnection
-        val cookieManager = CookieManager.getInstance()
-        var cookie = cookieManager.getCookie(url)
-
-        Thread {
-            if (cookie == null)
-                cookie = ""
-
-            urlConnection.setRequestProperty(
-                "Cookie",
-                cookie
-            )
-
-            urlConnection.requestMethod = "POST"
-            urlConnection.setRequestProperty(
-                "Referer",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Content-Type",
-                "application/x-www-form-urlencoded;"
-            )
-            urlConnection.setRequestProperty(
-                "Origin",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Host",
-                "www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-            )
-            urlConnection.setRequestProperty(
-                "DNT",
-                "1"
-            )
-            urlConnection.setRequestProperty(
-                "Proxy-Connection",
-                "keep-alive"
-            )
-
-            var result: String? = null
-
+        return withContext(Dispatchers.IO) {
+            var result: String?
+            val urlConnection = openConn(url, retrieveAsDesktopPage)
+            urlConnection.requestMethod = "GET"
             try {
                 val inputStream: InputStream = urlConnection.inputStream
                 val reader = InputStreamReader(inputStream, "GBK")
@@ -129,146 +105,72 @@ class HttpExt {
                     str = reader.readText()
                 }
                 result = res
+
+                storeCookie(urlConnection)
             } catch (e: Exception) {
                 result = "Failed Retrieved"
                 Log.i("HttpExt Exception", e.toString())
             } finally {
                 urlConnection.disconnect()
-                if (result == null)
-                    then("Failed Retrieved")
-                else then(result)
             }
-        }.start()
-
+            result ?: "Failed Retrieved"
+        }
     }
 
-    fun postPage(
+    suspend fun retrieveBitmap(url: String, retrieveAsDesktopPage: Boolean = true): Bitmap? {
+        /**
+         * [Function] retrieveBitmap
+         * @param url: String -> Remote URL
+         * @param retrieveAsDesktopPage: Boolean -> if true: use USERAGENT_DESKTOP as User-Agent
+         */
+
+        return withContext(Dispatchers.IO) {
+            val urlConnection = openConn(url, retrieveAsDesktopPage)
+            urlConnection.requestMethod = "GET"
+            storeCookie(urlConnection)
+            try {
+                BitmapFactory.decodeStream(urlConnection.inputStream)
+            } catch (ignored: Exception) {
+                println(ignored)
+                null
+            }
+        }
+    }
+
+    @Throws(FileNotFoundException::class, IOException::class)
+    fun getBitmapFormUri(ac: Activity, uri: Uri?): Bitmap? {
+        var input = ac.contentResolver.openInputStream(uri!!)
+        val onlyBoundsOptions = BitmapFactory.Options()
+        onlyBoundsOptions.inJustDecodeBounds = true
+        onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888 //optional
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
+        input!!.close()
+        val originalWidth = onlyBoundsOptions.outWidth
+        val originalHeight = onlyBoundsOptions.outHeight
+        if (originalWidth == -1 || originalHeight == -1) return null
+        input = ac.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(input, null, null)
+        input!!.close()
+        return bitmap
+    }
+
+    suspend fun postPage(
         url: String,
         params: String,
-        followRedirected: Boolean = true,
-        returnVal: (res: String) -> Unit
-    ) {
-        val urlConnection = URL(url).openConnection() as HttpURLConnection
-        urlConnection.instanceFollowRedirects = followRedirected
-        val cookieManager = CookieManager.getInstance()
-        var cookie = cookieManager.getCookie(url)
-
-        val thread = Thread {
-            var result = ""
-            if (cookie == null)
-                cookie = ""
-
-            urlConnection.setRequestProperty(
-                "Cookie",
-                cookie
-            )
-
-            urlConnection.requestMethod = "POST"
-            urlConnection.setRequestProperty(
-                "Referer",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Content-Type",
-                "application/x-www-form-urlencoded;"
-            )
-            urlConnection.setRequestProperty(
-                "Origin",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Host",
-                "www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-            )
-            urlConnection.setRequestProperty(
-                "DNT",
-                "1"
-            )
-            urlConnection.setRequestProperty(
-                "Proxy-Connection",
-                "keep-alive"
-            )
-            urlConnection.doOutput = true
-            urlConnection.outputStream.write(params.toByteArray(Charset.forName("GBK")))
-
-            try {
-                val inputStream: InputStream = urlConnection.inputStream
-                val reader = InputStreamReader(inputStream, "GBK")
-                var str = reader.readText()
-                var res = ""
-                while (str != "") {
-                    res += str
-                    str = reader.readText()
-                }
-                result = res
-            } catch (e: Exception) {
-                result = "Failed Retrieved"
-                Log.i("HttpExt Exception", e.toString())
-            } finally {
-                urlConnection.disconnect()
+        customHeader: Array<HttpHeader> = arrayOf(),
+        retrieveAsDesktopPage: Boolean = true,
+        charsetName: String = "GBK",
+        followRedirected: Boolean = true
+    ): String {
+        return withContext(Dispatchers.IO) {
+            var result: String?
+            val urlConnection = openConn(url, retrieveAsDesktopPage)
+            customHeader.forEach {
+                urlConnection.setRequestProperty(it.key, it.value)
             }
-
-            returnVal(
-                when (urlConnection.responseCode) {
-                    in 300..399 -> "succeed, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
-                    in 400..599 -> "error, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
-                    else -> result
-                }
-            )
-        }
-        thread.start()
-    }
-
-    fun asyncRetrievePage(url: String, charsetName: String = "GBK"): String {
-        val urlConnection = URL(url).openConnection() as HttpURLConnection
-        val cookieManager = CookieManager.getInstance()
-        var cookie = cookieManager.getCookie(url)
-
-        var result = ""
-
-        val thread = Thread {
-            if (cookie == null)
-                cookie = ""
-
-            urlConnection.setRequestProperty(
-                "Cookie",
-                cookie
-            )
-
             urlConnection.requestMethod = "POST"
-            urlConnection.setRequestProperty(
-                "Referer",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Content-Type",
-                "application/x-www-form-urlencoded;"
-            )
-            urlConnection.setRequestProperty(
-                "Origin",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Host",
-                "www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-            )
-            urlConnection.setRequestProperty(
-                "DNT",
-                "1"
-            )
-            urlConnection.setRequestProperty(
-                "Proxy-Connection",
-                "keep-alive"
-            )
-
+            urlConnection.doOutput = true
+            urlConnection.outputStream.write(params.toByteArray(Charset.forName(charsetName)))
             try {
                 val inputStream: InputStream = urlConnection.inputStream
                 val reader = InputStreamReader(inputStream, charsetName)
@@ -279,194 +181,57 @@ class HttpExt {
                     str = reader.readText()
                 }
                 result = res
+
+                storeCookie(urlConnection)
             } catch (e: Exception) {
                 result = "Failed Retrieved"
                 Log.i("HttpExt Exception", e.toString())
             } finally {
                 urlConnection.disconnect()
             }
+            result ?: "Failed Retrieved"
         }
-        thread.start()
-        thread.join()
-        return result
     }
 
-    fun asyncRetrieveNonForumPage(url: String, charsetName: String = "UTF-8"): String {
-        val urlConnection = URL(url).openConnection() as HttpURLConnection
-        val cookieManager = CookieManager.getInstance()
-        var cookie = cookieManager.getCookie(url)
-
-        var result = ""
-
-        val thread = Thread {
-            if (cookie == null)
-                cookie = ""
-
-            urlConnection.setRequestProperty(
-                "Cookie",
-                cookie
-            )
-
-            try {
-                val inputStream: InputStream = urlConnection.inputStream
-                val reader = InputStreamReader(inputStream, charsetName)
-                var str = reader.readText()
-                var res = ""
-                while (str != "") {
-                    res += str
-                    str = reader.readText()
+    suspend fun checkLogin(activity: Activity): Boolean {
+        return withContext(Dispatchers.IO) {
+            when (Jsoup.parse(retrievePage("http://www.ditiezu.com/forum.php?gid=149")).select("#lsform").isEmpty()) {
+                true -> {
+                    Preference(activity).edit("login_state", true)
+                    true
                 }
-                result = res
-            } catch (e: Exception) {
-                result = "Failed Retrieved"
-                Log.i("HttpExt Exception", e.toString())
-            } finally {
-                urlConnection.disconnect()
-            }
-        }
-        thread.start()
-        thread.join()
-        return result
-    }
-
-    fun asyncPostPage(url: String, params: String, followRedirected: Boolean = true): String {
-        val urlConnection = URL(url).openConnection() as HttpURLConnection
-        urlConnection.instanceFollowRedirects = followRedirected
-        val cookieManager = CookieManager.getInstance()
-        var cookie = cookieManager.getCookie(url)
-
-        var result = ""
-
-        val thread = Thread {
-            if (cookie == null)
-                cookie = ""
-
-            urlConnection.setRequestProperty(
-                "Cookie",
-                cookie
-            )
-
-            urlConnection.requestMethod = "POST"
-            urlConnection.setRequestProperty(
-                "Referer",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Content-Type",
-                "application/x-www-form-urlencoded;"
-            )
-            urlConnection.setRequestProperty(
-                "Origin",
-                "http://www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "Host",
-                "www.ditiezu.com"
-            )
-            urlConnection.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-            )
-            urlConnection.setRequestProperty(
-                "DNT",
-                "1"
-            )
-            urlConnection.setRequestProperty(
-                "Proxy-Connection",
-                "keep-alive"
-            )
-            urlConnection.doOutput = true
-            urlConnection.outputStream.write(params.toByteArray(Charset.forName("GBK")))
-
-            try {
-                val inputStream: InputStream = urlConnection.inputStream
-                val reader = InputStreamReader(inputStream, "GBK")
-                var str = reader.readText()
-                var res = ""
-                while (str != "") {
-                    res += str
-                    str = reader.readText()
+                else -> {
+                    Preference(activity).edit("login_state", false)
+                    false
                 }
-                result = res
-            } catch (e: Exception) {
-                result = "Failed Retrieved"
-                Log.i("HttpExt Exception", e.toString())
-            } finally {
-                urlConnection.disconnect()
             }
         }
-        thread.start()
-        thread.join()
-        return when (urlConnection.responseCode) {
-            in 300..399 -> "succeed, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
-            in 400..599 -> "error, '${urlConnection.responseCode} ${urlConnection.responseMessage}'"
-            else -> result
-        }
     }
 
-    fun checkLogin(): Boolean {
-        return asyncRetrievePage("http://www.ditiezu.com/search.php?mod=forum&srchfrom=4000&searchsubmit=yes").indexOf(
-            "抱歉，您所在的用户组(地铁游客)无法进行此操作"
-        ) == -1
-    }
-
-    fun retrieveRedirect(url: String): Array<String>? {
-        val c = URL(url).openConnection() as HttpURLConnection
-        c.instanceFollowRedirects = false
-        var result = arrayOf("-1", "1")
-        val t = Thread {
-            c.requestMethod = "POST"
-            c.setRequestProperty(
-                "Cookie",
-                CookieManager.getInstance().getCookie(url)
-            )
-            c.setRequestProperty(
-                "Referer",
-                "http://www.ditiezu.com"
-            )
-            c.setRequestProperty(
-                "Content-Type",
-                "application/x-www-form-urlencoded;"
-            )
-            c.setRequestProperty(
-                "Origin",
-                "http://www.ditiezu.com"
-            )
-            c.setRequestProperty(
-                "Host",
-                "www.ditiezu.com"
-            )
-            c.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-            )
-            c.setRequestProperty(
-                "DNT",
-                "1"
-            )
-            c.setRequestProperty(
-                "Proxy-Connection",
-                "keep-alive"
-            )
-            val it: String = c.getHeaderField("Location") ?: ""
-            it.let {
-                result =
-                    if (c.responseCode == HttpURLConnection.HTTP_MOVED_PERM || c.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+    suspend fun retrieveRedirect(url: String, retrieveAsDesktopPage: Boolean = true, charsetName: String = "GBK"): Array<String>? {
+        return withContext(Dispatchers.IO) {
+            var result: Array<String>?
+            val urlConnection = openConn(url, retrieveAsDesktopPage)
+            urlConnection.requestMethod = "GET"
+            urlConnection.instanceFollowRedirects = false
+            try {
+                val l = urlConnection.getHeaderField("Location") ?: ""
+                result = l.let {
+                    if (urlConnection.responseCode == HttpURLConnection.HTTP_MOVED_PERM || urlConnection.responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
                         arrayOf(
-                            it.substring(
-                                it.indexOf("tid=") + 4,
-                                it.indexOf("&", it.indexOf("tid=") + 4)
-                            ),
-                            it.substring(
-                                it.indexOf("page=") + 5, it.indexOf("#", it.indexOf("page=") + 5)
-                            )
+                            it.substring(it.indexOf("tid=") + 4, it.indexOf("&", it.indexOf("tid=") + 4)),
+                            it.substring(it.indexOf("page=") + 5, it.indexOf("#", it.indexOf("page=") + 5))
                         )
                     } else arrayOf("1", "1")
+                }
+            } catch (e: Exception) {
+                result = arrayOf("1", "1")
+                Log.i("HttpExt Exception", e.toString())
+            } finally {
+                urlConnection.disconnect()
             }
+            result ?: arrayOf("1", "1")
         }
-        t.start()
-        t.join()
-        return result
     }
 
 
@@ -599,30 +364,14 @@ class HttpExt {
         }
     }
 
-    @Throws(FileNotFoundException::class, IOException::class)
-    fun getBitmapFormUri(ac: Activity, uri: Uri?): Bitmap? {
-        var input = ac.contentResolver.openInputStream(uri!!)
-        val onlyBoundsOptions = BitmapFactory.Options()
-        onlyBoundsOptions.inJustDecodeBounds = true
-        onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888 //optional
-        BitmapFactory.decodeStream(input, null, onlyBoundsOptions)
-        input!!.close()
-        val originalWidth = onlyBoundsOptions.outWidth
-        val originalHeight = onlyBoundsOptions.outHeight
-        if (originalWidth == -1 || originalHeight == -1) return null
-        input = ac.contentResolver.openInputStream(uri)
-        val bitmap = BitmapFactory.decodeStream(input, null, null)
-        input!!.close()
-        return bitmap
-    }
-
-    fun uploadFile(
+    suspend fun uploadFile(
         sourceFileUri: String,
         activity: Activity,
         uid: String,
         hash: String,
         fid: String,
-        filetype: String
+        filetype: String,
+        charsetName: String = "GBK"
     ): String {
         val lineEnd = "\n"
         val twoHyphens = "--"
@@ -631,69 +380,50 @@ class HttpExt {
         var bytesAvailable: Int
         var bufferSize: Int
         val maxBufferSize = 1 * 1024 * 1024
-        var output = ""
+        var output: String
         val sourceFile = File(sourceFileUri)
         try {
             NativeUtil.compressBitmap(
-                getBitmapFormUri(activity, Uri.fromFile(sourceFile)),
+                getBitmapFormUri(activity, Uri.fromFile(sourceFile))!!,
                 sourceFile.absolutePath,
                 true
             )
         } catch (e: Exception) {
-            Dialog().tip(
+            Dialog.tip(
                 activity.resources.getString(R.string.compress_failed),
                 R.drawable.ic_baseline_close_24,
                 R.color.danger,
                 activity,
-                activity.findViewById(R.id.PostActivity),
+                activity.findViewById(R.id.Editor),
                 Dialog.TIME_SHORT
             )
         }
         return if (!sourceFile.isFile) {
             Log.e("uploadFile", "Source File not exist : ${sourceFile.absolutePath}")
-            Dialog().tip(
+            Dialog.tip(
                 activity.resources.getString(R.string.file_not_exist),
                 R.drawable.ic_baseline_close_24,
                 R.color.danger,
                 activity,
-                activity.findViewById(R.id.PostActivity),
+                activity.findViewById(R.id.Editor),
                 Dialog.TIME_SHORT
             )
             "ERROR"
         } else {
-            val t = Thread {
+            withContext(Dispatchers.IO) {
+                val urlConn = openConn("http://www.ditiezu.com/misc.php?mod=swfupload&operation=upload&hash=$hash&uid=$uid&type=image&filetype=$filetype&fid=$fid", true)
                 try {
                     // open a URL connection to the Servlet
                     val fileInputStream = FileInputStream(sourceFile)
-                    val url =
-                        URL("http://www.ditiezu.com/misc.php?mod=swfupload&operation=upload&hash=$hash&uid=$uid&type=image&filetype=$filetype&fid=$fid")
-
-                    // Open a HTTP  connection to  the URL
-                    val conn = url.openConnection() as HttpURLConnection
-                    conn.doInput = true // Allow Inputs
-                    conn.doOutput = true // Allow Outputs
-                    conn.useCaches = false // Don't use a Cached Copy
-                    conn.requestMethod = "POST"
-                    conn.setRequestProperty(
-                        "Cookie",
-                        CookieManager.getInstance().getCookie(url.toString())
-                    )
-                    conn.setRequestProperty("Referer", "http://www.ditiezu.com")
-                    conn.setRequestProperty(
+                    urlConn.doInput = true // Allow Inputs
+                    urlConn.doOutput = true // Allow Outputs
+                    urlConn.useCaches = false // Don't use a Cached Copy
+                    urlConn.requestMethod = "POST"
+                    urlConn.setRequestProperty(
                         "Content-Type",
                         "multipart/form-data; boundary=$boundary"
                     )
-                    conn.setRequestProperty("Origin", "http://www.ditiezu.com")
-                    conn.setRequestProperty("Host", "www.ditiezu.com")
-                    conn.setRequestProperty("DNT", "1")
-                    conn.setRequestProperty("Proxy-Connection", "keep-alive")
-                    conn.setRequestProperty("Connection", "Keep-Alive")
-                    conn.setRequestProperty("Upgrade-Insecure-Requests", "1")
-                    conn.setRequestProperty(
-                        "User-Agent",
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-                    )
-                    val dos = DataOutputStream(conn.outputStream)
+                    val dos = DataOutputStream(urlConn.outputStream)
 
                     // add parameters
                     dos.writeBytes(twoHyphens + boundary + lineEnd)
@@ -732,8 +462,8 @@ class HttpExt {
                     dos.close()
 
                     try {
-                        val inputStream: InputStream = conn.inputStream
-                        val reader = InputStreamReader(inputStream, "GBK")
+                        val inputStream: InputStream = urlConn.inputStream
+                        val reader = InputStreamReader(inputStream, charsetName)
                         var str = reader.readText()
                         var res = ""
                         while (str != "") {
@@ -745,7 +475,7 @@ class HttpExt {
                         output = "Failed Retrieved"
                         Log.i("HttpExt Exception", e.toString())
                     } finally {
-                        conn.disconnect()
+                        urlConn.disconnect()
                     }
                 } catch (ex: MalformedURLException) {
                     ex.printStackTrace()
@@ -756,10 +486,14 @@ class HttpExt {
                     Log.e("", "Exception" + "Exception : " + e.message, e)
                     output = "Failed Retrieved"
                 }
+                output
             }
-            t.start()
-            t.join()
-            output
         }
     }
+
+    private const val SET_COOKIE = "Set-Cookie"
+    private const val USERAGENT_DESKTOP =
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4187.0 Safari/537.36"
+
+    class HttpHeader(val key: String, val value: String)
 }

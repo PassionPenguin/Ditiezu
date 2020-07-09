@@ -10,8 +10,9 @@
     <color name="primary700">#1e7f5c</color>
     <color name="primary800">#176f4f</color>
     <color name="primary900">#0b5235</color>
-    <color name="surface">#fff</color>
-    <color name="surface_secondary">#f6f7f9</color>
+    <color name="surface">#FCFDFD</color>
+    <color name="surface_secondary">#F8F7F7</color>
+    <color name="surface_tertiary">#F4F4F4</color>
     <color name="black">#000</color>
     <color name="white">#fff</color>
     <color name="grey">#888</color>

@@ -5,7 +5,37 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.core.graphics.drawable.DrawableCompat
+import com.passionpenguin.ditiezu.R
+import java.util.*
+
+class LoadingButton(parent: LinearLayout, private val activity: Activity) {
+    private val spinner = parent.findViewById<ImageView>(R.id.spinner)!!
+    fun onLoading() {
+        spinner.visibility = View.VISIBLE
+        spinner.animate().alpha(1F).setDuration(250).start()
+        spinner.startAnimation(with(AnimationUtils.loadAnimation(activity, R.anim.rotate)) {
+            this.duration = 1000
+            this.fillAfter = true
+            this
+        })
+    }
+
+    fun onLoaded() {
+        spinner.visibility = View.GONE
+        spinner.animate().alpha(0F).setDuration(475).start()
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                spinner.visibility = View.GONE
+                spinner.clearAnimation()
+            }
+        }, 500)
+    }
+}
 
 fun tintDrawable(
     drawable: Drawable?,
@@ -27,6 +57,7 @@ class Preference(activity: Activity) {
                 is Int -> this.putInt(key, value)
                 is Long -> this.putLong(key, value)
                 is Float -> this.putFloat(key, value)
+                is Boolean -> this.putBoolean(key, value)
             }
             this.commit()
         }
@@ -34,6 +65,10 @@ class Preference(activity: Activity) {
 
     fun getString(key: String): String? {
         return sp.getString(key, "")
+    }
+
+    fun getBoolean(key: String): Boolean? {
+        return sp.getBoolean(key, false)
     }
 
     fun getInt(key: String): Int? {

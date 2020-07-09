@@ -14,46 +14,86 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.JsonParser
 import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
+import com.passionpenguin.ditiezu.helper.Preference
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         super.onCreate(savedInstanceState)
-        actionBar?.hide()
         setContentView(R.layout.activity_main)
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        actionBar?.hide()
 
         val navView = nav_view
 
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
 
-        val value =
-            HttpExt().asyncRetrieveNonForumPage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/CUR_VERSION.json")
-        if (value != "Failed Retrieved") {
-            val latestVersion = JsonParser().parse(value).obj
-            if (latestVersion.get("versionCode").asInt > BuildConfig.VERSION_CODE)
-                MainActivity.post {
-                    Dialog().create(
-                        this,
+        if (Preference(this).getBoolean("preview_mode")!!) GlobalScope.launch {
+            val value = HttpExt.retrievePage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/PREVIEW_VERSION.json", customHeader = arrayOf(HttpExt.HttpHeader("Referer", "https://gitee.com/PassionPenguin/Ditiezu?from=app")))
+            if (value != "Failed Retrieved") {
+                val latestVersion = JsonParser().parse(value).obj
+                if (latestVersion.get("debugCode").asInt > BuildConfig.VERSION_CODE)
+                    MainActivity.postDelayed({
+                        Dialog.create(
+                            this@MainActivity,
+                            MainActivity,
+                            resources.getString(R.string.confirmUpdating),
+                            resources.getString(R.string.new_version_detected),
+                            latestVersion.get("debugLog").asString
+                        ) { _, w ->
+                            HttpExt.downloadUtils(
+                                applicationContext,
+                                "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                                "dtz_${latestVersion.get("debugCode").asString}.apk"
+                            )
+                            w.dismiss()
+                        }
+                    }, 0)
+            }
+        }
+        else GlobalScope.launch {
+            val value = HttpExt.retrievePage("https://gitee.com/PassionPenguin/Ditiezu/raw/v2/STABLE_VERSION.json", customHeader = arrayOf(HttpExt.HttpHeader("Referer", "https://gitee.com/PassionPenguin/Ditiezu?from=app")))
+            if (value != "Failed Retrieved") {
+                val latestVersion = JsonParser().parse(value).obj
+                if (latestVersion.get("versionCode").asInt > BuildConfig.VERSION_CODE)
+                    MainActivity.postDelayed({
+                        Dialog.create(
+                            this@MainActivity,
+                            MainActivity,
+                            resources.getString(R.string.confirmUpdating),
+                            resources.getString(R.string.new_version_detected),
+                            latestVersion.get("versionLog").asString
+                        ) { _, w ->
+                            HttpExt.downloadUtils(
+                                applicationContext,
+                                "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                                "dtz_${latestVersion.get("versionCode").asString}.apk"
+                            )
+                            w.dismiss()
+                        }
+                    }, 0)
+            }
+        }
+
+        with(Preference(this@MainActivity)) {
+            if (this.getBoolean("login_state")!!)
+                MainActivity.postDelayed({
+                    Dialog.tip(resources.getString(R.string.welcome_user, this.getString("user_name")),
+                        R.drawable.ic_baseline_check_24,
+                        R.color.primary500,
+                        this@MainActivity,
                         MainActivity,
-                        resources.getString(R.string.confirmUpdating),
-                        resources.getString(R.string.new_version_detected),
-                        latestVersion.get("versionLog").asString
-                    ) { _, w ->
-                        HttpExt().downloadUtils(
-                            applicationContext,
-                            "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
-                            "dtz_${latestVersion.get("versionCode").asString}.apk"
-                        )
-                        w.dismiss()
-                    }
-                }
+                        Dialog.TIME_SHORT)
+                }, 0)
         }
     }
+
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus

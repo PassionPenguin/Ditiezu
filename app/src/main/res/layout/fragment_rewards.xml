@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/everytime_reward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:background="@drawable/dialog_content_background"
+        android:layout_marginTop="@dimen/_16"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/rewards"
+            android:layout_gravity="center_vertical" />
+
+        <EditText
+            android:id="@+id/everytime_reward_input"
+            android:background="@null"
+            android:inputType="number"
+            android:importantForAutofill="no"
+            android:autofillHints=""
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            tools:ignore="Autofill,LabelFor" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/zero_rewards"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/times"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:background="@drawable/dialog_content_background"
+        android:layout_marginTop="@dimen/_4"
+        app:layout_constraintTop_toBottomOf="@id/everytime_reward">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/times"
+            android:layout_gravity="center_vertical" />
+
+        <EditText
+            android:id="@+id/times_input"
+            android:background="@null"
+            android:inputType="number"
+            android:importantForAutofill="no"
+            android:autofillHints=""
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            tools:ignore="Autofill,LabelFor" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/zero_rewards"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/max_times"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:background="@drawable/dialog_content_background"
+        android:layout_marginTop="@dimen/_4"
+        app:layout_constraintTop_toBottomOf="@id/times">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/max_times"
+            android:layout_gravity="center_vertical" />
+
+        <Spinner
+            android:id="@+id/max_times_input"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/max_rewards_time_range"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/odds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:background="@drawable/dialog_content_background"
+        android:layout_marginTop="@dimen/_4"
+        app:layout_constraintTop_toBottomOf="@id/max_times">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/odds"
+            android:layout_gravity="center_vertical" />
+
+        <Spinner
+            android:id="@+id/odds_input"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/odds_range"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

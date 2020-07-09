@@ -4,15 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#bb888888"
-        android:orientation="horizontal"
-        android:elevation="@dimen/_16" />
+    android:orientation="vertical"
+    android:background="#44888888">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +13,7 @@
         android:orientation="vertical"
         android:elevation="@dimen/_32"
         android:background="@drawable/border_radius_top_4"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/surface"
         android:paddingBottom="@dimen/_32"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -39,7 +32,9 @@
                 <ImageView
                     android:layout_width="@dimen/_32"
                     android:layout_height="@dimen/_32"
-                    android:src="@mipmap/ic_launcher_round"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:src="@mipmap/ic_launcher_foreground"
                     android:contentDescription="@string/app_name" />
 
                 <TextView
@@ -107,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4"
                 android:paddingHorizontal="@dimen/_32"
-                android:backgroundTint="@color/surface_secondary"
+                android:backgroundTint="@color/surface_tertiary"
                 android:textColor="@color/dark"
                 android:text="@string/cancel"
                 tools:text="Cancel" />

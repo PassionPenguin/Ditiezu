@@ -279,6 +279,14 @@
             text-decoration: none;
             font-style: normal;
         }
+
+        ignore_js_op dd p.mbn:first-child {
+            display: none;
+        }
+
+        ignore_js_op dd {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -302,11 +310,14 @@
         <span class="edit">
             <i class="material-icons">edit</i>
         </span>
+        <span class="invite" style="display: none">
+            <i class="material-icons">person_add</i>
+        </span>
     </div>
 </div>
 <div class="loading-anim">
     <svg class="spinner" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 21a9 9 0 1 0-9-9" fill="none" stroke-linecap="round" stroke-width="2"></path>
+        <path d="M12 21a9 9 0 1 0-9-9" fill="none" stroke-linecap="round" stroke-width="2"/>
     </svg>
 </div>
 <app class="app" data-name="View Thread">
@@ -323,7 +334,6 @@
         <span class="last-page material-icons">last_page</span>
     </div>
 </app>
-<script src="data.js"></script>
 <script>
     window.startPoint = new Date().getMilliseconds();
     window.$ = (selector = "body", context = document) => {
@@ -469,6 +479,14 @@
             a.setAttribute("href", "javascript:void(0)");
         });
         dom.$(".ratl tbody:first-child th:last-child").remove();
+
+        if(dom.$("[onclick=\"showWindow('invite', this.href, 'get', 0);\"]").isNotEmpty()) {
+            element.$(".invite")[0].style.display = "inline-block";
+            element.$(".invite")[0].on("click", ()=>{
+                android.invite();
+            });
+        }
+
         const src = dom.$(".avatar a")[0].attr("href");
         const uid = ((src.indexOf("uid-") + 4 <= 0 || src.indexOf(".html") <= 0) ? 0 : src.substring(src.indexOf("uid-") + 4, src.indexOf(".html"))).toInt();
 
@@ -478,7 +496,9 @@
         element.$(".avatar")[0].src = `http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${uid}`;
         element.$(".authorName")[0].innerText = dom.$(".authi .xw1")[0].innerText;
         element.$(".threadMeta")[0].innerText = "第" + ((page - 1) * 15 + index + 1) + "楼 - " + dom.$("[id^='authorposton']")[0].innerText.substring(4);
-        element.$(".threadContent")[0].innerHTML = dom.$(".t_fsz")[0].$("[id^='postmessage']")[0].innerHTML + (dom.$(".t_fsz")[0].$(".pattl")[0] !== undefined ? dom.$(".t_fsz")[0].$(".pattl")[0].innerHTML : "") + (dom.$("[id^='ratelog_']")[0] !== undefined ? dom.$("[id^='ratelog_']")[0].innerHTML : "");
+        try{
+            element.$(".threadContent")[0].innerHTML = dom.$(".pcb")[0].$("[id^='postmessage']")[0].innerHTML + (dom.$(".pcb")[0].$(".pattl")[0] !== undefined ? dom.$(".pcb")[0].$(".pattl")[0].innerHTML : "") + (dom.$("[id^='ratelog_']")[0] !== undefined ? dom.$("[id^='ratelog_']")[0].innerHTML : "");
+        } catch(e) { console.log(e) }
 
         let rate = element.$(".rate i")[0];
         if (dom.$("[onclick^=\"showWindow('rate'\"]")[0] !== undefined) {

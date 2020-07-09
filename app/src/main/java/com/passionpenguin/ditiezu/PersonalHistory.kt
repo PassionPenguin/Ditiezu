@@ -1,15 +1,15 @@
 package com.passionpenguin.ditiezu
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.passionpenguin.ditiezu.helper.Dialog
 import com.passionpenguin.ditiezu.helper.HttpExt
 import com.passionpenguin.ditiezu.helper.ThreadItem
 import com.passionpenguin.ditiezu.helper.ThreadItemAdapter
-import kotlinx.android.synthetic.main.activity_forum_display.ForumDisplay
 import kotlinx.android.synthetic.main.activity_personal_history.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 
 //
@@ -44,23 +44,11 @@ class PersonalHistory : AppCompatActivity() {
                                 this.substring(52, this.indexOf("&", 52)).toInt()
                         }
                         threadListContent.add(
-                            ThreadItem(
-                                uid,
-                                title.text(),
-                                "",
-                                userName,
-                                views + resources.getString(R.string.views) + " " + replies + " " + resources.getString(
-                                    R.string.replies
-                                ),
-                                typ,
-                                targetId
-                            )
+                            ThreadItem(uid, title.text(), "", userName, views + resources.getString(R.string.views) + " " + replies + " " + resources.getString(
+                                R.string.replies
+                            ), typ, targetId)
                         )
                     }
-                    Log.i(
-                        parser.select(".pgb").isEmpty().toString(),
-                        parser.select(".nxt").isEmpty().toString()
-                    )
                     history.adapter = ThreadItemAdapter(
                         this@PersonalHistory,
                         threadListContent,
@@ -81,17 +69,23 @@ class PersonalHistory : AppCompatActivity() {
                 }
             }
 
-            HttpExt().retrievePage("http://www.ditiezu.com/home.php?mod=space&uid=$uid&do=thread&view=me&type=$type&order=dateline&page=$curPage") {
-                if (it == "Failed Retrieved")
-                    Dialog().tip(
-                        resources.getString(R.string.failed_retrieved),
-                        R.drawable.ic_baseline_close_24,
-                        R.color.danger,
-                        this@PersonalHistory,
-                        ForumDisplay,
-                        Dialog.TIME_SHORT
+            GlobalScope.launch {
+                with(
+                    HttpExt.retrievePage(
+                        "http://www.ditiezu.com/home.php?mod=space&uid=$uid&do=thread&view=me&type=$type&order=dateline&page=$curPage"
                     )
-                processResult(it)
+                ) {
+                    if (this == "Failed Retrieved")
+                        Dialog.tip(
+                            resources.getString(R.string.failed_retrieved),
+                            R.drawable.ic_baseline_close_24,
+                            R.color.danger,
+                            this@PersonalHistory,
+                            PersonalHistory,
+                            Dialog.TIME_SHORT
+                        )
+                    processResult(this)
+                }
             }
         }
         loadContent()

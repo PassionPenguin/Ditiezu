@@ -16,6 +16,8 @@ import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.activity_forum_display.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 
 class ForumDisplay : AppCompatActivity() {
@@ -26,31 +28,17 @@ class ForumDisplay : AppCompatActivity() {
         val extras = intent.extras
         val id = extras?.getInt("id") ?: return
 
-        val categoryContent =
-            CategoryContent(applicationContext)
+        val categoryContent = CategoryContent(applicationContext)
         val categoryList = categoryContent.categoryList[id]
 
         fab.setOnClickListener {
-            val i = Intent(this@ForumDisplay, PostActivity::class.java)
+            val i = Intent(this@ForumDisplay, Editor::class.java)
             i.putExtra("type", "newthread")
             i.putExtra("fid", categoryList.id)
             startActivity(i)
         }
 
-        var adapter = ThreadItemAdapter(
-            this@ForumDisplay,
-            listOf(),
-            isHome = false,
-            withHeader = true,
-            withNavigation = true,
-            curCategoryItem = categoryList,
-            curPage = 1,
-            lastPage = 1,
-            disabledCurPage = false,
-            enabledPrev = false,
-            enabledNext = false
-        ) {
-        }
+        var adapter = ThreadItemAdapter(this@ForumDisplay, listOf(), isHome = false, withHeader = true, withNavigation = true, curCategoryItem = categoryList, curPage = 1, lastPage = 1, disabledCurPage = false, enabledPrev = false, enabledNext = false) {}
 
         fun loadForumContent(page: Int, ext: String = "") {
             fun processResult(result: String) {
@@ -60,15 +48,8 @@ class ForumDisplay : AppCompatActivity() {
                         val t = TextView(applicationContext)
                         t.text = resources.getString(R.string.all)
                         t.setTextColor(resources.getColor(R.color.black, null))
-                        t.setOnClickListener {
-                            loadForumContent(1)
-                        }
-                        t.setPadding(
-                            resources.getDimension(R.dimen._8).toInt(),
-                            resources.getDimension(R.dimen._16).toInt(),
-                            resources.getDimension(R.dimen._8).toInt(),
-                            resources.getDimension(R.dimen._16).toInt()
-                        )
+                        t.setOnClickListener { loadForumContent(1) }
+                        t.setPadding(resources.getDimension(R.dimen._8).toInt(), resources.getDimension(R.dimen._16).toInt(), resources.getDimension(R.dimen._8).toInt(), resources.getDimension(R.dimen._16).toInt())
                         t.background = resources.getDrawable(R.drawable.border_bottom, null)
                         typesNavigation.addView(t)
                         parser.select("#thread_types li:not(.fold):not(#ttp_all)").forEach {
@@ -78,41 +59,25 @@ class ForumDisplay : AppCompatActivity() {
                                 text.setTextColor(resources.getColor(R.color.black, null))
                                 text.setOnClickListener { _ ->
                                     if (!it.className().contains("xw1"))
-                                        loadForumContent(
-                                            1, "?" + this.substring(this.indexOf("filter="))
-                                        )
+                                        loadForumContent(1, "?" + this.substring(this.indexOf("filter=")))
                                 }
-                                text.setPadding(
-                                    resources.getDimension(R.dimen._8).toInt(),
-                                    resources.getDimension(R.dimen._16).toInt(),
-                                    resources.getDimension(R.dimen._8).toInt(),
-                                    resources.getDimension(R.dimen._16).toInt()
-                                )
+                                text.setPadding(resources.getDimension(R.dimen._8).toInt(), resources.getDimension(R.dimen._16).toInt(), resources.getDimension(R.dimen._8).toInt(), resources.getDimension(R.dimen._16).toInt())
                                 try {
-                                    if (it.className().contains("xw1"))
-                                        text.background =
-                                            resources.getDrawable(R.drawable.border_bottom, null)
+                                    if (it.className().contains("xw1")) text.background = resources.getDrawable(R.drawable.border_bottom, null)
                                 } catch (ignored: Exception) {
                                 }
                                 typesNavigation.addView(text)
                             }
                         }
                     } else {
-                        typesNavigation.children.toList().forEach {
-                            it.background = null
-                        }
+                        typesNavigation.children.toList().forEach { it.background = null }
                         if (!ext.contains("typeid"))
-                            typesNavigation.children.toList()[0].background =
-                                resources.getDrawable(R.drawable.border_bottom, null)
+                            typesNavigation.children.toList()[0].background = resources.getDrawable(R.drawable.border_bottom, null)
                         else {
                             var i = -1
-                            parser.select("#thread_types li:not(.fold)")
-                                .forEachIndexed { index, e ->
-                                    if (e.className().contains("xw1")) i = index
-                                }
+                            parser.select("#thread_types li:not(.fold)").forEachIndexed { index, e -> if (e.className().contains("xw1")) i = index }
                             if (i == -1) i = 0
-                            typesNavigation.children.toList()[i].background =
-                                resources.getDrawable(R.drawable.border_bottom, null)
+                            typesNavigation.children.toList()[i].background = resources.getDrawable(R.drawable.border_bottom, null)
                         }
                     }
 
@@ -132,10 +97,8 @@ class ForumDisplay : AppCompatActivity() {
                         val title = it.select(".xst")
                         var targetId: Int
                         with(title.attr("href")) {
-                            targetId = if (this.contains(".html"))
-                                this.substring(30, this.lastIndexOf(".html") - 4).toInt()
-                            else
-                                this.substring(52, this.indexOf("&", 52)).toInt()
+                            targetId = if (this.contains(".html")) this.substring(30, this.lastIndexOf(".html") - 4).toInt()
+                            else this.substring(52, this.indexOf("&", 52)).toInt()
                         }
                         threadListContent.add(
                             ThreadItem(
@@ -162,12 +125,8 @@ class ForumDisplay : AppCompatActivity() {
                             withNavigation = true,
                             curCategoryItem = categoryList,
                             curPage = page,
-                            lastPage = if (!parser.select(".last").isEmpty())
-                                parser.select(".last")[0].text().substring(4).toInt()
-                            else if (!parser.select("#pgt .pg a:not(.nxt)")
-                                    .isEmpty()
-                            ) parser.select("#pgt .pg a:not(.nxt)")
-                                .last().text().toInt() else 1,
+                            lastPage = if (!parser.select(".last").isEmpty()) parser.select(".last")[0].text().substring(4).toInt()
+                            else if (!parser.select("#pgt .pg a:not(.nxt)").isEmpty()) parser.select("#pgt .pg a:not(.nxt)").last().text().toInt() else 1,
                             disabledCurPage = false,
                             enabledPrev = false,
                             enabledNext = false
@@ -179,17 +138,12 @@ class ForumDisplay : AppCompatActivity() {
                     }
                 }
             }
-            HttpExt().retrievePage("http://www.ditiezu.com/forum-${categoryList.id}-$page.html$ext") {
-                if (it == "Failed Retrieved")
-                    Dialog().tip(
-                        resources.getString(R.string.failed_retrieved),
-                        R.drawable.ic_baseline_close_24,
-                        R.color.danger,
-                        this@ForumDisplay,
-                        ForumDisplay,
-                        Dialog.TIME_SHORT
-                    )
-                processResult(it)
+            GlobalScope.launch {
+                with(HttpExt.retrievePage("http://www.ditiezu.com/forum-${categoryList.id}-$page.html$ext")) {
+                    if (this == "Failed Retrieved")
+                        Dialog.tip(resources.getString(R.string.failed_retrieved), R.drawable.ic_baseline_close_24, R.color.danger, this@ForumDisplay, ForumDisplay, Dialog.TIME_SHORT)
+                    processResult(this)
+                }
             }
         }
         loadForumContent(1)
@@ -198,9 +152,7 @@ class ForumDisplay : AppCompatActivity() {
 
         input.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && input.text.toString()
-                        .trim().isNotEmpty()
-                ) {
+                if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER && input.text.toString().trim().isNotEmpty()) {
                     val i = Intent(this@ForumDisplay, SearchResultActivity::class.java)
                     i.putExtra("kw", input.text.toString())
                     startActivity(i)

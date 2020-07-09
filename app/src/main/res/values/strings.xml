@@ -12,7 +12,7 @@
     <string name="threadList_title">THREAD TITLE</string>
     <string name="threadList_meta">THREAD META</string>
     <string name="title_reply">Reply</string>
-    <string name="app_description">The Underground</string>
+    <string name="app_description">The story of\n the UnderGround</string>
 
     <string name="category_Beijing">Beijing</string>
     <string name="category_Tianjin">Tianjin</string>
@@ -205,4 +205,34 @@
     <string name="password">Password</string>
     <string name="answer">Answer</string>
     <string name="security_code">Security Code</string>
+    <string name="tip_enter_code">Enter Security Code</string>
+    <string name="tip_incorrect_code">Incorrect Code</string>
+    <string name="tip_login_successfully">Login Successfully</string>
+    <string name="welcome_user">You\'re login as %s, Welcome Here!</string>
+    <string name="ignore_login">Skip Login</string>
+    <string name="permission">Permission</string>
+    <string name="everyone">Everyone</string>
+    <string name="rewards">Rewards</string>
+    <string name="none">None</string>
+    <string name="new_thread">New Thread</string>
+    <string name="gallery">Gallery</string>
+    <string name="permission_range">Range 0 ~ 255</string>
+    <string name="zero_rewards">0 means no reward</string>
+    <string name="times">Times</string>
+    <string name="max_times">Max Times</string>
+    <string name="odds">Odds</string>
+    <string name="max_rewards_time_range">Range 1 ~ 10</string>
+    <string name="odds_range">Range 10% ~ 100%</string>
+    <string name="not_a_number">Not A Number</string>
+    <string name="rewards_title">Set rewards</string>
+    <string name="rewards_description">Every user who replies to your post will get rewards according to your settings</string>
+    <string name="permission_title">Set reading permissions</string>
+    <string name="permission_description">Users who have not reached the read permission will not be able to read your post</string>
+    <string name="invite">Invite</string>
+    <string name="invite_title">Invite Users</string>
+    <string name="invite_description">The system will send a reminder to the selected user</string>
+    <string name="successful_and_fail_times">%d/%d (Succeed/Failed)</string>
+    <string name="preview_on">Developer Preview</string>
+    <string name="preview_description">Turning on preview mode means that you can use the complete new features, but the application may crash for some reasons. Please consider the update channel (stable/preview) after due consideration.</string>
+    <string name="preview_title">Preview</string>
 </resources>
