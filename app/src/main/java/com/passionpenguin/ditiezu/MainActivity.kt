@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                         ) { _, w ->
                             HttpExt.downloadUtils(
                                 applicationContext,
-                                "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699",
+                                "https://passionpenguin.coding.net/api/share/download/ebf77d48-2984-4a8b-b8da-1b53f4a8de8e",
                                 "dtz_${latestVersion.get("debugCode").asString}.apk"
                             )
                             w.dismiss()
