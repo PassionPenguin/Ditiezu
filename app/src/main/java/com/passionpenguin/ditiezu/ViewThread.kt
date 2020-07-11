@@ -484,16 +484,12 @@ class ViewThread : AppCompatActivity() {
                         } else {
                             url.substring(url.indexOf("page=") + 5, url.indexOf("&", url.indexOf("page="))).toInt()
                         }
-                        val i = Intent(this@ViewThread, ViewThread::class.java)
-                        i.putExtra("tid", tid)
-                        i.putExtra("page", page)
-                        startActivity(i)
+                        this@ViewThread.tid = tid
+                        this@ViewThread.page = page
+                        retrieveThreadContent()
                     }
                 }
-                evaluate(
-                    "window.open('$url')",
-                    null
-                )
+                evaluate("window.open('$url')", null)
                 return true
             }
         })
