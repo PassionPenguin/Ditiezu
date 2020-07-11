@@ -25,6 +25,8 @@ class ForumDisplay : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forum_display)
 
+        findViewById<TextView>(R.id.appName).setTextColor(resources.getColor(R.color.black, null))
+
         val extras = intent.extras
         val id = extras?.getInt("id") ?: return
 
@@ -83,17 +85,12 @@ class ForumDisplay : AppCompatActivity() {
 
                     val threadListContent = mutableListOf<ThreadItem>()
                     parser.select("[id^='normalthread_']").forEach {
-                        val type = if (it.select(".new em").text() !== "") {
-                            it.select(".new em").text()
-                        } else {
-                            ""
-                        }
                         val author = it.select(".by cite a")[0]
                         val authorName = author.text()
                         val time = it.select(".by:not(.kmhf) em span").text()
                         val views = it.select(".num em").text()
                         val replies = it.select(".num a").text()
-                        val lastTime = it.select(".by.kmhf em span").attr("title")
+                        val tagName = with(it.select("em:first-child a")) { if (isNotEmpty()) this.text() else null }
                         val title = it.select(".xst")
                         var targetId: Int
                         with(title.attr("href")) {
@@ -102,18 +99,8 @@ class ForumDisplay : AppCompatActivity() {
                         }
                         threadListContent.add(
                             ThreadItem(
-                                author.attr("href").substring(
-                                    author.attr("href").indexOf("uid-") + 4,
-                                    author.attr("href").indexOf(".html")
-                                ).toInt(),
-                                title.text(),
-                                "",
-                                authorName,
-                                time + " " + views + resources.getString(R.string.views) + " " + replies + " " + resources.getString(
-                                    R.string.replies
-                                ),
-                                "$type $lastTime",
-                                targetId
+                                author.attr("href").substring(author.attr("href").indexOf("uid-") + 4, author.attr("href").indexOf(".html")).toInt(),
+                                title.text(), "", authorName, time, tagName, views, replies, targetId
                             )
                         )
                         adapter.mItems.forEachIndexed { i, _ -> adapter.changeData(i) }

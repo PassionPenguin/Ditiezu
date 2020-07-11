@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_item_list.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
+import org.jsoup.parser.Parser
 
 
 class ThreadItemFragment : Fragment() {
@@ -55,24 +56,26 @@ class ThreadItemFragment : Fragment() {
         try {
             activity?.let { activity ->
                 fun processResult(result: String) {
-                    val parser = Jsoup.parse(result)
+                    val parser = Jsoup.parse(result, "", Parser.xmlParser())
                     val threadListContent = mutableListOf<ThreadItem>()
-                    parser.select("ul.comiis_onemiddleulone li").forEach {
-                        val author = it.select("code a")
-                        val authorName = author.text()
-                        val category = it.select(".orgen").text()
-                        val title = it.select(".blackvs")
-                        threadListContent.add(
-                            ThreadItem(
-                                author.attr("href").substring(author.attr("href").indexOf("uid-") + 4, author.attr("href").indexOf(".html")).toInt(),
-                                title.text(),
-                                "",
-                                authorName,
-                                "[$category]",
-                                "来自头条推荐",
-                                title.attr("href").substring(30, title.attr("href").lastIndexOf("-1-1")).toInt()
+                    parser.select("item").forEach {
+                        if (it.select("link").html().isNotEmpty()) {
+                            threadListContent.add(
+                                ThreadItem(
+                                    -1,
+                                    it.select("title").text(),
+                                    it.select("description").text().trim(),
+                                    it.select("author").text(),
+                                    it.select("pubDate").text(),
+                                    it.select("category").text(),
+                                    null,
+                                    null,
+                                    with(it.select("link").html()) {
+                                        (this.substring(this.indexOf("tid=") + 4)).toInt()
+                                    }
+                                )
                             )
-                        )
+                        }
                     }
 
                     val layoutManager = LinearLayoutManager(context)
@@ -124,7 +127,7 @@ class ThreadItemFragment : Fragment() {
                 activity.findViewById<LinearLayout>(R.id.LoadingAnimation)?.visibility = View.VISIBLE
 
                 GlobalScope.launch {
-                    val it = HttpExt.retrievePage("http://www.ditiezu.com/")
+                    val it = HttpExt.retrievePage("http://www.ditiezu.com/?mod=rss")
                     activity.runOnUiThread {
                         activity.findViewById<ViewGroup>(R.id.MainActivity).postDelayed({
                             when (it) {

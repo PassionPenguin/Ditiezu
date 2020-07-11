@@ -15,7 +15,7 @@
         android:button="@drawable/ic_baseline_arrow_back_ios_24"
         android:layout_marginStart="@dimen/_16"
         android:layout_marginTop="@dimen/_32"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout

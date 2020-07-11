@@ -295,6 +295,7 @@ class ViewThread : AppCompatActivity() {
                         }
                     }
                     if (str.contains("'singlenum':'0'")) {
+                        evaluate("onLoaded()") {}
                         if (users.isNotEmpty())
                             Dialog.create(
                                 this@ViewThread,
@@ -328,7 +329,6 @@ class ViewThread : AppCompatActivity() {
                                             }
                                         }
                                     }
-                                    evaluate("onLoaded()") {}
                                 }) { v, w ->
                                 v.addView(LayoutInflater.from(this@ViewThread).inflate(R.layout.fragment_invite, v, false))
                                 with(v.findViewById<RecyclerView>(R.id.selector)) {
@@ -456,9 +456,9 @@ class ViewThread : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
-            this.tid = (extras.get("tid") ?: 1) as Int
+            if (extras.get("tid") == null) onBackPressed() else this.tid = extras.get("tid") as Int
             this.page = (extras.get("page") ?: 1) as Int
-        } else finish()
+        } else onBackPressed()
 
         webView.loadUrl("file:///android_asset/webHelper/viewthread.html")
         webView.addJavascriptInterface(WebViewInterface(), "android")
@@ -475,26 +475,14 @@ class ViewThread : AppCompatActivity() {
                     if (url.indexOf("mod=viewthread") != -1 || url.indexOf("thread-") != -1) {
                         // ViewThread
                         val tid = if (url.indexOf("viewthread") == -1) {
-                            url.substring(
-                                url.indexOf("thread-") + 7,
-                                url.indexOf("-1-1")
-                            ).toInt()
+                            url.substring(url.indexOf("thread-") + 7, url.indexOf("-1-1")).toInt()
                         } else {
-                            url.substring(
-                                url.indexOf("tid=") + 4,
-                                url.indexOf("&", url.indexOf("tid="))
-                            ).toInt()
+                            url.substring(url.indexOf("tid=") + 4, url.indexOf("&", url.indexOf("tid="))).toInt()
                         }
                         val page = if (url.indexOf("viewthread") == -1) {
-                            url.substring(
-                                url.indexOf("-") + 1,
-                                url.indexOf("-1")
-                            ).toInt()
+                            url.substring(url.indexOf("-") + 1, url.indexOf("-1")).toInt()
                         } else {
-                            url.substring(
-                                url.indexOf("page=") + 5,
-                                url.indexOf("&", url.indexOf("page="))
-                            ).toInt()
+                            url.substring(url.indexOf("page=") + 5, url.indexOf("&", url.indexOf("page="))).toInt()
                         }
                         val i = Intent(this@ViewThread, ViewThread::class.java)
                         i.putExtra("tid", tid)
@@ -512,8 +500,7 @@ class ViewThread : AppCompatActivity() {
         GlobalScope.launch {
             loginState = HttpExt.checkLogin(this@ViewThread)
         }
-        this.darkMode =
-            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        this.darkMode = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         BackButton.setOnClickListener {
             onBackPressed()

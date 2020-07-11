@@ -18,7 +18,7 @@
         android:paddingStart="@dimen/_16"
         android:paddingEnd="@dimen/_8"
         android:orientation="vertical"
-        app:layout_constraintRight_toLeftOf="@id/pref_item_value"
+        app:layout_constraintEnd_toStartOf="@id/pref_item_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -56,6 +56,6 @@
         android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
         android:drawableTint="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

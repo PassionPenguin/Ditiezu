@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_toRightOf="@id/picture_title"
             android:scaleType="centerInside"
             android:src="?attr/picture.arrow_down.icon" />
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:background="@drawable/picture_send_button_default_bg"
         android:gravity="center"
         android:textColor="?picture.right.textColor"

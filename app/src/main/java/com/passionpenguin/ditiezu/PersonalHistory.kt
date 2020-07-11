@@ -12,13 +12,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 
-//
 class PersonalHistory : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_history)
         var curPage = 1
-        var type = "thread"
+        val type = "thread"
 
         val extras = intent.extras
         val uid = extras?.getInt("uid") ?: return
@@ -32,21 +31,18 @@ class PersonalHistory : AppCompatActivity() {
                         this.html().substring(0, this.html().length - 8)
                     }
                     parser.select(".tl table tr:not(.th)").forEach {
-                        val typ = it.select("td:nth-child(3)").text()
-                        val views = it.select(".num em").text()
+                        val category = it.select("td:nth-child(3)").text()
                         val replies = it.select(".num a").text()
+                        val views = it.select(".num em").text()
                         val title = it.select("th>a")
+                        val time = it.select(".by em").text()
                         var targetId: Int
                         with(title.attr("href")) {
-                            targetId = if (this.contains(".html"))
-                                this.substring(30, this.lastIndexOf(".html") - 4).toInt()
-                            else
-                                this.substring(52, this.indexOf("&", 52)).toInt()
+                            targetId = if (this.contains(".html")) this.substring(30, this.lastIndexOf(".html") - 4).toInt()
+                            else this.substring(52, this.indexOf("&", 52)).toInt()
                         }
                         threadListContent.add(
-                            ThreadItem(uid, title.text(), "", userName, views + resources.getString(R.string.views) + " " + replies + " " + resources.getString(
-                                R.string.replies
-                            ), typ, targetId)
+                            ThreadItem(uid, title.text(), "", userName, time, category, views, replies, targetId)
                         )
                     }
                     history.adapter = ThreadItemAdapter(

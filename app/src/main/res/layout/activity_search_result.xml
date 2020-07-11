@@ -5,14 +5,13 @@
     android:id="@+id/SearchResultActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/_32"
     android:background="@color/surface"
     tools:context=".SearchResultActivity">
 
     <include
         android:id="@+id/action_bar_layout"
         layout="@layout/fragment_action_bar"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout

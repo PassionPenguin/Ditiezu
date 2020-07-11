@@ -99,6 +99,8 @@ class Editor : AppCompatActivity() {
                 .forResult(PictureConfig.CHOOSE_REQUEST)
         }
 
+        permWrap.visibility = View.GONE
+        rewardsWrap.visibility = View.GONE
         GlobalScope.launch {
             when (type) {
                 TYPE_REPLY -> {
@@ -175,15 +177,17 @@ class Editor : AppCompatActivity() {
                 }
 
                 uid = originParser.select("[name=\"uid\"]").attr("value")
-                if (originParser.select("#extra_readperm_chk").isNotEmpty()) withPerm = true
-                if (originParser.select("#extra_replycredit_chk").isNotEmpty()) withRewards = true
+                if (originParser.select("#extra_readperm_b").isNotEmpty()) withPerm = true
+                if (originParser.select("#extra_replycredit_b").isNotEmpty()) withRewards = true
+
+                runOnUiThread {
+                    if (withPerm) permWrap.visibility = View.VISIBLE
+                    if (withRewards) rewardsWrap.visibility = View.VISIBLE
+                }
             }
 
             formhash = if (type == TYPE_NEW) originParser.select("[name='formhash']").attr("value") else Jsoup.parse(HttpExt.retrievePage("http://www.ditiezu.com/search.php?mod=forum")).select("[name=\"formhash\"]").attr("value")
         }
-
-        if (!withPerm) permWrap.visibility = View.GONE
-        if (!withRewards) rewardsWrap.visibility = View.GONE
 
         permWrap.setOnClickListener {
             Dialog.create(
@@ -422,6 +426,7 @@ class Editor : AppCompatActivity() {
 
         imageSelectorToggle.setOnClickListener {
             setCompoundButtonColor(imageSelectorToggle, false)
+            setCompoundButtonColor(emotionSelectorToggle, true)
             if ((it as CheckBox).isChecked) {
                 photoWrap.visibility = View.VISIBLE
                 emotionWrap.visibility = View.GONE
@@ -436,6 +441,7 @@ class Editor : AppCompatActivity() {
 
         emotionSelectorToggle.setOnClickListener {
             setCompoundButtonColor(emotionSelectorToggle, false)
+            setCompoundButtonColor(imageSelectorToggle, true)
             if ((it as CheckBox).isChecked) {
                 photoWrap.visibility = View.GONE
                 emotionWrap.visibility = View.VISIBLE

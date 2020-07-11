@@ -14,8 +14,8 @@ android {
     defaultConfig {
         applicationId "com.passionpenguin.ditiezu"
         targetSdkVersion 30
-        versionCode 42
-        versionName 'Ditiezu 10.2.1'
+        versionCode 43
+        versionName 'Ditiezu 10.2.2'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         minSdkVersion 23
@@ -28,6 +28,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a"
         }
+        versionNameSuffix 'STABLE'
     }
 
     buildTypes {

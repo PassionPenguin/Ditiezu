@@ -60,7 +60,7 @@
         android:drawableLeft="@drawable/picture_icon_video"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
-        android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:paddingTop="8dp"
         android:text="00:00"
         android:textColor="@color/picture_color_white"

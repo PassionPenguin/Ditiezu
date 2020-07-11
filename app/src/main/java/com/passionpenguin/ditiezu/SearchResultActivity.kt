@@ -34,7 +34,9 @@ class SearchResultActivity : AppCompatActivity() {
         if (i?.getString("kw", null) == null) finish()
         var kw = i?.getString("kw", "")
 
-        var formhash: String = ""
+        val formhash = ""
+        if (kw == "searchForNewPost")
+            GlobalScope.launch { Jsoup.parse(HttpExt.retrievePage("http://www.ditiezu.com/search.php?mod=forum&srchfrom=1000&searchsubmit=yes")) }
         GlobalScope.launch { Jsoup.parse(HttpExt.retrievePage("http://www.ditiezu.com/search.php?mod=forum")).select("[name=\"formhash\"]").attr("value") }
 
         fun processResult(result: String) {
@@ -43,16 +45,12 @@ class SearchResultActivity : AppCompatActivity() {
             parser.select("#threadlist .pbw").forEach {
                 val title = it.select("h3 a")
                 val author = it.select("p")[2].select("span a")[0]
+                val meta = it.select(".xg1").text()
                 var targetTid = ""
                 with(title.attr("href")) {
                     try {
-                        targetTid = if (this.contains("highlight"))
-                            this.substring(
-                                this.indexOf("tid=") + 4,
-                                this.indexOf("&", this.indexOf("tid=") + 4)
-                            )
-                        else
-                            this.substring(this.indexOf("tid=") + 4)
+                        targetTid = if (this.contains("highlight")) this.substring(this.indexOf("tid=") + 4, this.indexOf("&", this.indexOf("tid=") + 4))
+                        else this.substring(this.indexOf("tid=") + 4)
                     } catch (ignored: Exception) {
                     }
                 }
@@ -65,9 +63,10 @@ class SearchResultActivity : AppCompatActivity() {
                         title.text().trim(),
                         it.select("p:nth-child(3)").text().trim(),
                         author.text(),
-                        it.select("p:nth-child(4) span:first-child").text(),
-                        "[" + it.select("p:nth-child(4) span:last-child")
-                            .text() + "]" + it.select("p.xg1").text(),
+                        it.select("span:first-child").text(),
+                        it.select(".xi1").text(),
+                        meta.substring(meta.indexOf(" - ") + 3, meta.length - 3),
+                        meta.substring(0, meta.indexOf("个回复")),
                         targetTid.toInt()
                     )
                 )

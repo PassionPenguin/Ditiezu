@@ -12,7 +12,7 @@
         android:layout_marginTop="48dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +35,7 @@
                     android:contentDescription="@null"
                     android:layout_marginStart="@dimen/_16"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -48,8 +48,8 @@
                     android:layout_marginEnd="48dp"
                     android:layout_marginStart="@dimen/_16"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/BackButton"
-                    app:layout_constraintRight_toLeftOf="@id/SubmitButton"
+                    app:layout_constraintEnd_toStartOf="@id/SubmitButton"
+                    app:layout_constraintStart_toEndOf="@id/BackButton"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
@@ -61,7 +61,7 @@
                     android:contentDescription="@null"
                     android:layout_marginEnd="@dimen/_16"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

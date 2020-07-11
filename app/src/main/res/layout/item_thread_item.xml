@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/threadItem"
     android:layout_width="match_parent"
@@ -7,90 +8,155 @@
     android:clickable="false"
     android:focusable="false"
     android:orientation="vertical"
-    android:background="@color/surface"
+    android:background="@color/surface_secondary"
     tools:ignore="SmallSp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/_16"
-        android:background="@drawable/border_radius_4_no_padding"
-        android:elevation="@dimen/_8"
-        android:orientation="vertical">
+        android:background="@drawable/ripple_no_radius"
+        android:backgroundTint="@color/surface"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/_16"
+        android:paddingHorizontal="@dimen/_32"
+        android:layout_marginVertical="@dimen/_8">
 
         <TextView
-            android:id="@+id/threadPostTime"
+            android:id="@+id/threadTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_8"
-            android:paddingHorizontal="@dimen/_16"
+            android:layout_marginTop="@dimen/_4"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="18sp"
+            android:paddingTop="12dp"
+            android:textColor="@color/black"
+            tools:text="Thread Title" />
+
+        <TextView
+            android:id="@+id/threadContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4"
+            android:textSize="13sp"
             android:textColor="@color/dark"
-            tools:text="2020/05/30 13:00" />
+            tools:text="Thread Content" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/ripple_no_radius"
-            android:backgroundTint="@color/surface"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/_16"
-            android:paddingHorizontal="@dimen/_16">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="12dp">
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@null" />
 
             <TextView
-                android:id="@+id/threadTitle"
-                android:layout_width="match_parent"
+                android:id="@+id/threadAuthorName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4"
+                android:layout_gravity="center"
                 android:fontFamily="sans-serif-medium"
-                android:textSize="18sp"
-                android:paddingTop="12dp"
-                android:textColor="@color/black"
-                tools:text="Thread Title" />
+                android:textColor="@color/grey"
+                android:textSize="13sp"
+                tools:text="Author Name" />
 
             <TextView
-                android:id="@+id/threadContent"
-                android:layout_width="match_parent"
+                android:id="@+id/threadPostTime"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4"
-                android:textSize="13sp"
-                android:textColor="@color/dark"
-                tools:text="Thread Content" />
+                android:layout_gravity="center"
+                android:textColor="@color/grey"
+                android:layout_marginStart="@dimen/_16"
+                android:textSize="10sp"
+                tools:text="Post Time" />
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16">
+
+            <TextView
+                android:id="@+id/tagName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="@color/grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="[TAGNAME]" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/viewsWrap"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_16"
                 android:orientation="horizontal"
-                android:paddingTop="12dp">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/avatar"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="12dp"
-                    android:contentDescription="@null" />
+                    android:layout_width="@dimen/_16"
+                    android:layout_height="@dimen/_16"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_baseline_view_24"
+                    android:layout_marginEnd="@dimen/_4"
+                    android:contentDescription="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/views"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/threadAuthorName"
+                    android:id="@+id/views"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/dark"
-                    android:textSize="14sp"
-                    tools:text="Author Name" />
+                    android:padding="0dp"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="666" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/repliesWrap"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_16"
+                android:orientation="horizontal"
+                android:layout_marginEnd="@dimen/_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/viewsWrap"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="@dimen/_16"
+                    android:layout_height="@dimen/_16"
+                    android:tint="@color/grey"
+                    android:src="@drawable/ic_baseline_comment_24"
+                    android:layout_marginEnd="@dimen/_4"
+                    android:contentDescription="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/replies"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/threadMetaInfo"
+                    android:id="@+id/replies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/grey"
-                    android:layout_marginStart="@dimen/_16"
-                    android:textSize="10sp"
-                    tools:text="Thread Meta" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:padding="0dp"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="666" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 </LinearLayout>

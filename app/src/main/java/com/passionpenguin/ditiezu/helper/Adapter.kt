@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.scale
 import androidx.core.view.get
@@ -28,7 +29,6 @@ import com.tencent.bugly.crashreport.BuglyLog
 import java.io.FileNotFoundException
 import java.io.IOException
 
-
 class User(
     val uid: Int,
     val name: String,
@@ -36,9 +36,7 @@ class User(
     var isChecked: Boolean = false
 )
 
-class InviteUserAdapter(val activity: Activity, items: List<User>) :
-    RecyclerView.Adapter<InviteUserAdapter.ViewHolder>() {
-
+class InviteUserAdapter(val activity: Activity, items: List<User>) : RecyclerView.Adapter<InviteUserAdapter.ViewHolder>() {
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     private var mItems: List<User> = items
 
@@ -93,19 +91,13 @@ class CategoryItem(
     val id: Int
 )
 
-class CategoryItemAdapter(val activity: Activity, items: List<CategoryItem>) :
-    RecyclerView.Adapter<CategoryItemAdapter.ViewHolder>() {
+class CategoryItemAdapter(val activity: Activity, items: List<CategoryItem>) : RecyclerView.Adapter<CategoryItemAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     private var mItems: List<CategoryItem> = items
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            mInflater.inflate(
-                R.layout.item_category,
-                parent,
-                false
-            )
+        return ViewHolder(mInflater.inflate(R.layout.item_category, parent, false)
         )
     }
 
@@ -113,8 +105,7 @@ class CategoryItemAdapter(val activity: Activity, items: List<CategoryItem>) :
         return mItems.size
     }
 
-    class ViewHolder(view: View) :
-        RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var categoryIcon: ImageView = view.findViewById(R.id.categoryIcon)
         var categoryName: TextView = view.findViewById(R.id.categoryName)
     }
@@ -154,13 +145,7 @@ class EmotionItemAdapter(
     private var mItems: List<EmotionItem> = items
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            mInflater.inflate(
-                R.layout.item_emotion,
-                parent,
-                false
-            )
-        )
+        return ViewHolder(mInflater.inflate(R.layout.item_emotion, parent, false))
     }
 
 
@@ -170,21 +155,15 @@ class EmotionItemAdapter(
 
     class ViewHolder(view: View) :
         RecyclerView.ViewHolder(view) {
-        val image = view.findViewById<ImageView>(R.id.image)
+        val image: ImageView = view.findViewById<ImageView>(R.id.image)
     }
 
-    override fun onBindViewHolder(
-        holder: ViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             Glide.with(activity)
                 .load(BitmapFactory.decodeStream(activity.assets.open("webHelper/smiley/$name/" + mItems[position].src)))
                 .fitCenter()
-                .error(
-                    BitmapFactory.decodeStream(activity.assets.open("webHelper/smiley/xiaobai/1.gif"))
-                        .toDrawable(activity.resources)
-                )
+                .error(BitmapFactory.decodeStream(activity.assets.open("webHelper/smiley/xiaobai/1.gif")).toDrawable(activity.resources))
                 .into(holder.image)
         } catch (fne: FileNotFoundException) {
             AppCenterLog.error("[ADAPTER - SMILEY]", fne.toString())
@@ -198,14 +177,15 @@ class EmotionItemAdapter(
     }
 }
 
-
 class ThreadItem(
     val authorId: Int,
     val title: String,
     val content: String,
     val authorName: String,
     val time: String,
-    val meta: String,
+    val tagname: String? = null,
+    val views: String? = null,
+    val replies: String? = null,
     val target: Int
 )
 
@@ -247,41 +227,22 @@ class ThreadItemAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
             0 -> {
-                val vh = ViewHolder(
-                    mInflater.inflate(
-                        if (isHome) R.layout.item_home_header else R.layout.item_category_info_header,
-                        parent,
-                        false
-                    )
-                )
+                val vh = ViewHolder(mInflater.inflate(if (isHome) R.layout.item_home_header else R.layout.item_category_info_header, parent, false))
                 vh.init(viewType, isHome, withHeader, withNavigation)
                 vh
             }
             2 -> {
-                val vh = ViewHolder(
-                    mInflater.inflate(
-                        R.layout.item_category_pagination_navigation,
-                        parent,
-                        false
-                    )
-                )
+                val vh = ViewHolder(mInflater.inflate(R.layout.item_category_pagination_navigation, parent, false))
                 vh.init(viewType, isHome, withHeader, withNavigation)
                 vh
             }
             else -> {
-                val vh = ViewHolder(
-                    mInflater.inflate(
-                        R.layout.item_thread_item,
-                        parent,
-                        false
-                    )
-                )
+                val vh = ViewHolder(mInflater.inflate(R.layout.item_thread_item, parent, false))
                 vh.init(viewType, isHome, withHeader, withNavigation)
                 vh
             }
         }
     }
-
 
     override fun getItemCount(): Int {
         return if (isHome) mItems.size + 1 else {
@@ -301,9 +262,14 @@ class ThreadItemAdapter(
         lateinit var itemThreadTitle: TextView
         lateinit var itemThreadContent: TextView
         lateinit var itemThreadPostTime: TextView
-        lateinit var itemThreadMetaInfo: TextView
+        lateinit var itemThreadTagName: TextView
+        lateinit var itemThreadViews: TextView
+        lateinit var itemThreadViewsWrap: ConstraintLayout
+        lateinit var itemThreadReplies: TextView
+        lateinit var itemThreadRepliesWrap: ConstraintLayout
         lateinit var itemThreadAuthorName: TextView
         lateinit var itemAvatar: ImageView
+
         lateinit var categoryIcon: ImageView
         lateinit var categoryName: TextView
         lateinit var categoryMeta: TextView
@@ -326,7 +292,6 @@ class ThreadItemAdapter(
         ) {
             if (viewType == 0) {
                 if (isHome) {
-                    recentView = view.findViewById(R.id.recentView)
                     discoveryNew = view.findViewById(R.id.discoveryNew)
                     categoryList = view.findViewById(R.id.categoryList)
                     accountView = view.findViewById(R.id.accountView)
@@ -352,25 +317,24 @@ class ThreadItemAdapter(
                 itemThreadTitle = view.findViewById(R.id.threadTitle)
                 itemThreadContent = view.findViewById(R.id.threadContent)
                 itemThreadPostTime = view.findViewById(R.id.threadPostTime)
-                itemThreadMetaInfo = view.findViewById(R.id.threadMetaInfo)
                 itemThreadAuthorName = view.findViewById(R.id.threadAuthorName)
+                itemThreadTagName = view.findViewById(R.id.tagName)
+                itemThreadViews = view.findViewById(R.id.views)
+                itemThreadViewsWrap = view.findViewById(R.id.viewsWrap)
+                itemThreadReplies = view.findViewById(R.id.replies)
+                itemThreadRepliesWrap = view.findViewById(R.id.repliesWrap)
                 itemAvatar = view.findViewById(R.id.avatar)
             }
         }
     }
 
-    override fun onBindViewHolder(
-        holder: ViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == 0 && (isHome || withHeader)) {
             if (isHome) {
-                holder.recentView.setOnClickListener {
-                }
                 holder.discoveryNew.setOnClickListener {
                     val i = Intent(activity, SearchResultActivity::class.java)
                     i.flags = FLAG_ACTIVITY_NEW_TASK
-                    i.putExtra("kw", "")
+                    i.putExtra("kw", "searchForNewPost")
                     activity.startActivity(i)
                 }
                 holder.categoryList.setOnClickListener {
@@ -459,9 +423,28 @@ class ThreadItemAdapter(
             if (item.content.isEmpty()) holder.itemThreadContent.visibility = View.GONE
             holder.itemThreadContent.text = item.content
             holder.itemThreadPostTime.text = item.time
-            holder.itemThreadMetaInfo.text = item.meta
+            when (item.tagname) {
+                null -> holder.itemThreadTagName.visibility = View.GONE
+                else -> {
+                    holder.itemThreadTagName.text = item.tagname
+                }
+            }
+            when (item.views) {
+                null -> holder.itemThreadViewsWrap.visibility = View.GONE
+                else -> {
+                    holder.itemThreadViews.text = item.views
+                }
+            }
+            when (item.replies) {
+                null -> holder.itemThreadRepliesWrap.visibility = View.GONE
+                else -> {
+                    holder.itemThreadReplies.text = item.replies
+                }
+            }
             holder.itemThreadAuthorName.text = item.authorName
-            Glide.with(activity)
+            if (item.authorId == -1)
+                holder.itemAvatar.visibility = View.GONE
+            else Glide.with(activity)
                 .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${item.authorId}")
                 .placeholder(R.mipmap.noavatar_middle)
                 .error(R.mipmap.noavatar_middle)
@@ -469,18 +452,17 @@ class ThreadItemAdapter(
                 .into(holder.itemAvatar)
 
             holder.itemView.setOnClickListener {
-                if (position != 0) {
+                if (position != 0 || !(isHome || withHeader)) {
                     val i = Intent(activity, ViewThread::class.java)
-                    i.putExtra("tid", mItems[position - 1].target)
+                    i.putExtra("tid", mItems[position - (if (isHome || withHeader) 1 else 0)].target)
                     i.flags = FLAG_ACTIVITY_NEW_TASK
                     activity.startActivity(i)
                 }
             }
 
             holder.itemView.setOnLongClickListener {
-                if (position != 0) {
-//                    TODO("MENU")
-                }
+//                if (position != 0 || !(isHome || withHeader)) {
+//                }
                 true
             }
         }
@@ -530,8 +512,7 @@ class NotificationItem(
     val page: String? = "1"
 )
 
-class NotificationItemAdapter(val activity: Activity, items: List<NotificationItem>) :
-    RecyclerView.Adapter<NotificationItemAdapter.ViewHolder>() {
+class NotificationItemAdapter(val activity: Activity, items: List<NotificationItem>) : RecyclerView.Adapter<NotificationItemAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     private var mItems: List<NotificationItem> = items
@@ -592,48 +573,7 @@ class NotificationItemAdapter(val activity: Activity, items: List<NotificationIt
     }
 }
 
-class RateItem(
-    val authorId: Int,
-    val authorName: String,
-    val popularity: String,
-    val money: String,
-    val prestige: String,
-    val reason: String
-)
-
-fun rateView(
-    mCtx: Context,
-    rateLog: RateItem,
-    withPopularity: Boolean = false,
-    withMoney: Boolean = false,
-    withPrestige: Boolean = false
-): View {
-    val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-    val view: View = layoutInflater.inflate(R.layout.item_rate_log, null)
-    val popularity: TextView = view.findViewById(R.id.popularity)
-    val money: TextView = view.findViewById(R.id.money)
-    val prestige: TextView = view.findViewById(R.id.prestige)
-    view.findViewById<TextView>(R.id.reason).text = rateLog.reason
-    view.findViewById<TextView>(R.id.authorName).text = rateLog.authorName
-    popularity.text = rateLog.popularity
-    money.text = rateLog.money
-    prestige.text = rateLog.prestige
-    if (withPopularity) popularity.visibility = View.VISIBLE
-    if (withMoney) money.visibility = View.VISIBLE
-    if (withPrestige) prestige.visibility = View.VISIBLE
-    Glide.with(mCtx)
-        .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${rateLog.authorId}")
-        .placeholder(R.mipmap.noavatar_middle)
-        .error(R.mipmap.noavatar_middle)
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-        .into(view.findViewById(R.id.avatar))
-    return view
-}
-
-fun attachImageView(
-    mCtx: Activity,
-    url: String
-): View {
+fun attachImageView(mCtx: Activity, url: String): View {
     val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
     val view: View = layoutInflater.inflate(R.layout.item_image, null)
 
