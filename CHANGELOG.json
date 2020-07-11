@@ -240,6 +240,12 @@
             "versionName": "Ditiezu 10.2.2",
             "versionDate": "Sat Jul 11 2020 12:31:37 GMT+0800 (中国标准时间)",
             "versionLog": "稳定性更新（v41-v42开发版合并），修复错误，添加邀请、登录、设置权限、设置回帖奖励等功能，修复部分错误"
+        },
+        {
+            "versionCode": 44,
+            "versionName": "Ditiezu 10.2.3",
+            "versionDate": "Sat Jul 11 2020 17:22:18 GMT+0800 (中国标准时间)",
+            "versionLog": "修复登录问题"
         }
     ]
 }

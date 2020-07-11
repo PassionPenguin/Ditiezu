@@ -141,6 +141,8 @@ internal object Dialog {
                 val window = activity.window
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
+                view.alpha = 0F
+                view.animate().alpha(1F).setDuration(250).start()
                 view.postDelayed({
                     view.animate().alpha(0F).setDuration(250).start()
                     view.postDelayed({
@@ -150,8 +152,7 @@ internal object Dialog {
             } catch (exp: Exception) {
                 AppCenterLog.error("[DIALOG]", exp.toString())
 
-                val view =
-                    LayoutInflater.from(activity).inflate(R.layout.fragment_tips, target, false)
+                val view = LayoutInflater.from(activity).inflate(R.layout.fragment_tips, target, false)
                 view.findViewById<ImageView>(R.id.icon)
                     .setImageResource(R.drawable.ic_baseline_close_24)
                 view.findViewById<ImageView>(R.id.icon).backgroundTintList =
@@ -166,6 +167,8 @@ internal object Dialog {
                 val window = activity.window
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 popupWindow.showAtLocation(target, Gravity.TOP, 0, 0)
+                view.alpha = 0F
+                view.animate().alpha(1F).setDuration(250).start()
                 view.postDelayed({
                     view.animate().alpha(0F).setDuration(250).start()
                     view.postDelayed({

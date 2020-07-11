@@ -52,7 +52,7 @@ internal object HttpExt {
     private fun storeCookie(urlConnection: HttpURLConnection) {
         with(urlConnection.headerFields[SET_COOKIE]) {
             this?.forEach {
-                CookieManager.getInstance().setCookie(urlConnection.url.toString(), it)
+                CookieManager.getInstance().setCookie(urlConnection.url.toString(), it, null)
             }
         }
     }

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import com.passionpenguin.ditiezu.*
 import com.passionpenguin.ditiezu.helper.*
 import kotlinx.android.synthetic.main.fragment_account.*
@@ -35,7 +36,9 @@ class AccountFragment : Fragment() {
             false -> {
                 val loginView = layoutInflater.inflate(R.layout.fragment_login_tips, container, false)
                 loginView?.findViewById<Button>(R.id.toggle_login_page_button)?.setOnClickListener { _ ->
-                    activity?.startActivity(Intent(context, LoginActivity::class.java))
+                    val i = Intent(context, LoginActivity::class.java)
+                    i.putExtra("redirected", true)
+                    activity?.startActivity(i)
                 }
                 activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.GONE
                 loginView
@@ -48,6 +51,15 @@ class AccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val pref = activity?.let { Preference(it) }
+
+        GlobalScope.launch {
+            activity?.let {
+                if (HttpExt.checkLogin(it) && !isLogin) {
+                    pref?.edit("login_state", true)
+                    it.recreate()
+                }
+            }
+        }
 
         activity?.findViewById<LinearLayout>(R.id.LoadingMaskContainer)?.visibility = View.VISIBLE
         try {
@@ -102,7 +114,9 @@ class AccountFragment : Fragment() {
                                             GlobalScope.launch {
                                                 HttpExt.retrievePage("http://www.ditiezu.com/member.php?mod=logging&action=logout&formhash=$formhash")
                                                 CookieManager.getInstance().removeAllCookies(null)
-                                                activity.recreate()
+                                                runOnUiThread {
+                                                    activity.recreate()
+                                                }
                                             }
                                             val i = Intent(activity, LoginActivity::class.java)
                                             i.putExtra("redirected", true)
@@ -183,6 +197,7 @@ class AccountFragment : Fragment() {
                                         value_popularity.text = parser.select("#psts li")[4].textNodes()[0].text().trim()
 
                                         prefItem.forEach { item -> personal_pref_list.addView(context?.let { ctx -> prefView(ctx, item.name, item.description, item.value, item.toggle, item.execFunc) }) }
+                                        application_pref_list.addView(context?.let { ctx -> prefView(ctx, resources.getString(R.string.donate), "", "", true) { activity.startActivity(Intent(context, Donate::class.java)) } })
                                         application_pref_list.addView(context?.let { ctx -> prefView(ctx, resources.getString(R.string.about), "", "", true) { activity.startActivity(Intent(context, AboutDitiezu::class.java)) } })
                                     }
                                 }

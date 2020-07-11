@@ -1,6 +1,6 @@
 {
-    "debugCode": 43,
-    "debugName": "Ditiezu 10.2.2",
-    "debugDate": "Sat Jul 11 2020 12:31:37 GMT+0800 (中国标准时间)",
-    "debugLog": "稳定性更新（v41-v42开发版合并），修复错误，添加邀请、登录、设置权限、设置回帖奖励等功能，修复部分错误"
+    "debugCode": 44,
+    "debugName": "Ditiezu 10.2.3",
+    "debugDate": "Sat Jul 11 2020 17:22:18 GMT+0800 (中国标准时间)",
+    "debugLog": "修复登录问题"
 }

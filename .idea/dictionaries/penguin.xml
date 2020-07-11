@@ -2,6 +2,7 @@
   <dictionary name="penguin">
     <words>
       <w>ajaxtarget</w>
+      <w>alipay</w>
       <w>cookietime</w>
       <w>crashlytics</w>
       <w>ditiezu</w>
@@ -33,6 +34,7 @@
       <w>typeid</w>
       <w>useragent</w>
       <w>viewthread</w>
+      <w>wechatpay</w>
     </words>
   </dictionary>
 </component>

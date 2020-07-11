@@ -35,8 +35,6 @@ class SearchResultActivity : AppCompatActivity() {
         var kw = i?.getString("kw", "")
 
         val formhash = ""
-        if (kw == "searchForNewPost")
-            GlobalScope.launch { Jsoup.parse(HttpExt.retrievePage("http://www.ditiezu.com/search.php?mod=forum&srchfrom=1000&searchsubmit=yes")) }
         GlobalScope.launch { Jsoup.parse(HttpExt.retrievePage("http://www.ditiezu.com/search.php?mod=forum")).select("[name=\"formhash\"]").attr("value") }
 
         fun processResult(result: String) {
@@ -94,13 +92,8 @@ class SearchResultActivity : AppCompatActivity() {
         fun search() {
             LoadingMaskContainer.visibility = View.VISIBLE
             GlobalScope.launch {
-                val s = HttpExt.postPage(
-                    "http://ditiezu.com/search.php?mod=forum",
-                    "formhash=$formhash&srchtxt=" + URLEncoder.encode(
-                        kw.toString(),
-                        "GBK"
-                    ) + "&searchsubmit=yes"
-                )
+                val s = if (kw == "searchForNewPost") HttpExt.retrievePage("http://www.ditiezu.com/search.php?mod=forum&srchfrom=31536000&searchsubmit=yes") // 有点离谱哦～一年分量～
+                else HttpExt.postPage("http://ditiezu.com/search.php?mod=forum", "formhash=$formhash&srchtxt=" + URLEncoder.encode(kw.toString(), "GBK") + "&searchsubmit=yes")
                 runOnUiThread {
                     when {
                         s == "Failed Retrieved" -> {

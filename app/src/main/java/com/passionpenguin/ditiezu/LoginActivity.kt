@@ -28,7 +28,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import java.net.URLEncoder
-import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -98,126 +97,132 @@ class LoginActivity : AppCompatActivity() {
              * [Function] loadLoginData()
              * @purpose load Login Data
              */
-            runOnUiThread {
-                submitLogin.setOnClickListener {
-                    loadingButton.onLoading()
-                    GlobalScope.launch {
-                        val res = HttpExt.postPage(
-                            "http://www.ditiezu.com/member.php?mod=logging&action=login&loginsubmit=yes&infloat=yes&lssubmit=yes&inajax=1",
-                            "fastloginfield=username&username=${URLEncoder.encode(userNameInput.text.toString(), "GBK")}" +
-                                    "&password=${URLEncoder.encode(userPasswordInput.text.toString(), "GBK")}&quickforward=yes&handlekey=ls",
-                            customHeader = arrayOf(
-                                HttpExt.HttpHeader("Host", "www.ditiezu.com"),
-                                HttpExt.HttpHeader("Cache-Control", "max-age=0"),
-                                HttpExt.HttpHeader("Origin", "http://www.ditiezu.com"),
-                                HttpExt.HttpHeader("Upgrade-Insecure-Requests", "1"),
-                                HttpExt.HttpHeader("Content-Type", "application/x-www-form-urlencoded"),
-                                HttpExt.HttpHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"),
-                                HttpExt.HttpHeader("Referer", "http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes"),
-                                HttpExt.HttpHeader("Connection", "keep-alive")
+            try {
+                runOnUiThread {
+                    submitLogin.setOnClickListener {
+                        loadingButton.onLoading()
+                        GlobalScope.launch {
+                            val res = HttpExt.postPage(
+                                "http://www.ditiezu.com/member.php?mod=logging&action=login&loginsubmit=yes&infloat=yes&lssubmit=yes&inajax=1",
+                                "fastloginfield=username&username=${URLEncoder.encode(userNameInput.text.toString(), "GBK")}" +
+                                        "&password=${URLEncoder.encode(userPasswordInput.text.toString(), "GBK")}&quickforward=yes&handlekey=ls",
+                                customHeader = arrayOf(
+                                    HttpExt.HttpHeader("Host", "www.ditiezu.com"),
+                                    HttpExt.HttpHeader("Cache-Control", "max-age=0"),
+                                    HttpExt.HttpHeader("Origin", "http://www.ditiezu.com"),
+                                    HttpExt.HttpHeader("Upgrade-Insecure-Requests", "1"),
+                                    HttpExt.HttpHeader("Content-Type", "application/x-www-form-urlencoded"),
+                                    HttpExt.HttpHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"),
+                                    HttpExt.HttpHeader("Referer", "http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes"),
+                                    HttpExt.HttpHeader("Connection", "keep-alive")
+                                )
                             )
-                        )
-                        runOnUiThread {
-                            loadingButton.onLoaded()
-                        }
-                        if (res.contains("欢迎您回来") || res.contains("succeedhandle_ls")) {
-                            pref.edit("login_state", true)
-                            pref.edit("user_name", res.substring(res.indexOf("'username':") + 11, res.indexOf("'", res.indexOf("'username':") + 11)))
-                            startActivity(Intent(this@LoginActivity, Splash::class.java))
-                        } else {
-                            val data = res.substring(53, res.length - 10)
-                            try {
-                                if (res.contains("location")) {
-                                    // 需要输入验证码
-                                    val location = data.substring(data.indexOf("', '") + 4, data.indexOf("'", data.indexOf("', '") + 4))
-                                    GlobalScope.launch {
-                                        try {
-                                            val source = HttpExt.retrievePage("http://www.ditiezu.com/$location&infloat=yes&handlekey=login&inajax=1&ajaxtarget=fwin_content_login")
-                                            if (source.contains("验证码")) {
-                                                val codeParser = Jsoup.parse(source.substring(53, source.length - 10))
-                                                runOnUiThread {
-                                                    codeWrap.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                                                    loadCode(codeParser.select("[name='sechash']").attr("value"))
-                                                }
+                            runOnUiThread {
+                                loadingButton.onLoaded()
+                            }
+                            if (res.contains("欢迎您回来") || res.contains("succeedhandle_ls")) {
+                                pref.edit("login_state", true)
+                                pref.edit("user_name", res.substring(res.indexOf("'username':") + 11, res.indexOf("'", res.indexOf("'username':") + 11)))
+                                startActivity(Intent(this@LoginActivity, Splash::class.java))
+                            } else {
+                                val data = res.substring(53, res.length - 10)
+                                try {
+                                    if (res.contains("location")) {
+                                        // 需要输入验证码
+                                        val location = data.substring(data.indexOf("', '") + 4, data.indexOf("'", data.indexOf("', '") + 4))
+                                        GlobalScope.launch {
+                                            try {
+                                                val source = HttpExt.retrievePage("http://www.ditiezu.com/$location&infloat=yes&handlekey=login&inajax=1&ajaxtarget=fwin_content_login")
+                                                if (source.contains("验证码")) {
+                                                    val codeParser = Jsoup.parse(source.substring(53, source.length - 10))
+                                                    runOnUiThread {
+                                                        codeWrap.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                                                        loadCode(codeParser.select("[name='sechash']").attr("value"))
+                                                    }
 
-                                                submitLogin.setOnClickListener {
-                                                    loadingButton.onLoading()
-                                                    GlobalScope.launch {
-                                                        val status = HttpExt.retrievePage("http://www.ditiezu.com/misc.php?mod=seccode&action=check&inajax=1" +
-                                                                "&idhash=${codeParser.select("[name='sechash']").attr("value")}" +
-                                                                "&secverify=${URLEncoder.encode(codeInput.text.toString(), "GBK")}"
-                                                        )
-                                                        if (status.contains("succeed")) {
-                                                            // 验证码正确
-                                                            val postResult = HttpExt.postPage(
-                                                                "http://www.ditiezu.com/${codeParser.select("form").attr("action")}&inajax=1",
-                                                                "formhash=${codeParser.select("[name='formhash']").attr("value")}&referer=http%3A%2F%2Fwww.ditiezu.com%2Fmember.php%3Fmod%3Dregditiezu.php" +
-                                                                        "&auth=${codeParser.select("[name='auth']").attr("value")}" +
-                                                                        "&sechash=${URLEncoder.encode(codeParser.select("[name='sechash']").attr("value"), "GBK")}" +
-                                                                        "&seccodeverify=${URLEncoder.encode(codeInput.text.toString(), "GBK")}&cookietime=2592000",
-                                                                customHeader = arrayOf(
-                                                                    HttpExt.HttpHeader("Host", "www.ditiezu.com"),
-                                                                    HttpExt.HttpHeader("Cache-Control", "max-age=0"),
-                                                                    HttpExt.HttpHeader("Origin", "http://www.ditiezu.com"),
-                                                                    HttpExt.HttpHeader("Upgrade-Insecure-Requests", "1"),
-                                                                    HttpExt.HttpHeader("Content-Type", "application/x-www-form-urlencoded"),
-                                                                    HttpExt.HttpHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"),
-                                                                    HttpExt.HttpHeader("Referer", "http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes"),
-                                                                    HttpExt.HttpHeader("Connection", "keep-alive")
-                                                                )
+                                                    submitLogin.setOnClickListener {
+                                                        loadingButton.onLoading()
+                                                        GlobalScope.launch {
+                                                            val status = HttpExt.retrievePage("http://www.ditiezu.com/misc.php?mod=seccode&action=check&inajax=1" +
+                                                                    "&idhash=${codeParser.select("[name='sechash']").attr("value")}" +
+                                                                    "&secverify=${URLEncoder.encode(codeInput.text.toString(), "GBK")}"
                                                             )
-                                                            println(postResult)
-                                                            if (postResult.contains("抱歉，密码空或包含非法字符")) {
-                                                                // 错误，也不知道为什么
-                                                                codeWrap.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
-                                                                loadLoginData()
-                                                            }
-                                                            runOnUiThread {
-                                                                tips.text = postResult.substring(postResult.indexOf("CDATA[") + 6, postResult.indexOf("<", postResult.indexOf("CDATA[") + 6))
-                                                            }
-                                                            if (postResult.contains("succeedhandle_") || postResult.contains("'欢迎您回来，")) {
-                                                                // 登录成功进行写入及跳转
-                                                                println("succeed")
-                                                                tips.text = resources.getString(R.string.tip_login_successfully)
-                                                                pref.edit("login_state", true)
-                                                                pref.edit("user_name", postResult.substring(postResult.indexOf("'username':'") + 12, postResult.indexOf("'", postResult.indexOf("'username':'") + 12)))
-                                                                pref.edit("user_uid", postResult.substring(postResult.indexOf("'uid':'") + 12, postResult.indexOf("'", postResult.indexOf("'uid':'") + 12)))
-                                                                Timer().schedule(object : TimerTask() {
-                                                                    override fun run() {
-                                                                        startActivity(Intent(this@LoginActivity, Splash::class.java))
+                                                            if (status.contains("succeed")) {
+                                                                // 验证码正确
+                                                                val postResult = HttpExt.postPage(
+                                                                    "http://www.ditiezu.com/${codeParser.select("form").attr("action")}&inajax=1",
+                                                                    "formhash=${codeParser.select("[name='formhash']").attr("value")}&referer=http%3A%2F%2Fwww.ditiezu.com%2Fmember.php%3Fmod%3Dregditiezu.php" +
+                                                                            "&auth=${codeParser.select("[name='auth']").attr("value")}" +
+                                                                            "&sechash=${URLEncoder.encode(codeParser.select("[name='sechash']").attr("value"), "GBK")}" +
+                                                                            "&seccodeverify=${URLEncoder.encode(codeInput.text.toString(), "GBK")}&cookietime=2592000",
+                                                                    customHeader = arrayOf(
+                                                                        HttpExt.HttpHeader("Host", "www.ditiezu.com"),
+                                                                        HttpExt.HttpHeader("Cache-Control", "max-age=0"),
+                                                                        HttpExt.HttpHeader("Origin", "http://www.ditiezu.com"),
+                                                                        HttpExt.HttpHeader("Upgrade-Insecure-Requests", "1"),
+                                                                        HttpExt.HttpHeader("Content-Type", "application/x-www-form-urlencoded"),
+                                                                        HttpExt.HttpHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"),
+                                                                        HttpExt.HttpHeader("Referer", "http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes"),
+                                                                        HttpExt.HttpHeader("Connection", "keep-alive")
+                                                                    )
+                                                                )
+                                                                println(postResult)
+                                                                if (postResult.contains("抱歉，密码空或包含非法字符")) {
+                                                                    runOnUiThread {
+                                                                        codeWrap.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0)
+                                                                        loadLoginData()
                                                                     }
-                                                                }, 1000)
+                                                                }
+                                                                runOnUiThread {
+                                                                    tips.text = postResult.substring(postResult.indexOf("CDATA[") + 6, postResult.indexOf("<", postResult.indexOf("CDATA[") + 6))
+                                                                }
+                                                                if (postResult.contains("succeedhandle_") || postResult.contains("'欢迎您回来，")) {
+                                                                    // 登录成功进行写入及跳转
+                                                                    pref.edit("login_state", true)
+                                                                    pref.edit("user_name", postResult.substring(postResult.indexOf("'username':'") + 12, postResult.indexOf("'", postResult.indexOf("'username':'") + 12)))
+                                                                    pref.edit("user_uid", postResult.substring(postResult.indexOf("'uid':'") + 12, postResult.indexOf("'", postResult.indexOf("'uid':'") + 12)))
+                                                                    runOnUiThread {
+                                                                        tips.text = resources.getString(R.string.tip_login_successfully)
+                                                                    }
+                                                                    val i = Intent(this@LoginActivity, MainActivity::class.java)
+                                                                    i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                                                    startActivity(i)
+                                                                }
+                                                                runOnUiThread {
+                                                                    loadingButton.onLoaded()
+                                                                }
+                                                            } else runOnUiThread {
+                                                                tips.text = resources.getString(R.string.tip_incorrect_code)
+                                                                loadingButton.onLoaded()
                                                             }
-                                                            loadingButton.onLoaded()
-                                                        } else runOnUiThread {
-                                                            tips.text = resources.getString(R.string.tip_incorrect_code)
-                                                            loadingButton.onLoaded()
                                                         }
                                                     }
                                                 }
+
+                                            } catch (e: Exception) {
+                                                println(e)
                                             }
-
-                                        } catch (e: Exception) {
-                                            println(e)
                                         }
+                                    } else runOnUiThread {
+                                        // 出现错误，如密码空、密码错误等
+                                        tips.text = data.substring(0, data.indexOf("<"))
                                     }
-                                } else runOnUiThread {
-                                    // 出现错误，如密码空、密码错误等
-                                    tips.text = data.substring(0, data.indexOf("<"))
+                                } catch (e: Exception) {
+                                    println(e)
                                 }
-                            } catch (e: Exception) {
-                                println(e)
-                            }
 
-                            runOnUiThread {
-                                when {
-                                    res.contains("location_login") -> tips.text = resources.getString(R.string.tip_enter_code)
-                                    res.contains("Error") -> tips.text = res.substring(res.indexOf("CDATA[") + 6, res.indexOf("<", res.indexOf("CDATA[") + 6))
+                                runOnUiThread {
+                                    when {
+                                        res.contains("location_login") -> tips.text = resources.getString(R.string.tip_enter_code)
+                                        res.contains("Error") -> tips.text = res.substring(res.indexOf("CDATA[") + 6, res.indexOf("<", res.indexOf("CDATA[") + 6))
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            } catch (e: Exception) {
+                println(e)
             }
         }
         loadLoginData()

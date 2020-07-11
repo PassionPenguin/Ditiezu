@@ -170,4 +170,5 @@
     <string name="preview_on">开发者预览版</string>
     <string name="preview_description">开启预览模式代表着您可以使用完整的新功能，但是应用可能会因为部分原因而闪退，请妥善考虑后选择更新渠道（稳定/预览）</string>
     <string name="preview_title">预览版本</string>
+    <string name="donate">赞赏</string>
 </resources>

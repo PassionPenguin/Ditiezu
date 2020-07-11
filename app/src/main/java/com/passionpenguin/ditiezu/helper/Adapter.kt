@@ -253,9 +253,7 @@ class ThreadItemAdapter(
         }
     }
 
-    class ViewHolder(private val view: View) :
-        RecyclerView.ViewHolder(view) {
-        lateinit var recentView: LinearLayout
+    class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         lateinit var discoveryNew: LinearLayout
         lateinit var categoryList: LinearLayout
         lateinit var accountView: LinearLayout

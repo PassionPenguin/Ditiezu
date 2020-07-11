@@ -235,4 +235,7 @@
     <string name="preview_on">Developer Preview</string>
     <string name="preview_description">Turning on preview mode means that you can use the complete new features, but the application may crash for some reasons. Please consider the update channel (stable/preview) after due consideration.</string>
     <string name="preview_title">Preview</string>
+    <string name="donate">Donate</string>
+    <string name="wechatpay" translatable="false">wechatpay</string>
+    <string name="alipay" translatable="false">alipay</string>
 </resources>

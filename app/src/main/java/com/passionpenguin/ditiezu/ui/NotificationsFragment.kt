@@ -133,7 +133,7 @@ class NotificationsFragment : Fragment() {
                                                     } else it.select("img").attr("src"),
                                                     it.select(".ntc_body").text(),
                                                     quote,
-                                                    it.select("dt span").text(),
+                                                    it.select("dt span")[0].text(),
                                                     tid,
                                                     page
                                                 )

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/actionBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingBottom="@dimen/_8"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="72dp"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:layout_height="wrap_content"
+            android:text="@string/donate"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="@dimen/_16"
+            android:fontFamily="sans-serif-black"
+            android:textSize="16sp"
+            android:textColor="@color/text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/wechatpay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="WECHAT PAY 赞赏"
+        android:textColor="@color/success"
+        android:paddingTop="@dimen/_16"
+        android:paddingBottom="@dimen/_8"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-black"
+        android:textAlignment="center"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/wechatPayImage"
+        android:layout_width="@dimen/_240"
+        android:layout_height="@dimen/_240"
+        android:src="@drawable/wechatpay"
+        android:layout_gravity="center"
+        android:contentDescription="@string/wechatpay" />
+
+    <TextView
+        android:id="@+id/alipay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ALIPAY PAY 赞赏"
+        android:textColor="@color/primary_default"
+        android:paddingTop="@dimen/_16"
+        android:paddingBottom="@dimen/_8"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-black"
+        android:textAlignment="center"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/alipayImage"
+        android:layout_width="@dimen/_240"
+        android:layout_height="@dimen/_240"
+        android:src="@drawable/alipay"
+        android:visibility="invisible"
+        android:layout_gravity="center"
+        android:contentDescription="@string/alipay" />
+
+</LinearLayout>

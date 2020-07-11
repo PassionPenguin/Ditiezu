@@ -63,6 +63,7 @@
             android:name=".Splash"
             android:noHistory="true" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".Donate" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

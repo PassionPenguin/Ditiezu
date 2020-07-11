@@ -42,7 +42,7 @@ class AboutDitiezu : AppCompatActivity() {
                                 if (latestVersion.get("debugCode").asInt > BuildConfig.VERSION_CODE)
                                     application_pref_list.addView(prefView(applicationContext, resources.getString(R.string.new_version_detected), latestVersion.get("debugLog").asString, latestVersion.get("debugCode").asString, true) {
                                         Dialog.create(this@AboutDitiezu, AboutDitiezu, resources.getString(R.string.confirm), resources.getString(R.string.confirmUpdating), resources.getString(R.string.confirmUpdating_description)) { _, w ->
-                                            HttpExt.downloadUtils(applicationContext, "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699", "dtz_${latestVersion.get("debugCode").asString}.apk")
+                                            HttpExt.downloadUtils(applicationContext, "https://passionpenguin.coding.net/api/share/download/ebf77d48-2984-4a8b-b8da-1b53f4a8de8e", "dtz_${latestVersion.get("debugCode").asString}.apk")
                                             w.dismiss()
                                         }
                                     })
@@ -64,7 +64,7 @@ class AboutDitiezu : AppCompatActivity() {
                 if (latestVersion.get("debugCode").asInt > BuildConfig.VERSION_CODE)
                     appPref.add(PrefListItem(resources.getString(R.string.new_version_detected), latestVersion.get("debugLog").asString, latestVersion.get("debugCode").asString, true) {
                         Dialog.create(this@AboutDitiezu, AboutDitiezu, resources.getString(R.string.confirm), resources.getString(R.string.confirmUpdating), resources.getString(R.string.confirmUpdating_description)) { _, w ->
-                            HttpExt.downloadUtils(applicationContext, "https://passionpenguin.coding.net/api/share/download/0fa9eb8c-6255-4a97-b7cb-41c64e5b1699", "dtz_${latestVersion.get("debugCode").asString}.apk")
+                            HttpExt.downloadUtils(applicationContext, "https://passionpenguin.coding.net/api/share/download/ebf77d48-2984-4a8b-b8da-1b53f4a8de8e", "dtz_${latestVersion.get("debugCode").asString}.apk")
                             w.dismiss()
                         }
                     })
