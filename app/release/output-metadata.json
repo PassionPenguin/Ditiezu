@@ -8,11 +8,11 @@
   "variantName": "processReleaseResources",
   "elements": [
     {
-        "type": "SINGLE",
-        "filters": [],
-        "versionCode": 41,
-        "versionName": "Ditiezu 10.2.0",
-        "outputFile": "app-release.apk"
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 43,
+      "versionName": "Ditiezu 10.2.2STABLE",
+      "outputFile": "app-release.apk"
     }
   ]
 }
