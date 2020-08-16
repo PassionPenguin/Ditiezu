@@ -1,6 +1,38 @@
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   viewthread.html
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/12/20 8:27 PM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!doctype html>
 <html lang="zh">
 <head>
+    <script>
+
+        window.onLoading = () => {
+            $(".loading-anim")[0].fadeIn("flex");
+        };
+        window.onLoaded = () => {
+            $(".loading-anim")[0].fadeOut();
+        };
+
+    </script>
     <meta charset="UTF-8">
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
@@ -15,8 +47,16 @@
             src: url(MaterialIcons-Regular.woff2) format('woff2');
         }
 
+        @font-face {
+            font-family: Anodina;
+            src: url("anodina.otf")
+        }
+        body {
+            font-family: Anodina;
+        }
+
         .material-icons {
-            font-family: 'Material Icons', sans-serif;
+            font-family: 'Material Icons', Anodina, sans-serif;
             font-weight: normal;
             font-style: normal;
             font-size: 24px;
@@ -117,13 +157,13 @@
 
         .view span.authorName {
             display: block;
-            font: bold 15px/1 sans-serif;
+            font: bold 15px/1 Anodina, sans-serif;
             text-transform: uppercase;
             color: var(--secondary);
         }
 
         .view span.threadMeta {
-            font: 400 12px/1 sans-serif;
+            font: 400 12px/1 Anodina, sans-serif;
             margin-top: 6px;
             display: block;
             color: var(--text);
@@ -136,7 +176,7 @@
             display: block;
             padding: 8px 0;
             color: var(--text);
-            font: 15px/30px sans-serif;
+            font: 15px/30px Anodina, sans-serif;
         }
 
         .view div.threadContent * {
@@ -202,7 +242,7 @@
         .ratl {
             margin-top: 12px;
             width: 100%;
-            font: 13px/1 sans-serif;
+            font: 13px/1 Anodina, sans-serif;
             text-transform: uppercase;
         }
 
@@ -287,7 +327,291 @@
         ignore_js_op dd {
             margin: 0;
         }
+
+
     </style>
+    <script>
+        window.startPoint = new Date().getMilliseconds();
+        window.$ = (selector = "body", context = document) => {
+            return context.querySelectorAll(selector);
+        };
+        window.createElement = (data = {
+            type: "div",
+            ns: null,
+            innerText: null,
+            innerHTML: null,
+            attr: [],
+            onclick: null
+        }) => {
+            let el;
+            if (data.ns)
+                el = document.createElementNS(data.ns, data.type);
+            else el = document.createElement(data.type);
+            if (data.innerText)
+                el.innerText = data.innerText;
+            if (data.innerHTML)
+                el.innerHTML = data.innerHTML;
+            if (data.attr)
+                data.attr.forEach(e => {
+                    el.setAttribute(e[0], e[1])
+                });
+            if (data.onclick)
+                el.onclick = data.onclick;
+            return el;
+        };
+        Element.prototype.bcr = HTMLDocument.prototype.bcr = function () {
+            return this.getBoundingClientRect();
+        };
+        Element.prototype.fadeIn = HTMLDocument.prototype.fadeIn = function (displayMode = "unset", visibility = "visible") {
+            this.style.opacity = "1";
+            this.style.display = displayMode;
+            this.style.visibility = visibility;
+            this.style.transition += " opacity 500ms ease-in-out";
+        };
+        Element.prototype.fadeOut = HTMLDocument.prototype.fadeOut = function (remove = false) {
+            this.style.opacity = "0";
+            setTimeout(() => {
+                this.style.display = "none";
+                if (remove)
+                    this.parentElement.removeChild(this);
+            }, 500);
+        };
+        Element.prototype.on = window.on = HTMLDocument.prototype.on = function (types, func, options = {}) {
+            if (!(types || func)) {
+                return;
+            }
+            types = Array.isArray(types) ? types : [types];
+            types.forEach(type => {
+                this.addEventListener(type, func, options);
+            });
+        };
+        HTMLCollection.prototype.on = NodeList.prototype.on = function (types, func, options = {}) {
+            this.forEach(e => {
+                e.on(types, func, options)
+            });
+        };
+        Element.prototype.appendNewChild = function (data = {
+            type: "div",
+            ns: null,
+            innerText: null,
+            innerHTML: null,
+            attr: [],
+            onclick: null
+        }) {
+            let el = createElement(data);
+            this.appendChild(el);
+            return el;
+        };
+        Element.prototype.$ = HTMLDocument.prototype.$ = function (selector) {
+            return this.querySelectorAll(selector);
+        };
+        Element.prototype.attr = function (attrName) {
+            return this.getAttribute(attrName);
+        };
+        Array.prototype.last = HTMLCollection.prototype.last = NodeList.prototype.last = function () {
+            return this[this.length - 1];
+        };
+        HTMLCollection.prototype.forEach = NamedNodeMap.prototype.forEach = Array.prototype.forEach;
+        HTMLCollection.prototype.remove = NodeList.prototype.remove = function () {
+            for (let i = 0; i < this.length; i++) {
+                this[i].remove();
+            }
+        };
+        HTMLCollection.prototype.isEmpty = NodeList.prototype.isEmpty = function () {
+            return this.length === 0
+        }
+        HTMLCollection.prototype.isNotEmpty = NodeList.prototype.isNotEmpty = function () {
+            return this.length !== 0
+        }
+        NodeList.prototype.map = HTMLCollection.prototype.map = Array.prototype.map;
+        NodeList.prototype.addClass = function (value) {
+            for (let i = 0; i < this.length; i++) this[i].classList.add(value);
+        };
+        NodeList.prototype.removeClass = function (value) {
+            for (let i = 0; i < this.length; i++) this[i].classList.remove(value);
+        };
+        Element.prototype.addClass = function (value) {
+            return this.classList.add(value)
+        };
+        Element.prototype.removeClass = function (value) {
+            return this.classList.remove(value)
+        };
+        String.prototype.toInt = function () {
+            return parseInt(this);
+        };
+        Element.prototype.off = function (type) {
+            try {
+                getEventListeners(this)["click"].forEach(e => {
+                    this.removeEventListener("click", e.listener)
+                });
+            } catch (ignored) {
+
+            }
+        };
+        NodeList.prototype.off = HTMLCollection.prototype.off = function (type) {
+            this.forEach(e => {
+                e.off(type)
+            });
+        };
+        window.page = 1;
+        window.initThreadContent = (element, index, dom, pid) => {
+            dom.$("img[file]").forEach(img => {
+                img.setAttribute("src", img.attr("file"));
+                img.attributes.forEach(attr => {
+                    (dom.name !== "src" && dom.name !== "class") ? img.removeAttribute(attr.name) : void (0);
+                });
+                img.addClass("zoomable");
+                if (img.attr("onclick") != null)
+                    img.setAttribute("onclick", "")
+            });
+            dom.$(".quote blockquote font[size='2'] a").forEach(a => {
+                a.remove();
+            });
+            dom.$("[smilieid]").forEach(smiley => {
+                smiley.src = smiley.src.replace("static/image/", "").replace(/(http|https)?:\/\/(www.)?ditiezu.com\//, "")
+            });
+            dom.$("[onclick^='toggleRatelogCollapse'], .ratc [title=\"查看全部评分\"]").remove();
+            dom.$("[title=\"查看全部评分\"]").forEach(a => {
+                a.setAttribute("href", "javascript:void(0)");
+            });
+            dom.$(".ratl tbody:first-child th:last-child").remove();
+
+            if(dom.$("[onclick=\"showWindow('invite', this.href, 'get', 0);\"]").isNotEmpty()) {
+                element.$(".invite")[0].style.display = "inline-block";
+                element.$(".invite")[0].on("click", ()=>{
+                    android.invite();
+                });
+            }
+
+            const src = dom.$(".avatar a")[0].attr("href");
+            const uid = ((src.indexOf("uid-") + 4 <= 0 || src.indexOf(".html") <= 0) ? 0 : src.substring(src.indexOf("uid-") + 4, src.indexOf(".html"))).toInt();
+
+            element.$(".avatar")[0].on("error", () => {
+                this.src = "noavatar_middle.png";
+            });
+            element.$(".avatar")[0].on("click", () => {
+                android.openUserProfile(uid)
+            });
+            element.$(".avatar")[0].src = `http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${uid}`;
+            element.$(".authorName")[0].innerText = dom.$(".authi .xw1")[0].innerText;
+            element.$(".threadMeta")[0].innerText = "第" + ((page - 1) * 15 + index + 1) + "楼 - " + dom.$("[id^='authorposton']")[0].innerText.substring(4);
+            try{
+                element.$(".threadContent")[0].innerHTML = dom.$(".pcb")[0].$("[id^='postmessage']")[0].innerHTML + (dom.$(".pcb")[0].$(".pattl")[0] !== undefined ? dom.$(".pcb")[0].$(".pattl")[0].innerHTML : "") + (dom.$("[id^='ratelog_']")[0] !== undefined ? dom.$("[id^='ratelog_']")[0].innerHTML : "");
+            } catch(e) { console.log(e) }
+
+            element.$(".threadContent")[0].$("br").forEach(e => {
+                if(e.nextElementSibling && e.nextElementSibling.tagName == "BR") e.fadeOut(true)
+            })
+
+            let rate = element.$(".rate i")[0];
+            if (dom.$("[onclick^=\"showWindow('rate'\"]")[0] !== undefined) {
+                rate.onclick = () => {
+                    android.rate(pid.toInt(), index);
+                };
+            } else rate.style.display = "none";
+
+            let reply = element.$(".reply i")[0];
+            if (dom.$(".fastre")[0] !== undefined) {
+                reply.onclick = () => {
+                    android.reply(pid.toInt());
+                };
+            } else reply.style.display = "none";
+
+            let edit = element.$(".edit i")[0];
+            if (dom.$(".editp")[0] !== undefined) {
+                edit.onclick = () => {
+                    android.edit(pid.toInt());
+                };
+            } else edit.style.display = "none";
+        }
+        window.onPageLoaded = (pageResult, page) => {
+            // Will be called from Android
+            // Removed the boot anim
+            window.page = page;
+
+            if (new Date().getMilliseconds() - startPoint < 1000)
+                setTimeout(() => {
+                    onLoaded();
+                }, 1000);
+            else onLoaded();
+
+            const ViewHolder = $(".view")[0];
+            const app = $(".content-area")[0];
+            app.children.forEach(e => {
+                e.fadeOut();
+            });
+
+            const dom = new DOMParser().parseFromString(pageResult, "text/html");
+            dom.$("table[id^='pid']").forEach((e, index) => {
+                const holder = ViewHolder.cloneNode(true);
+                initThreadContent(holder, index, e, e.id.substring(3))
+                app.appendChild(holder);
+            });
+            let currentPage = page;
+            window.lastPage = 1;
+            if (!dom.$(".last").isEmpty())
+                lastPage = dom.$(".last")[0].innerText.substring(4).trim().toInt()
+            else if (!dom.$("#pgt .pg :not(.nxt)").isEmpty())
+                lastPage = dom.$("#pgt .pg :not(.nxt)").last().innerText.toInt()
+
+            $(".pagination")[0].style.display = "block";
+            $(".pagination *").forEach(span => {
+                span.style.display = "inline-block";
+                span.off("click");
+            });
+            if (lastPage === 1) {
+                $(".pagination")[0].style.display = "none";
+            }
+
+            if (currentPage === 1) {
+                $(".first-page")[0].style.display = "none";
+                $(".previous-page")[0].style.display = "none";
+                $(".previous-page-number")[0].style.display = "none";
+                $(".previous-page-2-number")[0].style.display = "none";
+            }
+            if (currentPage === lastPage) {
+                $(".last-page")[0].style.display = "none";
+                $(".next-page")[0].style.display = "none";
+                $(".next-page-number")[0].style.display = "none";
+                $(".next-page-2-number")[0].style.display = "none";
+            }
+            if (currentPage === 2) $(".previous-page-2-number")[0].style.display = "none";
+            if (currentPage === lastPage - 1) $(".next-page-2-number")[0].style.display = "none";
+            $(".previous-page-2-number")[0].innerText = (currentPage - 2).toString();
+            $(".previous-page-number")[0].innerText = (currentPage - 1).toString();
+            $(".current-page")[0].innerText = currentPage.toString();
+            $(".next-page-number")[0].innerText = (currentPage + 1).toString();
+            $(".next-page-2-number")[0].innerText = (currentPage + 2).toString();
+
+            $(".first-page").on("click", () => {
+                loadPageContent(1)
+            });
+            $(".previous-page-2-number").on("click", () => {
+                loadPageContent(currentPage - 2)
+            });
+            $(".previous-page, .previous-page-number").on("click", () => {
+                loadPageContent(currentPage - 1)
+            });
+            $(".next-page, .next-page-number").on("click", () => {
+                loadPageContent(currentPage + 1)
+            });
+            $(".next-page-2-number").on("click", () => {
+                loadPageContent(currentPage + 2)
+            });
+            $(".last-page").on("click", () => {
+                loadPageContent(lastPage)
+            });
+        }
+        window.onReloadIndex = (str, index) => {
+            const dom = new DOMParser().parseFromString(str, "text/xml");
+            const html = dom.children[0].innerHTML;
+            initThreadContent($(".app")[0].$(".view")[index], index, new DOMParser().parseFromString(html.substring(9, html.length - 4), "text/html"));
+        };
+        window.loadPageContent = (page) => {
+            $(".loading-anim")[0].fadeIn("flex");
+            android.load(page);
+        };
+    </script>
 </head>
 <body>
 <div class="view">
@@ -334,286 +658,5 @@
         <span class="last-page material-icons">last_page</span>
     </div>
 </app>
-<script>
-    window.startPoint = new Date().getMilliseconds();
-    window.$ = (selector = "body", context = document) => {
-        return context.querySelectorAll(selector);
-    };
-    window.createElement = (data = {
-        type: "div",
-        ns: null,
-        innerText: null,
-        innerHTML: null,
-        attr: [],
-        onclick: null
-    }) => {
-        let el;
-        if (data.ns)
-            el = document.createElementNS(data.ns, data.type);
-        else el = document.createElement(data.type);
-        if (data.innerText)
-            el.innerText = data.innerText;
-        if (data.innerHTML)
-            el.innerHTML = data.innerHTML;
-        if (data.attr)
-            data.attr.forEach(e => {
-                el.setAttribute(e[0], e[1])
-            });
-        if (data.onclick)
-            el.onclick = data.onclick;
-        return el;
-    };
-    Element.prototype.bcr = HTMLDocument.prototype.bcr = function () {
-        return this.getBoundingClientRect();
-    };
-    Element.prototype.fadeIn = HTMLDocument.prototype.fadeIn = function (displayMode = "unset", visibility = "visible") {
-        this.style.opacity = "1";
-        this.style.display = displayMode;
-        this.style.visibility = visibility;
-        this.style.transition += " opacity 500ms ease-in-out";
-    };
-    Element.prototype.fadeOut = HTMLDocument.prototype.fadeOut = function (remove = false) {
-        this.style.opacity = "0";
-        setTimeout(() => {
-            this.style.display = "none";
-            if (remove)
-                this.parentElement.removeChild(this);
-        }, 500);
-    };
-    Element.prototype.on = window.on = HTMLDocument.prototype.on = function (types, func, options = {}) {
-        if (!(types || func)) {
-            return;
-        }
-        types = Array.isArray(types) ? types : [types];
-        types.forEach(type => {
-            this.addEventListener(type, func, options);
-        });
-    };
-    HTMLCollection.prototype.on = NodeList.prototype.on = function (types, func, options = {}) {
-        this.forEach(e => {
-            e.on(types, func, options)
-        });
-    };
-    Element.prototype.appendNewChild = function (data = {
-        type: "div",
-        ns: null,
-        innerText: null,
-        innerHTML: null,
-        attr: [],
-        onclick: null
-    }) {
-        let el = createElement(data);
-        this.appendChild(el);
-        return el;
-    };
-    Element.prototype.$ = HTMLDocument.prototype.$ = function (selector) {
-        return this.querySelectorAll(selector);
-    };
-    Element.prototype.attr = function (attrName) {
-        return this.getAttribute(attrName);
-    };
-    Array.prototype.last = HTMLCollection.prototype.last = NodeList.prototype.last = function () {
-        return this[this.length - 1];
-    };
-    HTMLCollection.prototype.forEach = NamedNodeMap.prototype.forEach = Array.prototype.forEach;
-    HTMLCollection.prototype.remove = NodeList.prototype.remove = function () {
-        for (let i = 0; i < this.length; i++) {
-            this[i].remove();
-        }
-    };
-    HTMLCollection.prototype.isEmpty = NodeList.prototype.isEmpty = function () {
-        return this.length === 0
-    }
-    HTMLCollection.prototype.isNotEmpty = NodeList.prototype.isNotEmpty = function () {
-        return this.length !== 0
-    }
-    NodeList.prototype.map = HTMLCollection.prototype.map = Array.prototype.map;
-    NodeList.prototype.addClass = function (value) {
-        for (let i = 0; i < this.length; i++) this[i].classList.add(value);
-    };
-    NodeList.prototype.removeClass = function (value) {
-        for (let i = 0; i < this.length; i++) this[i].classList.remove(value);
-    };
-    Element.prototype.addClass = function (value) {
-        return this.classList.add(value)
-    };
-    Element.prototype.removeClass = function (value) {
-        return this.classList.remove(value)
-    };
-    String.prototype.toInt = function () {
-        return parseInt(this);
-    };
-    Element.prototype.off = function (type) {
-        try {
-            getEventListeners(this)["click"].forEach(e => {
-                this.removeEventListener("click", e.listener)
-            });
-        } catch (ignored) {
-
-        }
-    };
-    NodeList.prototype.off = HTMLCollection.prototype.off = function (type) {
-        this.forEach(e => {
-            e.off(type)
-        });
-    };
-    window.page = 1;
-    window.initThreadContent = (element, index, dom, pid) => {
-        dom.$("img[file]").forEach(img => {
-            img.setAttribute("src", img.attr("file"));
-            img.attributes.forEach(attr => {
-                (dom.name !== "src" && dom.name !== "class") ? img.removeAttribute(attr.name) : void (0);
-            });
-            img.addClass("zoomable");
-            if (img.attr("onclick") != null)
-                img.setAttribute("onclick", "")
-        });
-        dom.$(".quote blockquote font[size='2'] a").forEach(a => {
-            a.remove();
-        });
-        dom.$("[smilieid]").forEach(smiley => {
-            smiley.src = smiley.src.replace("static/image/", "").replace(/(http|https)?:\/\/(www.)?ditiezu.com\//, "")
-        });
-        dom.$("[onclick^='toggleRatelogCollapse'], .ratc [title=\"查看全部评分\"]").remove();
-        dom.$("[title=\"查看全部评分\"]").forEach(a => {
-            a.setAttribute("href", "javascript:void(0)");
-        });
-        dom.$(".ratl tbody:first-child th:last-child").remove();
-
-        if(dom.$("[onclick=\"showWindow('invite', this.href, 'get', 0);\"]").isNotEmpty()) {
-            element.$(".invite")[0].style.display = "inline-block";
-            element.$(".invite")[0].on("click", ()=>{
-                android.invite();
-            });
-        }
-
-        const src = dom.$(".avatar a")[0].attr("href");
-        const uid = ((src.indexOf("uid-") + 4 <= 0 || src.indexOf(".html") <= 0) ? 0 : src.substring(src.indexOf("uid-") + 4, src.indexOf(".html"))).toInt();
-
-        element.$(".avatar")[0].onerror = () => {
-            this.src = "noavatar_middle.png";
-        };
-        element.$(".avatar")[0].src = `http://ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${uid}`;
-        element.$(".authorName")[0].innerText = dom.$(".authi .xw1")[0].innerText;
-        element.$(".threadMeta")[0].innerText = "第" + ((page - 1) * 15 + index + 1) + "楼 - " + dom.$("[id^='authorposton']")[0].innerText.substring(4);
-        try{
-            element.$(".threadContent")[0].innerHTML = dom.$(".pcb")[0].$("[id^='postmessage']")[0].innerHTML + (dom.$(".pcb")[0].$(".pattl")[0] !== undefined ? dom.$(".pcb")[0].$(".pattl")[0].innerHTML : "") + (dom.$("[id^='ratelog_']")[0] !== undefined ? dom.$("[id^='ratelog_']")[0].innerHTML : "");
-        } catch(e) { console.log(e) }
-
-        let rate = element.$(".rate i")[0];
-        if (dom.$("[onclick^=\"showWindow('rate'\"]")[0] !== undefined) {
-            rate.onclick = () => {
-                android.rate(pid.toInt(), index);
-            };
-        } else rate.style.display = "none";
-
-        let reply = element.$(".reply i")[0];
-        if (dom.$(".fastre")[0] !== undefined) {
-            reply.onclick = () => {
-                android.reply(pid.toInt());
-            };
-        } else reply.style.display = "none";
-
-        let edit = element.$(".edit i")[0];
-        if (dom.$(".editp")[0] !== undefined) {
-            edit.onclick = () => {
-                android.edit(pid.toInt());
-            };
-        } else edit.style.display = "none";
-    }
-    window.onPageLoaded = (pageResult, page) => {
-        // Will be called from Android
-        // Removed the boot anim
-        window.page = page;
-
-        if (new Date().getMilliseconds() - startPoint < 1000)
-            setTimeout(() => {
-                onLoaded();
-            }, 1000);
-        else onLoaded();
-
-        const ViewHolder = $(".view")[0];
-        const app = $(".content-area")[0];
-        app.children.forEach(e => {
-            e.fadeOut();
-        });
-
-        const dom = new DOMParser().parseFromString(pageResult, "text/html");
-        dom.$("table[id^='pid']").forEach((e, index) => {
-            const holder = ViewHolder.cloneNode(true);
-            initThreadContent(holder, index, e, e.id.substring(3))
-            app.appendChild(holder);
-        });
-        let currentPage = page;
-        let lastPage = 1;
-        if (!dom.$(".last").isEmpty())
-            lastPage = dom.$(".last")[0].innerText.substring(4).trim().toInt()
-        else if (!dom.$("#pgt .pg a:not(.nxt)").isEmpty()) {
-            lastPage = dom.$("#pgt .pg a:not(.nxt)").last().innerText.trim().toInt()
-        }
-
-        $(".pagination *").forEach(span => {
-            span.style.display = "inline-block";
-            span.off("click");
-        });
-        if (lastPage === 1) {
-            $(".pagination")[0].style.display = "none";
-        }
-
-        if (currentPage === 1) {
-            $(".first-page")[0].style.display = "none";
-            $(".previous-page")[0].style.display = "none";
-            $(".previous-page-number")[0].style.display = "none";
-            $(".previous-page-2-number")[0].style.display = "none";
-        }
-        if (currentPage === lastPage) {
-            $(".last-page")[0].style.display = "none";
-            $(".next-page")[0].style.display = "none";
-            $(".next-page-number")[0].style.display = "none";
-            $(".next-page-2-number")[0].style.display = "none";
-        }
-        if (currentPage === 2) $(".previous-page-2-number")[0].style.display = "none";
-        if (currentPage === lastPage - 1) $(".next-page-2-number")[0].style.display = "none";
-        $(".previous-page-2-number")[0].innerText = (currentPage - 2).toString();
-        $(".previous-page-number")[0].innerText = (currentPage - 1).toString();
-        $(".current-page")[0].innerText = currentPage.toString();
-        $(".next-page-number")[0].innerText = (currentPage + 1).toString();
-        $(".next-page-2-number")[0].innerText = (currentPage + 2).toString();
-
-        $(".first-page").on("click", () => {
-            loadPageContent(1)
-        });
-        $(".previous-page-2-number").on("click", () => {
-            loadPageContent(currentPage - 2)
-        });
-        $(".previous-page, .previous-page-number").on("click", () => {
-            loadPageContent(currentPage - 1)
-        });
-        $(".next-page, .next-page-number").on("click", () => {
-            loadPageContent(currentPage + 1)
-        });
-        $(".next-page-2-number").on("click", () => {
-            loadPageContent(currentPage + 2)
-        });
-        $(".last-page").on("click", () => {
-            loadPageContent(lastPage)
-        });
-    }
-    window.onReloadIndex = (str, index) => {
-        const dom = new DOMParser().parseFromString(str, "text/xml");
-        const html = dom.children[0].innerHTML;
-        initThreadContent($(".app")[0].$(".view")[index], index, new DOMParser().parseFromString(html.substring(9, html.length - 4), "text/html"));
-    };
-    window.loadPageContent = (page) => {
-        $(".loading-anim")[0].fadeIn("flex");
-        android.load(page);
-    };
-    window.onLoading = () => {
-        $(".loading-anim")[0].fadeIn("flex");
-    };
-    window.onLoaded = () => {
-        $(".loading-anim")[0].fadeOut();
-    };
-</script>
 </body>
 </html>

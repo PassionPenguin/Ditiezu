@@ -1,3 +1,25 @@
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   qingdao.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="36dp"
     android:height="36dp"
@@ -8,5 +30,5 @@
       android:fillColor="#255140"/>
   <path
       android:pathData="M13.9,19.9v2.4c0,0.2 0.1,0.4 -0.1,0.5 -0.2,0.1 -0.3,-0.2 -0.5,-0.3 -3.7,-3.4 -2.3,-9.7 2.5,-11.3 3,-1 6.3,0.2 7.9,2.9 1.6,2.7 1.2,6.2 -1.1,8.3 -0.1,0.1 -0.3,0.4 -0.5,0.3 -0.2,-0.1 -0.1,-0.4 -0.1,-0.6v-4.8c-0.1,-1.9 -1.6,-3.6 -3.4,-3.8 -2,-0.3 -3.9,0.8 -4.5,2.7 -0.3,0.8 -0.2,1.6 -0.2,2.3v1.4z"
-      android:fillColor="@color/surface"/>
+      android:fillColor="#FFF"/>
 </vector>

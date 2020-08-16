@@ -1,2 +1,2 @@
-include ':app', ':picture_library'
-rootProject.name = "Ditiezu"
+rootProject.name = "地下铁的故事"
+include ':app', ":picture_library"

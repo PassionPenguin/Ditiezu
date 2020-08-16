@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ======================================================================
+  ~ =  PROJECT     PhotoHelper
+  ~ =  MODULE      PhotoHelper.PhotoHelper
+  ~ =  FILE NAME   colors.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/15/20 2:25 PM]
+  ~ ======================================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~   ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~ ======================================================================
+  -->
+
 <resources>
-    <color name="primary_default">#4F92EC</color>
-    <color name="primary_exlight">#ABC3EA</color>
-    <color name="primary_light">#8ab4f8</color>
-    <color name="primary_dark">#1967d2</color>
-    <color name="primary_exdark">#0C4798</color>
-    <color name="surface">#FEFEFE</color>
-    <color name="surface_secondary">#F8F7F7</color>
-    <color name="surface_tertiary">#F4F4F4</color>
-    <color name="black">#000</color>
-    <color name="white">#fff</color>
-    <color name="grey">#888</color>
-    <color name="light">#ddd</color>
-    <color name="dark">#333</color>
-    <color name="text">#555</color>
-    <color name="success">#61AC64</color>
-    <color name="danger">#CA5D4F</color>
-    <color name="warning">#F9A825</color>
-    <color name="shadowMask">#44ffffff</color>
-    <color name="transparentWhiteBackground">#88ffffff</color>
+    <color name="theme_200">#81D4FA</color>
+    <color name="theme_500">#03A9F4</color>
+    <color name="theme_700">#0288D1</color>
+    <color name="theme_sec_500">#009688</color>
+    <color name="theme_sec_700">#00796B</color>
+    <color name="success_500">#4CAF50</color>
+    <color name="danger_500">#F44336</color>
+    <color name="black">#000000</color>
+    <color name="dark">#444444</color>
+    <color name="grey">#888888</color>
+    <color name="light">#BBBBBB</color>
+    <color name="white">#FFFFFF</color>
+    <color name="bg">#f3f4f5</color>
+    <color name="surface">#F2F3F6</color>
 </resources>

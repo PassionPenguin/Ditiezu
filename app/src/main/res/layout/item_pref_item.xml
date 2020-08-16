@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   item_pref_item.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:background="@drawable/ripple"
+    android:backgroundTint="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/ripple"
-    android:backgroundTint="@color/surface_secondary">
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/_16"
-        android:paddingBottom="@dimen/_16"
-        android:paddingStart="@dimen/_16"
-        android:paddingEnd="@dimen/_8"
         android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
         app:layout_constraintEnd_toStartOf="@id/pref_item_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,19 +48,19 @@
             android:id="@+id/pref_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textColor="@color/dark"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/text"
-            android:layout_gravity="start"
             tools:text="PREF NAME" />
 
         <TextView
             android:id="@+id/pref_item_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text"
-            android:visibility="gone"
             android:layout_gravity="start"
+            android:textColor="@color/dark"
+            android:visibility="gone"
             tools:text="PREF DESCRIPTION" />
     </LinearLayout>
 
@@ -46,16 +68,16 @@
         android:id="@+id/pref_item_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/_16"
-        android:paddingBottom="@dimen/_16"
-        android:paddingStart="@dimen/_8"
-        android:paddingEnd="@dimen/_16"
-        android:textColor="@color/text"
-        android:gravity="center_vertical|end"
         android:layout_gravity="center_vertical|end"
-        android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
-        android:drawableTint="@color/grey"
+        android:gravity="center_vertical|end"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:textColor="@color/dark"
+        app:drawableTint="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

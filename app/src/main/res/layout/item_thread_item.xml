@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   item_thread_item.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,44 +30,45 @@
     android:clickable="false"
     android:focusable="false"
     android:orientation="vertical"
-    android:background="@color/surface_secondary"
+    android:background="@color/bg"
     tools:ignore="SmallSp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ripple_no_radius"
-        android:backgroundTint="@color/surface"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/ripple_radius"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/_16"
-        android:paddingHorizontal="@dimen/_32"
-        android:layout_marginVertical="@dimen/_8">
+        android:layout_marginHorizontal="8dp"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/threadTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4"
+            android:layout_marginTop="4dp"
             android:fontFamily="sans-serif-medium"
-            android:textSize="18sp"
-            android:paddingTop="12dp"
+            android:paddingTop="8dp"
             android:textColor="@color/black"
+            android:textSize="18sp"
             tools:text="Thread Title" />
 
         <TextView
             android:id="@+id/threadContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4"
-            android:textSize="13sp"
+            android:layout_marginTop="4dp"
             android:textColor="@color/dark"
+            android:textSize="13sp"
             tools:text="Thread Content" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="12dp">
+            android:paddingTop="4dp">
 
             <ImageView
                 android:id="@+id/avatar"
@@ -70,8 +93,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginStart="16dp"
                 android:textColor="@color/grey"
-                android:layout_marginStart="@dimen/_16"
                 android:textSize="10sp"
                 tools:text="Post Time" />
         </LinearLayout>
@@ -79,38 +102,27 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16">
-
-            <TextView
-                android:id="@+id/tagName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:textColor="@color/grey"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="[TAGNAME]" />
+            android:layout_marginTop="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/viewsWrap"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_16"
+                android:layout_height="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:layout_width="@dimen/_16"
-                    android:layout_height="@dimen/_16"
-                    android:tint="@color/grey"
-                    android:src="@drawable/ic_baseline_view_24"
-                    android:layout_marginEnd="@dimen/_4"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
                     android:contentDescription="@null"
+                    android:src="@drawable/ic_baseline_view_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/views"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/grey" />
 
                 <TextView
                     android:id="@+id/views"
@@ -127,23 +139,23 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/repliesWrap"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_16"
+                android:layout_height="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
-                android:layout_marginEnd="@dimen/_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/viewsWrap"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:layout_width="@dimen/_16"
-                    android:layout_height="@dimen/_16"
-                    android:tint="@color/grey"
-                    android:src="@drawable/ic_baseline_comment_24"
-                    android:layout_marginEnd="@dimen/_4"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
                     android:contentDescription="@null"
+                    android:src="@drawable/ic_baseline_comment_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/replies"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/grey" />
 
                 <TextView
                     android:id="@+id/replies"

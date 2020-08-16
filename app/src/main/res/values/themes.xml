@@ -1,35 +1,92 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   themes.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-    ima<style name="Theme.Ditiezu" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorAccent">@color/primary_default</item>
-        <item name="colorPrimary">@color/primary_default</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.PhotoLibraryTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/theme_500</item>
+        <item name="colorPrimaryVariant">@color/theme_700</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/primary_default</item>
-        <item name="colorSecondaryVariant">@color/primary_default</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/theme_sec_500</item>
+        <item name="colorSecondaryVariant">@color/theme_sec_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/anodina</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.Ditiezu.TabLayout" parent="Theme.Ditiezu">
-        <item name="tabBackground">@android:color/transparent</item>
-        <item name="tabIndicatorColor">@color/primary_default</item>
-        <item name="tabIndicatorHeight">2dp</item>
-        <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
-        <item name="tabSelectedTextColor">@color/primary_light</item>
+    <style name="Theme.AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/theme_500</item>
+        <item name="colorPrimaryVariant">@color/theme_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/theme_sec_500</item>
+        <item name="colorSecondaryVariant">@color/theme_sec_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/anodina</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.Ditiezu.AppBarOverlay">
+    <style name="setting_title" parent="Theme.AppTheme">
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="setting_value" parent="Theme.AppTheme">
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="settings_title" parent="Theme.AppTheme">
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Ditiezu.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.null.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

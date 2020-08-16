@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   item_invite.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,8 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/ripple"
-        android:backgroundTint="@color/surface"
-        android:padding="@dimen/_16"
+        android:backgroundTint="@color/white"
+        android:padding="16dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,14 +42,14 @@
             android:id="@+id/avatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/avatar"
+            android:contentDescription="@string/icon"
             android:alpha="0.8" />
 
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:background="@color/surface"
+            android:background="@color/bg"
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:gravity="center"
@@ -39,10 +61,10 @@
     <TextView
         android:id="@+id/userName"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_32"
+        android:layout_height="32dp"
         android:textSize="12sp"
-        android:paddingBottom="@dimen/_4"
-        android:paddingHorizontal="@dimen/_16"
+        android:paddingBottom="4dp"
+        android:paddingHorizontal="16dp"
         android:singleLine="true"
         android:ellipsize="marquee"
         app:layout_constraintTop_toBottomOf="@id/avatarWrap" />

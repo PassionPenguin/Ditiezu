@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   activity_editor.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Editor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface">
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/margin_screen">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/action_bar_layout"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +56,7 @@
                     android:layout_height="24dp"
                     android:src="@drawable/ic_baseline_arrow_back_ios_24"
                     android:contentDescription="@null"
-                    android:layout_marginStart="@dimen/_16"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +69,7 @@
                     android:layout_height="24dp"
                     android:ellipsize="end"
                     android:layout_marginEnd="48dp"
-                    android:layout_marginStart="@dimen/_16"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/SubmitButton"
                     app:layout_constraintStart_toEndOf="@id/BackButton"
@@ -59,25 +82,25 @@
                     android:layout_height="24dp"
                     android:src="@drawable/ic_baseline_send_24"
                     android:contentDescription="@null"
-                    android:layout_marginEnd="@dimen/_16"
+                    android:layout_marginEnd="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:id="@+id/NewThreadComponent"
+                android:id="@+id/newThreadWrap"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:orientation="horizontal"
-                android:layout_marginHorizontal="@dimen/_16"
-                android:layout_marginTop="@dimen/_16"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/action_bar">
 
                 <Spinner
                     android:id="@+id/typeSelector"
-                    android:layout_width="@dimen/_128"
+                    android:layout_width="128dp"
                     android:layout_height="36dp"
                     android:gravity="center"
                     android:layout_gravity="center" />
@@ -91,21 +114,21 @@
                     android:background="@null"
                     android:hint="@string/subject"
                     android:textSize="14sp"
-                    android:paddingHorizontal="@dimen/_16" />
+                    android:paddingHorizontal="16dp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
     <EditText
-        android:id="@+id/EditTextInput"
+        android:id="@+id/editTextInput"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_256"
+        android:layout_height="256dp"
         android:autofillHints="@null"
         android:inputType="textLongMessage|textAutoCorrect|textCapSentences|textMultiLine"
         android:hint="@string/tip_input_content"
         android:gravity="top"
-        android:padding="@dimen/_16"
+        android:padding="16dp"
         android:background="@null"
         app:layout_constraintTop_toBottomOf="@+id/action_bar_layout" />
 
@@ -113,17 +136,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/EditTextInput"
+        app:layout_constraintTop_toBottomOf="@id/editTextInput"
         tools:ignore="RelativeOverlap">
 
         <RelativeLayout
             android:id="@+id/permWrap"
             android:background="@drawable/ripple"
-            android:backgroundTint="@color/surface"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:paddingVertical="@dimen/_4"
-            android:paddingHorizontal="@dimen/_16"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -143,11 +166,11 @@
         <RelativeLayout
             android:id="@+id/rewardsWrap"
             android:background="@drawable/ripple"
-            android:backgroundTint="@color/surface"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:paddingVertical="@dimen/_4"
-            android:paddingHorizontal="@dimen/_16"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -168,8 +191,8 @@
             android:id="@+id/signature"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:paddingVertical="@dimen/_4"
-            android:paddingHorizontal="@dimen/_16"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -192,16 +215,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:elevation="@dimen/_32"
-        android:background="@color/surface_secondary"
+        android:elevation="32dp"
+        android:background="@color/bg"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/_16"
-            android:background="@color/surface"
+            android:paddingHorizontal="16dp"
+            android:background="@color/white"
             android:layout_gravity="bottom">
 
             <LinearLayout
@@ -408,10 +431,10 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/emotionList"
-                android:paddingHorizontal="@dimen/_16"
-                android:paddingVertical="@dimen/_4"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_240" />
+                android:layout_height="240dp" />
 
             <HorizontalScrollView
                 android:id="@+id/emotionSelector"
@@ -438,7 +461,7 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/photo"
+                    android:id="@+id/photos"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal" />
@@ -449,8 +472,8 @@
                 android:text="@string/gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/_16"
-                android:paddingVertical="@dimen/_8" />
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

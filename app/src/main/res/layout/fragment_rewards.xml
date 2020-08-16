@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
+  ~ =  FILE NAME   fragment_rewards.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ ==================================================
+  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~         http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +34,7 @@
         android:orientation="horizontal"
         android:weightSum="3"
         android:background="@drawable/dialog_content_background"
-        android:layout_marginTop="@dimen/_16"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -51,7 +73,7 @@
         android:orientation="horizontal"
         android:weightSum="3"
         android:background="@drawable/dialog_content_background"
-        android:layout_marginTop="@dimen/_4"
+        android:layout_marginTop="4dp"
         app:layout_constraintTop_toBottomOf="@id/everytime_reward">
 
         <TextView
@@ -90,7 +112,7 @@
         android:orientation="horizontal"
         android:weightSum="3"
         android:background="@drawable/dialog_content_background"
-        android:layout_marginTop="@dimen/_4"
+        android:layout_marginTop="4dp"
         app:layout_constraintTop_toBottomOf="@id/times">
 
         <TextView
@@ -124,7 +146,7 @@
         android:orientation="horizontal"
         android:weightSum="3"
         android:background="@drawable/dialog_content_background"
-        android:layout_marginTop="@dimen/_4"
+        android:layout_marginTop="4dp"
         app:layout_constraintTop_toBottomOf="@id/max_times">
 
         <TextView

@@ -7,8 +7,8 @@
         android:right="-2dp">
         <shape android:shape="rectangle">
             <padding
-                android:top="@dimen/_8"
-                android:bottom="@dimen/_8" />
+                android:top="8dp"
+                android:bottom="8dp" />
         </shape>
     </item>
 </layer-list>
