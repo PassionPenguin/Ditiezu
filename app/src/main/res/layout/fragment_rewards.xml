@@ -4,7 +4,7 @@
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
   ~ =  FILE NAME   fragment_rewards.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 11:37 PM]
   ~ ==================================================
   ~ Copyright 2021 PassionPenguin. All rights reserved.
   ~
@@ -28,7 +28,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/everytime_reward"
+        android:id="@+id/everytimeReward"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -45,7 +45,7 @@
             android:layout_gravity="center_vertical" />
 
         <EditText
-            android:id="@+id/everytime_reward_input"
+            android:id="@+id/everytimeRewardInput"
             android:background="@null"
             android:inputType="number"
             android:importantForAutofill="no"
@@ -74,7 +74,7 @@
         android:weightSum="3"
         android:background="@drawable/dialog_content_background"
         android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/everytime_reward">
+        app:layout_constraintTop_toBottomOf="@id/everytimeReward">
 
         <TextView
             android:layout_width="0dp"
@@ -84,7 +84,7 @@
             android:layout_gravity="center_vertical" />
 
         <EditText
-            android:id="@+id/times_input"
+            android:id="@+id/timesInput"
             android:background="@null"
             android:inputType="number"
             android:importantForAutofill="no"
@@ -106,7 +106,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/max_times"
+        android:id="@+id/maxTimes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -123,7 +123,7 @@
             android:layout_gravity="center_vertical" />
 
         <Spinner
-            android:id="@+id/max_times_input"
+            android:id="@+id/maxTimesInput"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
         android:weightSum="3"
         android:background="@drawable/dialog_content_background"
         android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/max_times">
+        app:layout_constraintTop_toBottomOf="@id/maxTimes">
 
         <TextView
             android:layout_width="0dp"
@@ -157,7 +157,7 @@
             android:layout_gravity="center_vertical" />
 
         <Spinner
-            android:id="@+id/odds_input"
+            android:id="@+id/oddsInput"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"

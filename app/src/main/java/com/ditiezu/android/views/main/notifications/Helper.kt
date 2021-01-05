@@ -3,7 +3,7 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   Helper.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 11:37 PM]
  * ==================================================
  * Copyright 2021 PassionPenguin. All rights reserved.
  *
@@ -25,7 +25,6 @@ package com.ditiezu.android.views.main.notifications
 import android.app.Activity
 import android.view.View
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ditiezu.android.R
 import com.ditiezu.android.adapters.NotificationItem
@@ -105,7 +104,6 @@ fun helper(activity: Activity, url: String, listEl: RecyclerView, tips: TextView
                     }
                     activity.runOnUiThread {
                         listEl.adapter = NotificationItemAdapter(activity, list)
-                        listEl.layoutManager = LinearLayoutManager(activity)
                     }
                 }
             }

@@ -3,7 +3,7 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   ViewThread.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 11:37 PM]
  * ==================================================
  * Copyright 2021 PassionPenguin. All rights reserved.
  *
@@ -41,9 +41,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ditiezu.android.adapters.InviteUserAdapter
 import com.ditiezu.android.adapters.User
+import com.microsoft.appcenter.crashes.Crashes
 import com.passionpenguin.Alert
 import com.passionpenguin.NetUtils
 import com.passionpenguin.PopupWindow
+import kotlinx.android.synthetic.main.activity_view_thread.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
@@ -51,15 +53,13 @@ import java.net.URLEncoder
 import java.util.regex.Pattern
 import kotlin.properties.Delegates
 
+
 class ViewThread : AppCompatActivity() {
     private var darkMode by Delegates.notNull<Boolean>()
     private var tid by Delegates.notNull<Int>()
     private var page by Delegates.notNull<Int>()
     private var loginState by Delegates.notNull<Boolean>()
     private var formhash by Delegates.notNull<String>()
-    private var webView by Delegates.notNull<WebView>()
-    private var tips by Delegates.notNull<TextView>()
-    private var tipsImage by Delegates.notNull<ImageView>()
 
     private fun evaluate(code: String, @Nullable resultCallback: ((res: String) -> Unit)?) {
         runOnUiThread {
@@ -312,7 +312,6 @@ class ViewThread : AppCompatActivity() {
                         findViewById<TextView>(R.id.threadTitle).text = title
                         if (parser.select("#messagetext").isNotEmpty()) {
                             tips.visibility = View.VISIBLE
-                            tipsImage.visibility = View.VISIBLE
                             tips.text = parser.select("#messagetext").text()
                         }
                         println(pageId)
@@ -391,9 +390,6 @@ class ViewThread : AppCompatActivity() {
         setContentView(R.layout.activity_view_thread)
         setSupportActionBar(findViewById(R.id.action_bar_in_thread))
 
-        webView = findViewById(R.id.webView)
-        tips = findViewById(R.id.tips)
-
         val extras = intent.extras
         if (extras != null) {
             if (extras.get("tid") == null) onBackPressed() else this.tid = extras.get("tid") as Int
@@ -414,19 +410,24 @@ class ViewThread : AppCompatActivity() {
                 if (url.indexOf("ditiezu.com/") != -1) {
                     if (url.indexOf("mod=viewthread") != -1 || url.indexOf("thread-") != -1) {
                         // ViewThread
-                        val tid = if (url.indexOf("viewthread") == -1) {
-                            url.substring(url.indexOf("thread-") + 7, url.indexOf("-1-1")).toInt()
-                        } else {
-                            url.substring(url.indexOf("tid=") + 4, url.indexOf("&", url.indexOf("tid="))).toInt()
+                        try {
+                            val tid = if (url.indexOf("viewthread") == -1) {
+                                url.substring(url.indexOf("thread-") + 7, url.indexOf("-1-1")).toInt()
+                            } else {
+                                url.substring(url.indexOf("tid=") + 4, url.indexOf("&", url.indexOf("tid="))).toInt()
+                            }
+                            val page = if (url.indexOf("viewthread") == -1) {
+                                url.substring(url.indexOf("-") + 1, url.indexOf("-1")).toInt()
+                            } else {
+                                url.substring(url.indexOf("page=") + 5, url.indexOf("&", url.indexOf("page="))).toInt()
+                            }
+                            this@ViewThread.tid = tid
+                            this@ViewThread.page = page
+                            retrieveThreadContent()
+                        } catch (e: Exception) {
+                            val properties: Map<String, String> = hashMapOf(Pair("url", url))
+                            Crashes.trackError(e, properties, null)
                         }
-                        val page = if (url.indexOf("viewthread") == -1) {
-                            url.substring(url.indexOf("-") + 1, url.indexOf("-1")).toInt()
-                        } else {
-                            url.substring(url.indexOf("page=") + 5, url.indexOf("&", url.indexOf("page="))).toInt()
-                        }
-                        this@ViewThread.tid = tid
-                        this@ViewThread.page = page
-                        retrieveThreadContent()
                     }
                 }
                 evaluate("window.open('$url')", null)

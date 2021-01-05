@@ -3,7 +3,7 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   Editor.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 11:37 PM]
  * ==================================================
  * Copyright 2021 PassionPenguin. All rights reserved.
  *
@@ -39,7 +39,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ditiezu.android.adapters.EmotionItem
 import com.ditiezu.android.adapters.EmotionItemAdapter
 import com.ditiezu.android.data.emotionData
@@ -48,6 +47,9 @@ import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.passionpenguin.*
+import kotlinx.android.synthetic.main.activity_editor.*
+import kotlinx.android.synthetic.main.fragment_perm.view.*
+import kotlinx.android.synthetic.main.fragment_rewards.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.cachapa.expandablelayout.ExpandableLayout
@@ -57,7 +59,7 @@ import java.net.URLEncoder
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import kotlin.properties.Delegates
+import com.passionpenguin.PopupWindow as pw
 
 class Editor : AppCompatActivity() {
     private var attachHash = ""
@@ -67,37 +69,6 @@ class Editor : AppCompatActivity() {
     private var attachlist: ArrayList<String> = arrayListOf()
     private var formhash: String = ""
 
-    private var editTextInput by Delegates.notNull<EditText>()
-    private var toolbar by Delegates.notNull<LinearLayout>()
-    private var openGallery by Delegates.notNull<TextView>()
-    private var permWrap by Delegates.notNull<RelativeLayout>()
-    private var rewardsWrap by Delegates.notNull<RelativeLayout>()
-    private var editorTitle by Delegates.notNull<TextView>()
-    private var signature by Delegates.notNull<RelativeLayout>()
-    private var signatureInput by Delegates.notNull<CheckBox>()
-    private var fontBoldToggle by Delegates.notNull<CheckBox>()
-    private var fontItalicToggle by Delegates.notNull<CheckBox>()
-    private var fontUnderlinedToggle by Delegates.notNull<CheckBox>()
-    private var fontStrikeThroughToggle by Delegates.notNull<CheckBox>()
-    private var fontQuoteToggle by Delegates.notNull<CheckBox>()
-    private var emotionSelectorToggle by Delegates.notNull<CheckBox>()
-    private var imageSelectorToggle by Delegates.notNull<CheckBox>()
-    private var fontSizeToggle by Delegates.notNull<CheckBox>()
-    private var fontSizeSelector by Delegates.notNull<ExpandableLayout>()
-    private var listToggle by Delegates.notNull<CheckBox>()
-    private var listSelector by Delegates.notNull<ExpandableLayout>()
-    private var bulletedList by Delegates.notNull<RadioButton>()
-    private var numberedList by Delegates.notNull<RadioButton>()
-    private var typeSelector by Delegates.notNull<Spinner>()
-    private var newThreadWrap by Delegates.notNull<LinearLayout>()
-    private var photos by Delegates.notNull<LinearLayout>()
-    private var backButton by Delegates.notNull<ImageButton>()
-    private var submitButton by Delegates.notNull<ImageButton>()
-    private var subject by Delegates.notNull<EditText>()
-    private var photoWrap by Delegates.notNull<LinearLayout>()
-    private var emotionWrap by Delegates.notNull<LinearLayout>()
-    private var emotionList by Delegates.notNull<RecyclerView>()
-    private var emotionSelectorList by Delegates.notNull<LinearLayout>()
 
     private fun insert(contentBefore: String = "", contentAfter: String = "", replaceWith: String? = null) {
         with(editTextInput) {
@@ -114,39 +85,6 @@ class Editor : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editor)
-
-        editTextInput = findViewById(R.id.editTextInput)
-        toolbar = findViewById(R.id.toolbar)
-        openGallery = findViewById(R.id.openGallery)
-        permWrap = findViewById(R.id.permWrap)
-        rewardsWrap = findViewById(R.id.rewardsWrap)
-        editorTitle = findViewById(R.id.editorTitle)
-        signature = findViewById(R.id.signature)
-        signatureInput = findViewById(R.id.signatureInput)
-        subject = findViewById(R.id.subject)
-        imageSelectorToggle = findViewById(R.id.imageSelectorToggle)
-        fontBoldToggle = findViewById(R.id.fontBoldToggle)
-        fontItalicToggle = findViewById(R.id.fontItalicToggle)
-        fontUnderlinedToggle = findViewById(R.id.fontUnderlinedToggle)
-        fontStrikeThroughToggle = findViewById(R.id.fontStrikeThroughToggle)
-        fontQuoteToggle = findViewById(R.id.fontQuoteToggle)
-        emotionSelectorToggle = findViewById(R.id.emotionSelectorToggle)
-        imageSelectorToggle = findViewById(R.id.imageSelectorToggle)
-        fontSizeToggle = findViewById(R.id.fontSizeToggle)
-        fontSizeSelector = findViewById(R.id.fontSizeSelector)
-        listToggle = findViewById(R.id.listToggle)
-        listSelector = findViewById(R.id.listSelector)
-        bulletedList = findViewById(R.id.bulletedList)
-        numberedList = findViewById(R.id.numberedList)
-        typeSelector = findViewById(R.id.typeSelector)
-        newThreadWrap = findViewById(R.id.newThreadWrap)
-        photos = findViewById(R.id.photos)
-        backButton = findViewById(R.id.BackButton)
-        submitButton = findViewById(R.id.SubmitButton)
-        photoWrap = findViewById(R.id.photoWrap)
-        emotionWrap = findViewById(R.id.emotionWrap)
-        emotionList = findViewById(R.id.emotionList)
-        emotionSelectorList = findViewById(R.id.emotionSelectorList)
 
         HeightHelper(this).init().setHeightListener(object : HeightHelper.HeightListener {
             override fun onHeightChanged(height: Int) {
@@ -280,22 +218,22 @@ class Editor : AppCompatActivity() {
         }
 
         permWrap.setOnClickListener {
-            object : PopupWindow(
+            object : pw(
                 this@Editor,
                 resources.getString(R.string.permission_title),
                 resources.getString(R.string.permission_description)
             ) {
-                override fun initContent(window: android.widget.PopupWindow, root: ViewGroup) {
+                override fun initContent(window: PopupWindow, root: ViewGroup) {
                     try {
-                        perm = arrayOf(0, 1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 255)[root.findViewById<Spinner>(R.id.permInput).selectedItemPosition]
+                        perm = arrayOf(0, 1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 255)[root.permInput.selectedItemPosition]
                     } catch (e: NumberFormatException) {
                         Alert(this@Editor, resources.getString(R.string.not_a_number)).error()
                     }
                 }
 
-                override fun onSubmit(window: android.widget.PopupWindow, root: ViewGroup) {
+                override fun onSubmit(window: PopupWindow, root: ViewGroup) {
                     root.addView(LayoutInflater.from(this@Editor).inflate(R.layout.fragment_perm, root, false))
-                    with(root.findViewById<Spinner>(R.id.permInput)) {
+                    with(root.permInput) {
                         val adapter = ArrayAdapter(this@Editor, R.layout.spinner_dropdown_item, listOf("不限权限", "地铁游客/等待验证用户", "地铁族 Ⅰ", "地铁族 Ⅱ", "地铁族 Ⅲ", "地铁族 Ⅳ", "地铁族 Ⅴ", "地铁族 Ⅵ", "地铁族 Ⅶ", "地铁族 Ⅷ", "地铁族 Ⅸ", "地铁族 Ⅹ", "版主", "超级版主", "管理员"))
                         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
                         this.adapter = adapter
@@ -307,31 +245,31 @@ class Editor : AppCompatActivity() {
         }
 
         rewardsWrap.setOnClickListener {
-            object : PopupWindow(
+            object : pw(
                 this@Editor,
                 resources.getString(R.string.rewards_title),
                 resources.getString(R.string.rewards_description)
             ) {
-                override fun onSubmit(window: android.widget.PopupWindow, root: ViewGroup) {
+                override fun onSubmit(window: PopupWindow, root: ViewGroup) {
                     try {
-                        rewards = root.findViewById<EditText>(R.id.everytime_reward_input).text.toString().toInt()
-                        rewardsTimes = root.findViewById<EditText>(R.id.times_input).text.toString().toInt()
-                        rewardsMaxTimes = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)[root.findViewById<Spinner>(R.id.max_times_input).selectedItemPosition]
-                        rewardsOdds = arrayOf(0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1f)[root.findViewById<Spinner>(R.id.odds_input).selectedItemPosition]
+                        rewards = root.everytimeRewardInput.text.toString().toInt()
+                        rewardsTimes = root.timesInput.text.toString().toInt()
+                        rewardsMaxTimes = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)[root.maxTimesInput.selectedItemPosition]
+                        rewardsOdds = arrayOf(0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1f)[root.oddsInput.selectedItemPosition]
                     } catch (e: NumberFormatException) {
                         Alert(this@Editor, resources.getString(R.string.not_a_number)).error()
                     }
                 }
 
-                override fun initContent(window: android.widget.PopupWindow, root: ViewGroup) {
+                override fun initContent(window: PopupWindow, root: ViewGroup) {
                     root.addView(LayoutInflater.from(this@Editor).inflate(R.layout.fragment_rewards, root, false))
-                    with(root.findViewById<Spinner>(R.id.max_times_input)) {
+                    with(root.maxTimesInput) {
                         val adapter = ArrayAdapter(this@Editor, R.layout.spinner_dropdown_item, listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
                         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
                         this.adapter = adapter
                         this.setSelection(9)
                     }
-                    with(root.findViewById<Spinner>(R.id.odds_input)) {
+                    with(root.oddsInput) {
                         val adapter = ArrayAdapter(this@Editor, R.layout.spinner_dropdown_item, listOf("10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"))
                         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
                         this.adapter = adapter
