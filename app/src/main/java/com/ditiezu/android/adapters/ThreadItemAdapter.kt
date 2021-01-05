@@ -3,7 +3,7 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   ThreadItemAdapter.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 11:11 PM]
  * ==================================================
  * Copyright 2021 PassionPenguin. All rights reserved.
  *
@@ -120,7 +120,7 @@ class ThreadItemAdapter(private val activity: Activity, items: List<ThreadItem>,
 
         holder.itemView.setOnClickListener {
             val i = Intent(activity, ViewThread::class.java)
-            i.putExtra("tid", mItems[position].target)
+            i.putExtra("tid", item.target)
             i.flags = FLAG_ACTIVITY_NEW_TASK
             activity.startActivity(i)
         }
