@@ -4,9 +4,9 @@
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
   ~ =  FILE NAME   AndroidManifest.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/12/20 8:27 PM]
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:58 PM]
   ~ ==================================================
-  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~ Copyright 2021 PassionPenguin. All rights reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -46,9 +46,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppTheme"
+        android:theme="@style/Theme.Ditiezu"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ViewThread"></activity>
+        <activity android:name=".ViewThread" />
         <activity android:name=".StartUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,7 +56,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".views.main.MainActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ForumActivity" />
         <activity android:name=".LoginActivity" />
