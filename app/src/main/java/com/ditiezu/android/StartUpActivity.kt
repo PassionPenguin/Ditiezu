@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   StartUpActivity.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:40 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:39 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@
 package com.ditiezu.android
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.ditiezu.android.views.main.MainActivity
 import com.passionpenguin.SPHelper
 import java.util.*
-import java.util.Collections.rotate
 
 class StartUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
