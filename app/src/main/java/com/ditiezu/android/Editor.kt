@@ -1,3 +1,25 @@
+/*
+ * ==================================================
+ * =  PROJECT     地下铁的故事
+ * =  MODULE      地下铁的故事.app
+ * =  FILE NAME   Editor.kt
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * ==================================================
+ * Copyright 2021 PassionPenguin. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @file:Suppress("BlockingMethodInNonBlockingContext", "UNCHECKED_CAST")
 
 package com.ditiezu.android
@@ -26,8 +48,6 @@ import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.passionpenguin.*
-import com.passionpenguin.PopupWindow
-import com.passionpenguin.GlideEngine
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.cachapa.expandablelayout.ExpandableLayout
@@ -385,7 +405,7 @@ class Editor : AppCompatActivity() {
 
         fun setCompoundButtonColor(e: CompoundButton, isChecked: Boolean) {
             val color = R.color.grey
-            val colorChecked = R.color.theme_500
+            val colorChecked = R.color.primary_default
             if (e.buttonDrawable != null)
                 e.buttonDrawable = tintDrawable(
                     e.buttonDrawable, getColorStateList(

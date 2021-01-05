@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   ThreadItemAdapter.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:40 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,15 +28,18 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.ditiezu.android.R
 import com.ditiezu.android.ViewThread
+import com.ditiezu.android.views.main.AccountActivity
+import com.ditiezu.android.views.main.category.CategoryActivity
+import com.ditiezu.android.views.main.notifications.NotificationActivity
+import kotlinx.android.synthetic.main.item_home_mixed.view.*
+import kotlinx.android.synthetic.main.item_thread_item.view.*
 
 class ThreadItem(
     val authorId: Int,
@@ -50,75 +53,76 @@ class ThreadItem(
     val target: Int
 )
 
-class ThreadItemAdapter(private val activity: Activity, items: List<ThreadItem>) : RecyclerView.Adapter<ThreadItemAdapter.ViewHolder>() {
+class ThreadItemAdapter(private val activity: Activity, items: List<ThreadItem>, private val isHomeMixed: Boolean = false) : RecyclerView.Adapter<ThreadItemAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(activity)
     private var mItems: List<ThreadItem> = items
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0 && isHomeMixed) 1 else 0
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(mInflater.inflate(R.layout.item_thread_item, parent, false))
+        return ViewHolder(mInflater.inflate(if (viewType == 1) R.layout.item_home_mixed else R.layout.item_thread_item, parent, false))
     }
 
     override fun getItemCount(): Int {
-        return mItems.size
+        return mItems.size + if (isHomeMixed) 1 else 0
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.threadTitle)
-        val content: TextView = view.findViewById(R.id.threadContent)
-        val avatar: ImageView = view.findViewById(R.id.avatar)
-        val authorName: TextView = view.findViewById(R.id.threadAuthorName)
-        val postTime: TextView = view.findViewById(R.id.threadPostTime)
-        val viewsWrap: ConstraintLayout = view.findViewById(R.id.viewsWrap)
-        val views: TextView = view.findViewById(R.id.views)
-        val repliesWrap: ConstraintLayout = view.findViewById(R.id.repliesWrap)
-        val replies: TextView = view.findViewById(R.id.replies)
+        var base: ViewGroup = if (view.findViewById<LinearLayout>(R.id.threadItem) != null) view.threadItem else view.homeMixed
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mItems[position]
-        holder.title.text = when (item.meta) {
+        if (position == 0 && isHomeMixed) {
+            holder.base.categoryItem.setOnClickListener {
+                activity.startActivity(Intent(activity, CategoryActivity::class.java))
+            }
+            holder.base.notificationItem.setOnClickListener {
+                activity.startActivity(Intent(activity, NotificationActivity::class.java))
+            }
+            holder.base.accountItem.setOnClickListener {
+                activity.startActivity(Intent(activity, AccountActivity::class.java))
+            }
+            return
+        }
+        val item = mItems[position - if (isHomeMixed) 1 else 0]
+        holder.base.title.text = when (item.meta) {
             null -> item.title
             else -> {
                 "[${item.meta}]${item.title}"
             }
         }
-        if (item.content.isEmpty()) holder.content.visibility = View.GONE
-        holder.content.text = item.content
-        holder.postTime.text = item.time
+        if (item.content.isEmpty()) holder.base.content.visibility = View.GONE
+        holder.base.content.text = item.content
+        holder.base.postTime.text = item.time
         when (item.views) {
-            null -> holder.viewsWrap.visibility = View.GONE
+            null -> holder.base.viewsWrap.visibility = View.GONE
             else -> {
-                holder.views.text = item.views
+                holder.base.views.text = item.views
             }
         }
         when (item.replies) {
-            null -> holder.repliesWrap.visibility = View.GONE
+            null -> holder.base.repliesWrap.visibility = View.GONE
             else -> {
-                holder.replies.text = item.replies
+                holder.base.replies.text = item.replies
             }
         }
-        holder.authorName.text = item.authorName
+        holder.base.authorName.text = item.authorName
         if (item.authorId == -1)
-            holder.avatar.visibility = View.GONE
+            holder.base.avatar.visibility = View.GONE
         else Glide.with(activity)
             .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=${item.authorId}")
             .placeholder(R.mipmap.noavatar_middle)
             .error(R.mipmap.noavatar_middle)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-            .into(holder.avatar)
+            .into(holder.base.avatar)
 
         holder.itemView.setOnClickListener {
             val i = Intent(activity, ViewThread::class.java)
             i.putExtra("tid", mItems[position].target)
             i.flags = FLAG_ACTIVITY_NEW_TASK
             activity.startActivity(i)
-        }
-
-        holder.itemView.setOnLongClickListener {
-//                if (position != 0 || !(isHome || withHeader)) {
-//                }
-            true
         }
     }
 }

@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   UserProfile.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:40 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.passionpenguin.*
-import com.passionpenguin.PopupWindow
+import kotlinx.android.synthetic.main.activity_account.*
+import kotlinx.android.synthetic.main.fragment_add_friend.*
+import kotlinx.android.synthetic.main.fragment_add_friend.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
@@ -44,30 +45,22 @@ import java.net.URLEncoder
 class UserProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_account)
+        setContentView(R.layout.activity_account)
 
         val uid = intent.extras?.getInt("uid") ?: -1
         if (uid == -1) onBackPressed()
 
-        val spinner = ImageView(this)
-        Glide.with(this).load(R.drawable.spinner).into(spinner)
-
         this.let {
-            findViewById<ConstraintLayout>(R.id.not_login_tips).visibility = View.GONE
-            findViewById<ScrollView>(R.id.userCenter).visibility = View.GONE
-            val spinnerAnim = with(AnimationUtils.loadAnimation(it, R.anim.rotate)) {
-                this.duration = 1000
+            notLoginTips.visibility = View.GONE
+            userCenter.visibility = View.GONE
+            spinner.startAnimation(with(AnimationUtils.loadAnimation(it, R.anim.rotate)) {
                 this.fillAfter = true
                 this
-            }
-            spinner.visibility = View.VISIBLE
-            spinner.alpha = 1F
-            spinner.startAnimation(spinnerAnim)
-            val friendCtrl = findViewById<Button>(R.id.friendCtrl)
-
-            findViewById<ConstraintLayout>(R.id.not_login_tips).visibility = View.GONE
-            findViewById<ScrollView>(R.id.userCenter).visibility = View.VISIBLE
-            if (findViewById<LinearLayout>(R.id.personal_pref_list).childCount == 0)
+            })
+            spinner.fadeIn()
+            notLoginTips.visibility = View.GONE
+            userCenter.visibility = View.VISIBLE
+            if (personalPrefList.childCount == 0)
                 GlobalScope.launch {
                     val ct = NetUtils(it).retrievePage("http://www.ditiezu.com/space-uid-$uid.html")
                     val parser = Jsoup.parse(ct)
@@ -99,13 +92,13 @@ class UserProfile : AppCompatActivity() {
                                                 // Specify the layout to use when the list of choices appears
                                                 adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
                                                 // Apply the adapter to the spinner
-                                                i.findViewById<Spinner>(R.id.userGroupList).adapter = adapter
+                                                userGroupList.adapter = adapter
                                             }
                                         }
 
                                         override fun onSubmit(window: android.widget.PopupWindow, root: ViewGroup) {
                                             GlobalScope.launch {
-                                                with(NetUtils(this@UserProfile).postPage("http://www.ditiezu.com/home.php?mod=spacecp&ac=friend&op=add&uid=$uid&inajax=1", "referer=http%3A%2F%2Fwww.ditiezu.com%2Fspace-uid-$uid.html&addsubmit=true&handlekey=a_friend_li_$uid&formhash=$formhash&note=${URLEncoder.encode(root.findViewById<EditText>(R.id.reason).text.toString(), "GBK")}&gid=${root.findViewById<Spinner>(R.id.userGroupList).selectedItemPosition}")) {
+                                                with(NetUtils(this@UserProfile).postPage("http://www.ditiezu.com/home.php?mod=spacecp&ac=friend&op=add&uid=$uid&inajax=1", "referer=http%3A%2F%2Fwww.ditiezu.com%2Fspace-uid-$uid.html&addsubmit=true&handlekey=a_friend_li_$uid&formhash=$formhash&note=${URLEncoder.encode(root.reason.text.toString(), "GBK")}&gid=${root.userGroupList.selectedItemPosition}")) {
                                                     if (this != "")
                                                         Alert(this@UserProfile, resources.getString(R.string.request_sent)).success()
                                                 }
@@ -136,29 +129,29 @@ class UserProfile : AppCompatActivity() {
                             }
                         }
 
-                        findViewById<TextView>(R.id.userName).text = parser.select("h2.mbn")[0].childNodes()[0].outerHtml().trim()
+                        userName.text = parser.select("h2.mbn")[0].childNodes()[0].outerHtml().trim()
                         Glide.with(it)
                             .load("http://www.ditiezu.com/uc_server/avatar.php?mod=avatar&uid=$uid")
                             .placeholder(R.mipmap.noavatar_middle)
                             .error(R.mipmap.noavatar_middle)
                             .apply(RequestOptions.bitmapTransform(RoundedCorners(8)))
-                            .into(findViewById(R.id.avatar))
-                        findViewById<TextView>(R.id.value_level).text = parser.select(".pbm span a")[0].text()
+                            .into(avatar)
+                        valueLevel.text = parser.select(".pbm span a")[0].text()
 
                         try {
-                            findViewById<TextView>(R.id.value_friends).text = metaList.select("a")[0].text().trim().substring(4)
+                            valueFriends.text = metaList.select("a")[0].text().trim().substring(4)
                         } catch (e: Exception) {
-                            findViewById<TextView>(R.id.value_friends).text = "N/A"
+                            valueFriends.text = "N/A"
                         }
                         try {
-                            findViewById<TextView>(R.id.value_replies).text = metaList.select("a")[1].text().trim().substring(4)
+                            valueReplies.text = metaList.select("a")[1].text().trim().substring(4)
                         } catch (e: Exception) {
-                            findViewById<TextView>(R.id.value_replies).text = "N/A"
+                            valueReplies.text = "N/A"
                         }
                         try {
-                            findViewById<TextView>(R.id.value_threads).text = metaList.select("a")[2].text().trim().substring(4)
+                            valueThreads.text = metaList.select("a")[2].text().trim().substring(4)
                         } catch (e: Exception) {
-                            findViewById<TextView>(R.id.value_threads).text = "N/A"
+                            valueThreads.text = "N/A"
                         }
 
 
@@ -189,24 +182,23 @@ class UserProfile : AppCompatActivity() {
                             in 20000..50000 -> 20000
                             else -> 0
                         }
-                        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
                         progressBar.max = max - min
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             progressBar.setProgress(pts - min, true)
                         else progressBar.progress = pts - min
-                        findViewById<TextView>(R.id.level).text = parser.select(".pbm span a")[0].text()
-                        findViewById<TextView>(R.id.points).text = "$pts / $max"
+                        level.text = parser.select(".pbm span a")[0].text()
+                        points.text = "$pts / $max"
 
-                        findViewById<TextView>(R.id.value_points).text = pts.toString()
-                        findViewById<TextView>(R.id.value_prestige).text = parser.select("#psts li")[1].textNodes()[0].text().trim()
-                        findViewById<TextView>(R.id.value_money).text = parser.select("#psts li")[2].textNodes()[0].text().trim()
-                        findViewById<TextView>(R.id.value_m_score).text = parser.select("#psts li")[3].textNodes()[0].text().trim()
-                        findViewById<TextView>(R.id.value_popularity).text = parser.select("#psts li")[4].textNodes()[0].text().trim()
+                        valuePoints.text = pts.toString()
+                        valuePrestige.text = parser.select("#psts li")[1].textNodes()[0].text().trim()
+                        valueMoney.text = parser.select("#psts li")[2].textNodes()[0].text().trim()
+                        valueMScore.text = parser.select("#psts li")[3].textNodes()[0].text().trim()
+                        valuePopularity.text = parser.select("#psts li")[4].textNodes()[0].text().trim()
 
-                        prefItem.forEach { item -> findViewById<LinearLayout>(R.id.personal_pref_list).addView(prefView(it, item.name, item.description, item.value, item.toggle, item.execFunc)) }
+                        prefItem.forEach { item -> personalPrefList.addView(prefView(it, item.name, item.description, item.value, item.toggle, item.execFunc)) }
                     }
                 }
-            spinner.animate().alpha(0F).setDuration(1000).start()
+            spinner.fadeOut()
         }
     }
 }

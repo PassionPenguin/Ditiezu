@@ -2,8 +2,8 @@
   ~ ==================================================
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
-  ~ =  FILE NAME   fragment_account.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:57 PM]
+  ~ =  FILE NAME   activity_account.xml
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
   ~ ==================================================
   ~ Copyright 2021 PassionPenguin. All rights reserved.
   ~
@@ -47,7 +47,7 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/not_login_tips"
+        android:id="@+id/notLoginTips"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/surface"
@@ -223,7 +223,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/value_level"
+                            android:id="@+id/valueLevel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -233,7 +233,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/title_level"
+                            android:id="@+id/titleLevel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -248,7 +248,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/value_friends"
+                            android:id="@+id/valueFriends"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -258,7 +258,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/title_friends"
+                            android:id="@+id/titleFriends"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -273,7 +273,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/value_replies"
+                            android:id="@+id/valueReplies"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -283,7 +283,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/title_replies"
+                            android:id="@+id/titleReplies"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -298,7 +298,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/value_threads"
+                            android:id="@+id/valueThreads"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -308,7 +308,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/title_threads"
+                            android:id="@+id/titleThreads"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -333,7 +333,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/value_points"
+                        android:id="@+id/valuePoints"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -344,7 +344,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/title_points"
+                        android:id="@+id/titlePoints"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -360,7 +360,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/value_prestige"
+                        android:id="@+id/valuePrestige"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -371,7 +371,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/title_prestige"
+                        android:id="@+id/titlePrestige"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -387,7 +387,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/value_money"
+                        android:id="@+id/valueMoney"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -398,7 +398,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/title_money"
+                        android:id="@+id/titleMoney"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -414,7 +414,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/value_m_score"
+                        android:id="@+id/valueMScore"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -425,7 +425,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/title_m_score"
+                        android:id="@+id/titleMScore"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -441,7 +441,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/value_popularity"
+                        android:id="@+id/valuePopularity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -452,7 +452,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/title_popularity"
+                        android:id="@+id/titlePopularity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -463,7 +463,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/personal_pref_list"
+                android:id="@+id/personalPrefList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -472,7 +472,7 @@
                 android:orientation="vertical" />
 
             <LinearLayout
-                android:id="@+id/application_pref_list"
+                android:id="@+id/applicationPrefList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -481,4 +481,16 @@
                 android:orientation="vertical" />
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/spinner"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@string/spinner"
+        android:src="@drawable/spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

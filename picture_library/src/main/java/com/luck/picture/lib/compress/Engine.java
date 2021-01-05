@@ -1,3 +1,25 @@
+/*
+ * ==================================================
+ * =  PROJECT     地下铁的故事
+ * =  MODULE      地下铁的故事.picture_library
+ * =  FILE NAME   Engine
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * ==================================================
+ * Copyright 2021 PassionPenguin. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.luck.picture.lib.compress;
 
 import android.graphics.Bitmap;
@@ -15,11 +37,11 @@ import java.io.IOException;
  */
 class Engine {
     private static final int DEFAULT_QUALITY = 80;
-    private InputStreamProvider srcImg;
-    private File tagImg;
+    private final InputStreamProvider srcImg;
+    private final File tagImg;
     private int srcWidth;
     private int srcHeight;
-    private boolean focusAlpha;
+    private final boolean focusAlpha;
     private int compressQuality;
 
     Engine(InputStreamProvider srcImg, File tagImg, boolean focusAlpha, int compressQuality) throws IOException {

@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   Helper.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:41 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,4 +64,15 @@ fun tintDrawable(
     val wrappedDrawable = DrawableCompat.wrap(drawable!!)
     DrawableCompat.setTintList(wrappedDrawable, colors)
     return wrappedDrawable
+}
+
+fun View.fadeIn(duration: Long = 1000) {
+    this.alpha = 0F
+    this.visibility = View.VISIBLE
+    this.animate().alpha(1F).setDuration(duration).start()
+}
+
+fun View.fadeOut(duration: Long = 1000) {
+    this.animate().alpha(0F).setDuration(duration).start()
+    this.postDelayed({ this.visibility = View.GONE }, duration)
 }

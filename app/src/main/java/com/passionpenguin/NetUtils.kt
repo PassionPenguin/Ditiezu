@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   NetUtils.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:41 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,14 @@
 package com.passionpenguin
 
 import android.app.Activity
-import android.app.DownloadManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Context.DOWNLOAD_SERVICE
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
 import android.os.NetworkOnMainThreadException
 import android.util.Log
 import android.webkit.CookieManager
-import android.widget.Toast
 import androidx.annotation.WorkerThread
-import androidx.core.content.FileProvider
 import com.ditiezu.android.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -49,7 +41,6 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
-import kotlin.jvm.Throws
 
 @Suppress("BlockingMethodInNonBlockingContext")
 class NetUtils(private val activity: Activity) {

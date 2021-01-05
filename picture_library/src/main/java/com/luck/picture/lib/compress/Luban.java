@@ -1,3 +1,25 @@
+/*
+ * ==================================================
+ * =  PROJECT     地下铁的故事
+ * =  MODULE      地下铁的故事.picture_library
+ * =  FILE NAME   Luban
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * ==================================================
+ * Copyright 2021 PassionPenguin. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.luck.picture.lib.compress;
 
 import android.content.Context;
@@ -34,20 +56,20 @@ public class Luban implements Handler.Callback {
     private static final int MSG_COMPRESS_ERROR = 2;
 
     private String mTargetDir;
-    private String mNewFileName;
-    private boolean focusAlpha;
-    private boolean isCamera;
-    private int mLeastCompressSize;
-    private OnRenameListener mRenameListener;
-    private OnCompressListener mCompressListener;
-    private CompressionPredicate mCompressionPredicate;
-    private List<InputStreamProvider> mStreamProviders;
-    private List<String> mPaths;
-    private List<LocalMedia> mediaList;
+    private final String mNewFileName;
+    private final boolean focusAlpha;
+    private final boolean isCamera;
+    private final int mLeastCompressSize;
+    private final OnRenameListener mRenameListener;
+    private final OnCompressListener mCompressListener;
+    private final CompressionPredicate mCompressionPredicate;
+    private final List<InputStreamProvider> mStreamProviders;
+    private final List<String> mPaths;
+    private final List<LocalMedia> mediaList;
     private int index = -1;
-    private int compressQuality;
-    private Handler mHandler;
-    private int dataCount;
+    private final int compressQuality;
+    private final Handler mHandler;
+    private final int dataCount;
 
     private Luban(Builder builder) {
         this.mPaths = builder.mPaths;
@@ -361,7 +383,7 @@ public class Luban implements Handler.Callback {
     }
 
     public static class Builder {
-        private Context context;
+        private final Context context;
         private String mTargetDir;
         private String mNewFileName;
         private boolean focusAlpha;
@@ -371,11 +393,11 @@ public class Luban implements Handler.Callback {
         private OnRenameListener mRenameListener;
         private OnCompressListener mCompressListener;
         private CompressionPredicate mCompressionPredicate;
-        private List<InputStreamProvider> mStreamProviders;
-        private List<String> mPaths;
+        private final List<InputStreamProvider> mStreamProviders;
+        private final List<String> mPaths;
         private List<LocalMedia> mediaList;
         private int dataCount;
-        private boolean isAndroidQ;
+        private final boolean isAndroidQ;
 
         Builder(Context context) {
             this.context = context;

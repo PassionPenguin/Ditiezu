@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ ==================================================
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
   ~ =  FILE NAME   colors.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:57 PM]
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
   ~ ==================================================
   ~ Copyright 2021 PassionPenguin. All rights reserved.
   ~
@@ -28,7 +27,7 @@
     <color name="primary_dark">#1967d2</color>
     <color name="primary_exdark">#0C4798</color>
     <color name="surface">#FEFEFE</color>
-    <color name="surface_secondary">#F8F7F7</color>
+    <color name="surface_secondary">#E8E8E8</color>
     <color name="surface_tertiary">#F4F4F4</color>
     <color name="black">#000</color>
     <color name="white">#fff</color>

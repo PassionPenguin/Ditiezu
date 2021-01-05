@@ -3,7 +3,7 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   StartUpActivity.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:39 PM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
  * Copyright 2021 PassionPenguin. All rights reserved.
  *
@@ -25,21 +25,17 @@ package com.ditiezu.android
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.ditiezu.android.views.main.MainActivity
-import com.passionpenguin.SPHelper
+import kotlinx.android.synthetic.main.activity_start_up.*
 import java.util.*
 
 class StartUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_up)
-        SPHelper(this).edit("followed_category", "")
-        println(SPHelper(this).getString("followed_category"))
 
-        findViewById<ImageView>(R.id.spinner).startAnimation(with(AnimationUtils.loadAnimation(this, R.anim.rotate)) {
-            this.duration = 1000
+        spinner.startAnimation(with(AnimationUtils.loadAnimation(this, R.anim.rotate)) {
             this.fillAfter = true
             this
         })

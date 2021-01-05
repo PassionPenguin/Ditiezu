@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   Alert.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:41 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,11 +57,11 @@ class Alert(val activity: Activity, text: String) {
 
     fun success() {
         view.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_check_24)
-        view.findViewById<ImageView>(R.id.icon).backgroundTintList = ColorStateList.valueOf(activity.resources.getColor(R.color.success_500, null))
+        view.findViewById<ImageView>(R.id.icon).backgroundTintList = ColorStateList.valueOf(activity.resources.getColor(R.color.success, null))
     }
 
     fun error() {
         view.findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_close_24)
-        view.findViewById<ImageView>(R.id.icon).backgroundTintList = ColorStateList.valueOf(activity.resources.getColor(R.color.danger_500, null))
+        view.findViewById<ImageView>(R.id.icon).backgroundTintList = ColorStateList.valueOf(activity.resources.getColor(R.color.danger, null))
     }
 }

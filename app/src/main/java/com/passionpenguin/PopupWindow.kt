@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   PopupWindow.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:41 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,15 @@
 package com.passionpenguin
 
 import android.app.Activity
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.ditiezu.android.R
-import kotlin.properties.Delegates
 
 abstract class PopupWindow(val activity: Activity, title: String, description: String) {
     init {
@@ -51,7 +49,7 @@ abstract class PopupWindow(val activity: Activity, title: String, description: S
             popupWindow.showAtLocation(target, Gravity.NO_GRAVITY, 0, 0)
             popupWindow.animationStyle = android.R.style.Animation_Dialog
             val icon = popupContentView.findViewById<ImageView>(R.id.app_icon)
-            Glide.with(icon).load(R.drawable.startup_icon).apply(RequestOptions.bitmapTransform(RoundedCorners(4))).into(icon)
+//            Glide.with(icon).load(R.drawable.startup_icon).apply(RequestOptions.bitmapTransform(RoundedCorners(4))).into(icon)
             popupContentView.findViewById<TextView>(R.id.dialog_name).text = title
             popupContentView.findViewById<TextView>(R.id.CancelButton).setTextColor(activity.resources.getColor(R.color.black, null))
             popupContentView.findViewById<TextView>(R.id.dialogDescription).text = description

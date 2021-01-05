@@ -2,10 +2,10 @@
  * ==================================================
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
- * =  FILE NAME   Read.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:40 AM]
+ * =  FILE NAME   AllCategory.kt
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,26 +20,35 @@
  * limitations under the License.
  */
 
-package com.ditiezu.android.fragments.notifications
+package com.ditiezu.android.views.main.category
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ditiezu.android.R
-import kotlin.properties.Delegates
+import com.ditiezu.android.adapters.CategoryItemAdapter
+import com.ditiezu.android.data.categoryList
 
-class Read : Fragment() {
+class AllCategory : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_notification_template, container, false)
+        return inflater.inflate(R.layout.fragment_all_category, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            helper(it, "http://www.ditiezu.com/home.php?mod=space&do=notice&isread=1", view.findViewById(R.id.list), view.findViewById(R.id.tips), view.findViewById(R.id.tips_image))
+            val listID = mutableListOf<Int>()
+            categoryList.forEachIndexed { pos, _->
+                listID.add(pos)
+            }
+            val list = it.findViewById<RecyclerView>(R.id.all_list)
+            list.adapter = CategoryItemAdapter(it, listID)
+            list.layoutManager = LinearLayoutManager(it)
         }
     }
 }

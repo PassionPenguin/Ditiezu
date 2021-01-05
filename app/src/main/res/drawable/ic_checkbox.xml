@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ ======================================================================
-  ~ =  PROJECT     PhotoHelper
-  ~ =  MODULE      PhotoHelper.PhotoHelper
+  ~ ==================================================
+  ~ =  PROJECT     地下铁的故事
+  ~ =  MODULE      地下铁的故事.app
   ~ =  FILE NAME   ic_checkbox.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/15/20 2:25 PM]
-  ~ ======================================================================
-  ~ Copyright 2020 PassionPenguin. All rights reserved.
-  ~   ~
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+  ~ ==================================================
+  ~ Copyright 2021 PassionPenguin. All rights reserved.
+  ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
@@ -18,7 +18,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~ ======================================================================
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">

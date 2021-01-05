@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   Helper.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:40 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,10 @@
  * limitations under the License.
  */
 
-package com.ditiezu.android.fragments.notifications
+package com.ditiezu.android.views.main.notifications
 
 import android.app.Activity
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,10 +35,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 
-fun helper(activity: Activity, url: String, listEl: RecyclerView, tips: TextView, tipsImage: ImageView) {
+fun helper(activity: Activity, url: String, listEl: RecyclerView, tips: TextView) {
 
     tips.visibility = View.GONE
-    tipsImage.visibility = View.GONE
+//    tipsImage.visibility = View.GONE
     GlobalScope.launch {
         val s = NetUtils(activity).retrievePage(url)
         val parser = Jsoup.parse(s)
@@ -49,14 +47,14 @@ fun helper(activity: Activity, url: String, listEl: RecyclerView, tips: TextView
                 activity.runOnUiThread {
                     tips.text = activity.resources.getString(R.string.not_login)
                     tips.visibility = View.VISIBLE
-                    tipsImage.visibility = View.VISIBLE
+//                    tipsImage.visibility = View.VISIBLE
                 }
             }
             parser.select(".emp").text().contains("暂时没有新提醒") -> {
                 activity.runOnUiThread {
                     tips.text = activity.resources.getString(R.string.no_notification)
                     tips.visibility = View.VISIBLE
-                    tipsImage.visibility = View.VISIBLE
+//                    tipsImage.visibility = View.VISIBLE
                 }
             }
             else -> {

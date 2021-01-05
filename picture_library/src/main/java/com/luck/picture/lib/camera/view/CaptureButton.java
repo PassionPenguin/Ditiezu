@@ -1,3 +1,25 @@
+/*
+ * ==================================================
+ * =  PROJECT     地下铁的故事
+ * =  MODULE      地下铁的故事.picture_library
+ * =  FILE NAME   CaptureButton
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * ==================================================
+ * Copyright 2021 PassionPenguin. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.luck.picture.lib.camera.view;
 
 import android.animation.Animator;
@@ -35,9 +57,9 @@ public class CaptureButton extends View {
     public static final int STATE_BAN = 0x005;         //禁止状态
     private int state;              //当前按钮状态
     private int button_state;       //按钮可执行的功能状态（拍照,录制,两者）
-    private int progress_color = 0xEE16AE16;            //进度条颜色
-    private int outside_color = 0xEEDCDCDC;             //外圆背景色
-    private int inside_color = 0xFFFFFFFF;              //内圆背景色
+    private final int progress_color = 0xEE16AE16;            //进度条颜色
+    private final int outside_color = 0xEEDCDCDC;             //外圆背景色
+    private final int inside_color = 0xFFFFFFFF;              //内圆背景色
 
 
     private float event_Y;  //Touch_Event_Down时候记录的Y值
@@ -325,7 +347,7 @@ public class CaptureButton extends View {
 
     //是否空闲状态
     public boolean isIdle() {
-        return state == STATE_IDLE ? true : false;
+        return state == STATE_IDLE;
     }
 
     //设置状态

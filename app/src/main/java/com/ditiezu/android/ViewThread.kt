@@ -3,9 +3,9 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   ViewThread.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 1:40 AM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
  * ==================================================
- * Copyright 2020 PassionPenguin. All rights reserved.
+ * Copyright 2021 PassionPenguin. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,6 @@
 package com.ditiezu.android
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -40,12 +37,10 @@ import android.webkit.WebViewClient
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ditiezu.android.adapters.InviteUserAdapter
 import com.ditiezu.android.adapters.User
-import com.google.android.material.snackbar.Snackbar
 import com.passionpenguin.Alert
 import com.passionpenguin.NetUtils
 import com.passionpenguin.PopupWindow
@@ -172,7 +167,7 @@ class ViewThread : AppCompatActivity() {
                                         with(p.select("td:last-child")[0].text().toInt()) {
                                             val restScore = root.findViewById<TextView>(R.id.rest)
                                             restScore.text = resources.getString(R.string.rest_score, this)
-                                            if (this < 3) restScore.setTextColor(resources.getColor(R.color.danger_500, null))
+                                            if (this < 3) restScore.setTextColor(resources.getColor(R.color.danger, null))
                                         }
                                         window.update()
                                     }
@@ -329,66 +324,66 @@ class ViewThread : AppCompatActivity() {
         loadPage(tid, page)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.thread, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        val inflater = menuInflater
+//        inflater.inflate(R.menu.thread, menu)
+//        return true
+//    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.share -> {
-                val shareIntent = Intent()
-                shareIntent.action = Intent.ACTION_SEND
-                shareIntent.type = "text/plain"
-                shareIntent.putExtra(
-                    Intent.EXTRA_TEXT,
-                    "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&page=$page"
-                )
-                startActivity(Intent.createChooser(shareIntent, "Choose an app"))
-                true
-            }
-            R.id.link -> {
-                val clipboard =
-                    applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText(
-                    "Thread URL",
-                    "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&page=$page"
-                )
-                clipboard.setPrimaryClip(clip)
-                Snackbar.make(
-                    findViewById<ConstraintLayout>(R.id.ViewThread),
-                    resources.getString(R.string.copied),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-                true
-            }
-            R.id.reload -> {
-                retrieveThreadContent()
-                true
-            }
-            R.id.reply -> {
-//                if (loginState) {
-//                    val i = Intent(this@ViewThread, Editor::class.java)
-//                    i.putExtra("tid", tid)
-//                    startActivity(i)
-//                } else {
-//                    Snackbar.make(
-//                        ViewThread,
-//                        resources.getString(R.string.login_description),
-//                        Snackbar.LENGTH_LONG
-//                    ).setAction(resources.getString(R.string.login)) {
-//                        startActivity(
-//                            Intent(this@ViewThread, LoginActivity::class.java)
-//                        )
-//                    }.show()
-//                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle item selection
+//        return when (item.itemId) {
+//            R.id.share -> {
+//                val shareIntent = Intent()
+//                shareIntent.action = Intent.ACTION_SEND
+//                shareIntent.type = "text/plain"
+//                shareIntent.putExtra(
+//                    Intent.EXTRA_TEXT,
+//                    "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&page=$page"
+//                )
+//                startActivity(Intent.createChooser(shareIntent, "Choose an app"))
+//                true
+//            }
+//            R.id.link -> {
+//                val clipboard =
+//                    applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//                val clip = ClipData.newPlainText(
+//                    "Thread URL",
+//                    "http://www.ditiezu.com/forum.php?mod=viewthread&tid=$tid&page=$page"
+//                )
+//                clipboard.setPrimaryClip(clip)
+//                Snackbar.make(
+//                    findViewById<ConstraintLayout>(R.id.ViewThread),
+//                    resources.getString(R.string.copied),
+//                    Snackbar.LENGTH_SHORT
+//                ).show()
+//                true
+//            }
+//            R.id.reload -> {
+//                retrieveThreadContent()
+//                true
+//            }
+//            R.id.reply -> {
+////                if (loginState) {
+////                    val i = Intent(this@ViewThread, Editor::class.java)
+////                    i.putExtra("tid", tid)
+////                    startActivity(i)
+////                } else {
+////                    Snackbar.make(
+////                        ViewThread,
+////                        resources.getString(R.string.login_description),
+////                        Snackbar.LENGTH_LONG
+////                    ).setAction(resources.getString(R.string.login)) {
+////                        startActivity(
+////                            Intent(this@ViewThread, LoginActivity::class.java)
+////                        )
+////                    }.show()
+////                }
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -398,7 +393,6 @@ class ViewThread : AppCompatActivity() {
 
         webView = findViewById(R.id.webView)
         tips = findViewById(R.id.tips)
-        tipsImage = findViewById(R.id.tips_image)
 
         val extras = intent.extras
         if (extras != null) {
