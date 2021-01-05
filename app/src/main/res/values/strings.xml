@@ -3,7 +3,7 @@
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
   ~ =  FILE NAME   strings.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:39 PM]
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:57 PM]
   ~ ==================================================
   ~ Copyright 2021 PassionPenguin. All rights reserved.
   ~
@@ -260,4 +260,46 @@
     <string name="donate">Donate</string>
     <string name="wechatpay" translatable="false">wechatpay</string>
     <string name="alipay" translatable="false">alipay</string>
+    <string name="album_all_photo">所有照片</string>
+    <string name="tvPhotoPreview">预览</string>
+    <string name="ivOriginalCheckbox">原图</string>
+    <string name="photo_content">图片</string>
+    <string name="settings">设置</string>
+    <string name="unknown">未知</string>
+    <string name="acknowledge_content">感谢亲爱的苏苏! Mua~</string>
+    <string name="request_sent">已发送请求</string>
+    <string name="group">分组</string>
+    <string name="remove_friend_description">请确认是否要删除[%s]好友</string>
+    <string name="remove_friend">删除好友</string>
+    <string name="remove_friend_title">- 删除好友</string>
+    <string name="add_friend_description">请确认是否要添加[%s]好友</string>
+    <string name="add_friend">加为好友</string>
+    <string name="add_friend_title">+ 加为好友</string>
+    <string name="file_not_found">文件不存在</string>
+    <string name="read">已读消息</string>
+    <string name="unread">未读消息</string>
+    <string name="not_login">您尚未登录</string>
+    <string name="reply">回复</string>
+    <string name="title_activity_view_thread">View Thread</string>
+    <string name="unfollow">取消关注</string>
+    <string name="follow">关注</string>
+    <string name="spinner">Spinner</string>
+    <string name="description">Description</string>
+    <string name="name">Name</string>
+    <string name="icon">icon</string>
+    <string name="no_followed_category">您暂无关注的分区</string>
+    <string name="all_category">所有分区</string>
+    <string name="followed_category">关注的分区</string>
+    <string name="account_title">我</string>
+    <string name="plugin">插件</string>
+    <string name="use_libjpeg">使用libjpeg压缩图片</string>
+    <string name="setting_description">您可以自定义APP的设置以获得更佳的浏览体验，一般来说，默认设置为大多数情况的最佳设置。更改设置有可能会导致APP的崩溃（如不恰当更改UA值）</string>
+    <string name="user_agent_default">Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36</string>
+    <string name="user_agent">UA值</string>
+    <string name="general">通用</string>
+    <string name="view_post">看帖</string>
+    <string name="post">发帖</string>
+    <string name="post_with_signature">发帖使用签名</string>
+    <string name="post_url_detect">发帖检测链接</string>
+    <string name="preload_image">预加载图片</string>
 </resources>

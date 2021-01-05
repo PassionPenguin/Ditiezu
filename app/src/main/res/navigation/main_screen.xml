@@ -4,9 +4,9 @@
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
   ~ =  FILE NAME   main_screen.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/12/20 8:27 PM]
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:57 PM]
   ~ ==================================================
-  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~ Copyright 2021 PassionPenguin. All rights reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -29,25 +29,25 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.ditiezu.android.fragments.MainScreenFragment"
+        android:name="com.ditiezu.android.views.MainScreenFragment"
         android:label="@string/home_title"
         tools:layout="@layout/fragment_item_list" />
 
     <fragment
         android:id="@+id/navigation_category"
-        android:name="com.ditiezu.android.fragments.category.CategoryFragment"
+        android:name="com.ditiezu.android.views.category.CategoryFragment"
         android:label="@string/category_title"
         tools:layout="@layout/fragment_category" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.ditiezu.android.fragments.notifications.NotificationsFragment"
+        android:name="com.ditiezu.android.views.notifications.NotificationsFragment"
         android:label="@string/notifications_title"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_account"
-        android:name="com.ditiezu.android.fragments.AccountFragment"
+        android:name="com.ditiezu.android.views.AccountFragment"
         android:label="@string/account_title"
         tools:layout="@layout/fragment_account" />
 </navigation>

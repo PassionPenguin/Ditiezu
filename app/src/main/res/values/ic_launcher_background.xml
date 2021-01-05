@@ -3,7 +3,7 @@
   ~ ==================================================
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
-  ~ =  FILE NAME   dimens.xml
+  ~ =  FILE NAME   ic_launcher_background.xml
   ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:57 PM]
   ~ ==================================================
   ~ Copyright 2021 PassionPenguin. All rights reserved.
@@ -22,13 +22,5 @@
   -->
 
 <resources>
-    <dimen name="text_margin">16dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="appbar_padding">16dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="appbar_padding_top">8dp</dimen>
-    <dimen name="_2">2dp</dimen>
-    <dimen name="margin_screen">32dp</dimen>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

@@ -3,9 +3,9 @@
   ~ =  PROJECT     地下铁的故事
   ~ =  MODULE      地下铁的故事.app
   ~ =  FILE NAME   fragment_account.xml
-  ~ =  LAST MODIFIED BY PASSIONPENGUIN [8/14/20 12:30 AM]
+  ~ =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 6:57 PM]
   ~ ==================================================
-  ~ Copyright 2020 PassionPenguin. All rights reserved.
+  ~ Copyright 2021 PassionPenguin. All rights reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
     android:id="@+id/fragment_account"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="@color/surface"
     tools:ignore="SmallSp">
 
     <LinearLayout
@@ -50,7 +50,7 @@
         android:id="@+id/not_login_tips"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg"
+        android:background="@color/surface"
         android:paddingTop="32dp"
         android:visibility="gone"
         tools:context=".StartUpActivity">
@@ -66,13 +66,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.4" />
 
-        <ImageView
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/icon"
-            android:src="@drawable/startup_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+        <!--        <ImageView-->
+        <!--            android:layout_width="180dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:contentDescription="@string/icon"-->
+        <!--            android:src="@drawable/startup_icon"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent" />-->
 
         <Button
             android:id="@+id/button"
