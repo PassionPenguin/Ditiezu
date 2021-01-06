@@ -14,5 +14,6 @@
       "versionName": "STABLE 0.1.5",
       "outputFile": "app-release.apk"
     }
-  ]
+  ],
+  "elementType": "File"
 }
