@@ -3,7 +3,7 @@
  * =  PROJECT     地下铁的故事
  * =  MODULE      地下铁的故事.app
  * =  FILE NAME   CategoryData.kt
- * =  LAST MODIFIED BY PASSIONPENGUIN [1/5/21, 9:25 PM]
+ * =  LAST MODIFIED BY PASSIONPENGUIN [1/6/21, 7:34 PM]
  * ==================================================
  * Copyright 2021 PassionPenguin. All rights reserved.
  *
@@ -79,6 +79,6 @@ val categoryList = listOf(
     CategoryItem("站前广场", "闲谈杂侃版块，严禁灌水。", R.drawable.message, 21),
     CategoryItem("城际铁路", "城际高速铁路路线、特色车站、国内外交通枢纽及转乘车站、城际铁路选线、城际铁路列车站。", R.drawable.high_speed_railway, 46),
     CategoryItem("轨道知识", "地铁和轨道交通相关技术、知识发表讨论区。", R.drawable.book, 43),
-    CategoryItem("意见建议", "意见建议、反馈中心", R.drawable.feedback, 48),
+    CategoryItem("意见建议", "意见建议、反馈中心", R.drawable.feedback, 18),
     CategoryItem("站务公告", "站务公告中心", R.drawable.announcement, 17)
 )
