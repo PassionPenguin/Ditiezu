@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">地铁族</string>
+    <string name="indexPage">主页</string>
+    <string name="categoryPage">分区</string>
+    <string name="notificationPage">消息</string>
+    <string name="settingPage">设置</string>
+    <string name="avatar">avatar</string>
 </resources>
