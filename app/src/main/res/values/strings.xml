@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">地铁族</string>
-    <string name="indexPage">主页</string>
-    <string name="categoryPage">分区</string>
-    <string name="notificationPage">消息</string>
-    <string name="settingPage">设置</string>
+    <string name="indexPage">主页 Home</string>
+    <string name="categoryPage">分区 Category</string>
+    <string name="notificationPage">消息 Notification</string>
+    <string name="settingPage">设置 Setting</string>
+    <string name="accountPage">个人 Account</string>
+    <string name="storagePage">存储 Storage</string>
     <string name="avatar">avatar</string>
+    <string name="categoryNameFormat">[%s]</string>
+    <string name="trending">Trending</string>
+    <string name="shortcut">Shortcut</string>
+    <string name="shortcut_class">io.hoarfroster.ditiezu.pages.MainActivity</string>
 </resources>

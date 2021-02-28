@@ -3,4 +3,9 @@
     <declare-styleable name="TabItem">
         <attr name="title" format="string" />
     </declare-styleable>
+    <declare-styleable name="ShortcutItem">
+        <attr name="shortcutName" format="string" />
+        <attr name="shortcutDrawable" format="reference" />
+        <attr name="shortcutTarget" format="string" />
+    </declare-styleable>
 </resources>

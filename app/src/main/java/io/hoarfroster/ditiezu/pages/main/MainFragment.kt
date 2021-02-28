@@ -29,14 +29,14 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        binding.trendingRecyclerView.isNestedScrollingEnabled = false
+
         val ac = activity
         if (ac != null) {
             GlobalScope.launch {
                 val data = DataFetcher.fetchMainPage()
-                Log.i("a", data.size.toString())
-                Log.i("a", data.toString())
                 ac.runOnUiThread {
-                    binding.recyclerView.adapter = MainFragmentThreadListAdapter(ac, data)
+                    binding.trendingRecyclerView.adapter = MainFragmentThreadListAdapter(ac, data)
                 }
             }
         }
