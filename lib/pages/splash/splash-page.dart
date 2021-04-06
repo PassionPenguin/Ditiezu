@@ -27,8 +27,9 @@ class SplashPageState extends State<StatefulWidget>
       curve: Curves.easeIn,
     );
     Timer(const Duration(seconds: 2), () {
-      Ditiezu.router
-          .navigateTo(context, "/main", transition: TransitionType.fadeIn);
+      Ditiezu.router.navigateTo(context, "/main",
+          transition: TransitionType.fadeIn,
+          transitionDuration: Duration(milliseconds: 750));
     });
   }
 
