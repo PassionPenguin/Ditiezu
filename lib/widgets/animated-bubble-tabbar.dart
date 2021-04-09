@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 class AnimatedBubbleTabBar extends StatefulWidget {
   final List<TabData> tabData;
+  final AnimatedBubbleTabBarState state = AnimatedBubbleTabBarState();
 
   AnimatedBubbleTabBar({this.tabData = const [], Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => AnimatedBubbleTabBarState();
+  State<StatefulWidget> createState() => state;
+
+  void notifyPositionUpdate(int index) {
+    state.updateIndex(index, true);
+  }
 }
 
 class TabData {
@@ -29,13 +34,13 @@ class AnimatedBubbleTabBarState extends State<AnimatedBubbleTabBar> {
   List<BubbleTabItem> tabChildren = [];
   int currentIndex = 0;
 
-  void updateIndex(int index) {
+  void updateIndex(int index, bool notifier) {
     setState(() {
       tabChildren.forEach((e) {
         e.notifyUpdate(index);
       }); // Notify every TabBarItem to update `currentIndex` value
       currentIndex = index;
-      tabChildren[index].tabData.tabCallback();
+      if (!notifier) tabChildren[index].tabData.tabCallback();
     });
   }
 
@@ -103,7 +108,7 @@ class BubbleTabItemState extends State<BubbleTabItem> with TickerProviderStateMi
 
   void onTapHandler() => setState(() {
         currentIndex = widget.tabData.tabIndex;
-        widget.updateIndex(widget.tabData.tabIndex);
+        widget.updateIndex(widget.tabData.tabIndex, false);
       });
 
   bool getActive() => currentIndex == widget.tabData.tabIndex;
